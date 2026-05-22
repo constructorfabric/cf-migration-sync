@@ -8,6 +8,19 @@ set -euo pipefail
 export SOURCE_ORG="${SOURCE_ORG:-cyberfabric}"
 export TARGET_ORG="${TARGET_ORG:-constructorfabric}"
 
+# ── Token strategy ───────────────────────────────────────────────────────────
+# GH_TOKEN_SOURCE — if set, used for ALL source-org API calls
+# GH_TOKEN        — used for all target-org calls; also fallback if GH_TOKEN_SOURCE unset
+ghsrc() {
+  # Pipe env to subshell so we don't leak the token into any child process argv.
+  # The gh cli reads GH_TOKEN / GH_TOKEN_SOURCE from env, so just set and run.
+  if [ -n "${GH_TOKEN_SOURCE:-}" ]; then
+    env GH_TOKEN="$GH_TOKEN_SOURCE" gh "$@"
+  else
+    env GH_TOKEN="${GH_TOKEN:-}" gh "$@"
+  fi
+}
+
 # ── Logging ──────────────────────────────────────────────────────────────────
 log()  { printf '\033[1;34m[%s]\033[0m %s\n' "$(date '+%H:%M:%S')" "$*" >&2; }
 ok()   { printf '\033[1;32m  ✓ %s\033[0m\n' "$*" >&2; }
@@ -32,12 +45,15 @@ preflight() {
   require_cmd git
   require_cmd jq
   require_env GH_TOKEN
+  if [ -n "${GH_TOKEN_SOURCE:-}" ]; then
+    log "Using GH_TOKEN_SOURCE for source-org calls (GH_TOKEN for target)"
+  fi
 }
 
-# ── Repo listing ─────────────────────────────────────────────────────────────
-# Outputs one repo name per line, sorted, for the source org.
+# ── Repo listing (source org) ─────────────────────────────────────────────────
+# Uses GH_TOKEN_SOURCE if set, otherwise falls back to GH_TOKEN.
 list_source_repos() {
-  gh api "orgs/${SOURCE_ORG}/repos" --paginate --jq '.[].name' | sort
+  ghsrc api "orgs/${SOURCE_ORG}/repos" --paginate --jq '.[].name' | sort
 }
 
 # ── Interactive helpers ──────────────────────────────────────────────────────

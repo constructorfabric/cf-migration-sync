@@ -17,7 +17,7 @@ for collab in "${COLLABS[@]}"; do
   echo ""
   echo "=== ${collab} ==="
   list_source_repos | while IFS= read -r REPO; do
-    PERM=$(gh api "repos/${SOURCE_ORG}/${REPO}/collaborators/${collab}/permission" \
+    PERM=$(ghsrc api "repos/${SOURCE_ORG}/${REPO}/collaborators/${collab}/permission" \
       --jq '.permission' 2>/dev/null || echo "")
     [ -n "$PERM" ] && echo "  ${REPO}: ${PERM}"
   done

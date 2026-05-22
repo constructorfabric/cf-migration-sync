@@ -43,7 +43,7 @@ migrate_one_repo() {
     tgt_num=$(gh api "repos/${TARGET_ORG}/${REPO}/milestones?state=all" --paginate \
       --jq ".[] | select(.title==\"${title}\") | .number" 2>/dev/null | head -1)
     [ -n "$tgt_num" ] && MS_MAP["$src_num"]="$tgt_num"
-  done < <(gh api "repos/${SOURCE_ORG}/${REPO}/milestones?state=all" --paginate \
+  done < <(ghsrc api "repos/${SOURCE_ORG}/${REPO}/milestones?state=all" --paginate \
     --jq '.[] | [(.number | tostring), .title] | @tsv' 2>/dev/null)
 
   local TOTAL=0 CREATED=0 SKIPPED=0
@@ -109,7 +109,7 @@ ${body}"
 
 ${c_body}" >/dev/null 2>&1 || true
       pause 0.2
-    done < <(gh api "repos/${SOURCE_ORG}/${REPO}/issues/${number}/comments" \
+    done < <(ghsrc api "repos/${SOURCE_ORG}/${REPO}/issues/${number}/comments" \
       --paginate --jq '.[]' 2>/dev/null)
 
     # Close if closed in source
@@ -121,7 +121,7 @@ ${c_body}" >/dev/null 2>&1 || true
     CREATED=$((CREATED + 1))
     [ $((CREATED % 25)) -eq 0 ] && echo "  ...migrated ${CREATED} issues so far in ${REPO}"
     pause 0.5
-  done < <(gh api "repos/${SOURCE_ORG}/${REPO}/issues?state=all&direction=asc&per_page=100" \
+  done < <(ghsrc api "repos/${SOURCE_ORG}/${REPO}/issues?state=all&direction=asc&per_page=100" \
     --paginate --jq '.[] | select(.pull_request == null)' 2>/dev/null)
 
   ok "${REPO}: created=${CREATED} skipped=${SKIPPED} total=${TOTAL}"

@@ -15,7 +15,7 @@ print_secrets() {
   local KIND="$1"   # actions | dependabot | codespaces
   echo ""
   echo "=== ${KIND} secrets (names only — recreate manually) ==="
-  gh api "orgs/${SOURCE_ORG}/${KIND}/secrets" \
+  ghsrc api "orgs/${SOURCE_ORG}/${KIND}/secrets" \
     --jq '.secrets[] | "  \(.name) (visibility: \(.visibility))"' 2>/dev/null \
     || echo "  (none or insufficient scope)"
 }
@@ -48,6 +48,6 @@ while read -r var; do
       -X PATCH -f value="$value" -f visibility="$visibility" >/dev/null 2>&1 \
       && echo "  ~ updated: ${name}" || warn "could not copy: ${name}"
   fi
-done < <(gh api "orgs/${SOURCE_ORG}/actions/variables" --paginate --jq '.variables[]' 2>/dev/null)
+done < <(ghsrc api "orgs/${SOURCE_ORG}/actions/variables" --paginate --jq '.variables[]' 2>/dev/null)
 
 log "Variables copied: ${COPIED}"

@@ -32,7 +32,7 @@ list_source_repos | while IFS= read -r REPO; do
     gh api "repos/${TARGET_ORG}/${REPO}/milestones" \
       -X POST --input - <<< "$PAYLOAD" >/dev/null 2>&1 \
       && CREATED=$((CREATED + 1)) || true
-  done < <(gh api "repos/${SOURCE_ORG}/${REPO}/milestones?state=all" --paginate --jq '.[]' 2>/dev/null)
+  done < <(ghsrc api "repos/${SOURCE_ORG}/${REPO}/milestones?state=all" --paginate --jq '.[]' 2>/dev/null)
   [ "$CREATED" -gt 0 ] && echo "  ${REPO}: ${CREATED} milestones created"
 done
 

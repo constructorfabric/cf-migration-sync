@@ -30,7 +30,7 @@ list_source_repos | while IFS= read -r REPO; do
       -F draft="$draft" \
       -F prerelease="$prerelease" >/dev/null 2>&1 \
       && CREATED=$((CREATED + 1)) || true
-  done < <(gh api "repos/${SOURCE_ORG}/${REPO}/releases" --paginate --jq '.[]' 2>/dev/null)
+  done < <(ghsrc api "repos/${SOURCE_ORG}/${REPO}/releases" --paginate --jq '.[]' 2>/dev/null)
   [ "$CREATED" -gt 0 ] && echo "  ${REPO}: ${CREATED} releases"
 done
 

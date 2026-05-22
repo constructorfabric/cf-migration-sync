@@ -22,7 +22,7 @@ list_source_repos | while IFS= read -r REPO; do
   echo ""
   log "Mirroring: ${REPO}"
 
-  META=$(gh api "repos/${SOURCE_ORG}/${REPO}")
+  META=$(ghsrc api "repos/${SOURCE_ORG}/${REPO}")
   DESC=$(echo "$META" | jq -r '.description // ""')
   DEFAULT_BRANCH=$(echo "$META" | jq -r '.default_branch // "main"')
 

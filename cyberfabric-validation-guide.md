@@ -29,7 +29,7 @@ The script prints PASS/FAIL per check and a final summary. Exit code 0 = all pas
 | 9 | Labels | Label set for cyberware-rust (22 custom labels) | Spot check |
 | 10 | Installed apps | App slugs installed in each org | Expects 13 apps; requires manual install per Phase 3.1 |
 | 11 | Org settings | 2FA, default permission, fork policy | 2FA requires manual UI toggle per Phase 3.3 |
-| 12 | Secrets & variables | Secret names + variable values | Secret values must be re-entered manually |
+| 12 | Secrets & variables | Secret names + variable values | 7 Actions secrets across 3 repos (see inventory); org-level not accessible via API; values must be re-entered manually |
 | 13 | GitHub Projects v2 | Project titles in each org | Numbers differ (new); requires manual recreation per Phase 3.2 |
 | 14 | Org profile | `.github/profile/README.md` exists in target | Auto-migrated by Phase 1 |
 | 15 | Latest commit SHA | Default-branch tip SHA for 3 key repos | Drift detection |

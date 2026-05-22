@@ -14,7 +14,7 @@ source "${SCRIPT_DIR}/_lib.sh"
 preflight
 
 log "Verifying token can access both orgs..."
-gh api "orgs/${SOURCE_ORG}" --jq '.login' >/dev/null \
+ghsrc api "orgs/${SOURCE_ORG}" --jq '.login' >/dev/null \
   && ok "Read access to ${SOURCE_ORG}" \
   || { err "Cannot read ${SOURCE_ORG} — check token scopes"; exit 1; }
 

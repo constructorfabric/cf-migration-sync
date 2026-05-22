@@ -58,7 +58,7 @@ reassign_one_repo() {
     [ -z "$src_num" ] && { MISSING=$((MISSING + 1)); continue; }
 
     # Fetch source assignees
-    src_assignees=$(gh api "repos/${SOURCE_ORG}/${REPO}/issues/${src_num}" \
+    src_assignees=$(ghsrc api "repos/${SOURCE_ORG}/${REPO}/issues/${src_num}" \
       --jq '[.assignees[].login]' 2>/dev/null || echo "[]")
 
     if [ "$src_assignees" = "[]" ] || [ -z "$src_assignees" ]; then
@@ -102,7 +102,7 @@ reassign_one_repo() {
     src_num=$(extract_source_number "$body" "PR")
     [ -z "$src_num" ] && { MISSING=$((MISSING + 1)); continue; }
 
-    src_assignees=$(gh api "repos/${SOURCE_ORG}/${REPO}/issues/${src_num}" \
+    src_assignees=$(ghsrc api "repos/${SOURCE_ORG}/${REPO}/issues/${src_num}" \
       --jq '[.assignees[].login]' 2>/dev/null || echo "[]")
 
     if [ "$src_assignees" = "[]" ] || [ -z "$src_assignees" ]; then

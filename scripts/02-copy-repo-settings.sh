@@ -11,7 +11,7 @@ preflight
 log "Copying topics for all repos..."
 
 list_source_repos | while IFS= read -r REPO; do
-  TOPICS=$(gh api "repos/${SOURCE_ORG}/${REPO}/topics" --jq '.names' 2>/dev/null || echo "[]")
+  TOPICS=$(ghsrc api "repos/${SOURCE_ORG}/${REPO}/topics" --jq '.names' 2>/dev/null || echo "[]")
   if [ "$TOPICS" = "[]" ]; then
     continue
   fi

@@ -98,7 +98,7 @@ ${body}"
     CREATED=$((CREATED + 1))
     echo "  PR #${number} → #${NEW_NUMBER}: ${title}"
     pause 0.5
-  done < <(gh api "repos/${SOURCE_ORG}/${REPO}/pulls?state=open&direction=asc&per_page=100" \
+  done < <(ghsrc api "repos/${SOURCE_ORG}/${REPO}/pulls?state=open&direction=asc&per_page=100" \
     --paginate --jq '.[]' 2>/dev/null)
 
   ok "${REPO}: created=${CREATED} skipped=${SKIPPED} missing_branch=${MISSING_BRANCH}"

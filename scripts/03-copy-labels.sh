@@ -28,7 +28,7 @@ list_source_repos | while IFS= read -r REPO; do
       -X PATCH -f color="$color" -f description="$desc" \
       >/dev/null 2>&1 || true
     COUNT=$((COUNT + 1))
-  done < <(gh api "repos/${SOURCE_ORG}/${REPO}/labels" --paginate --jq '.[]' 2>/dev/null)
+  done < <(ghsrc api "repos/${SOURCE_ORG}/${REPO}/labels" --paginate --jq '.[]' 2>/dev/null)
   [ "$COUNT" -gt 0 ] && echo "  ${REPO}: ${COUNT} labels"
 done
 

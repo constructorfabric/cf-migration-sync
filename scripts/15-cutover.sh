@@ -19,7 +19,7 @@ SYNC_REPO="${TARGET_ORG}/cf-migration-sync"
 log "Step 1/3 — Freeze ${SOURCE_ORG} (set default permission to 'read')"
 confirm "Set default_repository_permission=read on ${SOURCE_ORG}?" || { warn "skipped"; exit 0; }
 
-gh api "orgs/${SOURCE_ORG}" -X PATCH -f default_repository_permission=read \
+ghsrc api "orgs/${SOURCE_ORG}" -X PATCH -f default_repository_permission=read \
   --jq '.default_repository_permission' && ok "${SOURCE_ORG} is now read-only"
 
 echo ""

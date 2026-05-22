@@ -53,7 +53,7 @@ add_to_team frontend-architects \
   getahead necobaka eddeisling m231-a Artifizer \
   GeraBart voidtopixel Last-Christmas abyssal-potato
 
-log "Populating Governance (13 — gaidar, dfc-Acronis excluded)"
+log "Populating Governance (13)"
 add_to_team governance \
   pr0tey nonameffh dobrovols frontgeeks \
   lobster40 netjerikhet Artifizer enridis \
@@ -64,7 +64,7 @@ add_to_team insight-app-maintainers \
   mitasovr dzarlax bukem Gregory91G cyberdima \
   aleksdotbar mozhaev-dev Artifizer vzhuman cyberantonz
 
-log "Populating security (5 — dfc-Acronis excluded)"
+log "Populating security (5)"
 add_to_team security \
   dobrovols netjerikhet orivaris Artifizer vzhuman
 

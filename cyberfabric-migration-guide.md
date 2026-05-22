@@ -30,7 +30,7 @@ All migration logic lives in a separate "control repo" — **`constructorfabric/
 
 ## PHASE 0 — One-time setup
 
-### 0.1 Create a migration token
+### 0.1 Create migration token(s)
 
 The same person owns both `cyberfabric` and `constructorfabric`, so **one** classic personal access token works for both.
 
@@ -39,6 +39,11 @@ The same person owns both `cyberfabric` and `constructorfabric`, so **one** clas
 3. Scopes: `repo` (full), `admin:org`, `read:user`, `workflow`
 4. Expiration: 30 days
 5. Save it securely — you'll paste it as `GH_TOKEN` and into the sync repo's secret
+
+> **Two-token setup:** If your `GH_TOKEN` has limited read access to the source org, create a second
+> token with broader read permissions and set `GH_TOKEN_SOURCE` alongside `GH_TOKEN`.
+> Scripts use `GH_TOKEN_SOURCE` for source-org reads and `GH_TOKEN` for all target-org writes.
+> If `GH_TOKEN_SOURCE` is unset, scripts fall back to `GH_TOKEN` for source-org calls.
 
 ### 0.2 Install required tools
 
@@ -96,9 +101,10 @@ Expected output: all checks pass; 33 repos found in cyberfabric.
 
 Run the scripts below in the order listed. **Each script is idempotent** — safe to re-run if interrupted.
 
-> ⚠️ **Critical ordering note** — `08a-invite-members.sh` runs FIRST because:
+> ⚠️ **Critical ordering note** — `08a*` invite scripts run FIRST because:
 > - GitHub silently drops assignees on POSTed issues/PRs if those users aren't yet org members
 > - Inviting first lets people accept while the rest of Phase 1 runs (mirror, labels, etc.)
+> - Tier 1 (highest-issue users) are invited immediately; tiers 2–4 follow in priority order
 > - The longest step (`05-migrate-issues.sh`) is intentionally LAST so most people have accepted by then
 > - Anyone still pending gets handled by `12-reassign.sh` (Phase 4)
 
@@ -107,9 +113,14 @@ Run the scripts below in the order listed. **Each script is idempotent** — saf
 ```bash
 cd ~/cf-migration-sync
 export GH_TOKEN="ghp_YOUR_TOKEN"
+# Optional: set source token if different from GH_TOKEN
+# export GH_TOKEN_SOURCE="ghp_YOUR_SOURCE_TOKEN"
 
 # ── Step 1: send invitations IMMEDIATELY so people can start accepting ──
-./scripts/08a-invite-members.sh            # 1–2 min
+./scripts/08a1-invite-tier1.sh            # Tier 1 — highest-issue users first
+./scripts/08a2-invite-tier2.sh            # Tier 2 — active contributors
+./scripts/08a3-invite-tier3.sh            # Tier 3 — remaining members
+./scripts/08a4-invite-tier4.sh            # Tier 4 — occasional contributors
 
 # ── Step 2: things that don't depend on people ──
 ./scripts/01-mirror-all-repos.sh           # 10–30 min — 33 repos, full git history
@@ -140,8 +151,16 @@ Based on the output of `08b-check-collaborators.sh`, grant each outside collabor
 gh api repos/constructorfabric/<REPO>/collaborators/<COLLAB> -X PUT -f permission='push'
 ```
 
-Based on `11-secrets-and-variables.sh` output, recreate org secrets manually:
-https://github.com/organizations/constructorfabric/settings/secrets/actions
+Based on `11-secrets-and-variables.sh` output, recreate secrets manually in the target org:
+
+**Repo-level Actions secrets to recreate:**
+- `cyberfabric/cyberware-rust`: `CODECOV_TOKEN`, `CRATES_IO_TOKEN`, `PR_DASHBOARD_PROJECTS_TOKEN`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`
+- `cyberfabric/cyberware-frontx`: `NPM_TOKEN`
+- `cyberfabric/cyber-constructor`: `SONAR_TOKEN`
+
+**Org-level Actions secrets:** Not accessible via API — list manually at https://github.com/organizations/constructorfabric/settings/secrets/actions
+
+For repo-level secrets, go to: `https://github.com/cyberfabric/<REPO>/settings/secrets/actions` and recreate each in the corresponding `constructorfabric/<REPO>` repo.
 
 ---
 
@@ -314,7 +333,7 @@ Once you're satisfied, revoke the migration token at https://github.com/settings
 ```
 PHASE 0  Set up token, install tools, create cf-migration-sync repo, add secret
 PHASE 1  Initial migration:
-         08a (invite first!)
+         08a1-4 (invite first — Tier 1 highest-issue users first)
          01 02 03 04 07 10 11 (content + settings — no human dependency)
          09 (teams — pending memberships OK)
          08b (discovery; manual follow-up)

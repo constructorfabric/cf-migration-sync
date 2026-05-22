@@ -26,6 +26,16 @@ Create one classic personal access token at https://github.com/settings/tokens/n
 
 The same person owns both orgs, so a single token works for both.
 
+> **Two-token setup (recommended if source org has restrictions):**
+> If your `GH_TOKEN` has limited read access to the source org, create a second token
+> with broader read permissions and set `GH_TOKEN_SOURCE`. Scripts use `GH_TOKEN_SOURCE`
+> for source-org reads and `GH_TOKEN` for all target-org writes.
+>
+> ```bash
+> export GH_TOKEN="ghp_YOUR_TARGET_TOKEN"           # target + fallback source
+> export GH_TOKEN_SOURCE="ghp_YOUR_SOURCE_TOKEN"    # source (if different)
+> ```
+
 Then in every terminal session:
 
 ```bash
@@ -51,22 +61,25 @@ Run scripts in the sequence below. Each is idempotent — safe to re-run.
 | Step | Script | What it does | Time |
 |---|---|---|---|
 | 0 | `scripts/00-check-prereqs.sh` | Verify token + tools | <1 min |
-| 1 | `scripts/08a-invite-members.sh` | **Send invitations first** — people start accepting in parallel | 1–2 min |
-| 2 | `scripts/01-mirror-all-repos.sh` | Create + mirror all 33 repos with full git history | 10–30 min |
-| 3 | `scripts/02-copy-repo-settings.sh` | Copy topics | <1 min |
-| 4 | `scripts/03-copy-labels.sh` | Copy labels (required before issues) | 1–2 min |
-| 5 | `scripts/04-copy-milestones.sh` | Copy milestones (required before issues) | <1 min |
-| 6 | `scripts/07-migrate-releases.sh` | Copy GitHub Releases | <1 min |
-| 7 | `scripts/10-apply-org-settings.sh` | Default permission + fork policy | <1 min |
-| 8 | `scripts/11-secrets-and-variables.sh` | List secret names + copy variables | <1 min |
-| 9 | `scripts/09-create-teams.sh` | Create + populate 6 teams, assign repo access | 5 min |
-| 10 | `scripts/08b-check-collaborators.sh` | List outside-collaborator access (manual follow-up) | <1 min |
-| 11 | `scripts/05-migrate-issues.sh` | Migrate issues + comments | **1–2 hours** (run in tmux) |
-| 12 | `scripts/06-migrate-prs.sh` | Recreate open PRs (closed/merged stay in git history) | 5–10 min |
+| 1 | `scripts/08a1-invite-tier1.sh` | **Invite Tier 1** — highest-issue users first | <1 min |
+| 2 | `scripts/08a2-invite-tier2.sh` | **Invite Tier 2** — active contributors | <1 min |
+| 3 | `scripts/08a3-invite-tier3.sh` | **Invite Tier 3** — remaining members | <1 min |
+| 4 | `scripts/08a4-invite-tier4.sh` | **Invite Tier 4** — occasional contributors | <1 min |
+| 5 | `scripts/01-mirror-all-repos.sh` | Create + mirror all 33 repos with full git history | 10–30 min |
+| 6 | `scripts/02-copy-repo-settings.sh` | Copy topics | <1 min |
+| 7 | `scripts/03-copy-labels.sh` | Copy labels (required before issues) | 1–2 min |
+| 8 | `scripts/04-copy-milestones.sh` | Copy milestones (required before issues) | <1 min |
+| 9 | `scripts/07-migrate-releases.sh` | Copy GitHub Releases | <1 min |
+| 10 | `scripts/10-apply-org-settings.sh` | Default permission + fork policy | <1 min |
+| 11 | `scripts/11-secrets-and-variables.sh` | List secret names + copy variables | <1 min |
+| 12 | `scripts/09-create-teams.sh` | Create + populate 6 teams, assign repo access | 5 min |
+| 13 | `scripts/08b-check-collaborators.sh` | List outside-collaborator access (manual follow-up) | <1 min |
+| 14 | `scripts/05-migrate-issues.sh` | Migrate issues + comments | **1–2 hours** (run in tmux) |
+| 15 | `scripts/06-migrate-prs.sh` | Recreate open PRs (closed/merged stay in git history) | 5–10 min |
 | — | **manual** | Install 13 apps (see migration guide Phase 3) | 15 min |
 | — | **manual** | Recreate 11 GitHub Projects (see migration guide Phase 3) | 30–60 min |
 | — | **manual** | Enable 2FA in GitHub UI | <1 min |
-| 13 | `scripts/12-reassign.sh` | Re-apply assignees that were dropped (run 24h later, then again before cutover) | 2–5 min |
+| 16 | `scripts/12-reassign.sh` | Re-apply assignees that were dropped (run 24h later, then again before cutover) | 2–5 min |
 
 Then **enable continuous sync** (see next section) and let it run until cutover.
 
