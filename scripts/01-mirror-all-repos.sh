@@ -45,7 +45,12 @@ list_source_repos | while IFS= read -r REPO; do
   pushd "${WORKDIR}/${REPO}.git" >/dev/null
   git remote set-url origin \
     "https://x-access-token:${GH_TOKEN}@github.com/${TARGET_ORG}/${REPO}.git"
-  git push --mirror 2>&1 | tail -3
+  if ! git push --mirror 2>&1 | tail -5; then
+    warn "mirror push failed (likely refs/pull/* rejection), retrying with explicit refspecs..."
+    git push --prune origin \
+      '+refs/heads/*:refs/heads/*' \
+      '+refs/tags/*:refs/tags/*' 2>&1 | tail -5
+  fi
   popd >/dev/null
 
   rm -rf "${WORKDIR}/${REPO}.git"
