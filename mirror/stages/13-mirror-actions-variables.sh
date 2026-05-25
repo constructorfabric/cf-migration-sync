@@ -45,7 +45,7 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 12 — mirror-actions-variables starting"
+  log "Stage 13 — mirror-actions-variables starting"
 
   state_init "$STATE_FILE" "13-mirror-actions-variables"
 
@@ -142,7 +142,7 @@ main() {
   total="$(jq '.stats.total'   "$STATE_FILE")"
   synced="$(jq '.stats.synced' "$STATE_FILE")"
   failed="$(jq '.stats.failed' "$STATE_FILE")"
-  log "Stage 12 complete — total=$total synced=$synced failed=$failed"
+  log "Stage 13 complete — total=$total synced=$synced failed=$failed"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
     commit_state "mirror: state after stage 13 (mirror-actions-variables) [skip ci]"

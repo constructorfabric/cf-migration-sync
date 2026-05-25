@@ -37,7 +37,7 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 10 — mirror-releases starting"
+  log "Stage 11 — mirror-releases starting"
   mkdir -p "$STATE_DIR"
 
   log "Fetching source repos from $SOURCE_ORG..."
@@ -73,7 +73,7 @@ main() {
 
   done < <(echo "$repos" | jq -c '.[]')
 
-  log "Stage 10 complete"
+  log "Stage 11 complete"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
     commit_state "mirror: state after stage 11 (mirror-releases) [skip ci]"

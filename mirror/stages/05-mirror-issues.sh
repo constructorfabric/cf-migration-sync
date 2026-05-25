@@ -2,7 +2,7 @@
 # mirror/stages/05-mirror-issues.sh
 # Mirror issues from source repos to target repos.
 # - Creates issues WITHOUT assignees (to avoid notifications)
-# - Stores assignees in state for stage 07
+# - Stores assignees in state for stage 08
 # - Adds cf-mirror marker in body for idempotency
 # State file: state/issues/<repo-name>.yaml
 #

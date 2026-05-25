@@ -27,7 +27,7 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 09 — mirror-teams starting"
+  log "Stage 10 — mirror-teams starting"
 
   state_init "$STATE_FILE" "10-mirror-teams"
 
@@ -169,7 +169,7 @@ main() {
   total="$(jq '.stats.total'   "$STATE_FILE")"
   synced="$(jq '.stats.synced' "$STATE_FILE")"
   failed="$(jq '.stats.failed' "$STATE_FILE")"
-  log "Stage 09 complete — total=$total synced=$synced failed=$failed"
+  log "Stage 10 complete — total=$total synced=$synced failed=$failed"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
     commit_state "mirror: state after stage 10 (mirror-teams) [skip ci]"

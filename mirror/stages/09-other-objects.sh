@@ -40,7 +40,7 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 08 — other-objects starting"
+  log "Stage 09 — other-objects starting"
 
   state_init "$STATE_FILE" "09-other-objects"
 
@@ -429,7 +429,7 @@ main() {
     "$STATE_FILE" > "$tmp"
   mv "$tmp" "$STATE_FILE"
 
-  ok "Stage 08 complete — $item_count items inventoried/created"
+  ok "Stage 09 complete — $item_count items inventoried/created"
   log "Summary:"
   echo "$items" | jq -r 'group_by(.type) | .[] | "  \(.[0].type): \(length)"' >&2
 

@@ -26,7 +26,7 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 07 — assign-issues starting"
+  log "Stage 08 — assign-issues starting"
 
   # Load excluded logins (same list as stage 01 and stage 10)
   local excluded_logins
@@ -207,7 +207,7 @@ main() {
     log "  Completed $repo_name: applied=$processed"
   done
 
-  log "Stage 07 complete — applied=$total_applied skipped=$total_skipped failed=$total_failed"
+  log "Stage 08 complete — applied=$total_applied skipped=$total_skipped failed=$total_failed"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
     commit_state "mirror: state after stage 08 (assign-issues) [skip ci]"

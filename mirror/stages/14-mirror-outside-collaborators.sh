@@ -38,7 +38,7 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 13 — mirror-outside-collaborators starting"
+  log "Stage 14 — mirror-outside-collaborators starting"
 
   # ---- Guard: backup mode ------------------------------------------------
   # Adding collaborators requires them to have GitHub accounts and (for private
@@ -164,7 +164,7 @@ main() {
     pause 0.5
   done < <(echo "$repos" | jq -c '.[]')
 
-  log "Stage 13 complete"
+  log "Stage 14 complete"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
     commit_state "mirror: state after stage 14 (mirror-outside-collaborators) [skip ci]"
