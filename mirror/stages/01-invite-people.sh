@@ -104,7 +104,8 @@ main() {
 
     if [[ "$http_code" == "204" ]]; then
       log "$login is already a member of $TARGET_ORG"
-      _upsert_person "$login" "" "accepted" "$(now)" "$(now)"
+      # GitHub REST API does not expose the org-join date, so both timestamps are unknown.
+      _upsert_person "$login" "" "accepted" "" ""
       already_member_count=$((already_member_count + 1))
       continue
     fi
@@ -112,7 +113,12 @@ main() {
     # Check if already in pending invitations
     if echo "$pending_logins" | grep -qx "$login_lower" 2>/dev/null; then
       log "$login already has a pending invitation"
-      _upsert_person "$login" "" "invited" "$(now)" ""
+      # Extract the actual invitation created_at from the pre-fetched pending list.
+      local actual_invited_at
+      actual_invited_at="$(echo "$pending_invites" | jq -r --arg l "$login_lower" \
+        '.[] | select((.login // "" | ascii_downcase) == $l) | .created_at // empty' \
+        | head -1)"
+      _upsert_person "$login" "" "invited" "${actual_invited_at}" ""
       invited_count=$((invited_count + 1))
       continue
     fi
@@ -151,7 +157,10 @@ main() {
         failed_count=$((failed_count + 1))
       else
         ok "Invited $login"
-        _upsert_person "$login" "$source_id" "invited" "$(now)" ""
+        # Use the created_at from the API response — the actual server-side timestamp.
+        local actual_invited_at
+        actual_invited_at="$(echo "$invite_result" | jq -r '.created_at // empty')"
+        _upsert_person "$login" "$source_id" "invited" "${actual_invited_at}" ""
         invited_count=$((invited_count + 1))
       fi
 
