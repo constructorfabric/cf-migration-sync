@@ -1,0 +1,865 @@
+{
+  "meta": {
+    "stage": "01-invite-people",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-25T09:35:18Z",
+    "last_run_at": "2026-05-25T09:35:18Z"
+  },
+  "items": [
+    {
+      "login": "7er9GX",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T07:03:09.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "abyssal-potato",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "AdrienLaaboudi",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T07:03:57.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "ainetx",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "akshatjhalani",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T07:04:47.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "albinpla",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T07:05:14.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "aleksdotbar",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "alexpitsikoulis",
+      "source_id": null,
+      "role": "member",
+      "status": "skipped",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "alizid10",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "AntonBraer",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "Artifizer",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "asmith987",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "ast2074",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "Avi2777",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "aviator5",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "Bechma",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "binarycode",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T07:21:39.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "bit8shift",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T07:21:58.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "borjafm14",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "bsacrobatix",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T07:22:40.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "bukem",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T07:23:05.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "capybutler",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "cashmisa",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T07:25:46.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "claudedigon",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "constructor-tech",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "Corw1n-of-Amber",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-25T08:32:10.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "cyberantonz",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "cyberdima",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "denislituev",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "devjow",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T07:37:15.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "dfc-Acronis",
+      "source_id": null,
+      "role": "member",
+      "status": "skipped",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "diffora",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "dimonb",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "dobrovols",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "dominic1988-lgtm",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "dsrosenblum",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-25T08:32:15.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "Dynaval81",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "dzarlax",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "eddeisling",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "enjiruuuu",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:56.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "enridis",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "entropyshift",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "ffedoroff",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "FinnJost",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:32:07.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "fluiderson",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "frontgeeks",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "gaidar",
+      "source_id": null,
+      "role": "member",
+      "status": "skipped",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "genericaccount-de",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "GeraBart",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "getahead",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "Gregory91G",
+      "source_id": 17801775,
+      "role": "member",
+      "status": "invited",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "gs-layer",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "GuilleX7",
+      "source_id": 5785918,
+      "role": "member",
+      "status": "invited",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "hitengajjar",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:36.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "hyphen-2025",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:32:20.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "i02sopop",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "il10241024",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "itechmeat",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "jalankulkija",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "javiers451",
+      "source_id": 263596629,
+      "role": "member",
+      "status": "invited",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "joseph-cx",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:48.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "KvizadSaderah",
+      "source_id": 14391797,
+      "role": "member",
+      "status": "invited",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "lansfy",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:23.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "Last-Christmas",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:30:45.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "lavacitalola",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "lizreu",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:50.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "lobster40",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:30:50.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "m231-a",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:30:41.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "mattgarmon",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:40.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "maurolacy",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "max0xf",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "maxcherey",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:32:03.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "MetricWarper",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "MightyDuckNew",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:55.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "MikeFalcon77",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "mitasovr",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "Mitriyweb",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "modcrafter77",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:32:11.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "mozhaev-dev",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "nanoandrew4",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:33.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "necobaka",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:30:40.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "netjerikhet",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "nonameffh",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "orivaris",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "pavel-kalmykov",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:30.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "pm-pltfrm",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:30:58.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "pr0tey",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "Qilin101",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "refur-nfn",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "Ritmix3300",
+      "source_id": 7917034,
+      "role": "member",
+      "status": "invited",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "serg-sab",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "striped-zebra-dev",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "sulasen",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "teslanika",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "tranHieuDev23",
+      "source_id": 23050868,
+      "role": "member",
+      "status": "invited",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "tscbmstubp",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "twh09",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:48.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "vgprod",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "Vibetosh",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-25T08:32:40.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "Viperwow",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "voidtopixel",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "vzhuman",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "xiboliaren",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "yoskini",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:39.000Z",
+      "accepted_at": null
+    },
+    {
+      "login": "zengmlx",
+      "source_id": null,
+      "role": "member",
+      "status": "accepted",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "ziqwerty",
+      "source_id": null,
+      "role": "member",
+      "status": "invited",
+      "invited_at": "2026-05-22T10:31:45.000Z",
+      "accepted_at": null
+    }
+  ],
+  "stats": {
+    "total": 106,
+    "synced": 103,
+    "pending": 0,
+    "failed": 0
+  }
+}
