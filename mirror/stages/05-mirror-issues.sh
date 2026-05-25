@@ -228,6 +228,14 @@ _mirror_repo_issues() {
       log "  Issue #$src_number already mirrored as #$existing_target_number, syncing state+comments"
       _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
         "$title" "$existing_target_number" "" "$assignees" "mirrored" "$(now)" "pending"
+      # Sync closed/open state in target if needed
+      if [[ "$src_state" == "closed" ]]; then
+        gh api "repos/$TARGET_ORG/$repo_name/issues/$existing_target_number" \
+          --method PATCH \
+          -f state="closed" \
+          2>/dev/null || warn "  Failed to close issue #$existing_target_number in $TARGET_ORG/$repo_name"
+        pause 0.3
+      fi
       _mirror_issue_comments \
         "$repo_name" "$src_number" "$existing_target_number" "$state_file"
       skip_count=$((skip_count + 1))
