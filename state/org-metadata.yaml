@@ -4,26 +4,26 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-25T10:48:24Z",
-    "last_run_at": "2026-05-25T10:48:24Z"
+    "last_run_at": "2026-05-25T11:19:42Z"
   },
   "items": [
     {
       "name": "default_repository_permission",
       "value": "none",
       "status": "synced",
-      "synced_at": "2026-05-25T10:48:25Z"
+      "synced_at": "2026-05-25T11:19:43Z"
     },
     {
       "name": "members_can_create_repositories",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-25T10:48:25Z"
+      "synced_at": "2026-05-25T11:19:43Z"
     },
     {
       "name": "members_can_fork_private_repositories",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-25T10:48:25Z"
+      "synced_at": "2026-05-25T11:19:43Z"
     }
   ],
   "stats": {
