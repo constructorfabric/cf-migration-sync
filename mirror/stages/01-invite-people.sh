@@ -152,6 +152,18 @@ main() {
       continue
     fi
 
+    # ---- CIRCUIT-BREAKER: hard block — fires unconditionally --------------
+    # dfc-Acronis must NEVER receive an invitation under any circumstances.
+    # This check is intentionally hardcoded and independent of the exclude_logins
+    # config so it cannot be bypassed by an accidental config edit.
+    # No state is written here so a misconfigured exclude list stays visible
+    # in logs on every subsequent run until config.json is corrected.
+    if [[ "$(echo "$login" | tr '[:upper:]' '[:lower:]')" == "dfc-acronis" ]]; then
+      warn "CIRCUIT-BREAKER: invitation to dfc-Acronis BLOCKED (login=$login id=$source_id) — this account must never be invited; verify exclude_logins in config.json"
+      skipped_count=$((skipped_count + 1))
+      continue
+    fi
+
     if dry_run_skip "gh api orgs/$TARGET_ORG/invitations -F invitee_id=$source_id -f role=direct_member"; then
       _upsert_person "$login" "$source_id" "invited" "$(now)" ""
       invited_count=$((invited_count + 1))
