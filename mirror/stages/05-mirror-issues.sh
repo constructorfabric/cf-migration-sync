@@ -300,28 +300,27 @@ ${marker}"
     create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
       --method POST \
       --input <(echo "$payload") \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || create_result="FAILED"
 
-    # Retry without labels if Validation Failed
-    if [[ "$create_result" == "FAILED" ]] || \
-       echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
+    # Retry without labels only for Validation Failed (not for network/auth errors —
+    # those go straight to the FAILED check below to avoid burning rate-limit quota).
+    if echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
       warn "  Issue #$src_number: retry without labels..."
       payload="$(echo "$payload" | jq 'del(.labels)')"
       create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
         --method POST \
         --input <(echo "$payload") \
-        2>/dev/null || echo 'FAILED')"
+        2>/dev/null)" || create_result="FAILED"
     fi
 
     # Retry without milestone too
-    if [[ "$create_result" == "FAILED" ]] || \
-       echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
+    if echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
       warn "  Issue #$src_number: retry without milestone..."
       payload="$(echo "$payload" | jq 'del(.milestone)')"
       create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
         --method POST \
         --input <(echo "$payload") \
-        2>/dev/null || echo 'FAILED')"
+        2>/dev/null)" || create_result="FAILED"
     fi
 
     if [[ "$create_result" == "FAILED" ]]; then
@@ -337,6 +336,17 @@ ${marker}"
     tgt_number="$(echo "$create_result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
     local tgt_node_id
     tgt_node_id="$(echo "$create_result" | jq -rs '.[0].node_id // empty' 2>/dev/null || true)"
+
+    # Guard: API returned a non-issue response (e.g. secondary rate-limit 403 that
+    # gh wrote to stdout before exiting non-zero, leaving create_result as partial JSON).
+    if [[ -z "$tgt_number" || "$tgt_number" == "null" ]]; then
+      warn "  Issue #$src_number: create did not return a valid issue number — marking failed (response: $(echo "$create_result" | head -c 120))"
+      _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
+        "$title" "" "" "$assignees" "failed" "" "none"
+      failed_count=$((failed_count + 1))
+      pause 0.3
+      continue
+    fi
 
     # ---- Close issue in target if source is closed ----------------------
     if [[ "$src_state" == "closed" ]]; then
