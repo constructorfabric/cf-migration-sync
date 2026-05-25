@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "stage": "05-mirror-issues",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-25T18:46:37Z",
+    "last_run_at": "2026-05-25T18:46:37Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  }
+}

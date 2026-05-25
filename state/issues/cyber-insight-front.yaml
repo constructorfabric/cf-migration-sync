@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "stage": "05-mirror-issues",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-25T18:46:23Z",
+    "last_run_at": "2026-05-25T18:46:23Z"
+  },
+  "items": [
+    {
+      "source_number": 36,
+      "source_id": 4335063337,
+      "source_state": "open",
+      "target_number": 1,
+      "target_node_id": "I_kwDOSksNZ88AAAABDVk5dA",
+      "title": "Run nginx as non-root user (switch to nginx-unprivileged base image)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:25Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 40,
+      "source_id": 4349853461,
+      "source_state": "open",
+      "target_number": 2,
+      "target_node_id": "I_kwDOSksNZ88AAAABDVk5wA",
+      "title": "team-view: align TEAM_BULLET_* aggregates with the IR roster",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:26Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 66,
+      "source_id": 4502350452,
+      "source_state": "open",
+      "target_number": 3,
+      "target_node_id": "I_kwDOSksNZ88AAAABDVk6lQ",
+      "title": "Metric Catalog: hydrate from POST /catalog/get_metrics; remove thresholdConfig.ts",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:27Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 3,
+    "synced": 3,
+    "pending": 0,
+    "failed": 0
+  }
+}

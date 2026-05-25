@@ -1,0 +1,139 @@
+{
+  "meta": {
+    "stage": "05-mirror-issues",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-25T18:38:20Z",
+    "last_run_at": "2026-05-25T18:38:20Z"
+  },
+  "items": [
+    {
+      "source_number": 1,
+      "source_id": 3921377740,
+      "source_state": "closed",
+      "target_number": 1,
+      "target_node_id": null,
+      "title": "Roadmap to Alpha",
+      "assignees": [
+        "Bechma"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:21Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 17,
+      "source_id": 4137360069,
+      "source_state": "open",
+      "target_number": 2,
+      "target_node_id": null,
+      "title": "[NEW] subcommand deploy",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:23Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 18,
+      "source_id": 4137466969,
+      "source_state": "open",
+      "target_number": 3,
+      "target_node_id": null,
+      "title": "[NEW] subcommand check",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:23Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 19,
+      "source_id": 4137507604,
+      "source_state": "open",
+      "target_number": 4,
+      "target_node_id": null,
+      "title": "[NEW] subcommand lint",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:23Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 20,
+      "source_id": 4137593422,
+      "source_state": "open",
+      "target_number": 5,
+      "target_node_id": null,
+      "title": "[NEW] subcommand e2e",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:23Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 22,
+      "source_id": 4151826505,
+      "source_state": "open",
+      "target_number": 6,
+      "target_node_id": null,
+      "title": "[OOP] Dev environment",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:24Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 23,
+      "source_id": 4178642865,
+      "source_state": "open",
+      "target_number": 7,
+      "target_node_id": null,
+      "title": "[config] init",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:24Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 24,
+      "source_id": 4178675259,
+      "source_state": "open",
+      "target_number": 8,
+      "target_node_id": null,
+      "title": "[mod add] flag style",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:24Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 8,
+    "synced": 8,
+    "pending": 0,
+    "failed": 0
+  }
+}

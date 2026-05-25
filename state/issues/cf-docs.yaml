@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "stage": "05-mirror-issues",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-25T18:46:19Z",
+    "last_run_at": "2026-05-25T18:46:19Z"
+  },
+  "items": [
+    {
+      "source_number": 1,
+      "source_id": 4151427021,
+      "source_state": "open",
+      "target_number": 1,
+      "target_node_id": "I_kwDOSksEzs8AAAABDVk4Tw",
+      "title": "Create documentation site",
+      "assignees": [
+        "Bechma"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:21Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 1,
+    "synced": 1,
+    "pending": 0,
+    "failed": 0
+  }
+}
