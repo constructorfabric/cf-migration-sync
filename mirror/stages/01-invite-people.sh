@@ -251,6 +251,28 @@ _upsert_person() {
     *) warn "_upsert_person: unexpected status '$status' for $login — check state machine" ;;
   esac
 
+  # ---- Timestamp handling ----
+  # GitHub REST API does not expose org-join date or original invitation timestamp
+  # for users who are already members (invitation record is deleted on acceptance).
+  # What we CAN do:
+  #   invited_at:  preserve the value already in the state file when transitioning
+  #                invited → accepted, so the send-time recorded in a prior run is
+  #                not overwritten by null.
+  #   accepted_at: record the detection time (when this script confirmed membership).
+  #                Not the exact moment they clicked Accept, but more useful than null.
+  if [[ "$status" == "accepted" ]]; then
+    # Preserve invited_at from existing state record if the caller didn't supply one
+    if [[ -z "$invited_at" ]]; then
+      invited_at="$(jq -r --arg login "$login" \
+        '.items[] | select(.login == $login) | .invited_at // empty' \
+        "$STATE_FILE" 2>/dev/null || true)"
+    fi
+    # Record detection time as accepted_at if not supplied
+    if [[ -z "$accepted_at" ]]; then
+      accepted_at="$(now)"
+    fi
+  fi
+
   # Build the record
   local record
   record="$(jq -n \
