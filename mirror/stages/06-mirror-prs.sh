@@ -3,17 +3,19 @@
 # Mirror PRs from source repos to target repos.
 #
 # Strategy:
-#   OPEN PRs  — NOT created in target (live dev work; hard to keep in sync).
-#               Inventoried in state with status=skipped_open for visibility.
-#   CLOSED PRs — Created as CLOSED ISSUES in target with:
+#   OPEN PRs  — Created as real open PRs in target if the head branch exists.
+#               Recorded as skipped_open if the branch is missing.
+#   CLOSED PRs — Created as closed PRs in target if head branch exists, which
+#                  preserves linked commits and file diffs. Falls back to a
+#                  closed issue when the branch is gone. In both cases:
 #                  • Attribution header in body (original author, source URL, dates)
 #                  • All discussion comments mirrored with attribution headers
 #                  • All PR review bodies mirrored as comments
 #                  • All inline review comments mirrored as comments with file/line context
 #
-# Why not create actual PRs?  The API requires source branches to exist in
-# target.  For merged PRs the feature branch is typically deleted; for stale
-# closed PRs it may be gone too.  Issues are reliable; branches are not.
+# Why not always create real PRs?  The API requires the head branch to exist in
+# target.  For merged PRs the feature branch is often deleted; issues are the
+# reliable fallback for those cases.
 #
 # Attribution note: GitHub API does not allow setting the author of an issue
 # or comment — it will always appear as the token owner.  Attribution is
@@ -122,14 +124,50 @@ main() {
 }
 
 # ---------------------------------------------------------------------------
+# _create_or_update_branch — ensure a branch in the target repo points to a
+# specific SHA. Creates it if absent, force-updates it if it already exists
+# (e.g. from a previous interrupted run).
+_create_or_update_branch() {
+  local repo_name="$1" branch="$2" sha="$3"
+  # Try to create first.
+  gh api "repos/$TARGET_ORG/$repo_name/git/refs" \
+    --method POST \
+    -f "ref=refs/heads/$branch" \
+    -f "sha=$sha" \
+    &>/dev/null && return 0
+  # Branch already exists — force-update it to the correct SHA.
+  gh api "repos/$TARGET_ORG/$repo_name/git/refs/heads/$branch" \
+    --method PATCH \
+    -f "sha=$sha" \
+    -F "force=true" \
+    &>/dev/null && return 0
+  return 1
+}
+
+# ---------------------------------------------------------------------------
 _mirror_repo_prs() {
   local repo_name="$1"
   local state_file="$STATE_DIR/$repo_name.yaml"
 
   state_init "$state_file" "06-mirror-prs"
 
-  # ---- 1. Inventory open PRs (NOT mirrored — live dev work) ---------------
-  log "  Fetching open PRs from $SOURCE_ORG/$repo_name (inventory only)..."
+  # ---- Pre-fetch target data used by both open + closed PR loops ----------
+  # Issues endpoint returns both issues and PRs — used for idempotency markers.
+  log "  Pre-fetching existing target issues/PRs for $repo_name..."
+  local tgt_issues
+  tgt_issues="$(gh api \
+    "repos/$TARGET_ORG/$repo_name/issues?state=all&per_page=100" \
+    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+
+  # Branch list with tip SHAs — one API call instead of one per PR.
+  # SHA is needed to verify the branch tip matches pr.head.sha exactly.
+  local tgt_branches
+  tgt_branches="$(gh api \
+    "repos/$TARGET_ORG/$repo_name/branches?per_page=100" \
+    --paginate 2>/dev/null | jq -s 'add // [] | [.[] | {name: .name, sha: .commit.sha}]' || echo '[]')"
+
+  # ---- 1. Open PRs — create as real PRs where head branch exists ----------
+  log "  Fetching open PRs from $SOURCE_ORG/$repo_name..."
   local open_prs
   open_prs="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls?state=open&per_page=100" \
@@ -137,28 +175,132 @@ _mirror_repo_prs() {
 
   local open_count
   open_count="$(echo "$open_prs" | jq 'length')"
+  log "  Found $open_count open PRs in $repo_name"
+
   if [[ "$open_count" -gt 0 ]]; then
-    log "  Found $open_count open PRs — recording as skipped_open (not created in target)"
     while IFS= read -r pr; do
-      local pr_number pr_title pr_author pr_url
-      pr_number="$(echo "$pr" | jq -r '.number')"
-      pr_title="$(echo  "$pr" | jq -r '.title')"
-      pr_author="$(echo "$pr" | jq -r '.user.login // "unknown"')"
+      local pr_number pr_title pr_body pr_author pr_created pr_url pr_head_ref pr_base_ref
+      pr_number="$(echo   "$pr" | jq -r '.number')"
+      pr_title="$(echo    "$pr" | jq -r '.title')"
+      pr_body="$(echo     "$pr" | jq -r '.body // ""')"
+      pr_author="$(echo   "$pr" | jq -r '.user.login // "unknown"')"
+      pr_created="$(echo  "$pr" | jq -r '.created_at // ""')"
+      pr_head_ref="$(echo "$pr" | jq -r '.head.ref // ""')"
+      pr_base_ref="$(echo "$pr" | jq -r '.base.ref // "main"')"
       pr_url="https://github.com/$SOURCE_ORG/$repo_name/pull/$pr_number"
 
-      # Only insert if not already tracked (closed version takes precedence)
+      # Idempotency: already fully mirrored
       local already_status
       already_status="$(jq -r --argjson n "$pr_number" \
         '.items[] | select(.source_pr_number == $n) | .status // empty' \
         "$state_file" 2>/dev/null | head -1 || true)"
-      if [[ -z "$already_status" ]]; then
+
+      if [[ "$already_status" == "mirrored" ]]; then
+        local already_comments_status tgt_in_state
+        already_comments_status="$(jq -r --argjson n "$pr_number" \
+          '.items[] | select(.source_pr_number == $n) | .comments_status // empty' \
+          "$state_file" 2>/dev/null | head -1 || true)"
+        if [[ "$already_comments_status" == "done" ]]; then
+          continue
+        fi
+        tgt_in_state="$(jq -r --argjson n "$pr_number" \
+          '.items[] | select(.source_pr_number == $n) | .target_issue_number // empty' \
+          "$state_file" 2>/dev/null | head -1 || true)"
+        if [[ -n "$tgt_in_state" && "$tgt_in_state" != "null" ]]; then
+          log "  Open PR #$pr_number body already mirrored — completing comment sync..."
+          _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_in_state" "$state_file"
+        fi
+        continue
+      fi
+
+      # Idempotency: check for existing marker in target
+      local marker="<!-- cf-mirror-pr: $SOURCE_ORG/$repo_name#$pr_number -->"
+      local existing_target_number
+      existing_target_number="$(echo "$tgt_issues" | jq -r \
+        --arg marker "$marker" \
+        '.[] | select(.body != null and (.body | contains($marker))) | .number' \
+        2>/dev/null | head -1 || true)"
+      if [[ -n "$existing_target_number" ]]; then
+        log "  Open PR #$pr_number already mirrored as #$existing_target_number — syncing state+comments"
+        _upsert_pr "$state_file" "$pr_number" "$pr_url" \
+          "$existing_target_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "open"
+        _mirror_pr_comments "$repo_name" "$pr_number" "$existing_target_number" "$state_file"
+        continue
+      fi
+
+      if dry_run_skip "create real PR for open PR#$pr_number in $TARGET_ORG/$repo_name"; then
+        continue
+      fi
+
+      # O(1) branch existence check against pre-fetched list (name only for open PRs)
+      local branch_in_target=0
+      if [[ -n "$pr_head_ref" ]] && \
+         echo "$tgt_branches" | jq -e --arg ref "$pr_head_ref" \
+           'map(select(.name == $ref)) | length > 0' &>/dev/null 2>&1; then
+        branch_in_target=1
+      fi
+
+      if [[ $branch_in_target -eq 0 ]]; then
+        log "  Open PR #$pr_number: head branch '$pr_head_ref' not in target — skipping"
         _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
           "$pr_title" "skipped_open" "" "$pr_author" "open"
+        continue
       fi
+
+      # Build body with attribution + marker, then create real PR
+      pr_body="$(echo "$pr_body" | _encode_at_mentions)"
+      local open_pr_body
+      open_pr_body="> 🔗 **Mirrored PR** [$SOURCE_ORG/$repo_name#$pr_number]($pr_url) | **Author:** $pr_author | **Opened:** $pr_created | **Status:** open
+> *GitHub API does not allow setting PR author or timestamps — attribution preserved here.*
+
+---
+
+${pr_body}
+
+---
+${marker}"
+
+      # Use printf|jq pipe to avoid ARG_MAX on large bodies
+      local open_payload
+      open_payload="$(printf '%s' "$open_pr_body" | jq -Rs \
+        --arg title "$pr_title" \
+        --arg head  "$pr_head_ref" \
+        --arg base  "$pr_base_ref" \
+        '{"title":$title,"body":.,"head":$head,"base":$base}')"
+
+      local open_result
+      open_result="$(gh api "repos/$TARGET_ORG/$repo_name/pulls" \
+        --method POST \
+        --input <(echo "$open_payload") \
+        2>/dev/null)" || open_result="FAILED"
+
+      if [[ "$open_result" == "FAILED" ]]; then
+        warn "  Failed to create real PR for open PR #$pr_number — recording as skipped"
+        _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
+          "$pr_title" "skipped_open" "" "$pr_author" "open"
+        continue
+      fi
+
+      local tgt_open_pr_number
+      tgt_open_pr_number="$(echo "$open_result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
+
+      if [[ -z "$tgt_open_pr_number" || "$tgt_open_pr_number" == "null" ]]; then
+        warn "  Open PR #$pr_number: API did not return a valid PR number — recording as skipped"
+        _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
+          "$pr_title" "skipped_open" "" "$pr_author" "open"
+        continue
+      fi
+
+      ok "  Mirrored open PR #$pr_number -> PR #$tgt_open_pr_number in $TARGET_ORG/$repo_name"
+      _upsert_pr "$state_file" "$pr_number" "$pr_url" \
+        "$tgt_open_pr_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "open"
+      _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_open_pr_number" "$state_file"
+      pause 0.3
+
     done < <(echo "$open_prs" | jq -c '.[]' 2>/dev/null || true)
   fi
 
-  # ---- 2. Fetch closed PRs from source ------------------------------------
+  # ---- 2. Closed PRs — real PR if branch exists, else issue ---------------
   log "  Fetching closed PRs from $SOURCE_ORG/$repo_name..."
   local prs
   prs="$(ghsrc api \
@@ -174,23 +316,21 @@ _mirror_repo_prs() {
     return 0
   fi
 
-  # Pre-fetch existing target issues for idempotency marker check
-  local tgt_issues
-  tgt_issues="$(gh api \
-    "repos/$TARGET_ORG/$repo_name/issues?state=all&per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
-
   local processed=0 new_count=0 skip_count=0 failed_count=0
 
   while IFS= read -r pr; do
     local pr_number pr_title pr_body pr_state pr_merged pr_author pr_created pr_url
-    pr_number="$(echo "$pr" | jq -r '.number')"
-    pr_title="$(echo  "$pr" | jq -r '.title')"
-    pr_body="$(echo   "$pr" | jq -r '.body // ""')"
-    pr_state="$(echo  "$pr" | jq -r '.state')"
-    pr_merged="$(echo "$pr" | jq -r '.merged_at // ""')"
-    pr_author="$(echo "$pr" | jq -r '.user.login // "unknown"')"
-    pr_created="$(echo "$pr" | jq -r '.created_at // ""')"
+    local pr_head_ref pr_head_sha pr_base_ref
+    pr_number="$(echo    "$pr" | jq -r '.number')"
+    pr_title="$(echo     "$pr" | jq -r '.title')"
+    pr_body="$(echo      "$pr" | jq -r '.body // ""')"
+    pr_state="$(echo     "$pr" | jq -r '.state')"
+    pr_merged="$(echo    "$pr" | jq -r '.merged_at // ""')"
+    pr_author="$(echo    "$pr" | jq -r '.user.login // "unknown"')"
+    pr_created="$(echo   "$pr" | jq -r '.created_at // ""')"
+    pr_head_ref="$(echo  "$pr" | jq -r '.head.ref // ""')"
+    pr_head_sha="$(echo  "$pr" | jq -r '.head.sha // ""')"
+    pr_base_ref="$(echo  "$pr" | jq -r '.base.ref // "main"')"
     pr_url="https://github.com/$SOURCE_ORG/$repo_name/pull/$pr_number"
 
     processed=$((processed + 1))
@@ -198,7 +338,7 @@ _mirror_repo_prs() {
       log "  Progress: $processed/$total_prs PRs..."
     fi
 
-    # ---- Idempotency: split on body vs comments (same pattern as stage 05) --
+    # ---- Idempotency: body vs comments split --------------------------------
     local already_status
     already_status="$(jq -r --argjson n "$pr_number" \
       '.items[] | select(.source_pr_number == $n) | .status // empty' \
@@ -213,7 +353,6 @@ _mirror_repo_prs() {
         skip_count=$((skip_count + 1))
         continue
       fi
-      # Body mirrored but comments not yet done — resume
       tgt_issue_in_state="$(jq -r --argjson n "$pr_number" \
         '.items[] | select(.source_pr_number == $n) | .target_issue_number // empty' \
         "$state_file" 2>/dev/null | head -1 || true)"
@@ -225,7 +364,7 @@ _mirror_repo_prs() {
       continue
     fi
 
-    # ---- Idempotency via body marker in target ---------------------------
+    # ---- Idempotency via body marker in target ------------------------------
     local marker="<!-- cf-mirror-pr: $SOURCE_ORG/$repo_name#$pr_number -->"
     local existing_target_number
     existing_target_number="$(echo "$tgt_issues" | jq -r \
@@ -234,9 +373,15 @@ _mirror_repo_prs() {
       2>/dev/null | head -1 || true)"
 
     if [[ -n "$existing_target_number" ]]; then
-      log "  PR #$pr_number already mirrored as issue #$existing_target_number — syncing state+comments"
+      log "  PR #$pr_number already mirrored as #$existing_target_number — syncing state+comments"
       _upsert_pr "$state_file" "$pr_number" "$pr_url" \
         "$existing_target_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "$pr_state"
+      # Idempotent close — source PR is closed/merged; target may still be open
+      # if a previous run was interrupted after creation but before the close step.
+      gh api "repos/$TARGET_ORG/$repo_name/issues/$existing_target_number" \
+        --method PATCH \
+        -f state="closed" \
+        2>/dev/null || warn "  Failed to close #$existing_target_number in $TARGET_ORG/$repo_name"
       _mirror_pr_comments "$repo_name" "$pr_number" "$existing_target_number" "$state_file"
       skip_count=$((skip_count + 1))
       continue
@@ -247,13 +392,12 @@ _mirror_repo_prs() {
       continue
     fi
 
-    # ---- Build issue body with attribution header -----------------------
+    # ---- Build attribution body ---------------------------------------------
     local pr_status_str="closed (not merged)"
     if [[ -n "$pr_merged" && "$pr_merged" != "null" ]]; then
       pr_status_str="merged on $pr_merged"
     fi
 
-    # Encode @mentions in PR body to prevent GitHub notification emails
     pr_body="$(echo "$pr_body" | _encode_at_mentions)"
 
     local issue_body
@@ -267,21 +411,97 @@ ${pr_body}
 ---
 ${marker}"
 
-    # ---- Create issue in target -----------------------------------------
-    local payload
-    payload="$(jq -n \
-      --arg title "[PR #$pr_number] $pr_title" \
-      --arg body  "$issue_body" \
-      '{"title":$title,"body":$body}')"
+    # ---- Determine the head ref to use for a real PR -----------------------
+    # We must point to exactly pr_head_sha so the commit list matches the source PR.
+    #
+    # Case A: head branch tip == pr_head_sha → use the branch directly.
+    # Case B: tip diverged or branch deleted → create a temp branch at pr_head_sha,
+    #         create+close the PR, then delete the temp branch.  Commits remain
+    #         visible in closed PRs even after the branch is deleted.
+    local tgt_issue_number="" used_pr_api=0 head_for_pr="" created_temp_branch=0
 
-    local create_result
-    create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
-      --method POST \
-      --input <(echo "$payload") \
-      2>/dev/null || echo 'FAILED')"
+    if [[ -n "$pr_head_sha" ]]; then
+      # Case A: branch exists with exact tip SHA
+      if echo "$tgt_branches" | jq -e \
+           --arg ref "$pr_head_ref" --arg sha "$pr_head_sha" \
+           'map(select(.name == $ref and .sha == $sha)) | length > 0' &>/dev/null 2>&1; then
+        head_for_pr="$pr_head_ref"
+      else
+        # Case B: SHA exists in target (git objects were pushed) but branch tip
+        # diverged or branch was deleted — pin a temp branch at the exact commit.
+        local temp_branch="cf-mirror-pr-$pr_number"
+        if _create_or_update_branch "$repo_name" "$temp_branch" "$pr_head_sha"; then
+          head_for_pr="$temp_branch"
+          created_temp_branch=1
+        else
+          warn "  PR #$pr_number: could not create temp branch '$temp_branch' at $pr_head_sha — falling back to issue"
+        fi
+      fi
+    fi
 
-    if [[ "$create_result" == "FAILED" ]]; then
-      warn "  Failed to create issue for PR #$pr_number in $TARGET_ORG/$repo_name"
+    if [[ -n "$head_for_pr" ]]; then
+      local pr_payload
+      # Use printf|jq pipe to avoid ARG_MAX on large bodies
+      pr_payload="$(printf '%s' "$issue_body" | jq -Rs \
+        --arg title "[PR #$pr_number] $pr_title" \
+        --arg head  "$head_for_pr" \
+        --arg base  "$pr_base_ref" \
+        '{"title":$title,"body":.,"head":$head,"base":$base}')"
+
+      local pr_create_result
+      pr_create_result="$(gh api "repos/$TARGET_ORG/$repo_name/pulls" \
+        --method POST \
+        --input <(echo "$pr_payload") \
+        2>/dev/null)" || pr_create_result="FAILED"
+
+      if [[ "$pr_create_result" != "FAILED" ]]; then
+        tgt_issue_number="$(echo "$pr_create_result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
+        if [[ -n "$tgt_issue_number" && "$tgt_issue_number" != "null" ]]; then
+          used_pr_api=1
+        else
+          warn "  PR #$pr_number: real PR API returned no number — falling back to issue"
+          tgt_issue_number=""
+        fi
+      else
+        warn "  PR #$pr_number: real PR creation failed — falling back to issue"
+      fi
+
+      # Clean up temp branch even on failure — it has served its purpose or is stale.
+      if [[ $created_temp_branch -eq 1 ]]; then
+        gh api "repos/$TARGET_ORG/$repo_name/git/refs/heads/$head_for_pr" \
+          --method DELETE 2>/dev/null || true
+        created_temp_branch=0
+      fi
+    fi
+
+    # ---- Fall back to issue creation ----------------------------------------
+    if [[ $used_pr_api -eq 0 ]]; then
+      local issue_payload
+      issue_payload="$(printf '%s' "$issue_body" | jq -Rs \
+        --arg title "[PR #$pr_number] $pr_title" \
+        '{"title":$title,"body":.}')"
+
+      local create_result
+      create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
+        --method POST \
+        --input <(echo "$issue_payload") \
+        2>/dev/null)" || create_result="FAILED"
+
+      if [[ "$create_result" == "FAILED" ]]; then
+        warn "  Failed to create issue for PR #$pr_number in $TARGET_ORG/$repo_name"
+        _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
+          "$pr_title" "failed" "" "$pr_author" "$pr_state"
+        failed_count=$((failed_count + 1))
+        pause 0.3
+        continue
+      fi
+
+      tgt_issue_number="$(echo "$create_result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
+    fi
+
+    # Guard: neither path returned a valid number
+    if [[ -z "$tgt_issue_number" || "$tgt_issue_number" == "null" ]]; then
+      warn "  PR #$pr_number: did not get a valid target number — marking failed"
       _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
         "$pr_title" "failed" "" "$pr_author" "$pr_state"
       failed_count=$((failed_count + 1))
@@ -289,22 +509,25 @@ ${marker}"
       continue
     fi
 
-    local tgt_issue_number
-    tgt_issue_number="$(echo "$create_result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
-
-    # Close the target issue immediately (historical PR)
-    gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number" \
-      --method PATCH \
-      -f state="closed" \
-      2>/dev/null || warn "  Failed to close issue #$tgt_issue_number"
+    # ---- Close the target (historical PR — closed or merged in source) ------
+    if [[ $used_pr_api -eq 1 ]]; then
+      gh api "repos/$TARGET_ORG/$repo_name/pulls/$tgt_issue_number" \
+        --method PATCH \
+        -f state="closed" \
+        2>/dev/null || warn "  Failed to close PR #$tgt_issue_number in $TARGET_ORG/$repo_name"
+      ok "  Mirrored PR #$pr_number -> PR #$tgt_issue_number in $TARGET_ORG/$repo_name"
+    else
+      gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number" \
+        --method PATCH \
+        -f state="closed" \
+        2>/dev/null || warn "  Failed to close issue #$tgt_issue_number in $TARGET_ORG/$repo_name"
+      ok "  Mirrored PR #$pr_number -> issue #$tgt_issue_number in $TARGET_ORG/$repo_name"
+    fi
     pause 0.2
-
-    ok "  Mirrored PR #$pr_number -> issue #$tgt_issue_number in $TARGET_ORG/$repo_name"
 
     _upsert_pr "$state_file" "$pr_number" "$pr_url" \
       "$tgt_issue_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "$pr_state"
 
-    # Mirror all comments (discussion + reviews + inline)
     _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_issue_number" "$state_file"
 
     new_count=$((new_count + 1))
@@ -318,7 +541,7 @@ ${marker}"
 
 # ---------------------------------------------------------------------------
 # _mirror_pr_comments
-# Mirrors three types of PR content onto the target issue:
+# Mirrors three types of PR content onto the target issue/PR:
 #   1. Discussion comments  (GET /issues/{n}/comments)
 #   2. Review-level bodies  (GET /pulls/{n}/reviews — only non-empty bodies)
 #   3. Inline review comments (GET /pulls/{n}/comments — with file/line context)
@@ -363,12 +586,11 @@ _mirror_pr_comments() {
 
   log "  PR #$src_pr_number: mirroring $ic_total discussion + $rv_total review-bodies + $rc_total inline-review comments..."
 
-  # BUG-03 fix: pre-fetch existing target issue comments to check markers before
-  # posting.  An interrupted run would otherwise re-post all comments.
+  # Pre-fetch existing target comments for idempotency marker checks.
   local tgt_comment_bodies
   tgt_comment_bodies="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // [] | map(.body // "") | join("\n")' || echo '')"
+    --paginate 2>/dev/null | jq -s 'add // [] | map(.body // "") | join("\n")' 2>/dev/null || echo '')"
 
   local mirrored=0
 
@@ -385,7 +607,6 @@ _mirror_pr_comments() {
       mirrored=$((mirrored + 1)); continue
     fi
 
-    # Encode @mentions to prevent GitHub notification emails
     c_body="$(echo "$c_body" | _encode_at_mentions)"
 
     c_full_body="**${c_author}** commented on ${c_created}:
@@ -396,10 +617,11 @@ ${c_body}
 
 ${c_marker}"
 
-    c_payload="$(jq -n --arg body "$c_full_body" '{"body":$body}')"
+    # Use printf|jq pipe to avoid ARG_MAX on large comment bodies
+    c_payload="$(printf '%s' "$c_full_body" | jq -Rs '{"body":.}')"
     c_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments" \
       --method POST --input <(echo "$c_payload") \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || c_result="FAILED"
     if [[ "$c_result" == "FAILED" ]]; then
       warn "  Failed to mirror discussion comment $c_id on PR #$src_pr_number"
     else
@@ -422,7 +644,6 @@ ${c_marker}"
       mirrored=$((mirrored + 1)); continue
     fi
 
-    # Encode @mentions to prevent GitHub notification emails
     rv_body="$(echo "$rv_body" | _encode_at_mentions)"
 
     rv_full_body="**${rv_author}** submitted review **${rv_state}** on ${rv_submitted}:
@@ -433,10 +654,10 @@ ${rv_body}
 
 ${rv_marker}"
 
-    rv_payload="$(jq -n --arg body "$rv_full_body" '{"body":$body}')"
+    rv_payload="$(printf '%s' "$rv_full_body" | jq -Rs '{"body":.}')"
     rv_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments" \
       --method POST --input <(echo "$rv_payload") \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || rv_result="FAILED"
     if [[ "$rv_result" == "FAILED" ]]; then
       warn "  Failed to mirror review body $rv_id on PR #$src_pr_number"
     else
@@ -460,7 +681,6 @@ ${rv_marker}"
       mirrored=$((mirrored + 1)); continue
     fi
 
-    # Encode @mentions to prevent GitHub notification emails
     rc_body="$(echo "$rc_body" | _encode_at_mentions)"
 
     rc_full_body="**${rc_author}** reviewed \`${rc_path}\` line ${rc_line} on ${rc_created}:
@@ -471,10 +691,10 @@ ${rc_body}
 
 ${rc_marker}"
 
-    rc_payload="$(jq -n --arg body "$rc_full_body" '{"body":$body}')"
+    rc_payload="$(printf '%s' "$rc_full_body" | jq -Rs '{"body":.}')"
     rc_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments" \
       --method POST --input <(echo "$rc_payload") \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || rc_result="FAILED"
     if [[ "$rc_result" == "FAILED" ]]; then
       warn "  Failed to mirror inline review comment $rc_id on PR #$src_pr_number"
     else

@@ -162,6 +162,85 @@ check in the codebase.
 
 ---
 
+### RC-5 — `|| echo 'SENTINEL'` inside `$()` conflates exit-code with output content
+
+**Root cause:** `result="$(cmd || echo 'FAILED')"` is assumed to produce either
+valid output or exactly `"FAILED"`. That contract breaks whenever `cmd` exits
+non-zero *after already writing to stdout* — the sentinel is appended to the
+partial output, producing a string that is neither valid JSON nor exactly `"FAILED"`.
+Every downstream guard (`== "FAILED"`, `jq -rs '.[0].number'`) is silently bypassed,
+leaving dependent variables empty and cascading into broken API calls.
+
+**Fix applied:** Moved the sentinel assignment *outside* `$()`:
+```bash
+# WRONG — sentinel appended to partial stdout if cmd fails mid-output
+result="$(gh api ... 2>/dev/null || echo 'FAILED')"
+
+# CORRECT — assignment exit-code drives the sentinel; partial stdout is discarded
+result="$(gh api ... 2>/dev/null)" || result="FAILED"
+```
+
+**Prevention rule:** Never use `|| echo 'SENTINEL'` inside a command substitution
+for any call that writes to stdout before it can fail (network I/O, `gh api`, `curl`).
+Always put the sentinel assignment in the current shell: `cmd="$(external-call)" || cmd="FAILED"`.
+
+---
+
+### RC-6 — `jq --arg` passes large strings as OS arguments, subject to ARG_MAX
+
+**Root cause:** `jq -n --arg body "$var" '{"body":$body}'` passes the value as a
+command-line argument. The OS rejects `execve()` with `E2BIG` when arguments exceed
+`ARG_MAX` (~2 MB on Linux). `set -euo pipefail` then kills the entire script with
+exit 126. The failure is a hard crash with no warning or fallback — large PR review
+bodies (long inline code reviews) reliably trigger it.
+
+**Fix applied:** All payload construction with potentially-large string variables now
+pipes via stdin instead:
+```bash
+# WRONG — crashes silently on bodies > ~2 MB
+payload="$(jq -n --arg body "$large_var" '{"body":$body}')"
+
+# CORRECT — stdin has no size limit
+payload="$(printf '%s' "$large_var" | jq -Rs '{"body":.}')"
+
+# CORRECT — multiple fields: pass only the large one via stdin
+payload="$(printf '%s' "$large_var" | jq -Rs --arg title "$title" '{"title":$title,"body":.}')"
+```
+
+**Prevention rule:** Never use `jq --arg` for any variable that originates from
+external content (API response bodies, PR descriptions, issue text, comment bodies).
+Use `printf '%s' "$var" | jq -Rs` for the large field and `--arg` only for small
+control values (titles, IDs, status strings).
+
+---
+
+### RC-7 — Idempotency shortcut paths skip side-effect enforcement
+
+**Root cause:** Every idempotency path (state-file skip, body-marker skip) is written
+as a "fast-forward shortcut" that re-applies only the side effects the developer thought
+of in the moment. There is no enumerated list of invariants that a "fully mirrored" item
+must satisfy, so any invariant omitted from a shortcut path is silently skipped on every
+subsequent re-run.
+
+The concrete failure: closed PRs found via body-marker on re-runs were never closed in
+the target — the marker path reconciled state and synced comments but had no close call.
+The PR remained open indefinitely despite being closed/merged in source.
+
+**Fix applied:** Added idempotent `PATCH issues/$n state=closed` to the marker-found
+path in the closed PRs loop of `06-mirror-prs.sh`. The GitHub issues endpoint accepts
+this call for both real issues and PRs, and it is safe to call repeatedly.
+
+**Prevention rules:**
+1. Before writing any idempotency shortcut, enumerate every invariant that must hold
+   when the item is "done". Write those invariants as a comment above the shortcut block.
+2. Every exit path from the item loop (new creation, state-file skip, marker skip) must
+   enforce all invariants — not just the ones the creation path happens to run in order.
+3. For closed/merged PRs the invariant set is: body present + closed in target + comments
+   synced. Any idempotency path that touches a closed PR must call the close endpoint
+   (idempotent; safe if already closed).
+
+---
+
 ## Pre-fetch over per-item API calls
 
 When a loop needs to check membership/existence for N items, fetch the full set

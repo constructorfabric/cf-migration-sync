@@ -284,12 +284,12 @@ ${marker}"
     fi
 
     # ---- Create issue in target ----------------------------------------
+    # Use printf|jq pipe to avoid ARG_MAX on large issue bodies
     local payload
-    payload="$(jq -n \
+    payload="$(printf '%s' "$full_body" | jq -Rs \
       --arg title "$title" \
-      --arg body  "$full_body" \
       --argjson labels "$labels" \
-      '{"title":$title,"body":$body,"labels":$labels}')"
+      '{"title":$title,"body":.,"labels":$labels}')"
 
     if [[ -n "$milestone_number" && "$milestone_number" != "null" ]]; then
       payload="$(echo "$payload" | jq --argjson ms "$milestone_number" '.milestone = $ms')"
@@ -503,13 +503,13 @@ ${c_body}
 ${c_marker}"
 
     local c_payload
-    c_payload="$(jq -n --arg body "$c_full_body" '{"body":$body}')"
+    c_payload="$(printf '%s' "$c_full_body" | jq -Rs '{"body":.}')"
 
     local c_result
     c_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments" \
       --method POST \
       --input <(echo "$c_payload") \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || c_result="FAILED"
 
     if [[ "$c_result" == "FAILED" ]]; then
       warn "  Failed to mirror comment $c_id on issue #$src_number"
