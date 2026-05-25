@@ -1,8 +1,8 @@
 name: Continuous mirror cyberfabric → constructorfabric
 
 on:
-  schedule:
-    - cron: "0 */6 * * *"   # every 6 hours; adjust or disable after cutover
+  #schedule:
+  #  - cron: "0 */6 * * *"   # every 6 hours; adjust or disable after cutover
   workflow_dispatch:
     inputs:
       since:
