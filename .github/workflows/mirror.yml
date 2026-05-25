@@ -182,6 +182,29 @@ jobs:
           fi
 
       # ================================================================== #
+      # Stage 14 — Rewrite cross-references
+      # Runs automatically before stage 7 (assign-issues) so that all
+      # source-org links are corrected BEFORE people receive assignment
+      # notifications and start clicking links.
+      # Fires whenever stage 6 or stage 7 is in the run set.
+      # ================================================================== #
+      - name: Stage 14 — rewrite-cross-references
+        if: steps.stages.outputs.run_6 == 'true' || steps.stages.outputs.run_7 == 'true'
+        run: mirror/stages/14-rewrite-cross-references.sh
+
+      - name: Commit state after stage 14
+        if: steps.stages.outputs.run_6 == 'true' || steps.stages.outputs.run_7 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 14 (rewrite-cross-references) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 14"
+          fi
+
+      # ================================================================== #
       # Stage 7 — Assign issues
       # ================================================================== #
       - name: Stage 07 — assign-issues
