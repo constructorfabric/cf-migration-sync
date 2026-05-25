@@ -29,6 +29,17 @@ main() {
   log "Stage 01 — invite-people starting"
   log "Source org: $SOURCE_ORG | Target org: $TARGET_ORG"
 
+  # ---- Guard: backup mode -------------------------------------------------
+  # invite_members=false means this is a read-only mirror (backup/DR standby).
+  # No invitations are sent.  All other stages run normally.
+  # To switch to active DR mode: set invite_members=true in mirror/config.json
+  # and re-run stages 01, 07, and 09.
+  if [[ "$INVITE_MEMBERS" -eq 0 ]]; then
+    log "invite_members=false — stage 01 skipped (backup/read-only mirror mode)"
+    log "To invite members set invite_members=true in mirror/config.json"
+    return 0
+  fi
+
   # ---- Load exclusion list from config ------------------------------------
   while IFS= read -r _login; do
     [[ -n "$_login" ]] && EXCLUDE_LOGINS+=("$_login")

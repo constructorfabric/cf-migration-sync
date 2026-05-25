@@ -123,7 +123,17 @@ main() {
   done
 
   # ---- 4. Sync members and repo permissions for every team ----------------
-  log "Syncing team members and repo permissions..."
+  # Team structure (creation) and repo permissions are always synced — they
+  # make the org ready to use even before members are added.
+  # Member sync is skipped in backup mode (invite_members=false) because the
+  # users do not exist in the target org yet.  Re-run stage 09 after switching
+  # to invite_members=true and running stage 01 to sync members.
+  if [[ "$INVITE_MEMBERS" -eq 0 ]]; then
+    log "invite_members=false — syncing team repo permissions only (member sync skipped)"
+  else
+    log "Syncing team members and repo permissions..."
+  fi
+
   while IFS= read -r team; do
     local src_slug
     src_slug="$(echo "$team" | jq -r '.slug')"
@@ -132,7 +142,9 @@ main() {
       continue
     fi
 
-    _sync_team_members   "$team"
+    if [[ "$INVITE_MEMBERS" -eq 1 ]]; then
+      _sync_team_members "$team"
+    fi
     _sync_team_repos     "$team"
     pause 0.3
   done < <(echo "$all_teams" | jq -c '.[]' 2>/dev/null || true)

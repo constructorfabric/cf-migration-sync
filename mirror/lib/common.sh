@@ -224,8 +224,18 @@ DRY_RUN=0
 # Populated by config_load (called from preflight).
 MIRROR_CONFIG=""
 
+# INVITE_MEMBERS — global mode flag derived from config.json invite_members.
+#   1 = active migration / DR: invite members, apply assignees, sync team members
+#   0 = backup / read-only mirror: skip all of the above
+#
+# Default 1 so scripts work even if config is partially written.
+# RC-4: do NOT use "// true" — jq treats false as falsy and would discard it.
+# Use explicit "== false" comparison instead.
+INVITE_MEMBERS=1
+
 # config_load — locate and validate mirror/config.json.
-# Sets MIRROR_CONFIG to the absolute path.  Called automatically from preflight.
+# Sets MIRROR_CONFIG and all global config-derived flags.
+# Called automatically from preflight().
 config_load() {
   local config_path="${REPO_ROOT}/mirror/config.json"
   if [[ ! -f "$config_path" ]]; then
@@ -237,7 +247,16 @@ config_load() {
     exit 1
   fi
   MIRROR_CONFIG="$config_path"
+
+  # invite_members: explicit false → 0; anything else (true, missing) → 1.
+  # RC-4: .invite_members == false is the only safe pattern for boolean presence.
+  INVITE_MEMBERS="$(jq -r 'if (.invite_members == false) then "0" else "1" end' \
+    "$config_path" 2>/dev/null || echo "1")"
+
+  local invite_label
+  invite_label="$([ "$INVITE_MEMBERS" -eq 1 ] && echo "true (active migration / DR mode)" || echo "false (backup / read-only mirror mode)")"
   log "Config loaded: $MIRROR_CONFIG"
+  log "  invite_members = $invite_label"
 }
 
 check_dry_run() {

@@ -1,6 +1,18 @@
 {
   "version": "1",
 
+  "_comment_invite_members": [
+    "invite_members controls whether org members are invited to the target org.",
+    "  true  — ACTIVE MIGRATION / DISASTER RECOVERY: members are invited and",
+    "          issue assignees are applied. Use this when people need to start",
+    "          working in the target org immediately.",
+    "  false — BACKUP / READ-ONLY MIRROR: no invitations are sent, no issue",
+    "          assignees are set, and team member lists are not synced.",
+    "          Team structures and repo permissions are still mirrored so the",
+    "          org is fully ready to flip to DR mode at any time."
+  ],
+  "invite_members": true,
+
   "stage_01_invite_people": {
     "exclude_logins": [
       "dfc-Acronis",

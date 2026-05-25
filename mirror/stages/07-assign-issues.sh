@@ -28,6 +28,17 @@ main() {
 
   log "Stage 07 — assign-issues starting"
 
+  # ---- Guard: backup mode -------------------------------------------------
+  # Assigning issues requires the assignee to be an org member.
+  # If invite_members=false, members have not been invited, so assignments
+  # would fail silently (GitHub API ignores non-member logins in assignees).
+  # Skip the entire stage to avoid noise in state files.
+  if [[ "$INVITE_MEMBERS" -eq 0 ]]; then
+    log "invite_members=false — stage 07 skipped (members not in target org)"
+    log "Issue assignees will be applied when invite_members=true and stage 07 is re-run"
+    return 0
+  fi
+
   if [[ ! -d "$STATE_DIR" ]]; then
     warn "No issues state directory found at $STATE_DIR, nothing to do"
     exit 0
