@@ -39,6 +39,19 @@ main() {
     log "Excluded teams: $(echo "$excluded_teams" | tr '\n' ' ')"
   fi
 
+  # ---- Load policy overrides from config ----------------------------------
+  # force_privacy: "secret" (hidden) | "closed" (visible) | empty = use source value
+  # force_notification_setting: "notifications_disabled" | "notifications_enabled" | empty = use source value
+  local force_privacy force_notification_setting
+  force_privacy="$(jq -r '.stage_09_mirror_teams.force_privacy // empty' \
+    "$MIRROR_CONFIG" 2>/dev/null || true)"
+  force_notification_setting="$(jq -r '.stage_09_mirror_teams.force_notification_setting // empty' \
+    "$MIRROR_CONFIG" 2>/dev/null || true)"
+  [[ -n "$force_privacy" ]] && \
+    log "POLICY: all teams will be forced to privacy='$force_privacy'"
+  [[ -n "$force_notification_setting" ]] && \
+    log "POLICY: all teams will be forced to notification_setting='$force_notification_setting'"
+
   # ---- 1. Fetch all source teams ------------------------------------------
   log "Fetching teams from $SOURCE_ORG..."
   local all_teams
@@ -111,7 +124,7 @@ main() {
         fi
       fi
 
-      _create_or_update_team "$team" "$parent_target_id"
+      _create_or_update_team "$team" "$parent_target_id" "$force_privacy" "$force_notification_setting"
       local result_id="${_LAST_TEAM_ID:-}"
       if [[ -n "$result_id" ]]; then
         created_slug_to_target_id["$src_slug"]="$result_id"
@@ -169,7 +182,9 @@ _LAST_TEAM_ID=""
 
 _create_or_update_team() {
   local team="$1"
-  local parent_target_id="${2:-}"  # empty for root teams
+  local parent_target_id="${2:-}"        # empty for root teams
+  local force_privacy="${3:-}"           # "secret" | "closed" | empty = use source
+  local force_notification_setting="${4:-}"  # "notifications_disabled" | "notifications_enabled" | empty = use source
   _LAST_TEAM_ID=""
 
   local src_id src_slug src_name src_desc src_privacy
@@ -179,6 +194,15 @@ _create_or_update_team() {
   src_desc="$(echo    "$team" | jq -r '.description // ""')"
   src_privacy="$(echo "$team" | jq -r '.privacy // "secret"')"
 
+  # Apply policy overrides before anything else
+  local effective_privacy="$src_privacy"
+  if [[ -n "$force_privacy" && "$force_privacy" != "$src_privacy" ]]; then
+    warn "  POLICY: team '$src_slug' privacy forced to '$force_privacy' (source: '$src_privacy')"
+    effective_privacy="$force_privacy"
+  elif [[ -n "$force_privacy" ]]; then
+    effective_privacy="$force_privacy"
+  fi
+
   # Check if team already exists in target by slug
   local existing_tgt_id
   existing_tgt_id="$(gh api "orgs/$TARGET_ORG/teams/$src_slug" \
@@ -187,6 +211,22 @@ _create_or_update_team() {
   if [[ -n "$existing_tgt_id" ]]; then
     log "  Team '$src_slug' already exists (id=$existing_tgt_id)"
     _LAST_TEAM_ID="$existing_tgt_id"
+
+    # Patch existing team with forced policy settings (idempotent)
+    if [[ -n "$force_privacy" || -n "$force_notification_setting" ]]; then
+      local patch_payload="{}"
+      [[ -n "$force_privacy" ]] && \
+        patch_payload="$(echo "$patch_payload" | jq --arg p "$force_privacy" '.privacy = $p')"
+      [[ -n "$force_notification_setting" ]] && \
+        patch_payload="$(echo "$patch_payload" | jq --arg ns "$force_notification_setting" '.notification_setting = $ns')"
+      if ! dry_run_skip "patch team '$src_slug' in $TARGET_ORG (force privacy/notifications)"; then
+        gh api "orgs/$TARGET_ORG/teams/$src_slug" \
+          --method PATCH \
+          --input <(echo "$patch_payload") \
+          2>/dev/null || warn "  Failed to apply forced settings to existing team '$src_slug'"
+      fi
+    fi
+
     _upsert_team "$src_id" "$src_slug" "$existing_tgt_id" "$src_name" "mirrored"
     return 0
   fi
@@ -196,16 +236,21 @@ _create_or_update_team() {
     return 0
   fi
 
-  # Build payload
+  # Build payload with effective (possibly forced) privacy
   local payload
   payload="$(jq -n \
     --arg name    "$src_name" \
     --arg desc    "$src_desc" \
-    --arg privacy "$src_privacy" \
+    --arg privacy "$effective_privacy" \
     '{"name":$name,"description":$desc,"privacy":$privacy}')"
 
   if [[ -n "$parent_target_id" ]]; then
     payload="$(echo "$payload" | jq --argjson pid "$parent_target_id" '.parent_team_id = $pid')"
+  fi
+
+  # Inject forced notification_setting if configured
+  if [[ -n "$force_notification_setting" ]]; then
+    payload="$(echo "$payload" | jq --arg ns "$force_notification_setting" '.notification_setting = $ns')"
   fi
 
   local result

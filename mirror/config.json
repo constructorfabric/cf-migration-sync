@@ -53,7 +53,11 @@
   "stage_08_other_objects": {},
 
   "stage_09_mirror_teams": {
-    "exclude_teams": []
+    "exclude_teams": [],
+    "_comment_force_privacy": "Force all mirrored teams to this visibility regardless of source. 'secret' = hidden (only org owners + team members can see it). 'closed' = visible to all org members. Omit or set null to mirror source value.",
+    "force_privacy": "secret",
+    "_comment_force_notification_setting": "Force all mirrored teams to this notification setting regardless of source. 'notifications_disabled' or 'notifications_enabled'. Omit or set null to mirror source value.",
+    "force_notification_setting": "notifications_disabled"
   },
 
   "stage_10_mirror_releases": {
