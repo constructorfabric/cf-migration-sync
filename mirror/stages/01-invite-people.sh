@@ -152,14 +152,28 @@ main() {
         2>/dev/null || echo 'FAILED')"
 
       if [[ "$invite_result" == "FAILED" ]]; then
-        warn "Failed to invite $login"
-        _upsert_person "$login" "$source_id" "failed" "" ""
-        failed_count=$((failed_count + 1))
+        # Distinguish race condition (became a member between pre-fetch and invite)
+        # from a genuine failure, so we don't record an unnecessary "failed" entry.
+        local recheck_code
+        recheck_code="$(gh api "orgs/$TARGET_ORG/members/$login" \
+          -i 2>/dev/null | head -1 | awk '{print $2}' || echo "000")"
+        if [[ "$recheck_code" == "204" ]]; then
+          warn "$login — invitation blocked by GitHub: they joined during this run (race condition, all OK)"
+          _upsert_person "$login" "$source_id" "accepted" "" ""
+          already_member_count=$((already_member_count + 1))
+        else
+          warn "Failed to invite $login"
+          _upsert_person "$login" "$source_id" "failed" "" ""
+          failed_count=$((failed_count + 1))
+        fi
       else
         ok "Invited $login"
         # Use the created_at from the API response — the actual server-side timestamp.
+        # gh api on some runners outputs extra non-JSON lines after the body; -rs '.[0]'
+        # slurps all values into an array so extra content doesn't cause a parse error.
+        # 2>/dev/null + || true prevent set -e from killing the script if jq still fails.
         local actual_invited_at
-        actual_invited_at="$(echo "$invite_result" | jq -r '.created_at // empty')"
+        actual_invited_at="$(echo "$invite_result" | jq -rs '.[0].created_at // empty' 2>/dev/null || true)"
         _upsert_person "$login" "$source_id" "invited" "${actual_invited_at}" ""
         invited_count=$((invited_count + 1))
       fi
