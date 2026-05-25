@@ -28,7 +28,11 @@
   "stage_03_org_metadata": {
     "skip_settings": [],
     "locked_settings": {
-      "members_can_fork_private_repositories": false
+      "default_repository_permission":           "none",
+      "members_can_create_repositories":         false,
+      "members_can_create_public_repositories":  false,
+      "members_can_create_private_repositories": false,
+      "members_can_fork_private_repositories":   false
     }
   },
 
