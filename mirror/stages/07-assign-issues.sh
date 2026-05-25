@@ -28,6 +28,14 @@ main() {
 
   log "Stage 07 — assign-issues starting"
 
+  # Load excluded logins (same list as stage 01 and stage 09)
+  local excluded_logins
+  excluded_logins="$(jq -r '.stage_01_invite_people.exclude_logins[] // empty' \
+    "$MIRROR_CONFIG" 2>/dev/null || true)"
+  if [[ -n "$excluded_logins" ]]; then
+    log "Excluded logins: $(echo "$excluded_logins" | tr '\n' ' ')"
+  fi
+
   # ---- Guard: backup mode -------------------------------------------------
   # Assigning issues requires the assignee to be an org member.
   # If invite_members=false, members have not been invited, so assignments
@@ -83,6 +91,33 @@ main() {
       local assignees
       assignees="$(echo "$item" | jq -r '.assignees')"
 
+      # ---- Filter excluded / blocked assignees ----------------------------
+      # CIRCUIT-BREAKER: dfc-Acronis — hard block, unconditional
+      local filtered_assignees
+      filtered_assignees="$(echo "$assignees" | \
+        jq '[.[] | select(ascii_downcase != "dfc-acronis")]')"
+      if [[ "$(echo "$filtered_assignees" | jq 'length')" -lt \
+            "$(echo "$assignees"          | jq 'length')" ]]; then
+        warn "  CIRCUIT-BREAKER: dfc-Acronis BLOCKED from assignees on $repo_name#$src_number"
+      fi
+
+      # Config-excluded logins (stage_01_invite_people.exclude_logins)
+      if [[ -n "$excluded_logins" ]]; then
+        local excl_json
+        excl_json="$(echo "$excluded_logins" | jq -R . | jq -s '[.[] | ascii_downcase]')"
+        filtered_assignees="$(echo "$filtered_assignees" | \
+          jq --argjson excl "$excl_json" \
+          '[.[] | select((ascii_downcase) as $l | ($excl | map(select(. == $l)) | length) == 0)]')"
+      fi
+
+      # If nothing remains after filtering, mark applied and move on
+      if [[ "$(echo "$filtered_assignees" | jq 'length')" -eq 0 ]]; then
+        log "  All assignees excluded for $repo_name#$tgt_number — marking applied (no-op)"
+        _update_assignees_status "$state_file" "$src_number" "applied" "$(now)"
+        total_applied=$((total_applied + 1))
+        continue
+      fi
+
       processed=$((processed + 1))
       if (( processed % 25 == 0 )); then
         log "  Progress: $processed/$pending_count..."
@@ -102,9 +137,9 @@ main() {
 
       log "  Assigning $assignees to $TARGET_ORG/$repo_name#$tgt_number (source #$src_number)..."
 
-      # Try to apply all assignees
+      # Try to apply all assignees (filtered list — excluded logins already removed)
       local payload
-      payload="$(jq -n --argjson a "$assignees" '{"assignees":$a}')"
+      payload="$(jq -n --argjson a "$filtered_assignees" '{"assignees":$a}')"
 
       local result
       result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/assignees" \
@@ -120,6 +155,18 @@ main() {
         local applied_list="[]"
 
         while IFS= read -r login; do
+          # Defence-in-depth: circuit-breaker + excluded logins (filtered_assignees
+          # already removes these, but guard here too in case of future refactors)
+          if [[ "$(echo "$login" | tr '[:upper:]' '[:lower:]')" == "dfc-acronis" ]]; then
+            warn "  CIRCUIT-BREAKER: dfc-Acronis BLOCKED (individual path) on $repo_name#$tgt_number"
+            continue
+          fi
+          if [[ -n "$excluded_logins" ]] && echo "$excluded_logins" | \
+              grep -qi "^${login}$" 2>/dev/null; then
+            log "  Skipping excluded assignee: $login for $repo_name#$tgt_number"
+            continue
+          fi
+
           local single_payload
           single_payload="$(jq -n --arg l "$login" '{"assignees":[$l]}')"
 
@@ -138,7 +185,7 @@ main() {
           fi
 
           pause 0.3
-        done < <(echo "$assignees" | jq -r '.[]')
+        done < <(echo "$filtered_assignees" | jq -r '.[]')
 
         if [[ "$applied_any" -eq 1 ]]; then
           _update_assignees_status "$state_file" "$src_number" "applied" "$(now)"
