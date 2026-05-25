@@ -36,6 +36,14 @@ main() {
   total_repos="$(echo "$repos" | jq 'length')"
   log "Found $total_repos repos in $SOURCE_ORG"
 
+  # ---- Load excluded repos from config ------------------------------------
+  local excluded_repos
+  excluded_repos="$(jq -r '.stage_05_mirror_issues.exclude_repos[] // empty' \
+    "$MIRROR_CONFIG" 2>/dev/null || true)"
+  if [[ -n "$excluded_repos" ]]; then
+    log "Excluded repos: $(echo "$excluded_repos" | tr '\n' ' ')"
+  fi
+
   local repo_idx=0
 
   while IFS= read -r repo; do
@@ -45,6 +53,13 @@ main() {
     has_issues="$(echo "$repo" | jq -r '.has_issues // true')"
 
     repo_idx=$((repo_idx + 1))
+
+    # Check exclusion list from config
+    if [[ -n "$excluded_repos" ]] && echo "$excluded_repos" | grep -qx "$repo_name" 2>/dev/null; then
+      log "[$repo_idx/$total_repos] Skipping excluded repo: $repo_name"
+      continue
+    fi
+
     log "[$repo_idx/$total_repos] Processing issues for $repo_name (has_issues=$has_issues)..."
 
     if [[ "$has_issues" != "true" ]]; then

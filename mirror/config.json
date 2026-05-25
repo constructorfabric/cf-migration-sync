@@ -1,0 +1,37 @@
+{
+  "version": "1",
+
+  "stage_01_invite_people": {
+    "exclude_logins": [
+      "dfc-Acronis",
+      "alexpitsikoulis",
+      "gaidar"
+    ]
+  },
+
+  "stage_02_mirror_repos": {
+    "exclude_repos": []
+  },
+
+  "stage_03_org_metadata": {
+    "locked_settings": {
+      "members_can_fork_private_repositories": false
+    }
+  },
+
+  "stage_04_repo_metadata": {
+    "exclude_repos": []
+  },
+
+  "stage_05_mirror_issues": {
+    "exclude_repos": []
+  },
+
+  "stage_06_mirror_prs": {
+    "exclude_repos": []
+  },
+
+  "stage_07_assign_issues": {},
+
+  "stage_08_other_objects": {}
+}

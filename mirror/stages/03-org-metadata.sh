@@ -54,6 +54,40 @@ main() {
   log "  members_can_create_repositories: $members_can_create"
   log "  members_can_fork_private_repositories: $members_can_fork_private"
 
+  # ---- 1b. Apply policy locks from config ---------------------------------
+  # Locked settings override source values regardless of what the source org
+  # has configured.  Add entries to mirror/config.json to enforce constraints
+  # (e.g., security policies that must always be set a specific way in target).
+  log "Checking config policy locks..."
+  local locked_settings
+  locked_settings="$(jq '.stage_03_org_metadata.locked_settings // {}' \
+    "$MIRROR_CONFIG" 2>/dev/null || echo '{}')"
+
+  local _lv  # temp variable for each locked value
+
+  _lv="$(echo "$locked_settings" | jq -r '.default_repository_permission // empty' 2>/dev/null || true)"
+  if [[ -n "$_lv" ]]; then
+    warn "POLICY LOCK: default_repository_permission = '$_lv' (source '$default_repo_perm' ignored)"
+    default_repo_perm="$_lv"
+  fi
+
+  _lv="$(echo "$locked_settings" | jq -r '.members_can_create_repositories // empty' 2>/dev/null || true)"
+  if [[ -n "$_lv" ]]; then
+    warn "POLICY LOCK: members_can_create_repositories = '$_lv' (source '$members_can_create' ignored)"
+    members_can_create="$_lv"
+  fi
+
+  _lv="$(echo "$locked_settings" | jq -r '.members_can_fork_private_repositories // empty' 2>/dev/null || true)"
+  if [[ -n "$_lv" ]]; then
+    warn "POLICY LOCK: members_can_fork_private_repositories = '$_lv' (source '$members_can_fork_private' ignored)"
+    members_can_fork_private="$_lv"
+  fi
+
+  log "Effective settings (after locks):"
+  log "  default_repository_permission: $default_repo_perm"
+  log "  members_can_create_repositories: $members_can_create"
+  log "  members_can_fork_private_repositories: $members_can_fork_private"
+
   # ---- 2. Apply to target org ------------------------------------------
   local ts
   ts="$(now)"

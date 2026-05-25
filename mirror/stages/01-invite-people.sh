@@ -16,8 +16,8 @@ source "$SCRIPT_DIR/../lib/common.sh"
 
 TARGET_ORG="${TARGET_ORG:-constructorfabric}"
 
-# Members to exclude from invitations
-EXCLUDE_LOGINS=("dfc-Acronis" "alexpitsikoulis" "gaidar")
+# Populated from config in main() — do not edit here; edit mirror/config.json instead.
+EXCLUDE_LOGINS=()
 
 STATE_FILE="$REPO_ROOT/state/people.yaml"
 
@@ -28,6 +28,12 @@ main() {
 
   log "Stage 01 — invite-people starting"
   log "Source org: $SOURCE_ORG | Target org: $TARGET_ORG"
+
+  # ---- Load exclusion list from config ------------------------------------
+  while IFS= read -r _login; do
+    [[ -n "$_login" ]] && EXCLUDE_LOGINS+=("$_login")
+  done < <(jq -r '.stage_01_invite_people.exclude_logins[]' "$MIRROR_CONFIG" 2>/dev/null || true)
+  log "Exclude list (${#EXCLUDE_LOGINS[@]} logins): ${EXCLUDE_LOGINS[*]:-none}"
 
   state_init "$STATE_FILE" "01-invite-people"
 

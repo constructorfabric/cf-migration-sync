@@ -36,6 +36,14 @@ main() {
   total="$(echo "$repos" | jq 'length')"
   log "Found $total repos in $SOURCE_ORG"
 
+  # ---- Load excluded repos from config ------------------------------------
+  local excluded_repos
+  excluded_repos="$(jq -r '.stage_02_mirror_repos.exclude_repos[] // empty' \
+    "$MIRROR_CONFIG" 2>/dev/null || true)"
+  if [[ -n "$excluded_repos" ]]; then
+    log "Excluded repos: $(echo "$excluded_repos" | tr '\n' ' ')"
+  fi
+
   local processed=0
   local success_count=0
   local failed_count=0
@@ -51,6 +59,12 @@ main() {
     processed=$((processed + 1))
     if (( processed % 10 == 0 )); then
       log "Progress: $processed/$total repos processed..."
+    fi
+
+    # Check exclusion list from config
+    if [[ -n "$excluded_repos" ]] && echo "$excluded_repos" | grep -qx "$name" 2>/dev/null; then
+      log "[$processed/$total] Skipping excluded repo: $name"
+      continue
     fi
 
     log "[$processed/$total] Mirroring $SOURCE_ORG/$name..."

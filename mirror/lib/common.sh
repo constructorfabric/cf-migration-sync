@@ -94,6 +94,7 @@ preflight() {
     exit 1
   fi
 
+  config_load
   ok "Preflight passed (SOURCE_ORG=$SOURCE_ORG, TARGET_ORG=$TARGET_ORG)"
 }
 
@@ -216,6 +217,28 @@ commit_state() {
 # Dry-run helper
 # ---------------------------------------------------------------------------
 DRY_RUN=0
+
+# ---------------------------------------------------------------------------
+# Config helpers
+# ---------------------------------------------------------------------------
+# Populated by config_load (called from preflight).
+MIRROR_CONFIG=""
+
+# config_load — locate and validate mirror/config.json.
+# Sets MIRROR_CONFIG to the absolute path.  Called automatically from preflight.
+config_load() {
+  local config_path="${REPO_ROOT}/mirror/config.json"
+  if [[ ! -f "$config_path" ]]; then
+    err "Mirror config not found: $config_path"
+    exit 1
+  fi
+  if ! jq empty "$config_path" 2>/dev/null; then
+    err "Mirror config is not valid JSON: $config_path"
+    exit 1
+  fi
+  MIRROR_CONFIG="$config_path"
+  log "Config loaded: $MIRROR_CONFIG"
+}
 
 check_dry_run() {
   for arg in "$@"; do
