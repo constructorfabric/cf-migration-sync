@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# mirror/stages/14-rewrite-cross-references.sh
+# mirror/stages/07-rewrite-cross-references.sh
 # Post-process all mirrored issue/PR bodies and comments to rewrite
 # internal links that still point at the source org.
 #
@@ -45,7 +45,7 @@
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
-#   ./mirror/stages/14-rewrite-cross-references.sh [--dry-run]
+#   ./mirror/stages/07-rewrite-cross-references.sh [--dry-run]
 
 set -euo pipefail
 
@@ -65,8 +65,8 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 14 — rewrite-cross-references starting"
-  state_init "$STATE_FILE" "14-rewrite-cross-references"
+  log "Stage 07 — rewrite-cross-references starting"
+  state_init "$STATE_FILE" "07-rewrite-cross-references"
 
   # ---- Write Python rewrite helper to temp file ---------------------------
   REWRITE_PY="$(mktemp /tmp/cf-rewrite.XXXXX.py)"
@@ -128,10 +128,10 @@ main() {
   total="$(jq '.stats.total'   "$STATE_FILE")"
   synced="$(jq '.stats.synced' "$STATE_FILE")"
   failed="$(jq '.stats.failed' "$STATE_FILE")"
-  log "Stage 14 complete — total=$total rewritten=$synced failed=$failed"
+  log "Stage 07 complete — total=$total rewritten=$synced failed=$failed"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
-    commit_state "mirror: state after stage 14 (rewrite-cross-references) [skip ci]"
+    commit_state "mirror: state after stage 07 (rewrite-cross-references) [skip ci]"
   fi
 }
 
@@ -290,8 +290,9 @@ _rewrite_item_comments() {
     c_id="$(echo   "$comment" | jq -r '.id')"
     c_body="$(echo "$comment" | jq -r '.body // ""')"
 
-    # Fast path: skip comments with no source-org references at all
-    if ! echo "$c_body" | grep -qF "$SOURCE_ORG" 2>/dev/null; then
+    # Fast path: skip comments with neither source-org references nor @mentions
+    if ! echo "$c_body" | grep -qF "$SOURCE_ORG" 2>/dev/null && \
+       ! echo "$c_body" | grep -qE '@[a-zA-Z0-9]' 2>/dev/null; then
       continue
     fi
 
@@ -470,6 +471,19 @@ def _rewrite_line(line, src_org, tgt_org, repo_name, number_maps):
         line = re.sub(
             r'(^|(?<=[^/\w#]))#(\d+)(?!\w)',
             _bare_ref, line)
+
+    # 7. Encode @mentions as HTML entity to suppress GitHub notification emails.
+    #    Split on inline code spans to preserve code formatting.
+    def _encode_mentions(s):
+        parts = re.split(r'(`[^`\n]*`)', s)
+        out = []
+        for p in parts:
+            if p.startswith('`'):
+                out.append(p)
+            else:
+                out.append(re.sub(r'@([a-zA-Z0-9][-a-zA-Z0-9]*)', r'&#64;\1', p))
+        return ''.join(out)
+    line = _encode_mentions(line)
 
     return line
 

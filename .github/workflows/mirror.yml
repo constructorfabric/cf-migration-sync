@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       stages:
-        description: 'Stages to run (all, or comma-separated: 1,2,5)'
+        description: 'Stages to run (all, or comma-separated: 1,2,5,10)'
         required: false
         default: 'all'
 
@@ -61,16 +61,11 @@ jobs:
         run: |
           INPUT="${{ github.event.inputs.stages }}"
           if [[ -z "$INPUT" || "$INPUT" == "all" ]]; then
-            echo "run_1=true"  >> "$GITHUB_OUTPUT"
-            echo "run_2=true"  >> "$GITHUB_OUTPUT"
-            echo "run_3=true"  >> "$GITHUB_OUTPUT"
-            echo "run_4=true"  >> "$GITHUB_OUTPUT"
-            echo "run_5=true"  >> "$GITHUB_OUTPUT"
-            echo "run_6=true"  >> "$GITHUB_OUTPUT"
-            echo "run_7=true"  >> "$GITHUB_OUTPUT"
-            echo "run_8=true"  >> "$GITHUB_OUTPUT"
+            for stage in 1 2 3 4 5 6 7 8 9 10 11 12 13 14; do
+              echo "run_${stage}=true" >> "$GITHUB_OUTPUT"
+            done
           else
-            for stage in 1 2 3 4 5 6 7 8; do
+            for stage in 1 2 3 4 5 6 7 8 9 10 11 12 13 14; do
               if echo "$INPUT" | grep -qE "(^|,)${stage}(,|$)"; then
                 echo "run_${stage}=true" >> "$GITHUB_OUTPUT"
               else
@@ -182,34 +177,14 @@ jobs:
           fi
 
       # ================================================================== #
-      # Stage 14 — Rewrite cross-references
-      # Runs automatically before stage 7 (assign-issues) so that all
-      # source-org links are corrected BEFORE people receive assignment
-      # notifications and start clicking links.
-      # Fires whenever stage 6 or stage 7 is in the run set.
+      # Stage 7 — Rewrite cross-references
+      # Rewrites source-org links in all mirrored issue/PR bodies and
+      # comments, and encodes @mentions to suppress notification emails.
+      # Must run after stages 05 and 06 are complete.
       # ================================================================== #
-      - name: Stage 14 — rewrite-cross-references
-        if: steps.stages.outputs.run_6 == 'true' || steps.stages.outputs.run_7 == 'true'
-        run: mirror/stages/14-rewrite-cross-references.sh
-
-      - name: Commit state after stage 14
-        if: steps.stages.outputs.run_6 == 'true' || steps.stages.outputs.run_7 == 'true'
-        run: |
-          git add state/ validation-reports/ || true
-          if ! git diff --cached --quiet; then
-            git commit --allow-empty \
-              -m "mirror: state after stage 14 (rewrite-cross-references) [skip ci]"
-            git push
-          else
-            echo "No state changes to commit after stage 14"
-          fi
-
-      # ================================================================== #
-      # Stage 7 — Assign issues
-      # ================================================================== #
-      - name: Stage 07 — assign-issues
+      - name: Stage 07 — rewrite-cross-references
         if: steps.stages.outputs.run_7 == 'true'
-        run: mirror/stages/07-assign-issues.sh
+        run: mirror/stages/07-rewrite-cross-references.sh
 
       - name: Commit state after stage 07
         if: steps.stages.outputs.run_7 == 'true'
@@ -217,18 +192,18 @@ jobs:
           git add state/ validation-reports/ || true
           if ! git diff --cached --quiet; then
             git commit --allow-empty \
-              -m "mirror: state after stage 07 (assign-issues) [skip ci]"
+              -m "mirror: state after stage 07 (rewrite-cross-references) [skip ci]"
             git push
           else
             echo "No state changes to commit after stage 07"
           fi
 
       # ================================================================== #
-      # Stage 8 — Other objects inventory
+      # Stage 8 — Assign issues
       # ================================================================== #
-      - name: Stage 08 — other-objects
+      - name: Stage 08 — assign-issues
         if: steps.stages.outputs.run_8 == 'true'
-        run: mirror/stages/08-other-objects.sh
+        run: mirror/stages/08-assign-issues.sh
 
       - name: Commit state after stage 08
         if: steps.stages.outputs.run_8 == 'true'
@@ -236,8 +211,122 @@ jobs:
           git add state/ validation-reports/ || true
           if ! git diff --cached --quiet; then
             git commit --allow-empty \
-              -m "mirror: state after stage 08 (other-objects) [skip ci]"
+              -m "mirror: state after stage 08 (assign-issues) [skip ci]"
             git push
           else
             echo "No state changes to commit after stage 08"
+          fi
+
+      # ================================================================== #
+      # Stage 9 — Other objects inventory
+      # ================================================================== #
+      - name: Stage 09 — other-objects
+        if: steps.stages.outputs.run_9 == 'true'
+        run: mirror/stages/09-other-objects.sh
+
+      - name: Commit state after stage 09
+        if: steps.stages.outputs.run_9 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 09 (other-objects) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 09"
+          fi
+
+      # ================================================================== #
+      # Stage 10 — Mirror teams
+      # ================================================================== #
+      - name: Stage 10 — mirror-teams
+        if: steps.stages.outputs.run_10 == 'true'
+        run: mirror/stages/10-mirror-teams.sh
+
+      - name: Commit state after stage 10
+        if: steps.stages.outputs.run_10 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 10 (mirror-teams) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 10"
+          fi
+
+      # ================================================================== #
+      # Stage 11 — Mirror releases
+      # ================================================================== #
+      - name: Stage 11 — mirror-releases
+        if: steps.stages.outputs.run_11 == 'true'
+        run: mirror/stages/11-mirror-releases.sh
+
+      - name: Commit state after stage 11
+        if: steps.stages.outputs.run_11 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 11 (mirror-releases) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 11"
+          fi
+
+      # ================================================================== #
+      # Stage 12 — Mirror branch protections
+      # ================================================================== #
+      - name: Stage 12 — mirror-branch-protections
+        if: steps.stages.outputs.run_12 == 'true'
+        run: mirror/stages/12-mirror-branch-protections.sh
+
+      - name: Commit state after stage 12
+        if: steps.stages.outputs.run_12 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 12 (mirror-branch-protections) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 12"
+          fi
+
+      # ================================================================== #
+      # Stage 13 — Mirror Actions variables and secrets inventory
+      # ================================================================== #
+      - name: Stage 13 — mirror-actions-variables
+        if: steps.stages.outputs.run_13 == 'true'
+        run: mirror/stages/13-mirror-actions-variables.sh
+
+      - name: Commit state after stage 13
+        if: steps.stages.outputs.run_13 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 13 (mirror-actions-variables) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 13"
+          fi
+
+      # ================================================================== #
+      # Stage 14 — Mirror outside collaborators
+      # ================================================================== #
+      - name: Stage 14 — mirror-outside-collaborators
+        if: steps.stages.outputs.run_14 == 'true'
+        run: mirror/stages/14-mirror-outside-collaborators.sh
+
+      - name: Commit state after stage 14
+        if: steps.stages.outputs.run_14 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 14 (mirror-outside-collaborators) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 14"
           fi

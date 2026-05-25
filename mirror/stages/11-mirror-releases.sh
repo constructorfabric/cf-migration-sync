@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# mirror/stages/10-mirror-releases.sh
+# mirror/stages/11-mirror-releases.sh
 # Mirror GitHub Releases from source org to target org:
 #   - Creates each release in target (tag, title, body, draft/prerelease flags)
 #   - Prepends attribution block to release body (original author, source URL,
@@ -21,7 +21,7 @@
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
-#   ./mirror/stages/10-mirror-releases.sh [--dry-run]
+#   ./mirror/stages/11-mirror-releases.sh [--dry-run]
 
 set -euo pipefail
 
@@ -49,7 +49,7 @@ main() {
 
   # ---- Load excluded repos from config ------------------------------------
   local excluded_repos
-  excluded_repos="$(jq -r '.stage_10_mirror_releases.exclude_repos[] // empty' \
+  excluded_repos="$(jq -r '.stage_11_mirror_releases.exclude_repos[] // empty' \
     "$MIRROR_CONFIG" 2>/dev/null || true)"
   if [[ -n "$excluded_repos" ]]; then
     log "Excluded repos: $(echo "$excluded_repos" | tr '\n' ' ')"
@@ -76,7 +76,7 @@ main() {
   log "Stage 10 complete"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
-    commit_state "mirror: state after stage 10 (mirror-releases) [skip ci]"
+    commit_state "mirror: state after stage 11 (mirror-releases) [skip ci]"
   fi
 }
 
@@ -85,7 +85,7 @@ _mirror_repo_releases() {
   local repo_name="$1"
   local state_file="$STATE_DIR/$repo_name.yaml"
 
-  state_init "$state_file" "10-mirror-releases"
+  state_init "$state_file" "11-mirror-releases"
 
   # Fetch all source releases (newest-first pagination)
   local releases

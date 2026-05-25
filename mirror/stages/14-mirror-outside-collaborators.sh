@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# mirror/stages/13-mirror-outside-collaborators.sh
+# mirror/stages/14-mirror-outside-collaborators.sh
 # Mirror per-repository outside collaborators from source to target.
 #
 # Outside collaborators are GitHub users with direct repository access who are
@@ -22,7 +22,7 @@
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
-#   ./mirror/stages/13-mirror-outside-collaborators.sh [--dry-run]
+#   ./mirror/stages/14-mirror-outside-collaborators.sh [--dry-run]
 
 set -euo pipefail
 
@@ -45,7 +45,7 @@ main() {
   # repos) accept an invitation.  In backup mode no one is being added to the
   # target org, so this stage would fail silently for private repos.
   if [[ "$INVITE_MEMBERS" -eq 0 ]]; then
-    log "invite_members=false — stage 13 skipped (outside collaborator access requires active migration mode)"
+    log "invite_members=false — stage 14 skipped (outside collaborator access requires active migration mode)"
     log "Set invite_members=true in mirror/config.json and re-run this stage to mirror collaborators"
     return 0
   fi
@@ -60,7 +60,7 @@ main() {
   log "Found $total_repos repos"
 
   local excluded_repos
-  excluded_repos="$(jq -r '.stage_13_mirror_outside_collaborators.exclude_repos[] // empty' \
+  excluded_repos="$(jq -r '.stage_14_mirror_outside_collaborators.exclude_repos[] // empty' \
     "$MIRROR_CONFIG" 2>/dev/null || true)"
 
   # Load excluded logins (same list as stage 01 — NEVER add these users anywhere)
@@ -96,7 +96,7 @@ main() {
     log "[$repo_idx/$total_repos] $repo_name: $collab_count outside collaborators"
 
     local state_file="$STATE_DIR/$repo_name.yaml"
-    state_init "$state_file" "13-mirror-outside-collaborators"
+    state_init "$state_file" "14-mirror-outside-collaborators"
 
     while IFS= read -r collab; do
       local login login_lower permission
@@ -167,7 +167,7 @@ main() {
   log "Stage 13 complete"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
-    commit_state "mirror: state after stage 13 (mirror-outside-collaborators) [skip ci]"
+    commit_state "mirror: state after stage 14 (mirror-outside-collaborators) [skip ci]"
   fi
 }
 

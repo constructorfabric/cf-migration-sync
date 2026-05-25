@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# mirror/stages/11-mirror-branch-protections.sh
+# mirror/stages/12-mirror-branch-protections.sh
 # Mirror per-repository branch protection rules to the target org.
 #
 # Two separate GitHub mechanisms are handled:
@@ -10,7 +10,7 @@
 #      POST /repos/{org}/{repo}/rulesets         (create)
 #
 #      Bypass actors with type="Team" are mapped by slug (teams must already
-#      exist in target — run stage 09 first).  Actors of type="Integration"
+#      exist in target — run stage 10 first).  Actors of type="Integration"
 #      (apps) are stripped with a warning because the app may not be installed.
 #      Actors of type="RepositoryRole" and "OrganizationAdmin" are kept as-is
 #      since these reference built-in roles that exist in every org.
@@ -28,7 +28,7 @@
 # Idempotency: state per repo tracks applied rules; existing-name rulesets are
 # patched (PATCH) rather than re-created.
 #
-# Depends on: stage 02 (branches must exist), stage 09 (teams must exist for
+# Depends on: stage 02 (branches must exist), stage 10 (teams must exist for
 #             bypass actor / push restriction mapping).
 #
 # State file: state/branch-protections/<repo-name>.yaml
@@ -36,7 +36,7 @@
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
-#   ./mirror/stages/11-mirror-branch-protections.sh [--dry-run]
+#   ./mirror/stages/12-mirror-branch-protections.sh [--dry-run]
 
 set -euo pipefail
 
@@ -63,7 +63,7 @@ main() {
   log "Found $total_repos repos"
 
   local excluded_repos
-  excluded_repos="$(jq -r '.stage_11_mirror_branch_protections.exclude_repos[] // empty' \
+  excluded_repos="$(jq -r '.stage_12_mirror_branch_protections.exclude_repos[] // empty' \
     "$MIRROR_CONFIG" 2>/dev/null || true)"
 
   local repo_idx=0
@@ -87,7 +87,7 @@ main() {
   log "Stage 11 complete"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
-    commit_state "mirror: state after stage 11 (mirror-branch-protections) [skip ci]"
+    commit_state "mirror: state after stage 12 (mirror-branch-protections) [skip ci]"
   fi
 }
 
@@ -96,7 +96,7 @@ _mirror_repo_protections() {
   local repo_name="$1"
   local state_file="$STATE_DIR/$repo_name.yaml"
 
-  state_init "$state_file" "11-mirror-branch-protections"
+  state_init "$state_file" "12-mirror-branch-protections"
 
   # Pre-fetch target teams (slug → id) for bypass actor mapping.
   local tgt_teams
@@ -306,7 +306,7 @@ _apply_ruleset() {
 # ---------------------------------------------------------------------------
 # _apply_legacy_protection — translate GET format → PUT format and apply.
 # Strips apps from restrictions (may not be installed in target).
-# Maps team slugs in restrictions (trusted to match since stage 09 ran).
+# Maps team slugs in restrictions (trusted to match since stage 10 ran).
 # ---------------------------------------------------------------------------
 _apply_legacy_protection() {
   local repo_name="$1"

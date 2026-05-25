@@ -48,11 +48,13 @@
     "exclude_repos": []
   },
 
-  "stage_07_assign_issues": {},
+  "stage_07_rewrite_cross_references": {},
 
-  "stage_08_other_objects": {},
+  "stage_08_assign_issues": {},
 
-  "stage_09_mirror_teams": {
+  "stage_09_other_objects": {},
+
+  "stage_10_mirror_teams": {
     "exclude_teams": [],
     "_comment_force_privacy": "Force all mirrored teams to this visibility regardless of source. 'secret' = hidden (only org owners + team members can see it). 'closed' = visible to all org members. Omit or set null to mirror source value.",
     "force_privacy": "secret",
@@ -60,7 +62,13 @@
     "force_notification_setting": "notifications_disabled"
   },
 
-  "stage_10_mirror_releases": {
+  "stage_11_mirror_releases": {
     "exclude_repos": []
-  }
+  },
+
+  "stage_12_mirror_branch_protections": {},
+
+  "stage_13_mirror_actions_variables": {},
+
+  "stage_14_mirror_outside_collaborators": {}
 }

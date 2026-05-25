@@ -21,6 +21,43 @@ TARGET_ORG="${TARGET_ORG:-constructorfabric}"
 STATE_DIR="$REPO_ROOT/state/issues"
 
 # ---------------------------------------------------------------------------
+# _encode_at_mentions — replace @username with &#64;username in piped text,
+# skipping fenced code blocks and inline code spans, to prevent GitHub from
+# sending notification emails for @mentions in mirrored content.
+# Usage: encoded="$(echo "$body" | _encode_at_mentions)"
+_encode_at_mentions() {
+  python3 -c '
+import re, sys
+
+def encode_line(line):
+    # Split on inline code spans to avoid encoding @mentions inside them
+    parts = re.split(r"(`[^`\n]*`)", line)
+    out = []
+    for p in parts:
+        if p.startswith("`"):
+            out.append(p)
+        else:
+            out.append(re.sub(r"@([a-zA-Z0-9][-a-zA-Z0-9]*)", r"&#64;\1", p))
+    return "".join(out)
+
+lines = sys.stdin.read().split("\n")
+in_fence = False
+result = []
+for line in lines:
+    s = line.strip()
+    if s.startswith("```") or s.startswith("~~~"):
+        in_fence = not in_fence
+        result.append(line)
+        continue
+    if in_fence:
+        result.append(line)
+        continue
+    result.append(encode_line(line))
+sys.stdout.write("\n".join(result))
+'
+}
+
+# ---------------------------------------------------------------------------
 main() {
   check_dry_run "$@"
   preflight
@@ -205,7 +242,11 @@ _mirror_repo_issues() {
     # ---- Build body with visible attribution + idempotency marker ------
     local src_url="https://github.com/$SOURCE_ORG/$repo_name/issues/$src_number"
     local attribution="> 🔗 **Mirrored from** [$SOURCE_ORG/$repo_name#$src_number]($src_url)
-> Originally opened by **@${src_author}** on ${src_created}"
+> Originally opened by **${src_author}** on ${src_created}"
+
+    # Encode @mentions in source body to prevent GitHub notification emails
+    local encoded_body
+    encoded_body="$(echo "$body" | _encode_at_mentions)"
 
     local full_body
     if [[ -n "$body" ]]; then
@@ -213,7 +254,7 @@ _mirror_repo_issues() {
 
 ---
 
-${body}
+${encoded_body}
 
 ---
 ${marker}"
@@ -431,8 +472,11 @@ _mirror_issue_comments() {
       continue
     fi
 
+    # Encode @mentions in comment body to prevent GitHub notification emails
+    c_body="$(echo "$c_body" | _encode_at_mentions)"
+
     local c_full_body
-    c_full_body="**@${c_author}** commented on ${c_created}:
+    c_full_body="**${c_author}** commented on ${c_created}:
 
 ---
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# mirror/stages/08-other-objects.sh
+# mirror/stages/09-other-objects.sh
 # Inventory and partial mirror of objects requiring manual action or secrets.
 #
 # What this stage does:
@@ -17,14 +17,14 @@
 #     - Deploy key titles + public keys — private keys are unreadable
 #
 # NOT included here (handled by dedicated stages):
-#   - Releases + assets  → stage 10 (mirror-releases)
-#   - Branch protections → stage 11 (mirror-branch-protections)
-#   - Actions variables  → stage 12 (mirror-actions-variables)
+#   - Releases + assets  → stage 11 (mirror-releases)
+#   - Branch protections → stage 12 (mirror-branch-protections)
+#   - Actions variables  → stage 13 (mirror-actions-variables)
 #
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
-#   ./mirror/stages/08-other-objects.sh [--dry-run]
+#   ./mirror/stages/09-other-objects.sh [--dry-run]
 
 set -euo pipefail
 
@@ -42,7 +42,7 @@ main() {
 
   log "Stage 08 — other-objects starting"
 
-  state_init "$STATE_FILE" "08-other-objects"
+  state_init "$STATE_FILE" "09-other-objects"
 
   local items="[]"
   local ts
@@ -434,7 +434,7 @@ main() {
   echo "$items" | jq -r 'group_by(.type) | .[] | "  \(.[0].type): \(length)"' >&2
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
-    commit_state "mirror: state after stage 08 (other-objects) [skip ci]"
+    commit_state "mirror: state after stage 09 (other-objects) [skip ci]"
   fi
 }
 

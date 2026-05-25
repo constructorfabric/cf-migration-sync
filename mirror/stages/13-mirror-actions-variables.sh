@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# mirror/stages/12-mirror-actions-variables.sh
+# mirror/stages/13-mirror-actions-variables.sh
 # Mirror GitHub Actions VARIABLES (not secrets) from source to target.
 #
 # Variables are NOT secrets — their values are readable via the API and can
@@ -11,7 +11,7 @@
 #   - Repo-level Actions variables (GET /repos/{owner}/{repo}/actions/variables)
 #
 # NOT in scope (separate manual action required):
-#   - Actions SECRETS — values are write-only; see stage 08 for name inventory
+#   - Actions SECRETS — values are write-only; see stage 09 for name inventory
 #   - Dependabot variables/secrets — not yet in REST API
 #   - Environment-level variables — complex dependency on environments existing
 #
@@ -29,7 +29,7 @@
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
-#   ./mirror/stages/12-mirror-actions-variables.sh [--dry-run]
+#   ./mirror/stages/13-mirror-actions-variables.sh [--dry-run]
 
 set -euo pipefail
 
@@ -47,10 +47,10 @@ main() {
 
   log "Stage 12 — mirror-actions-variables starting"
 
-  state_init "$STATE_FILE" "12-mirror-actions-variables"
+  state_init "$STATE_FILE" "13-mirror-actions-variables"
 
   local excluded_repos
-  excluded_repos="$(jq -r '.stage_12_mirror_actions_variables.exclude_repos[] // empty' \
+  excluded_repos="$(jq -r '.stage_13_mirror_actions_variables.exclude_repos[] // empty' \
     "$MIRROR_CONFIG" 2>/dev/null || true)"
 
   # ---- 1. Org-level Actions variables ------------------------------------
@@ -145,7 +145,7 @@ main() {
   log "Stage 12 complete — total=$total synced=$synced failed=$failed"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
-    commit_state "mirror: state after stage 12 (mirror-actions-variables) [skip ci]"
+    commit_state "mirror: state after stage 13 (mirror-actions-variables) [skip ci]"
   fi
 }
 

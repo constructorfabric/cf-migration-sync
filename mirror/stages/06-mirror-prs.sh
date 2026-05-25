@@ -36,6 +36,43 @@ TARGET_ORG="${TARGET_ORG:-constructorfabric}"
 STATE_DIR="$REPO_ROOT/state/prs"
 
 # ---------------------------------------------------------------------------
+# _encode_at_mentions — replace @username with &#64;username in piped text,
+# skipping fenced code blocks and inline code spans, to prevent GitHub from
+# sending notification emails for @mentions in mirrored content.
+# Usage: encoded="$(echo "$body" | _encode_at_mentions)"
+_encode_at_mentions() {
+  python3 -c '
+import re, sys
+
+def encode_line(line):
+    # Split on inline code spans to avoid encoding @mentions inside them
+    parts = re.split(r"(`[^`\n]*`)", line)
+    out = []
+    for p in parts:
+        if p.startswith("`"):
+            out.append(p)
+        else:
+            out.append(re.sub(r"@([a-zA-Z0-9][-a-zA-Z0-9]*)", r"&#64;\1", p))
+    return "".join(out)
+
+lines = sys.stdin.read().split("\n")
+in_fence = False
+result = []
+for line in lines:
+    s = line.strip()
+    if s.startswith("```") or s.startswith("~~~"):
+        in_fence = not in_fence
+        result.append(line)
+        continue
+    if in_fence:
+        result.append(line)
+        continue
+    result.append(encode_line(line))
+sys.stdout.write("\n".join(result))
+'
+}
+
+# ---------------------------------------------------------------------------
 main() {
   check_dry_run "$@"
   preflight
@@ -216,8 +253,11 @@ _mirror_repo_prs() {
       pr_status_str="merged on $pr_merged"
     fi
 
+    # Encode @mentions in PR body to prevent GitHub notification emails
+    pr_body="$(echo "$pr_body" | _encode_at_mentions)"
+
     local issue_body
-    issue_body="> 🔗 **Mirrored PR** [$SOURCE_ORG/$repo_name#$pr_number]($pr_url) | **Author:** @$pr_author | **Opened:** $pr_created | **Status:** $pr_status_str
+    issue_body="> 🔗 **Mirrored PR** [$SOURCE_ORG/$repo_name#$pr_number]($pr_url) | **Author:** $pr_author | **Opened:** $pr_created | **Status:** $pr_status_str
 > *GitHub API does not allow setting PR author or timestamps — attribution preserved here.*
 
 ---
@@ -345,7 +385,10 @@ _mirror_pr_comments() {
       mirrored=$((mirrored + 1)); continue
     fi
 
-    c_full_body="**@${c_author}** commented on ${c_created}:
+    # Encode @mentions to prevent GitHub notification emails
+    c_body="$(echo "$c_body" | _encode_at_mentions)"
+
+    c_full_body="**${c_author}** commented on ${c_created}:
 
 ---
 
@@ -379,7 +422,10 @@ ${c_marker}"
       mirrored=$((mirrored + 1)); continue
     fi
 
-    rv_full_body="**@${rv_author}** submitted review **${rv_state}** on ${rv_submitted}:
+    # Encode @mentions to prevent GitHub notification emails
+    rv_body="$(echo "$rv_body" | _encode_at_mentions)"
+
+    rv_full_body="**${rv_author}** submitted review **${rv_state}** on ${rv_submitted}:
 
 ---
 
@@ -414,7 +460,10 @@ ${rv_marker}"
       mirrored=$((mirrored + 1)); continue
     fi
 
-    rc_full_body="**@${rc_author}** reviewed \`${rc_path}\` line ${rc_line} on ${rc_created}:
+    # Encode @mentions to prevent GitHub notification emails
+    rc_body="$(echo "$rc_body" | _encode_at_mentions)"
+
+    rc_full_body="**${rc_author}** reviewed \`${rc_path}\` line ${rc_line} on ${rc_created}:
 
 ---
 

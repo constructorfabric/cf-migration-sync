@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# mirror/stages/09-mirror-teams.sh
+# mirror/stages/10-mirror-teams.sh
 # Mirror teams from source org to target org:
 #   - Create teams (preserving parent-child hierarchy, parents first)
 #   - Sync team members with their roles (member | maintainer)
@@ -11,7 +11,7 @@
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
-#   ./mirror/stages/09-mirror-teams.sh [--dry-run]
+#   ./mirror/stages/10-mirror-teams.sh [--dry-run]
 
 set -euo pipefail
 
@@ -29,11 +29,11 @@ main() {
 
   log "Stage 09 — mirror-teams starting"
 
-  state_init "$STATE_FILE" "09-mirror-teams"
+  state_init "$STATE_FILE" "10-mirror-teams"
 
   # ---- Load excluded teams from config ------------------------------------
   local excluded_teams
-  excluded_teams="$(jq -r '.stage_09_mirror_teams.exclude_teams[] // empty' \
+  excluded_teams="$(jq -r '.stage_10_mirror_teams.exclude_teams[] // empty' \
     "$MIRROR_CONFIG" 2>/dev/null || true)"
   if [[ -n "$excluded_teams" ]]; then
     log "Excluded teams: $(echo "$excluded_teams" | tr '\n' ' ')"
@@ -43,9 +43,9 @@ main() {
   # force_privacy: "secret" (hidden) | "closed" (visible) | empty = use source value
   # force_notification_setting: "notifications_disabled" | "notifications_enabled" | empty = use source value
   local force_privacy force_notification_setting
-  force_privacy="$(jq -r '.stage_09_mirror_teams.force_privacy // empty' \
+  force_privacy="$(jq -r '.stage_10_mirror_teams.force_privacy // empty' \
     "$MIRROR_CONFIG" 2>/dev/null || true)"
-  force_notification_setting="$(jq -r '.stage_09_mirror_teams.force_notification_setting // empty' \
+  force_notification_setting="$(jq -r '.stage_10_mirror_teams.force_notification_setting // empty' \
     "$MIRROR_CONFIG" 2>/dev/null || true)"
   [[ -n "$force_privacy" ]] && \
     log "POLICY: all teams will be forced to privacy='$force_privacy'"
@@ -139,7 +139,7 @@ main() {
   # Team structure (creation) and repo permissions are always synced — they
   # make the org ready to use even before members are added.
   # Member sync is skipped in backup mode (invite_members=false) because the
-  # users do not exist in the target org yet.  Re-run stage 09 after switching
+  # users do not exist in the target org yet.  Re-run stage 10 after switching
   # to invite_members=true and running stage 01 to sync members.
   if [[ "$INVITE_MEMBERS" -eq 0 ]]; then
     log "invite_members=false — syncing team repo permissions only (member sync skipped)"
@@ -172,7 +172,7 @@ main() {
   log "Stage 09 complete — total=$total synced=$synced failed=$failed"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
-    commit_state "mirror: state after stage 09 (mirror-teams) [skip ci]"
+    commit_state "mirror: state after stage 10 (mirror-teams) [skip ci]"
   fi
 }
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# mirror/stages/07-assign-issues.sh
+# mirror/stages/08-assign-issues.sh
 # Apply assignees to previously mirrored issues.
 # Reads state/issues/<repo>.yaml — processes items where
 #   assignees_status == "pending" AND assignees array is non-empty.
@@ -10,7 +10,7 @@
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
-#   ./mirror/stages/07-assign-issues.sh [--dry-run]
+#   ./mirror/stages/08-assign-issues.sh [--dry-run]
 
 set -euo pipefail
 
@@ -28,7 +28,7 @@ main() {
 
   log "Stage 07 — assign-issues starting"
 
-  # Load excluded logins (same list as stage 01 and stage 09)
+  # Load excluded logins (same list as stage 01 and stage 10)
   local excluded_logins
   excluded_logins="$(jq -r '.stage_01_invite_people.exclude_logins[] // empty' \
     "$MIRROR_CONFIG" 2>/dev/null || true)"
@@ -42,8 +42,8 @@ main() {
   # would fail silently (GitHub API ignores non-member logins in assignees).
   # Skip the entire stage to avoid noise in state files.
   if [[ "$INVITE_MEMBERS" -eq 0 ]]; then
-    log "invite_members=false — stage 07 skipped (members not in target org)"
-    log "Issue assignees will be applied when invite_members=true and stage 07 is re-run"
+    log "invite_members=false — stage 08 skipped (members not in target org)"
+    log "Issue assignees will be applied when invite_members=true and stage 08 is re-run"
     return 0
   fi
 
@@ -210,7 +210,7 @@ main() {
   log "Stage 07 complete — applied=$total_applied skipped=$total_skipped failed=$total_failed"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
-    commit_state "mirror: state after stage 07 (assign-issues) [skip ci]"
+    commit_state "mirror: state after stage 08 (assign-issues) [skip ci]"
   fi
 }
 
