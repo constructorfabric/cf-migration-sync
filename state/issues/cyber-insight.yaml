@@ -1,0 +1,4983 @@
+{
+  "meta": {
+    "stage": "05-mirror-issues",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-25T18:38:25Z",
+    "last_run_at": "2026-05-25T18:38:25Z"
+  },
+  "items": [
+    {
+      "source_number": 72,
+      "source_id": 4230908969,
+      "source_state": "closed",
+      "target_number": 1,
+      "target_node_id": null,
+      "title": "[PRE-01] Define Priority-1 connectors for VZ",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:30Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 73,
+      "source_id": 4230909260,
+      "source_state": "closed",
+      "target_number": 2,
+      "target_node_id": null,
+      "title": "[PRE-02] Define Priority-1 charts and dashboards",
+      "assignees": [
+        "dzarlax"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:31Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 74,
+      "source_id": 4230909480,
+      "source_state": "closed",
+      "target_number": 3,
+      "target_node_id": null,
+      "title": "[PRE-03] Stand up test ClickHouse",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:32Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 75,
+      "source_id": 4230909667,
+      "source_state": "open",
+      "target_number": 4,
+      "target_node_id": null,
+      "title": "[PRE-04] Stand up test auxiliary services",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:33Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 76,
+      "source_id": 4230909854,
+      "source_state": "closed",
+      "target_number": 5,
+      "target_node_id": null,
+      "title": "[PRE-05] Decide v0.1 release boundary",
+      "assignees": [
+        "dzarlax"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:33Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 77,
+      "source_id": 4230910081,
+      "source_state": "closed",
+      "target_number": 6,
+      "target_node_id": null,
+      "title": "[BE-01] ClickHouse connection pool & config",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:34Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 78,
+      "source_id": 4230910320,
+      "source_state": "closed",
+      "target_number": 7,
+      "target_node_id": null,
+      "title": "[BE-02] Parameterized query builder",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:36Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 79,
+      "source_id": 4230910643,
+      "source_state": "closed",
+      "target_number": 8,
+      "target_node_id": null,
+      "title": "[BE-03] OData-to-ClickHouse SQL translator + client tests",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:37Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 80,
+      "source_id": 4230910876,
+      "source_state": "closed",
+      "target_number": 9,
+      "target_node_id": null,
+      "title": "[BE-04] Identity Service skeleton + MariaDB schema",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:38Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 81,
+      "source_id": 4230911110,
+      "source_state": "open",
+      "target_number": 10,
+      "target_node_id": null,
+      "title": "[BE-05] Org hierarchy + membership CRUD",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:39Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 82,
+      "source_id": 4230911280,
+      "source_state": "closed",
+      "target_number": 11,
+      "target_node_id": null,
+      "title": "[BE-06] OIDC subject mapping + RBAC role CRUD",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:39Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 83,
+      "source_id": 4230911513,
+      "source_state": "open",
+      "target_number": 12,
+      "target_node_id": null,
+      "title": "[BE-07] Authz plugin: RBAC permission check + org-tree scoping",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:40Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 84,
+      "source_id": 4230911718,
+      "source_state": "closed",
+      "target_number": 13,
+      "target_node_id": null,
+      "title": "[BE-08] Authz plugin: Redis caching + integration tests",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:40Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 85,
+      "source_id": 4230911973,
+      "source_state": "closed",
+      "target_number": 14,
+      "target_node_id": null,
+      "title": "[BE-09] Analytics API skeleton + MariaDB schema",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:41Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 86,
+      "source_id": 4230912151,
+      "source_state": "closed",
+      "target_number": 15,
+      "target_node_id": null,
+      "title": "[BE-10] Analytics query endpoint with authz scoping",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:42Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 87,
+      "source_id": 4230912378,
+      "source_state": "closed",
+      "target_number": 16,
+      "target_node_id": null,
+      "title": "[BE-11] Metrics catalog CRUD",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:43Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 88,
+      "source_id": 4230912555,
+      "source_state": "closed",
+      "target_number": 17,
+      "target_node_id": null,
+      "title": "[ING-01] Review approved Priority-1 connectors vs latest specs",
+      "assignees": [
+        "mitasovr",
+        "aleksdotbar",
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:45Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 89,
+      "source_id": 4230912791,
+      "source_state": "open",
+      "target_number": 18,
+      "target_node_id": null,
+      "title": "[ING-02] Review and normalize Silver layer descriptions",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:46Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 90,
+      "source_id": 4230912984,
+      "source_state": "closed",
+      "target_number": 19,
+      "target_node_id": null,
+      "title": "[ING-03] dbt bronze→silver for first approved connectors",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:46Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 91,
+      "source_id": 4230913188,
+      "source_state": "open",
+      "target_number": 20,
+      "target_node_id": null,
+      "title": "[ING-04] dbt bronze→silver for remaining approved connectors",
+      "assignees": [
+        "aleksdotbar",
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:47Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 92,
+      "source_id": 4230913376,
+      "source_state": "closed",
+      "target_number": 21,
+      "target_node_id": null,
+      "title": "[ING-05] Test ingestion pipeline into ClickHouse",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:47Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 93,
+      "source_id": 4230913597,
+      "source_state": "closed",
+      "target_number": 22,
+      "target_node_id": null,
+      "title": "[FE-01] Frontend skeleton on frontx",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:48Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 94,
+      "source_id": 4230913829,
+      "source_state": "closed",
+      "target_number": 23,
+      "target_node_id": null,
+      "title": "[FE-02] OIDC login integration",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:50Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_number": 95,
+      "source_id": 4230914027,
+      "source_state": "closed",
+      "target_number": 24,
+      "target_node_id": null,
+      "title": "[FE-03] API client layer",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:51Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_number": 96,
+      "source_id": 4230914225,
+      "source_state": "closed",
+      "target_number": 25,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVi7Ow",
+      "title": "[FE-04] App shell: routing, navigation, session guards",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:55Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 97,
+      "source_id": 4230914411,
+      "source_state": "open",
+      "target_number": 26,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVi8fA",
+      "title": "[BE-12] Dashboard config CRUD",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:57Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 98,
+      "source_id": 4230914749,
+      "source_state": "closed",
+      "target_number": 27,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVi8yA",
+      "title": "[FE-05] Minimal dashboard viewer with live data",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:38:59Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_number": 99,
+      "source_id": 4230914944,
+      "source_state": "closed",
+      "target_number": 28,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVi9wg",
+      "title": "[REL-01] Helm release skeleton with core dependencies",
+      "assignees": [
+        "mitasovr",
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:03Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 100,
+      "source_id": 4230915141,
+      "source_state": "closed",
+      "target_number": 29,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVi-SA",
+      "title": "[REL-02] Service manifests, migrations, ingress/TLS, secrets, bootstrap seed",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:05Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 101,
+      "source_id": 4230915308,
+      "source_state": "closed",
+      "target_number": 30,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVi-vQ",
+      "title": "[REL-03] Frontend packaging and inclusion in installer",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:07Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 102,
+      "source_id": 4230915502,
+      "source_state": "closed",
+      "target_number": 31,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjABg",
+      "title": "[QA-01] First end-to-end test installation",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:10Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 103,
+      "source_id": 4230915676,
+      "source_state": "closed",
+      "target_number": 32,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjAlg",
+      "title": "[IR-01] Choose base HR system and define canonical person model",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:12Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 104,
+      "source_id": 4230915861,
+      "source_state": "open",
+      "target_number": 33,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjBnA",
+      "title": "[IR-02] Identity Resolution core: skeleton, alias matching, golden record builder, bootstrap",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:13Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 105,
+      "source_id": 4230916066,
+      "source_state": "open",
+      "target_number": 34,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjB0g",
+      "title": "[IR-03] Write `person_id` to Silver step 2 and integrate with connector outputs",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:14Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_number": 106,
+      "source_id": 4230916267,
+      "source_state": "closed",
+      "target_number": 35,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjCew",
+      "title": "[ING-06] dbt support for identity resolution",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:18Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 107,
+      "source_id": 4230916480,
+      "source_state": "open",
+      "target_number": 36,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjDTw",
+      "title": "[ING-07] Gold / materialized views for approved P1 charts",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:19Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 108,
+      "source_id": 4230916789,
+      "source_state": "closed",
+      "target_number": 37,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjDlQ",
+      "title": "[FE-06] Implement approved P1 charts and dashboards",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:22Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 109,
+      "source_id": 4230917034,
+      "source_state": "open",
+      "target_number": 38,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjEcg",
+      "title": "[FE-07] Chart polish and error/debug UX",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:24Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 110,
+      "source_id": 4230917259,
+      "source_state": "open",
+      "target_number": 39,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjErA",
+      "title": "[QA-02] Backend/UI tests, data-format debugging, performance checks",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:25Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 111,
+      "source_id": 4230917445,
+      "source_state": "open",
+      "target_number": 40,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjE-Q",
+      "title": "[BL-01] Connector refinement backlog beyond approved P1 scope",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:26Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 112,
+      "source_id": 4230917627,
+      "source_state": "open",
+      "target_number": 41,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjFPQ",
+      "title": "[BL-02] Connector Manager service",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:27Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 113,
+      "source_id": 4230917804,
+      "source_state": "open",
+      "target_number": 42,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjGIA",
+      "title": "[BL-03] Connector management UI",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:28Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 114,
+      "source_id": 4230917983,
+      "source_state": "open",
+      "target_number": 43,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjGYQ",
+      "title": "[BL-04] Transform Service",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:29Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 115,
+      "source_id": 4230918166,
+      "source_state": "closed",
+      "target_number": 44,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjG-Q",
+      "title": "[BL-05] Audit Trail / Redpanda-based async flows",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:31Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 116,
+      "source_id": 4230918337,
+      "source_state": "closed",
+      "target_number": 45,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjH6w",
+      "title": "[BL-06] Org sync + alerts + email",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:34Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 117,
+      "source_id": 4230918597,
+      "source_state": "open",
+      "target_number": 46,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjIpQ",
+      "title": "[BL-07] Production hardening",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:36Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 118,
+      "source_id": 4230918943,
+      "source_state": "open",
+      "target_number": 47,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjI8A",
+      "title": "[BL-08] Advanced constructor (custom dashboards/charts/connectors)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:37Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 120,
+      "source_id": 4232071441,
+      "source_state": "closed",
+      "target_number": 48,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjJKA",
+      "title": "[CONN-01] M365 connector: spec + implementation + dbt",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:39Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 121,
+      "source_id": 4232071866,
+      "source_state": "closed",
+      "target_number": 49,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjJpQ",
+      "title": "[CONN-02] BambooHR connector: spec + implementation + dbt",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:41Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 122,
+      "source_id": 4232072277,
+      "source_state": "closed",
+      "target_number": 50,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjKKg",
+      "title": "[CONN-03] Cursor connector: spec + implementation + dbt",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:43Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 123,
+      "source_id": 4232072745,
+      "source_state": "closed",
+      "target_number": 51,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjKnQ",
+      "title": "[CONN-04] Claude API connector: spec + implementation + dbt",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:45Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 124,
+      "source_id": 4232073186,
+      "source_state": "closed",
+      "target_number": 52,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjLuQ",
+      "title": "[CONN-05] Claude Team connector: spec + implementation + dbt",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:47Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 125,
+      "source_id": 4232073622,
+      "source_state": "closed",
+      "target_number": 53,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjMVg",
+      "title": "[CONN-06] Salesforce connector: spec + implementation + dbt",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:49Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 126,
+      "source_id": 4232074064,
+      "source_state": "closed",
+      "target_number": 54,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjM3g",
+      "title": "[CONN-07] Zoom connector: spec + implementation + dbt",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:51Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 127,
+      "source_id": 4232074469,
+      "source_state": "closed",
+      "target_number": 55,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjNdA",
+      "title": "[CONN-08] GitHub connector: spec + implementation + dbt",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:54Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 128,
+      "source_id": 4232074875,
+      "source_state": "closed",
+      "target_number": 56,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjN_Q",
+      "title": "[CONN-09] Bitbucket Cloud connector: spec + implementation + dbt",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:56Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 129,
+      "source_id": 4232075188,
+      "source_state": "closed",
+      "target_number": 57,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjOeQ",
+      "title": "[CONN-10] Bitbucket Cloud connector: spec + implementation + dbt",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:39:58Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 130,
+      "source_id": 4232075495,
+      "source_state": "closed",
+      "target_number": 58,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjPCA",
+      "title": "[CONN-11] Jira connector: spec + implementation + dbt",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:00Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 131,
+      "source_id": 4232075849,
+      "source_state": "closed",
+      "target_number": 59,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjPhQ",
+      "title": "[CONN-12] Slack connector: spec + implementation + dbt",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:02Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 132,
+      "source_id": 4232076068,
+      "source_state": "open",
+      "target_number": 60,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjQCw",
+      "title": "[CONN-13] GitLab connector: spec + implementation + dbt",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:03Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 133,
+      "source_id": 4232076240,
+      "source_state": "closed",
+      "target_number": 61,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjQqw",
+      "title": "[CONN-14] YouTrack connector: spec + implementation + dbt",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:05Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 134,
+      "source_id": 4232076441,
+      "source_state": "closed",
+      "target_number": 62,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjRcw",
+      "title": "[CONN-15] Zulip connector: spec + implementation + dbt",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:07Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 135,
+      "source_id": 4232076579,
+      "source_state": "open",
+      "target_number": 63,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjSlQ",
+      "title": "[CONN-16] Windsurf connector: spec + implementation + dbt",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:08Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 136,
+      "source_id": 4232076786,
+      "source_state": "open",
+      "target_number": 64,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjS7w",
+      "title": "[CONN-17] LDAP connector: spec + implementation + dbt",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:09Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 137,
+      "source_id": 4232076999,
+      "source_state": "closed",
+      "target_number": 65,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjTQg",
+      "title": "[CONN-18] HubSpot connector: spec + implementation + dbt",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:11Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 138,
+      "source_id": 4232227397,
+      "source_state": "closed",
+      "target_number": 66,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjTyQ",
+      "title": "state.sh: shell injection via unquoted variable interpolation into Python",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:13Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 141,
+      "source_id": 4232906614,
+      "source_state": "closed",
+      "target_number": 67,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjUOQ",
+      "title": "Consolidate Claude connectors + add Enterprise Analytics connector",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:16Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 147,
+      "source_id": 4261596913,
+      "source_state": "open",
+      "target_number": 68,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjU0A",
+      "title": "[FE-08] Migrate API layer to Analytics API spec (per-metric queries, Connector Manager, Identity Service)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:17Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 156,
+      "source_id": 4268890355,
+      "source_state": "closed",
+      "target_number": 69,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjVHw",
+      "title": "[CONN-19] Confluence connector: spec + implementation + dbt",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:19Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 164,
+      "source_id": 4276130190,
+      "source_state": "open",
+      "target_number": 70,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjWFw",
+      "title": "[ING-08] Extend class_comms_events: add M365 teams_activity stream",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:20Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 165,
+      "source_id": 4276131682,
+      "source_state": "open",
+      "target_number": 71,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjWZQ",
+      "title": "[ING-09] Extend class_comms_events: add Zoom meetings metadata",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:21Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 166,
+      "source_id": 4276133017,
+      "source_state": "open",
+      "target_number": 72,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjWog",
+      "title": "[ING-10] dbt Silver model: class_hr_events (leave requests, onboarding, transfers)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:22Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 167,
+      "source_id": 4276134163,
+      "source_state": "open",
+      "target_number": 73,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjW8w",
+      "title": "[ING-11] dbt Silver model: class_tasks (task tracker unified schema)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:23Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 168,
+      "source_id": 4276228762,
+      "source_state": "open",
+      "target_number": 74,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjXNw",
+      "title": "[ING-12] dbt Silver model: class_ai_dev_usage (Claude Code, Cursor, Windsurf)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:24Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 169,
+      "source_id": 4276229113,
+      "source_state": "open",
+      "target_number": 75,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjYHA",
+      "title": "[ING-13] dbt Silver model: class_ai_api_usage (Claude API, OpenAI, Claude Enterprise)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:25Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 170,
+      "source_id": 4276229290,
+      "source_state": "open",
+      "target_number": 76,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjYXQ",
+      "title": "[ING-14] dbt staging transforms: GitLab → class_git_* Silver models",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:26Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 171,
+      "source_id": 4276229465,
+      "source_state": "closed",
+      "target_number": 77,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjYng",
+      "title": "[ING-15] dbt staging transforms: Bitbucket Cloud → class_git_* Silver models",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:28Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 172,
+      "source_id": 4276229627,
+      "source_state": "open",
+      "target_number": 78,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjZKQ",
+      "title": "[ING-16] dbt staging transforms: Bitbucket Server → class_git_* Silver models",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:29Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 173,
+      "source_id": 4276229785,
+      "source_state": "closed",
+      "target_number": 79,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjZXg",
+      "title": "[ING-17] dbt staging transforms: Zulip → class_comms_events",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:31Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 174,
+      "source_id": 4276230086,
+      "source_state": "open",
+      "target_number": 80,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjZ3Q",
+      "title": "[ING-18] dbt staging transforms: LDAP → class_people",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:32Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 175,
+      "source_id": 4276230279,
+      "source_state": "closed",
+      "target_number": 81,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjaEw",
+      "title": "[ING-19] dbt Silver model: class_wiki_pages (Confluence)",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:35Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 176,
+      "source_id": 4276230471,
+      "source_state": "closed",
+      "target_number": 82,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjajA",
+      "title": "[ING-20] dbt staging transforms: HubSpot → class_crm_* Silver models",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:37Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 177,
+      "source_id": 4276230622,
+      "source_state": "open",
+      "target_number": 83,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjbEg",
+      "title": "[ING-21] dbt staging transforms: Windsurf → class_ai_dev_usage",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:38Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 178,
+      "source_id": 4276230900,
+      "source_state": "open",
+      "target_number": 84,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjbTQ",
+      "title": "[ING-22] CI connector + dbt Silver model: class_ci_builds (GitHub Actions, Jenkins, GitLab CI)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:39Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 185,
+      "source_id": 4281805510,
+      "source_state": "open",
+      "target_number": 85,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjbmA",
+      "title": "[BL-09] Alerts Service — business metric threshold evaluation and notifications",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:40Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 186,
+      "source_id": 4281806664,
+      "source_state": "open",
+      "target_number": 86,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjcHw",
+      "title": "[BL-10] Email Service — SMTP delivery + template rendering",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:42Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 187,
+      "source_id": 4281807859,
+      "source_state": "open",
+      "target_number": 87,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjcXg",
+      "title": "[BL-11] Org Sync — HR/directory → Identity Service integration",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:43Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 188,
+      "source_id": 4281809678,
+      "source_state": "open",
+      "target_number": 88,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjcqg",
+      "title": "[BL-12] Audit Service — append-only audit trail in ClickHouse",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:44Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 189,
+      "source_id": 4281811682,
+      "source_state": "open",
+      "target_number": 89,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjc8g",
+      "title": "[BL-13] Redpanda topic bootstrap — event-driven async backbone",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:45Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 190,
+      "source_id": 4281814386,
+      "source_state": "open",
+      "target_number": 90,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjdOA",
+      "title": "[IR-04] Identity Resolution REST API — resolve/merge/split/unmapped endpoints",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:46Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 191,
+      "source_id": 4281815807,
+      "source_state": "open",
+      "target_number": 91,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjdkg",
+      "title": "[IR-05] GDPR purge implementation — alias erasure endpoint + archive",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:48Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 192,
+      "source_id": 4281817592,
+      "source_state": "open",
+      "target_number": 92,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjd1Q",
+      "title": "[REL-04] CI/CD pipeline — GitHub Actions for tests, lint, image builds, releases",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:49Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 193,
+      "source_id": 4281819174,
+      "source_state": "open",
+      "target_number": 93,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjeFw",
+      "title": "[BL-14] Observability stack — Prometheus + Grafana + Alertmanager bundled",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:50Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 194,
+      "source_id": 4281821176,
+      "source_state": "open",
+      "target_number": 94,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjeYg",
+      "title": "[BL-15] Backup/restore strategy — ClickHouse + MariaDB disaster recovery",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:51Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 195,
+      "source_id": 4281822777,
+      "source_state": "open",
+      "target_number": 95,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjerQ",
+      "title": "[BL-16] Connector sync failure alerting — operator notifications on Airbyte errors",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:52Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 196,
+      "source_id": 4281824201,
+      "source_state": "open",
+      "target_number": 96,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVje9A",
+      "title": "[BL-17] API Gateway rate limiting — per-tenant quotas and abuse protection",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:53Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 197,
+      "source_id": 4281850800,
+      "source_state": "open",
+      "target_number": 97,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjfPA",
+      "title": "[BL-18] Tenant onboarding automation — end-to-end new-tenant provisioning",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:54Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 209,
+      "source_id": 4301502450,
+      "source_state": "open",
+      "target_number": 98,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjfhg",
+      "title": "LOC stat calculation methodology",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:55Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 238,
+      "source_id": 4337341159,
+      "source_state": "open",
+      "target_number": 99,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjfxg",
+      "title": "feat(silver): add class_task_daily aggregate model",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:56Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 249,
+      "source_id": 4357228831,
+      "source_state": "open",
+      "target_number": 100,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjgUg",
+      "title": "silver: duplicate rows in class_task_worklogs and class_task_field_history",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:57Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 250,
+      "source_id": 4358099069,
+      "source_state": "open",
+      "target_number": 101,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjgng",
+      "title": "Backend support for person_id IN (list) on bullet aggregate queries",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:40:58Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 258,
+      "source_id": 4375324646,
+      "source_state": "closed",
+      "target_number": 102,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjg6A",
+      "title": "Zoom meeting rejoins are counted as separate meetings",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:00Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 259,
+      "source_id": 4375379032,
+      "source_state": "closed",
+      "target_number": 103,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjhWg",
+      "title": "Confluence edit bursts inflate total_edits (same logical edit counted N times)",
+      "assignees": [
+        "aleksdotbar",
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:03Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 260,
+      "source_id": 4375379282,
+      "source_state": "closed",
+      "target_number": 104,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjh5Q",
+      "title": "Confluence minor_edit field always false — minor/major split is dead",
+      "assignees": [
+        "aleksdotbar",
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:05Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 261,
+      "source_id": 4375404082,
+      "source_state": "closed",
+      "target_number": 105,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjicQ",
+      "title": "Cursor resync stream not merged with main events — finalized costs lost, double-count risk",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:07Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 262,
+      "source_id": 4375404428,
+      "source_state": "closed",
+      "target_number": 106,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjjVg",
+      "title": "Cursor silver: completions_count and tool_use_accepted both backed by totalTabsAccepted",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:10Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 263,
+      "source_id": 4375516497,
+      "source_state": "closed",
+      "target_number": 107,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjj1g",
+      "title": "class_collab_meeting_activity: Zoom and M365 feeders have incompatible audio/video/screen duration semantics",
+      "assignees": [
+        "aleksdotbar",
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:12Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 264,
+      "source_id": 4375516646,
+      "source_state": "open",
+      "target_number": 108,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjkTg",
+      "title": "M365 silver: unlicensed users (isLicensed=false) leak into class_collab_meeting_activity",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:13Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 265,
+      "source_id": 4375650360,
+      "source_state": "open",
+      "target_number": 109,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjk5A",
+      "title": "Slack silver: user-status flags (is_active/is_guest/is_billable_seat) dropped — 58% noise rows in class_collab_chat_activity",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:16Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 266,
+      "source_id": 4375650570,
+      "source_state": "closed",
+      "target_number": 110,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjlKA",
+      "title": "Slack silver: direct_messages and group_chat_messages columns are permanently NULL",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:18Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 267,
+      "source_id": 4375650795,
+      "source_state": "open",
+      "target_number": 111,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjl7w",
+      "title": "bronze_slack: zombie empty tables (messages, users, channels) from retired connector",
+      "assignees": [
+        "mitasovr",
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:19Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 268,
+      "source_id": 4375709068,
+      "source_state": "open",
+      "target_number": 112,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjmRA",
+      "title": "Bitbucket Cloud connector: PR participants/reviewers never captured (list endpoint omits the field)",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:20Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 269,
+      "source_id": 4375709597,
+      "source_state": "open",
+      "target_number": 113,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjmgQ",
+      "title": "Silver fct_git_*/mtr_git_* tables use MergeTree instead of ReplacingMergeTree — latent dedup gap on replay",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:21Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 270,
+      "source_id": 4375743848,
+      "source_state": "open",
+      "target_number": 114,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjmzQ",
+      "title": "bronze_jira._boards: Airbyte _scrum_boards substream artifact persisted alongside jira_boards",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:22Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 271,
+      "source_id": 4376337951,
+      "source_state": "open",
+      "target_number": 115,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjnGw",
+      "title": "Consider migrating ingestion-ops tooling from Python to Rust",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:24Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 272,
+      "source_id": 4376440769,
+      "source_state": "open",
+      "target_number": 116,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjnYw",
+      "title": "Ingestion deployment-health alert: catch connectors that should be deployed but aren't",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:25Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 273,
+      "source_id": 4377150671,
+      "source_state": "closed",
+      "target_number": 117,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjntg",
+      "title": "ingestion-monitoring docs: bring PRD/DESIGN/FEATURE to full sdlc-kit compliance",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:27Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 275,
+      "source_id": 4378573319,
+      "source_state": "closed",
+      "target_number": 118,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjpFg",
+      "title": "Fresh local install via ./dev-up.sh on main is broken end-to-end (10 distinct bugs)",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:30Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_number": 283,
+      "source_id": 4383396946,
+      "source_state": "closed",
+      "target_number": 119,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjqmA",
+      "title": "Duplicate Zoom Airbyte source inflates meeting hours by 10x+ for affected tenants",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:36Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 285,
+      "source_id": 4383470052,
+      "source_state": "closed",
+      "target_number": 120,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjrLQ",
+      "title": "Add Confluence comments ingestion (footer + inline)",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:38Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 286,
+      "source_id": 4383520658,
+      "source_state": "open",
+      "target_number": 121,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjryg",
+      "title": "Add admin endpoint for read-only data-quality checks",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:39Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 287,
+      "source_id": 4383608779,
+      "source_state": "closed",
+      "target_number": 122,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjsbg",
+      "title": "Deploy #251 dataflow conventions to virtuozzo: hotfix bundle + bronze→RMT for all connectors",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:43Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 288,
+      "source_id": 4383813828,
+      "source_state": "open",
+      "target_number": 123,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjtRQ",
+      "title": "Connector: YouTrack",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:45Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 290,
+      "source_id": 4384619044,
+      "source_state": "open",
+      "target_number": 124,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjtjw",
+      "title": "Silver + connector staging watermarks not partitioned by tenant_id/source_id — silent data loss on multi-tenant",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:46Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 292,
+      "source_id": 4385081885,
+      "source_state": "open",
+      "target_number": 125,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjt1w",
+      "title": "CRM: Gold: analytics and charts",
+      "assignees": [
+        "mitasovr",
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:47Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 304,
+      "source_id": 4391660126,
+      "source_state": "closed",
+      "target_number": 126,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjuIQ",
+      "title": "Design deployment process: source of truth for values, secrets, image tags",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:49Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 309,
+      "source_id": 4392896943,
+      "source_state": "open",
+      "target_number": 127,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjulg",
+      "title": "Tech-debt: gold-view migrations reference silver tables before dbt builds them — split init.sh into pre-dbt/post-dbt phases OR move gold to dbt",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:50Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 310,
+      "source_id": 4393562555,
+      "source_state": "open",
+      "target_number": 128,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVju3A",
+      "title": "Connector: Salesforce",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:51Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 311,
+      "source_id": 4393563440,
+      "source_state": "open",
+      "target_number": 129,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjvGA",
+      "title": "Connector: HubSpot",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:52Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 312,
+      "source_id": 4393564805,
+      "source_state": "open",
+      "target_number": 130,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjvXw",
+      "title": "CRM: Silver",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:53Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 313,
+      "source_id": 4393610172,
+      "source_state": "closed",
+      "target_number": 131,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjvmA",
+      "title": "Salesforce connector: spec + implementation + staging dbt",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:55Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 314,
+      "source_id": 4393692209,
+      "source_state": "closed",
+      "target_number": 132,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjwFA",
+      "title": "Silver crm: implement transformations (Salesforce + HubSpot → class_crm_*)",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:57Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 315,
+      "source_id": 4393692388,
+      "source_state": "closed",
+      "target_number": 133,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjwng",
+      "title": "Silver crm: validate on real data",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:41:59Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 316,
+      "source_id": 4393770101,
+      "source_state": "open",
+      "target_number": 134,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjxHw",
+      "title": "Connector: Zoom",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:00Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 317,
+      "source_id": 4393770124,
+      "source_state": "open",
+      "target_number": 135,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjxdA",
+      "title": "Connector: Bitbucket Cloud",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:01Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 318,
+      "source_id": 4393770132,
+      "source_state": "open",
+      "target_number": 136,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjxzw",
+      "title": "Silver: git",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:02Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 319,
+      "source_id": 4393770140,
+      "source_state": "open",
+      "target_number": 137,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjyDQ",
+      "title": "Silver: collaboration",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:03Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 320,
+      "source_id": 4393770161,
+      "source_state": "open",
+      "target_number": 138,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjyUQ",
+      "title": "Connector: Slack",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:04Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 321,
+      "source_id": 4393770195,
+      "source_state": "open",
+      "target_number": 139,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjyhQ",
+      "title": "Connector: Microsoft 365",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:05Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 323,
+      "source_id": 4393781407,
+      "source_state": "open",
+      "target_number": 140,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjywg",
+      "title": "Silver git: implement transformations (BBC + BBS + GitHub + GitLab → class_git_*)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:06Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 322,
+      "source_id": 4393781408,
+      "source_state": "open",
+      "target_number": 141,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjzAw",
+      "title": "Bitbucket Cloud: validate bronze on real data",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:08Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 324,
+      "source_id": 4393781410,
+      "source_state": "open",
+      "target_number": 142,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjzRw",
+      "title": "Silver collaboration: validate on real data",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:09Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 325,
+      "source_id": 4393781415,
+      "source_state": "open",
+      "target_number": 143,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjzlw",
+      "title": "Silver git: validate on real data",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:10Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 326,
+      "source_id": 4393781417,
+      "source_state": "closed",
+      "target_number": 144,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVjz1A",
+      "title": "Slack connector: spec + implementation + staging dbt",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:12Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 327,
+      "source_id": 4393781418,
+      "source_state": "closed",
+      "target_number": 145,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj0XA",
+      "title": "Zoom connector: spec + implementation + staging dbt",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:14Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 328,
+      "source_id": 4393781424,
+      "source_state": "open",
+      "target_number": 146,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj03w",
+      "title": "Silver collaboration: implement transformations (M365 + Slack + Zoom + Zulip → class_collab_*)",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:15Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 329,
+      "source_id": 4393781425,
+      "source_state": "closed",
+      "target_number": 147,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj1HA",
+      "title": "Microsoft 365: validate bronze on real data",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:17Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 330,
+      "source_id": 4393781429,
+      "source_state": "open",
+      "target_number": 148,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj1qQ",
+      "title": "Slack: validate bronze on real data",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:18Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 331,
+      "source_id": 4393781430,
+      "source_state": "closed",
+      "target_number": 149,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj18Q",
+      "title": "Microsoft 365 connector: spec + implementation + staging dbt",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:20Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 332,
+      "source_id": 4393781432,
+      "source_state": "open",
+      "target_number": 150,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj2dw",
+      "title": "Zoom: validate bronze on real data",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:21Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 333,
+      "source_id": 4393899440,
+      "source_state": "open",
+      "target_number": 151,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj2vQ",
+      "title": "Connector: GitLab",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:22Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 334,
+      "source_id": 4393899801,
+      "source_state": "open",
+      "target_number": 152,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj3BA",
+      "title": "GitLab: validate bronze on real data",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:23Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 335,
+      "source_id": 4394075522,
+      "source_state": "open",
+      "target_number": 153,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj3Qg",
+      "title": "ID Res: Identity Service & Resolution",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:24Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 336,
+      "source_id": 4394075695,
+      "source_state": "open",
+      "target_number": 154,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj3fg",
+      "title": "ID Res: Silver: identity",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:25Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 337,
+      "source_id": 4394129039,
+      "source_state": "closed",
+      "target_number": 155,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj32A",
+      "title": "Identity Service & Resolution: historical impl + specs",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:27Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 338,
+      "source_id": 4394129185,
+      "source_state": "closed",
+      "target_number": 156,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj4XQ",
+      "title": "Silver identity: validate on real data",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:29Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 339,
+      "source_id": 4394216642,
+      "source_state": "open",
+      "target_number": 157,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj44w",
+      "title": "YouTrack: validate bronze on real data",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:30Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 340,
+      "source_id": 4394237289,
+      "source_state": "open",
+      "target_number": 158,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj5MQ",
+      "title": "Data quality: author dbt tests for silver/gold catalog",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:31Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 341,
+      "source_id": 4394237482,
+      "source_state": "open",
+      "target_number": 159,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj5hQ",
+      "title": "Data quality: common mechanism for collecting test findings",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:32Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 342,
+      "source_id": 4394244064,
+      "source_state": "open",
+      "target_number": 160,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj5yQ",
+      "title": "Data quality: API to write and read test findings",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:33Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 343,
+      "source_id": 4394297795,
+      "source_state": "open",
+      "target_number": 161,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj6Dw",
+      "title": "Connector: OKTA",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:34Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 344,
+      "source_id": 4394297797,
+      "source_state": "open",
+      "target_number": 162,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj6UQ",
+      "title": "ID Res: First-necessity endpoints",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:36Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 345,
+      "source_id": 4394297802,
+      "source_state": "open",
+      "target_number": 163,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj6nQ",
+      "title": "Connector: MS Entra",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:37Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 346,
+      "source_id": 4394297816,
+      "source_state": "closed",
+      "target_number": 164,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj63w",
+      "title": "ID Res: Super users",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:39Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 347,
+      "source_id": 4394326292,
+      "source_state": "closed",
+      "target_number": 165,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj7Yw",
+      "title": "ID Res endpoint: GET profiles by email/id",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:41Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 348,
+      "source_id": 4394326296,
+      "source_state": "closed",
+      "target_number": 166,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj7-w",
+      "title": "ID Res endpoint: GET subchart by person_id",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:43Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 349,
+      "source_id": 4394326299,
+      "source_state": "open",
+      "target_number": 167,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj8xQ",
+      "title": "ID Res endpoint: POST initial resolve by email",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:45Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 350,
+      "source_id": 4394385614,
+      "source_state": "open",
+      "target_number": 168,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj9AQ",
+      "title": "ID Res: Proposals",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:46Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 351,
+      "source_id": 4394385632,
+      "source_state": "open",
+      "target_number": 169,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj9Qg",
+      "title": "ID Res: Persons list",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:47Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 352,
+      "source_id": 4394385649,
+      "source_state": "open",
+      "target_number": 170,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj9fw",
+      "title": "ID Res: Fields Conflicts resolution",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:48Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 353,
+      "source_id": 4394428391,
+      "source_state": "open",
+      "target_number": 171,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj9vA",
+      "title": "Bamboo HR v2: Collect all fields",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:49Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 354,
+      "source_id": 4394428707,
+      "source_state": "open",
+      "target_number": 172,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj-Aw",
+      "title": "Bamboo HR v2: validate bronze on real data",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:50Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 355,
+      "source_id": 4394428755,
+      "source_state": "open",
+      "target_number": 173,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj-UA",
+      "title": "Bamboo HR v2: adapt silver layer for new fields (if needed)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:52Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 356,
+      "source_id": 4394428764,
+      "source_state": "open",
+      "target_number": 174,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj-jQ",
+      "title": "Bamboo HR v2: CDK connector with dynamic custom-fields discovery",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:53Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 357,
+      "source_id": 4397433324,
+      "source_state": "closed",
+      "target_number": 175,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj-4g",
+      "title": "silver.class_collab_meeting_activity: meetings_attended over-counts ~2.3x vs bronze ground truth",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:55Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 359,
+      "source_id": 4398375916,
+      "source_state": "closed",
+      "target_number": 176,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj_Xw",
+      "title": "[FE] Hide Organization (executive-view) screen from UI without deleting",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:57Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 360,
+      "source_id": 4398414889,
+      "source_state": "closed",
+      "target_number": 177,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVj_zw",
+      "title": "MS Entra: standalone connector spec + implementation",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:42:59Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 361,
+      "source_id": 4398415617,
+      "source_state": "closed",
+      "target_number": 178,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkAaQ",
+      "title": "MS Entra: dbt transforms for identity resolution",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:01Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 362,
+      "source_id": 4398416045,
+      "source_state": "closed",
+      "target_number": 179,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkA_w",
+      "title": "MS Entra: validate bronze on real data",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:03Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 364,
+      "source_id": 4399548373,
+      "source_state": "closed",
+      "target_number": 180,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkBmA",
+      "title": "[BE] Add availability field to metric catalog (live / pipeline_pending / no_source)",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:05Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 365,
+      "source_id": 4399551420,
+      "source_state": "closed",
+      "target_number": 181,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkCkQ",
+      "title": "[FE] Render metrics based on availability field from metric catalog",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:09Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 366,
+      "source_id": 4400127195,
+      "source_state": "open",
+      "target_number": 182,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkDZg",
+      "title": "[Strategy] From hardcoded dashboards to a diagnosis-driven product — implementation roadmap",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:11Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 367,
+      "source_id": 4403976715,
+      "source_state": "closed",
+      "target_number": 183,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkDrw",
+      "title": "Fresh-cluster bring-up flow has 9 distinct bugs (post-#275 follow-up)",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:13Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 369,
+      "source_id": 4405091688,
+      "source_state": "closed",
+      "target_number": 184,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkELw",
+      "title": "Phase 0: Update SPEC with chart-publishing semantics",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:15Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 370,
+      "source_id": 4405091970,
+      "source_state": "closed",
+      "target_number": 185,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkEuQ",
+      "title": "Phase 1: ADR-0001 — chart publishing on merge",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:17Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 371,
+      "source_id": 4405092109,
+      "source_state": "closed",
+      "target_number": 186,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkFMg",
+      "title": "Phase 2: GitHub Actions — publish umbrella chart per merge to main",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:19Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 372,
+      "source_id": 4405092230,
+      "source_state": "closed",
+      "target_number": 187,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkF_w",
+      "title": "Phase 3: gitops Makefile — drive Airbyte/Argo/Insight from OCI pin",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:22Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 373,
+      "source_id": 4405092330,
+      "source_state": "closed",
+      "target_number": 188,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkGkQ",
+      "title": "Phase 4: End-to-end test on local k3s (GATE)",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:25Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 374,
+      "source_id": 4405092424,
+      "source_state": "closed",
+      "target_number": 189,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkHFg",
+      "title": "Phase 5: Remove deploy/gitops/ from public repo",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:27Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 375,
+      "source_id": 4405092535,
+      "source_state": "closed",
+      "target_number": 190,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkH1g",
+      "title": "Phase 6: Rewrite top-level README deploy section",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:30Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 376,
+      "source_id": 4405092685,
+      "source_state": "closed",
+      "target_number": 191,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkIhA",
+      "title": "Phase 7: Trim per-engine READMEs",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:33Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 377,
+      "source_id": 4405092803,
+      "source_state": "closed",
+      "target_number": 192,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkJVQ",
+      "title": "Phase 8: Rewrite PRD + DESIGN for chart-as-artifact model",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:36Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 378,
+      "source_id": 4405122199,
+      "source_state": "closed",
+      "target_number": 193,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkKFQ",
+      "title": "EPIC — Deploy consolidation: one path, one artifact",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:39Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 379,
+      "source_id": 4419057410,
+      "source_state": "open",
+      "target_number": 194,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkKzg",
+      "title": "Git commits duplicates: compute patch_id and group duplicates",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:42Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 381,
+      "source_id": 4419364415,
+      "source_state": "closed",
+      "target_number": 195,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkLFg",
+      "title": "dbt parse broken on main: duplicate model name \"to_class_people\" after MS Entra merge (#363) + CI gap",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:44Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 383,
+      "source_id": 4419496409,
+      "source_state": "closed",
+      "target_number": 196,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkLkQ",
+      "title": "CRM metrics: build gold layer + web display",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:46Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 384,
+      "source_id": 4419496751,
+      "source_state": "closed",
+      "target_number": 197,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkMEA",
+      "title": "CRM metrics: validate on real data",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:48Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 385,
+      "source_id": 4419530712,
+      "source_state": "open",
+      "target_number": 198,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkMfA",
+      "title": "Salesforce: validate bronze -> silver on real data",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:49Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 387,
+      "source_id": 4419786358,
+      "source_state": "closed",
+      "target_number": 199,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkMsQ",
+      "title": "dbt silver/_shared/identity_inputs fails NO_COMMON_TYPE (UNION String vs UUID) — blocks Persons seeding (follow-up to #368)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:51Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 388,
+      "source_id": 4419846868,
+      "source_state": "open",
+      "target_number": 200,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkNPg",
+      "title": "Connector: Confluence",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:52Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 389,
+      "source_id": 4419846875,
+      "source_state": "closed",
+      "target_number": 201,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkNjA",
+      "title": "Confluence connector: spec + implementation + staging dbt",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:54Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 390,
+      "source_id": 4419846889,
+      "source_state": "open",
+      "target_number": 202,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkOCQ",
+      "title": "Confluence: validate bronze on real data",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:55Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 391,
+      "source_id": 4419846896,
+      "source_state": "open",
+      "target_number": 203,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkOUg",
+      "title": "Silver wiki: validate on real data",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:56Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 392,
+      "source_id": 4419846898,
+      "source_state": "open",
+      "target_number": 204,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkOlA",
+      "title": "Silver: wiki",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:57Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 394,
+      "source_id": 4421904377,
+      "source_state": "open",
+      "target_number": 205,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkO2g",
+      "title": "Idempotent connector reconciliation (cron-driven)",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:43:58Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 395,
+      "source_id": 4421904594,
+      "source_state": "closed",
+      "target_number": 206,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkPIA",
+      "title": "Connector reconciliation: implement cron-driven script",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:01Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 397,
+      "source_id": 4424280608,
+      "source_state": "closed",
+      "target_number": 207,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkPpQ",
+      "title": "Reconcile creates Airbyte connections with cron schedule — fires syncs in parallel with Argo (bypasses dbt)",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:03Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 400,
+      "source_id": 4427068789,
+      "source_state": "closed",
+      "target_number": 208,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkQOg",
+      "title": "HubSpot: validate bronze on real data",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:05Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 401,
+      "source_id": 4427324494,
+      "source_state": "closed",
+      "target_number": 209,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkQ1A",
+      "title": "API Gateway",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:07Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 402,
+      "source_id": 4427324592,
+      "source_state": "open",
+      "target_number": 210,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkRVQ",
+      "title": "OIDC & Authorization",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:08Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 403,
+      "source_id": 4427324700,
+      "source_state": "closed",
+      "target_number": 211,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkRkg",
+      "title": "API Gateway: foundational implementation + hardening",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:10Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 404,
+      "source_id": 4427324808,
+      "source_state": "closed",
+      "target_number": 212,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkSoQ",
+      "title": "OIDC & Auth-info plumbing: historical impl",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:12Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 405,
+      "source_id": 4428205349,
+      "source_state": "closed",
+      "target_number": 213,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkTOg",
+      "title": "chart: subchart `image.tag` should default to `.Chart.AppVersion`, not be required",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:14Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 406,
+      "source_id": 4428206621,
+      "source_state": "closed",
+      "target_number": 214,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkTzA",
+      "title": "chart: per-service DB provisioning Helm hook for external (gitops-mode) MariaDB",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:16Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 407,
+      "source_id": 4428206885,
+      "source_state": "open",
+      "target_number": 215,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkU8g",
+      "title": "chart: compose `*-config` Secrets unconditionally via Helm hook, drop `autoGenerate` gate",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:17Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 408,
+      "source_id": 4428208024,
+      "source_state": "open",
+      "target_number": 216,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkVNQ",
+      "title": "chart: parameterise `airbyte.namespace` — don't assume Airbyte is in `.Release.Namespace`",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:18Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 409,
+      "source_id": 4428208263,
+      "source_state": "open",
+      "target_number": 217,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkVgg",
+      "title": "chart: default L2 service hosts to `<release>.insight-infra.svc.cluster.local` when `<svc>.deploy: false`",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:19Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 410,
+      "source_id": 4428208505,
+      "source_state": "closed",
+      "target_number": 218,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkV0A",
+      "title": "ci: `publish-chart` workflow accepts `frontend_tag` input for cross-repo frontend bumps",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:21Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_number": 411,
+      "source_id": 4428355014,
+      "source_state": "open",
+      "target_number": 219,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkW-w",
+      "title": "Rate Limits",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:24Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 412,
+      "source_id": 4428355129,
+      "source_state": "open",
+      "target_number": 220,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkXSg",
+      "title": "Silver: calendar",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:25Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 413,
+      "source_id": 4428355160,
+      "source_state": "open",
+      "target_number": 221,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkXkQ",
+      "title": "Silver calendar: implement class_meeting",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:26Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 414,
+      "source_id": 4428355161,
+      "source_state": "closed",
+      "target_number": 222,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkX3A",
+      "title": "MS Calendar: connector implementation (m365 calendar stream)",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:28Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 415,
+      "source_id": 4428355177,
+      "source_state": "open",
+      "target_number": 223,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkYWQ",
+      "title": "Connector: MS Calendar",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:29Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 416,
+      "source_id": 4428355189,
+      "source_state": "closed",
+      "target_number": 224,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkYkg",
+      "title": "HubSpot: improve data collection and UI",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:32Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 417,
+      "source_id": 4428355217,
+      "source_state": "open",
+      "target_number": 225,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkZNw",
+      "title": "Slack silver: DM/group breakdown not retrievable — adapt downstream usage",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:33Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 418,
+      "source_id": 4428368436,
+      "source_state": "open",
+      "target_number": 226,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkZcg",
+      "title": "BE: GET profiles endpoint returns array of profiles",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:34Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 419,
+      "source_id": 4428368468,
+      "source_state": "open",
+      "target_number": 227,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkZsw",
+      "title": "FE: consume profiles-array response in identity client",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:35Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 420,
+      "source_id": 4429097155,
+      "source_state": "open",
+      "target_number": 228,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkZ7w",
+      "title": "Connector: GitHub Copilot",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:36Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 421,
+      "source_id": 4429097431,
+      "source_state": "closed",
+      "target_number": 229,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkaOw",
+      "title": "GitHub Copilot connector: spec + implementation + staging dbt",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:38Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 422,
+      "source_id": 4429097682,
+      "source_state": "open",
+      "target_number": 230,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkauA",
+      "title": "GitHub Copilot: validate bronze on real data",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:39Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 423,
+      "source_id": 4429224172,
+      "source_state": "open",
+      "target_number": 231,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVka-g",
+      "title": "Add backend CI: dotnet test + cargo test + clippy + dotnet format",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:40Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 424,
+      "source_id": 4429337465,
+      "source_state": "open",
+      "target_number": 232,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkbNg",
+      "title": "YouTrack: Silver/Enrich pipeline (Stage C — features 2.5–2.10)",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:41Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 425,
+      "source_id": 4429587652,
+      "source_state": "open",
+      "target_number": 233,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkbcA",
+      "title": "Connector: Zulip Server",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:42Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 426,
+      "source_id": 4429587942,
+      "source_state": "open",
+      "target_number": 234,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkbqQ",
+      "title": "Zulip Server: proxy service (DB access + analytics API, no PII)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:43Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 427,
+      "source_id": 4429588403,
+      "source_state": "open",
+      "target_number": 235,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkb9Q",
+      "title": "Zulip Server: deploy proxy service to customer env",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:44Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 428,
+      "source_id": 4429588806,
+      "source_state": "open",
+      "target_number": 236,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkcRg",
+      "title": "Zulip Server: connector to proxy service",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:45Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 429,
+      "source_id": 4429589025,
+      "source_state": "open",
+      "target_number": 237,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkchg",
+      "title": "Zulip Server: validate bronze + dbt silver feeder",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:46Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 431,
+      "source_id": 4430362091,
+      "source_state": "closed",
+      "target_number": 238,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkcyQ",
+      "title": "m365 chat metrics: teamChatMessageCount mis-mapped to group_chat_messages (it's channel posts, not group DMs)",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:48Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 432,
+      "source_id": 4430471651,
+      "source_state": "closed",
+      "target_number": 239,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkdXA",
+      "title": "[FE] CallbackScreen still hardcodes /executive-view redirect — follow-up to #359",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:50Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 433,
+      "source_id": 4437016258,
+      "source_state": "closed",
+      "target_number": 240,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkd3w",
+      "title": "Bullet metrics: gold-view structure violates aggregation rules, blocks forward-compat with metric-catalog",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:53Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 434,
+      "source_id": 4437431240,
+      "source_state": "open",
+      "target_number": 241,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkezQ",
+      "title": "Deploy. GitOps",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:55Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 435,
+      "source_id": 4437431436,
+      "source_state": "open",
+      "target_number": 242,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkfFQ",
+      "title": "Data validation",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:56Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 436,
+      "source_id": 4437431599,
+      "source_state": "open",
+      "target_number": 243,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkfWg",
+      "title": "Constructor Insight Instance",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:57Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 437,
+      "source_id": 4437431779,
+      "source_state": "open",
+      "target_number": 244,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkfmw",
+      "title": "Retire Metrics",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:58Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 438,
+      "source_id": 4437431947,
+      "source_state": "open",
+      "target_number": 245,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkf3Q",
+      "title": "Retire AI Portal",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:44:59Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 439,
+      "source_id": 4437534660,
+      "source_state": "open",
+      "target_number": 246,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkgIg",
+      "title": "Reconcile-connectors: sealed-secrets adaptation",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:00Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 440,
+      "source_id": 4437534860,
+      "source_state": "open",
+      "target_number": 247,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkgaA",
+      "title": "Reconcile-connectors: source credentials from sealed secrets",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:01Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 441,
+      "source_id": 4437571266,
+      "source_state": "open",
+      "target_number": 248,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkgtA",
+      "title": "OpenAPI specs for backend services",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:02Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 442,
+      "source_id": 4437571439,
+      "source_state": "open",
+      "target_number": 249,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkg-A",
+      "title": "OpenAPI auto-gen for analytics-api + api-gateway (Rust)",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:03Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 443,
+      "source_id": 4437571658,
+      "source_state": "open",
+      "target_number": 250,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkhPQ",
+      "title": "OpenAPI auto-gen for identity-service (.NET 9)",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:05Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 444,
+      "source_id": 4437831033,
+      "source_state": "open",
+      "target_number": 251,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkhhA",
+      "title": "BFF: implement session manager + OIDC login/refresh/logout flows",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:06Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 446,
+      "source_id": 4437848270,
+      "source_state": "open",
+      "target_number": 252,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkh1Q",
+      "title": "BFF (Backend-For-Frontend)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:07Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 447,
+      "source_id": 4437849062,
+      "source_state": "open",
+      "target_number": 253,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkiGg",
+      "title": "Router: implement gateway JWT mint + JWKS + route table",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:08Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 448,
+      "source_id": 4437951621,
+      "source_state": "open",
+      "target_number": 254,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkiXQ",
+      "title": "OpenTelemetry: instance health visibility (admin + developer dual-view)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:09Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 450,
+      "source_id": 4439400843,
+      "source_state": "open",
+      "target_number": 255,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkitQ",
+      "title": "Insight v1",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:10Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 452,
+      "source_id": 4439441631,
+      "source_state": "closed",
+      "target_number": 256,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkjDA",
+      "title": "bug: frontend calls /api/identity-resolution/* removed by PR #398 (regression)",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:12Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 458,
+      "source_id": 4454230534,
+      "source_state": "open",
+      "target_number": 257,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkjpg",
+      "title": "Connector: Claude team",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:13Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 459,
+      "source_id": 4454230659,
+      "source_state": "open",
+      "target_number": 258,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkj5w",
+      "title": "Connector: Zendesk",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:14Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 460,
+      "source_id": 4454230854,
+      "source_state": "open",
+      "target_number": 259,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkkKg",
+      "title": "ID Res: case-sensitive identifiers in persons",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:15Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 461,
+      "source_id": 4454230950,
+      "source_state": "open",
+      "target_number": 260,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkkgQ",
+      "title": "Deploy to dev instance",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:17Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 462,
+      "source_id": 4454231068,
+      "source_state": "open",
+      "target_number": 261,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkk3g",
+      "title": "GitOps example",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:18Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 463,
+      "source_id": 4454231184,
+      "source_state": "open",
+      "target_number": 262,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVklXg",
+      "title": "Redesign",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:19Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 464,
+      "source_id": 4454231323,
+      "source_state": "open",
+      "target_number": 263,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVklsw",
+      "title": "ID Res: org-chart problem assessment",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:20Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 465,
+      "source_id": 4454231528,
+      "source_state": "open",
+      "target_number": 264,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkl_w",
+      "title": "Review: end-to-end data flow (connector → UI)",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:21Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 466,
+      "source_id": 4454237176,
+      "source_state": "open",
+      "target_number": 265,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkmVg",
+      "title": "Claude team: email-code authorization flow",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:22Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 467,
+      "source_id": 4454237326,
+      "source_state": "open",
+      "target_number": 266,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkmpQ",
+      "title": "Claude team: Bronze connector",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:23Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 468,
+      "source_id": 4454237456,
+      "source_state": "open",
+      "target_number": 267,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVknAg",
+      "title": "Claude team: Silver review + transformations",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:24Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 469,
+      "source_id": 4454237590,
+      "source_state": "open",
+      "target_number": 268,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVknmA",
+      "title": "Claude team: Gold layer + UI",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:25Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 470,
+      "source_id": 4454237842,
+      "source_state": "open",
+      "target_number": 269,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkn6w",
+      "title": "Zendesk: Bronze connector",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:26Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 471,
+      "source_id": 4454237988,
+      "source_state": "open",
+      "target_number": 270,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkoNg",
+      "title": "Zendesk: Silver validation + transformations",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:28Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 472,
+      "source_id": 4454238132,
+      "source_state": "open",
+      "target_number": 271,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkofw",
+      "title": "Zendesk: Gold layer + UI",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:29Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 473,
+      "source_id": 4454238318,
+      "source_state": "closed",
+      "target_number": 272,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkozQ",
+      "title": "Deploy to dev: implementation",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:31Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 474,
+      "source_id": 4454238533,
+      "source_state": "closed",
+      "target_number": 273,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkpWQ",
+      "title": "GitOps example: implementation",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:33Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 475,
+      "source_id": 4454238729,
+      "source_state": "open",
+      "target_number": 274,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkp5g",
+      "title": "Redesign: implementation",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:34Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 481,
+      "source_id": 4469666118,
+      "source_state": "closed",
+      "target_number": 275,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkqLQ",
+      "title": "identity service crashes on startup race with MariaDB; pre-#406 stale chart value blocks pod recreation",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:36Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 483,
+      "source_id": 4469909572,
+      "source_state": "closed",
+      "target_number": 276,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkqpg",
+      "title": "ci: backend-checks doesn't gate .NET identity service — tests run only locally",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:38Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 485,
+      "source_id": 4469915357,
+      "source_state": "closed",
+      "target_number": 277,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkrxw",
+      "title": "identity: persons schema fixes — drop UNIQUE on value_hash + case-insensitive value_id collation",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:40Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 488,
+      "source_id": 4470844061,
+      "source_state": "open",
+      "target_number": 278,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVksVA",
+      "title": "FE: Math.round in scaleHoursToDays / formatBulletValue strips bullet metric precision",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:41Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 494,
+      "source_id": 4477853640,
+      "source_state": "closed",
+      "target_number": 279,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkspQ",
+      "title": "silver.fct_git_file_change.file_extension always empty (swapped position() args in dbt)",
+      "assignees": [
+        "mozhaev-dev"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:43Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 497,
+      "source_id": 4487137114,
+      "source_state": "open",
+      "target_number": 280,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVktMQ",
+      "title": "Connector: ChatGPT",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:45Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 498,
+      "source_id": 4487137616,
+      "source_state": "open",
+      "target_number": 281,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVktig",
+      "title": "ChatGPT: Bronze connector",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:46Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 499,
+      "source_id": 4487137822,
+      "source_state": "open",
+      "target_number": 282,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkt2A",
+      "title": "ChatGPT: Silver transformations",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:47Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 500,
+      "source_id": 4487138136,
+      "source_state": "open",
+      "target_number": 283,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkuJQ",
+      "title": "ChatGPT: Gold layer + UI",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:48Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 501,
+      "source_id": 4487153250,
+      "source_state": "open",
+      "target_number": 284,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkuZA",
+      "title": "Connector: Figma",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:49Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 502,
+      "source_id": 4487153418,
+      "source_state": "open",
+      "target_number": 285,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkuqA",
+      "title": "Figma: Bronze connector",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:50Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 503,
+      "source_id": 4487153647,
+      "source_state": "open",
+      "target_number": 286,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVku4g",
+      "title": "Figma: Data validation + dbt staging (Bronze → RMT)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:51Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 504,
+      "source_id": 4487153810,
+      "source_state": "open",
+      "target_number": 287,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkvNw",
+      "title": "Figma: Silver-layer transformations",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:52Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 505,
+      "source_id": 4487154056,
+      "source_state": "open",
+      "target_number": 288,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkwDg",
+      "title": "Figma: User stream + identity inputs prep",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:53Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 506,
+      "source_id": 4487250975,
+      "source_state": "open",
+      "target_number": 289,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkwdQ",
+      "title": "Okta: Bronze connector",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:54Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 507,
+      "source_id": 4487251281,
+      "source_state": "open",
+      "target_number": 290,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkwvg",
+      "title": "Okta: Validate bronze + identity_inputs prep",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:55Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 508,
+      "source_id": 4487267416,
+      "source_state": "open",
+      "target_number": 291,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkxAQ",
+      "title": "Self-service deployment",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:56Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 519,
+      "source_id": 4502342798,
+      "source_state": "open",
+      "target_number": 292,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkxQA",
+      "title": "Metric Catalog: MariaDB schema + sea-orm migrations (3 tables)",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:57Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 520,
+      "source_id": 4502343576,
+      "source_state": "open",
+      "target_number": 293,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkxhQ",
+      "title": "analytics-api: migrate to modkit-canonical-errors (RFC 9457 envelope)",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:45:59Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 521,
+      "source_id": 4502345467,
+      "source_state": "open",
+      "target_number": 294,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkxzA",
+      "title": "Metric Catalog: implement schema-validator (startup + per-write ClickHouse system.columns check)",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:00Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 522,
+      "source_id": 4502346324,
+      "source_state": "open",
+      "target_number": 295,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkyHA",
+      "title": "Metric Catalog: implement tenantDefaultId Helm fallback for single-tenant installs",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:01Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 523,
+      "source_id": 4502346874,
+      "source_state": "open",
+      "target_number": 296,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkyYw",
+      "title": "Metric Catalog: seed migration importing BULLET_DEFS / IC_KPI_DEFS / METRIC_KEYS",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:02Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 524,
+      "source_id": 4502347952,
+      "source_state": "open",
+      "target_number": 297,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkypQ",
+      "title": "Metric Catalog: implement POST /catalog/get_metrics (catalog-reader + resolver + cache)",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:03Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 525,
+      "source_id": 4502349138,
+      "source_state": "open",
+      "target_number": 298,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVky7Q",
+      "title": "Metric Catalog: implement /v1/admin/metric-thresholds CRUD (admin-crud + lock-enforcer + audit-emitter)",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:04Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 526,
+      "source_id": 4502389981,
+      "source_state": "open",
+      "target_number": 299,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkzQw",
+      "title": "[EPIC] Metric Catalog — implementation",
+      "assignees": [
+        "cyberantonz"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:05Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 527,
+      "source_id": 4502748535,
+      "source_state": "closed",
+      "target_number": 300,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVkzkw",
+      "title": "ClickHouse system.*_log tables grow unbounded — needs chart-level TTL",
+      "assignees": [
+        "Gregory91G"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:07Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 533,
+      "source_id": 4505786655,
+      "source_state": "open",
+      "target_number": 301,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVk0Cw",
+      "title": "[identity] Timing-oracle on GET /v1/persons/{email} + POST /v1/profiles deny paths",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:08Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 535,
+      "source_id": 4511234715,
+      "source_state": "open",
+      "target_number": 302,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVk0pA",
+      "title": "Analytics-api: consolidate per-person fanout HTTPs across Team View, TeamMetricsModal, and IC dashboards",
+      "assignees": [
+        "aleksdotbar"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:09Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 537,
+      "source_id": 4515787229,
+      "source_state": "open",
+      "target_number": 303,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVk1Lg",
+      "title": "Analytics-api: switch team_median / team_min / team_max grouping from raw BambooHR department to org-tree cohort",
+      "assignees": [
+        "mitasovr"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:10Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 539,
+      "source_id": 4516146323,
+      "source_state": "open",
+      "target_number": 304,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVk1bA",
+      "title": "jira_closed_tasks: replace hard-coded status whitelist ('Closed','Resolved','Verified') with statusCategory-based terminality",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:12Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 540,
+      "source_id": 4516146461,
+      "source_state": "open",
+      "target_number": 305,
+      "target_node_id": "I_kwDOSksL3M8AAAABDVk1uw",
+      "title": "Customer onboarding: document jira_project_keys allowlist requirement + ship coverage-check verification query",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-25T18:46:13Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 305,
+    "synced": 305,
+    "pending": 0,
+    "failed": 0
+  }
+}
