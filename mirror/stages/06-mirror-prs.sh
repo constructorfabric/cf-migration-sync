@@ -75,6 +75,18 @@ sys.stdout.write("\n".join(result))
 }
 
 # ---------------------------------------------------------------------------
+# _gh_err_hint — extract a short (≤100 char) reason string from a failed
+# gh api response body so callers can log it before overwriting the variable.
+# Returns empty string when the body is not parseable JSON.
+_gh_err_hint() {
+  printf '%s' "$1" | jq -r '
+    if .message then .message
+    elif (.errors // [] | length) > 0 then (.errors[0].message // .errors[0].code // "unknown")
+    else empty
+    end' 2>/dev/null | cut -c1-100 || true
+}
+
+# ---------------------------------------------------------------------------
 main() {
   check_dry_run "$@"
   preflight
@@ -268,14 +280,16 @@ ${marker}"
         --arg base  "$pr_base_ref" \
         '{"title":$title,"body":.,"head":$head,"base":$base}')"
 
-      local open_result
+      local open_result open_err=""
       open_result="$(gh api "repos/$TARGET_ORG/$repo_name/pulls" \
         --method POST \
         --input <(echo "$open_payload") \
-        2>/dev/null)" || open_result="FAILED"
+        2>/dev/null)" || {
+        open_err="$(_gh_err_hint "$open_result")"; open_result="FAILED"
+      }
 
       if [[ "$open_result" == "FAILED" ]]; then
-        warn "  Failed to create real PR for open PR #$pr_number — recording as skipped"
+        warn "  Failed to create real PR for open PR #$pr_number${open_err:+ — $open_err} — recording as skipped"
         _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
           "$pr_title" "skipped_open" "" "$pr_author" "open"
         continue
@@ -448,11 +462,18 @@ ${marker}"
         --arg base  "$pr_base_ref" \
         '{"title":$title,"body":.,"head":$head,"base":$base}')"
 
-      local pr_create_result
+      local pr_create_result pr_err=""
       pr_create_result="$(gh api "repos/$TARGET_ORG/$repo_name/pulls" \
         --method POST \
         --input <(echo "$pr_payload") \
-        2>/dev/null)" || pr_create_result="FAILED"
+        2>/dev/null)" || {
+        pr_err="$(_gh_err_hint "$pr_create_result")"
+        if echo "$pr_err" | grep -qi "rate.limit\|secondary rate\|abuse"; then
+          warn "  Rate limit hit on PR creation — pausing 60s"
+          sleep 60
+        fi
+        pr_create_result="FAILED"
+      }
 
       if [[ "$pr_create_result" != "FAILED" ]]; then
         tgt_issue_number="$(echo "$pr_create_result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
@@ -463,7 +484,7 @@ ${marker}"
           tgt_issue_number=""
         fi
       else
-        warn "  PR #$pr_number: real PR creation failed — falling back to issue"
+        warn "  PR #$pr_number: real PR creation failed${pr_err:+ — $pr_err} — falling back to issue"
       fi
 
       # Clean up temp branch even on failure — it has served its purpose or is stale.
@@ -481,14 +502,21 @@ ${marker}"
         --arg title "[PR #$pr_number] $pr_title" \
         '{"title":$title,"body":.}')"
 
-      local create_result
+      local create_result create_err=""
       create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
         --method POST \
         --input <(echo "$issue_payload") \
-        2>/dev/null)" || create_result="FAILED"
+        2>/dev/null)" || {
+        create_err="$(_gh_err_hint "$create_result")"
+        if echo "$create_err" | grep -qi "rate.limit\|secondary rate\|abuse"; then
+          warn "  Rate limit hit on issue creation — pausing 60s"
+          sleep 60
+        fi
+        create_result="FAILED"
+      }
 
       if [[ "$create_result" == "FAILED" ]]; then
-        warn "  Failed to create issue for PR #$pr_number in $TARGET_ORG/$repo_name"
+        warn "  Failed to create issue for PR #$pr_number${create_err:+ — $create_err} in $TARGET_ORG/$repo_name"
         _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
           "$pr_title" "failed" "" "$pr_author" "$pr_state"
         failed_count=$((failed_count + 1))
