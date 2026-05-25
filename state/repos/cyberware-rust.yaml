@@ -1,0 +1,361 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-25T14:23:56Z",
+    "last_run_at": "2026-05-25T14:23:56Z"
+  },
+  "items": [
+    {
+      "type": "label",
+      "name": "breaking-api-acknowledged",
+      "color": "#ededed",
+      "description": "",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "bug",
+      "color": "#ededed",
+      "description": "",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "chore",
+      "color": "#721e9e",
+      "description": "Chore/CI",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "ci",
+      "color": "#ededed",
+      "description": "",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "dependencies",
+      "color": "#0366d6",
+      "description": "Pull requests that update a dependency file",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "documentation",
+      "color": "#0075ca",
+      "description": "Improvements or additions to documentation",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "e2e-nightly",
+      "color": "#ededed",
+      "description": "",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "e2e-smoke",
+      "color": "#ededed",
+      "description": "",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "enhancement",
+      "color": "#a2eeef",
+      "description": "New feature or request",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "high-complexity",
+      "color": "#b542da",
+      "description": "High-level complexity",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "logging_tracing",
+      "color": "#aaaaaa",
+      "description": "",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "low-complexity",
+      "color": "#7057ff",
+      "description": "Good for newcomers",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "med-complexity",
+      "color": "#ca280a",
+      "description": "Medium-level complexity",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "mini-chat",
+      "color": "#1163ad",
+      "description": "",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "module",
+      "color": "#e14626",
+      "description": "",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "pr-issue",
+      "color": "#cd7c16",
+      "description": "PR issue tracker task, needed to consolidate information about PR status and blocking issues",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "release-plz",
+      "color": "#ededed",
+      "description": "",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "rust",
+      "color": "#000000",
+      "description": "Pull requests that update rust code",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "security",
+      "color": "#d6491f",
+      "description": "Security fixes and improvements",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "spec",
+      "color": "#409e04",
+      "description": "Markdown specifications",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "tests",
+      "color": "#58531e",
+      "description": "Everything related to tests and quality assurance",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "label",
+      "name": "weekly-plan",
+      "color": "#71c0d0",
+      "description": "Label for weekly plans",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:23:59Z"
+    },
+    {
+      "type": "milestone",
+      "title": "2026-01-30",
+      "state": "closed",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.02",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.01",
+      "state": "closed",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.03",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.04",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.05",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.06",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "Backlog",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.07",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.08",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.09",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.10",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.11",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "milestone",
+      "title": "26.12",
+      "state": "open",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:14Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "has_issues",
+      "value": "true",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:22Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "has_projects",
+      "value": "true",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:22Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "has_wiki",
+      "value": "false",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:22Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "allow_forking",
+      "value": "true",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:22Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "web_commit_signoff_required",
+      "value": "false",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:22Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "homepage",
+      "value": "https://www.cyberfabric.org",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:22Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "default_branch",
+      "value": "main",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:22Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "pages_source_branch",
+      "value": "main",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:27Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "pages_source_path",
+      "value": "/",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:27Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "pages_build_type",
+      "value": "legacy",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:27Z"
+    }
+  ],
+  "stats": {
+    "total": 46,
+    "synced": 46,
+    "pending": 0,
+    "failed": 0
+  }
+}

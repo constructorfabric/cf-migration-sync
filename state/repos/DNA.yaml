@@ -1,0 +1,152 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-25T14:24:27Z",
+    "last_run_at": "2026-05-25T14:24:27Z"
+  },
+  "items": [
+    {
+      "type": "label",
+      "name": "bug",
+      "color": "#d73a4a",
+      "description": "Something isn't working",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:29Z"
+    },
+    {
+      "type": "label",
+      "name": "documentation",
+      "color": "#0075ca",
+      "description": "Improvements or additions to documentation",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:29Z"
+    },
+    {
+      "type": "label",
+      "name": "duplicate",
+      "color": "#cfd3d7",
+      "description": "This issue or pull request already exists",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:29Z"
+    },
+    {
+      "type": "label",
+      "name": "enhancement",
+      "color": "#a2eeef",
+      "description": "New feature or request",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:29Z"
+    },
+    {
+      "type": "label",
+      "name": "good first issue",
+      "color": "#7057ff",
+      "description": "Good for newcomers",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:29Z"
+    },
+    {
+      "type": "label",
+      "name": "help wanted",
+      "color": "#008672",
+      "description": "Extra attention is needed",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:29Z"
+    },
+    {
+      "type": "label",
+      "name": "invalid",
+      "color": "#e4e669",
+      "description": "This doesn't seem right",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:29Z"
+    },
+    {
+      "type": "label",
+      "name": "question",
+      "color": "#d876e3",
+      "description": "Further information is requested",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:29Z"
+    },
+    {
+      "type": "label",
+      "name": "wontfix",
+      "color": "#ffffff",
+      "description": "This will not be worked on",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:29Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "has_issues",
+      "value": "true",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:35Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "has_projects",
+      "value": "true",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:35Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "has_wiki",
+      "value": "false",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:35Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "allow_forking",
+      "value": "true",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:35Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "web_commit_signoff_required",
+      "value": "false",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:35Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "default_branch",
+      "value": "main",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:35Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "pages_source_branch",
+      "value": "main",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:38Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "pages_source_path",
+      "value": "/",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:38Z"
+    },
+    {
+      "type": "repo_setting",
+      "name": "pages_build_type",
+      "value": "legacy",
+      "status": "synced",
+      "synced_at": "2026-05-25T14:24:38Z"
+    }
+  ],
+  "stats": {
+    "total": 18,
+    "synced": 18,
+    "pending": 0,
+    "failed": 0
+  }
+}
