@@ -234,9 +234,9 @@ $marker"
     fi
 
     local tgt_number
-    tgt_number="$(echo "$create_result" | jq -r '.number')"
+    tgt_number="$(echo "$create_result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
     local tgt_node_id
-    tgt_node_id="$(echo "$create_result" | jq -r '.node_id // ""')"
+    tgt_node_id="$(echo "$create_result" | jq -rs '.[0].node_id // empty' 2>/dev/null || true)"
 
     # ---- Close issue in target if source is closed ----------------------
     if [[ "$src_state" == "closed" ]]; then

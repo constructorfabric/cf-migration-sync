@@ -184,7 +184,7 @@ $marker"
     fi
 
     local tgt_issue_number
-    tgt_issue_number="$(echo "$create_result" | jq -r '.number')"
+    tgt_issue_number="$(echo "$create_result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
 
     # Close the target issue (it's a historical PR)
     gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number" \
