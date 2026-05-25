@@ -111,6 +111,12 @@ main() {
   org_wh_count="$(echo "$org_webhooks" | jq 'length' 2>/dev/null || echo 0)"
   log "Found $org_wh_count org webhooks — will create in target without secret"
 
+  # BUG-05 fix: pre-fetch existing target org webhook URLs to avoid duplicates on re-run.
+  local tgt_org_hook_urls
+  tgt_org_hook_urls="$(gh api "orgs/$TARGET_ORG/hooks?per_page=100" \
+    2>/dev/null | jq -rs '.[0] // [] | [.[].config.url // ""] | map(select(. != ""))' \
+    2>/dev/null || echo '[]')"
+
   while IFS= read -r hook; do
     local hook_name hook_url hook_ct hook_ssl hook_active hook_events hook_id
     hook_name="$(echo   "$hook" | jq -r '.name // "web"')"
@@ -125,26 +131,35 @@ main() {
     if dry_run_skip "create org webhook $hook_url in $TARGET_ORG (no secret)"; then
       status="created_no_secret"
     else
-      local wh_payload
-      wh_payload="$(jq -n \
-        --arg name   "$hook_name" \
-        --arg url    "$hook_url" \
-        --arg ct     "$hook_ct" \
-        --arg ssl    "$hook_ssl" \
-        --argjson active "$hook_active" \
-        --argjson events "$hook_events" \
-        '{"name":$name,"config":{"url":$url,"content_type":$ct,"insecure_ssl":$ssl},"events":$events,"active":$active}')"
-
-      local wh_result
-      wh_result="$(gh api "orgs/$TARGET_ORG/hooks" \
-        --method POST --input <(echo "$wh_payload") \
-        2>/dev/null || echo 'FAILED')"
-
-      if [[ "$wh_result" == "FAILED" ]]; then
-        warn "  Failed to create org webhook $hook_url in $TARGET_ORG"
-        status="failed"
+      # Skip if webhook with same URL already exists in target
+      local already_in_tgt
+      already_in_tgt="$(echo "$tgt_org_hook_urls" | jq -r --arg u "$hook_url" \
+        '.[] | select(. == $u)' 2>/dev/null || true)"
+      if [[ -n "$already_in_tgt" ]]; then
+        log "  Org webhook $hook_url already exists in target — skipping"
+        status="created_no_secret"
       else
-        ok "  Created org webhook: $hook_url (secret must be set manually)"
+        local wh_payload
+        wh_payload="$(jq -n \
+          --arg name   "$hook_name" \
+          --arg url    "$hook_url" \
+          --arg ct     "$hook_ct" \
+          --arg ssl    "$hook_ssl" \
+          --argjson active "$hook_active" \
+          --argjson events "$hook_events" \
+          '{"name":$name,"config":{"url":$url,"content_type":$ct,"insecure_ssl":$ssl},"events":$events,"active":$active}')"
+
+        local wh_result
+        wh_result="$(gh api "orgs/$TARGET_ORG/hooks" \
+          --method POST --input <(echo "$wh_payload") \
+          2>/dev/null || echo 'FAILED')"
+
+        if [[ "$wh_result" == "FAILED" ]]; then
+          warn "  Failed to create org webhook $hook_url in $TARGET_ORG"
+          status="failed"
+        else
+          ok "  Created org webhook: $hook_url (secret must be set manually)"
+        fi
       fi
     fi
 
@@ -196,6 +211,12 @@ main() {
 
     repo_wh_total=$((repo_wh_total + rh_count))
 
+    # BUG-05 fix: pre-fetch existing target repo webhook URLs per repo.
+    local tgt_repo_hook_urls
+    tgt_repo_hook_urls="$(gh api "repos/$TARGET_ORG/$repo_name/hooks?per_page=100" \
+      2>/dev/null | jq -rs '.[0] // [] | [.[].config.url // ""] | map(select(. != ""))' \
+      2>/dev/null || echo '[]')"
+
     while IFS= read -r hook; do
       local hook_url hook_ct hook_ssl hook_active hook_events hook_id
       hook_url="$(echo    "$hook" | jq -r '.config.url // ""')"
@@ -209,25 +230,33 @@ main() {
       if dry_run_skip "create repo webhook $hook_url in $TARGET_ORG/$repo_name (no secret)"; then
         status="created_no_secret"
       else
-        local rh_payload
-        rh_payload="$(jq -n \
-          --arg url    "$hook_url" \
-          --arg ct     "$hook_ct" \
-          --arg ssl    "$hook_ssl" \
-          --argjson active "$hook_active" \
-          --argjson events "$hook_events" \
-          '{"config":{"url":$url,"content_type":$ct,"insecure_ssl":$ssl},"events":$events,"active":$active}')"
-
-        local rh_result
-        rh_result="$(gh api "repos/$TARGET_ORG/$repo_name/hooks" \
-          --method POST --input <(echo "$rh_payload") \
-          2>/dev/null || echo 'FAILED')"
-
-        if [[ "$rh_result" == "FAILED" ]]; then
-          warn "  Failed to create repo webhook $hook_url in $TARGET_ORG/$repo_name"
-          status="failed"
+        local already_in_tgt_repo
+        already_in_tgt_repo="$(echo "$tgt_repo_hook_urls" | jq -r --arg u "$hook_url" \
+          '.[] | select(. == $u)' 2>/dev/null || true)"
+        if [[ -n "$already_in_tgt_repo" ]]; then
+          log "  Repo webhook $hook_url already exists in $TARGET_ORG/$repo_name — skipping"
+          status="created_no_secret"
         else
-          ok "  Created repo webhook for $repo_name: $hook_url"
+          local rh_payload
+          rh_payload="$(jq -n \
+            --arg url    "$hook_url" \
+            --arg ct     "$hook_ct" \
+            --arg ssl    "$hook_ssl" \
+            --argjson active "$hook_active" \
+            --argjson events "$hook_events" \
+            '{"config":{"url":$url,"content_type":$ct,"insecure_ssl":$ssl},"events":$events,"active":$active}')"
+
+          local rh_result
+          rh_result="$(gh api "repos/$TARGET_ORG/$repo_name/hooks" \
+            --method POST --input <(echo "$rh_payload") \
+            2>/dev/null || echo 'FAILED')"
+
+          if [[ "$rh_result" == "FAILED" ]]; then
+            warn "  Failed to create repo webhook $hook_url in $TARGET_ORG/$repo_name"
+            status="failed"
+          else
+            ok "  Created repo webhook for $repo_name: $hook_url"
+          fi
         fi
       fi
       pause 0.2
@@ -255,9 +284,11 @@ main() {
   log "Inventorying Actions secret names from $SOURCE_ORG..."
 
   # Org-level Actions secrets
+  # BUG-01 fix: jq -s 'add // [] | .secrets' does object-merge, keeping only the
+  # last page's .secrets array.  Use map()+add to concatenate all pages' arrays.
   local org_secrets
   org_secrets="$(ghsrc api "orgs/$SOURCE_ORG/actions/secrets?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // [] | .secrets // []' || echo '[]')"
+    --paginate 2>/dev/null | jq -s 'map(.secrets // []) | add // []' || echo '[]')"
 
   while IFS= read -r secret; do
     local sname svis
@@ -279,7 +310,7 @@ main() {
 
     local repo_secrets
     repo_secrets="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/actions/secrets?per_page=100" \
-      --paginate 2>/dev/null | jq -s 'add // [] | .secrets // []' || echo '[]')"
+      --paginate 2>/dev/null | jq -s 'map(.secrets // []) | add // []' || echo '[]')"
 
     while IFS= read -r secret; do
       local sname
@@ -298,7 +329,7 @@ main() {
   # Org-level Dependabot secrets
   local dep_secrets
   dep_secrets="$(ghsrc api "orgs/$SOURCE_ORG/dependabot/secrets?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // [] | .secrets // []' || echo '[]')"
+    --paginate 2>/dev/null | jq -s 'map(.secrets // []) | add // []' || echo '[]')"
 
   while IFS= read -r secret; do
     local sname svis

@@ -235,6 +235,11 @@ _sync_team_members() {
 
   log "  Syncing members for team '$src_slug'..."
 
+  # BUG-04 fix: load excluded logins once (same list used by stage 01).
+  local excluded_logins
+  excluded_logins="$(jq -r '.stage_01_invite_people.exclude_logins[] // empty' \
+    "$MIRROR_CONFIG" 2>/dev/null || true)"
+
   local members
   members="$(ghsrc api \
     "orgs/$SOURCE_ORG/teams/$src_slug/members?per_page=100&role=all" \
@@ -253,6 +258,21 @@ _sync_team_members() {
   while IFS= read -r member; do
     local login role
     login="$(echo "$member" | jq -r '.login')"
+
+    # ---- CIRCUIT-BREAKER: hard block — unconditional, independent of config ----
+    if [[ "$(echo "$login" | tr '[:upper:]' '[:lower:]')" == "dfc-acronis" ]]; then
+      warn "CIRCUIT-BREAKER: team member sync for dfc-Acronis BLOCKED for team '$src_slug'"
+      skipped=$((skipped + 1))
+      continue
+    fi
+
+    # ---- Excluded logins (from config, same list as stage 01) ------------------
+    if [[ -n "$excluded_logins" ]] && echo "$excluded_logins" | \
+        grep -qi "^${login}$" 2>/dev/null; then
+      log "  Skipping excluded login: $login for team '$src_slug'"
+      skipped=$((skipped + 1))
+      continue
+    fi
 
     # Fetch member's role in this team (member vs maintainer)
     role="$(ghsrc api "orgs/$SOURCE_ORG/teams/$src_slug/memberships/$login" \

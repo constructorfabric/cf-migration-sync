@@ -324,6 +324,13 @@ _mirror_pr_comments() {
 
   log "  PR #$src_pr_number: mirroring $ic_total discussion + $rv_total review-bodies + $rc_total inline-review comments..."
 
+  # BUG-03 fix: pre-fetch existing target issue comments to check markers before
+  # posting.  An interrupted run would otherwise re-post all comments.
+  local tgt_comment_bodies
+  tgt_comment_bodies="$(gh api \
+    "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments?per_page=100" \
+    --paginate 2>/dev/null | jq -s 'add // [] | map(.body // "") | join("\n")' || echo '')"
+
   local mirrored=0
 
   # -- 1. Discussion comments -----------------------------------------------
@@ -334,6 +341,10 @@ _mirror_pr_comments() {
     c_created="$(echo "$c" | jq -r '.created_at // ""')"
     c_body="$(echo    "$c" | jq -r '.body // ""')"
     c_marker="<!-- cf-mirror-pr-comment: $SOURCE_ORG/$repo_name#$src_pr_number/$c_id -->"
+
+    if echo "$tgt_comment_bodies" | grep -qF "$c_marker" 2>/dev/null; then
+      mirrored=$((mirrored + 1)); continue
+    fi
 
     c_full_body="**@${c_author}** commented on ${c_created}:
 
@@ -365,6 +376,10 @@ ${c_marker}"
     rv_body="$(echo      "$rv" | jq -r '.body // ""')"
     rv_marker="<!-- cf-mirror-pr-review: $SOURCE_ORG/$repo_name#$src_pr_number/$rv_id -->"
 
+    if echo "$tgt_comment_bodies" | grep -qF "$rv_marker" 2>/dev/null; then
+      mirrored=$((mirrored + 1)); continue
+    fi
+
     rv_full_body="**@${rv_author}** submitted review **${rv_state}** on ${rv_submitted}:
 
 ---
@@ -395,6 +410,10 @@ ${rv_marker}"
     rc_path="$(echo    "$rc" | jq -r '.path // "(unknown file)"')"
     rc_line="$(echo    "$rc" | jq -r '(.line // .original_line) | tostring' 2>/dev/null || echo '?')"
     rc_marker="<!-- cf-mirror-pr-review-inline: $SOURCE_ORG/$repo_name#$src_pr_number/$rc_id -->"
+
+    if echo "$tgt_comment_bodies" | grep -qF "$rc_marker" 2>/dev/null; then
+      mirrored=$((mirrored + 1)); continue
+    fi
 
     rc_full_body="**@${rc_author}** reviewed \`${rc_path}\` line ${rc_line} on ${rc_created}:
 

@@ -55,9 +55,11 @@ main() {
 
   # ---- 1. Org-level Actions variables ------------------------------------
   log "Fetching org Actions variables from $SOURCE_ORG..."
+  # BUG-01 fix: jq -s 'add // {} | .variables' does object-merge (last page wins).
+  # Use map()+add to concatenate .variables arrays from all pages.
   local org_vars
   org_vars="$(ghsrc api "orgs/$SOURCE_ORG/actions/variables?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // {} | .variables // []' || echo '[]')"
+    --paginate 2>/dev/null | jq -s 'map(.variables // []) | add // []' || echo '[]')"
 
   local org_var_count
   org_var_count="$(echo "$org_vars" | jq 'length' 2>/dev/null || echo 0)"
@@ -66,7 +68,7 @@ main() {
   # Pre-fetch existing target org vars for upsert
   local tgt_org_vars
   tgt_org_vars="$(gh api "orgs/$TARGET_ORG/actions/variables?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // {} | .variables // [] | [.[].name]' || echo '[]')"
+    --paginate 2>/dev/null | jq -s 'map(.variables // []) | add // [] | [.[].name]' || echo '[]')"
 
   while IFS= read -r var; do
     local vname vvalue vvis
@@ -106,7 +108,7 @@ main() {
 
     local repo_vars
     repo_vars="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/actions/variables?per_page=100" \
-      --paginate 2>/dev/null | jq -s 'add // {} | .variables // []' || echo '[]')"
+      --paginate 2>/dev/null | jq -s 'map(.variables // []) | add // []' || echo '[]')"
 
     local rv_count
     rv_count="$(echo "$repo_vars" | jq 'length' 2>/dev/null || echo 0)"
@@ -120,7 +122,7 @@ main() {
     # Pre-fetch existing target repo vars
     local tgt_repo_vars
     tgt_repo_vars="$(gh api "repos/$TARGET_ORG/$repo_name/actions/variables?per_page=100" \
-      --paginate 2>/dev/null | jq -s 'add // {} | .variables // [] | [.[].name]' || echo '[]')"
+      --paginate 2>/dev/null | jq -s 'map(.variables // []) | add // [] | [.[].name]' || echo '[]')"
 
     while IFS= read -r var; do
       local vname vvalue

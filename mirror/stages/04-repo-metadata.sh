@@ -139,10 +139,12 @@ _copy_topics() {
     return 0
   fi
 
+  # BUG-07 fix: use the cleaned topics_json (RC-3 guarded), not the raw src_topics.
+  # Raw src_topics may contain extra non-JSON output appended by the runner.
   gh api "repos/$TARGET_ORG/$repo_name/topics" \
     --method PUT \
     -H "Accept: application/vnd.github.mercy-preview+json" \
-    --input <(echo "$src_topics") \
+    --input <(jq -n --argjson names "$topics_json" '{"names":$names}') \
     2>/dev/null || warn "Failed to set topics for $repo_name"
 
   pause 0.3
@@ -192,8 +194,13 @@ _copy_labels() {
       status="synced"
     elif [[ -n "$existing_label" ]]; then
       # Update existing label
+      # BUG-08 fix: pass label name as argv[1] to avoid shell injection when lname
+      # contains single quotes or backslashes; jq @uri as fallback if python3 absent.
       local encoded_name
-      encoded_name="$(python3 -c "import urllib.parse; print(urllib.parse.quote('$lname'))" 2>/dev/null || echo "$lname" | sed 's/ /%20/g')"
+      encoded_name="$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" \
+        "$lname" 2>/dev/null || \
+        printf '%s' "$lname" | jq -Rr '@uri' 2>/dev/null || \
+        echo "$lname" | sed 's/ /%20/g; s/#/%23/g; s/&/%26/g')"
       gh api "repos/$TARGET_ORG/$repo_name/labels/$encoded_name" \
         --method PATCH \
         -f name="$lname" \
@@ -250,7 +257,9 @@ _copy_milestones() {
     2>/dev/null || echo '[]')"
   src_closed="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/milestones?state=closed&per_page=100" \
     2>/dev/null || echo '[]')"
-  src_milestones="$(echo "$src_open $src_closed" | jq -s 'add // []')"
+  # BUG-13 fix: dedup by id — a milestone crossing open→closed between API calls
+  # would appear in both arrays; unique_by(.id) collapses duplicates.
+  src_milestones="$(echo "$src_open $src_closed" | jq -s 'add // [] | unique_by(.id)')"
 
   local ms_count
   ms_count="$(echo "$src_milestones" | jq 'length')"

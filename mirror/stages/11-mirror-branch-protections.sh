@@ -98,9 +98,15 @@ _mirror_repo_protections() {
 
   state_init "$state_file" "11-mirror-branch-protections"
 
-  # Pre-fetch target teams (slug → id) for bypass actor mapping
+  # Pre-fetch target teams (slug → id) for bypass actor mapping.
   local tgt_teams
   tgt_teams="$(gh api "orgs/$TARGET_ORG/teams?per_page=100" \
+    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+
+  # BUG-11 fix: pre-fetch source teams once here so _apply_ruleset can look up
+  # bypass-actor team slugs without making a fresh paginated API call per actor.
+  local src_teams
+  src_teams="$(ghsrc api "orgs/$SOURCE_ORG/teams?per_page=100" \
     --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
 
   # ---- A. Repository Rulesets -------------------------------------------
@@ -135,7 +141,7 @@ _mirror_repo_protections() {
         continue
       fi
 
-      _apply_ruleset "$repo_name" "$rs_name" "$rs_full" "$tgt_rulesets" "$tgt_teams" "$state_file"
+      _apply_ruleset "$repo_name" "$rs_name" "$rs_full" "$tgt_rulesets" "$tgt_teams" "$state_file" "$src_teams"
       pause 0.3
     done < <(echo "$rulesets" | jq -c '.[]' 2>/dev/null || true)
   fi
@@ -187,6 +193,8 @@ _apply_ruleset() {
   local tgt_rulesets="$4"
   local tgt_teams="$5"
   local state_file="$6"
+  # BUG-11 fix: accept pre-fetched source teams (avoids N per-actor API calls)
+  local src_teams="${7:-}"
   local ts
   ts="$(now)"
 
@@ -210,11 +218,17 @@ _apply_ruleset() {
     actor_id="$(echo "$actor" | jq -r '.actor_id')"
 
     if [[ "$atype" == "Team" ]]; then
-      # Look up source team slug by actor_id, then find target id by slug
+      # Look up source team slug using the pre-fetched src_teams (no extra API call).
       local src_team_slug
-      src_team_slug="$(ghsrc api "orgs/$SOURCE_ORG/teams?per_page=100" \
-        --paginate 2>/dev/null | jq -s --argjson id "$actor_id" \
-        'add // [] | .[] | select(.id == $id) | .slug' 2>/dev/null | head -1 | tr -d '"' || true)"
+      if [[ -n "$src_teams" && "$src_teams" != "[]" ]]; then
+        src_team_slug="$(echo "$src_teams" | jq -r --argjson id "$actor_id" \
+          '.[] | select(.id == $id) | .slug' 2>/dev/null | head -1 || true)"
+      else
+        # Fallback: fetch on demand if src_teams was not pre-populated
+        src_team_slug="$(ghsrc api "orgs/$SOURCE_ORG/teams?per_page=100" \
+          --paginate 2>/dev/null | jq -s --argjson id "$actor_id" \
+          'add // [] | .[] | select(.id == $id) | .slug' 2>/dev/null | head -1 | tr -d '"' || true)"
+      fi
 
       if [[ -n "$src_team_slug" ]]; then
         local tgt_team_id

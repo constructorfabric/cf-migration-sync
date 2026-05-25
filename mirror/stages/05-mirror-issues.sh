@@ -86,20 +86,22 @@ _mirror_repo_issues() {
 
   state_init "$state_file" "05-mirror-issues"
 
-  # Fetch all source issues (open + closed), exclude pull requests
+  # Fetch all source issues (open + closed), exclude pull requests.
+  # BUG-02 fix: use --paginate so repos with >100 issues in either state are fully fetched.
   log "  Fetching issues from $SOURCE_ORG/$repo_name..."
   local issues_open issues_closed all_issues
 
   issues_open="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues?state=open&per_page=100" \
-    2>/dev/null || echo '[]')"
+    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
   issues_closed="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues?state=closed&per_page=100" \
-    2>/dev/null || echo '[]')"
+    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
 
-  # Filter out pull requests (issues with pull_request key)
+  # Filter out pull requests; unique_by(.id) deduplicates issues that changed
+  # state between the two API calls (BUG-16 fix).
   all_issues="$(echo "$issues_open $issues_closed" | \
-    jq -s 'add // [] | map(select(.pull_request == null))')"
+    jq -s 'add // [] | map(select(.pull_request == null)) | unique_by(.id)')"
 
   local total_issues
   total_issues="$(echo "$all_issues" | jq 'length')"
@@ -391,6 +393,13 @@ _mirror_issue_comments() {
 
   log "  Mirroring $total_comments comments for issue #$src_number -> #$tgt_number..."
 
+  # BUG-03 fix: pre-fetch existing target comments so we can check markers before
+  # posting.  Without this, an interrupted run re-posts all comments (duplicates).
+  local tgt_comment_bodies
+  tgt_comment_bodies="$(gh api \
+    "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments?per_page=100" \
+    --paginate 2>/dev/null | jq -s 'add // [] | map(.body // "") | join("\n")' || echo '')"
+
   local mirrored=0
   while IFS= read -r comment; do
     local c_id c_author c_created c_body
@@ -401,6 +410,12 @@ _mirror_issue_comments() {
 
     # Marker for idempotency on future re-runs (stored in comment body)
     local c_marker="<!-- cf-mirror-comment: $SOURCE_ORG/$repo_name#$src_number/$c_id -->"
+
+    # Skip if already posted in a previous (possibly interrupted) run
+    if echo "$tgt_comment_bodies" | grep -qF "$c_marker" 2>/dev/null; then
+      mirrored=$((mirrored + 1))
+      continue
+    fi
 
     local c_full_body
     c_full_body="**@${c_author}** commented on ${c_created}:
