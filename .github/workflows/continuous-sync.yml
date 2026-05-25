@@ -1,4 +1,4 @@
-name: Continuous mirror cyberfabric → constructorfabric
+name: Legacy mirror
 
 on:
   #schedule:
