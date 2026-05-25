@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "stage": "03-org-metadata",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-25T10:48:24Z",
+    "last_run_at": "2026-05-25T10:48:24Z"
+  },
+  "items": [
+    {
+      "name": "default_repository_permission",
+      "value": "none",
+      "status": "synced",
+      "synced_at": "2026-05-25T10:48:25Z"
+    },
+    {
+      "name": "members_can_create_repositories",
+      "value": "true",
+      "status": "synced",
+      "synced_at": "2026-05-25T10:48:25Z"
+    },
+    {
+      "name": "members_can_fork_private_repositories",
+      "value": "true",
+      "status": "synced",
+      "synced_at": "2026-05-25T10:48:25Z"
+    }
+  ],
+  "stats": {
+    "total": 3,
+    "synced": 3,
+    "pending": 0,
+    "failed": 0
+  }
+}
