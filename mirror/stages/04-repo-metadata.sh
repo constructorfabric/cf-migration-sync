@@ -80,6 +80,9 @@ main() {
     # ---- Copy repo settings (PATCH /repos) ------------------------------
     _copy_repo_settings "$name" "$repo" "$state_file"
 
+    # ---- Copy Pages settings --------------------------------------------
+    _copy_pages_settings "$name" "$state_file"
+
     state_update_stats "$state_file"
     pause 0.3
 
@@ -385,6 +388,12 @@ _copy_repo_settings() {
     "allow_forking               bool"
     "web_commit_signoff_required bool"
     "homepage                    string"
+    # -- Merge strategy titles/messages (controls default commit message style) --
+    "allow_update_branch           bool"
+    "squash_merge_commit_title     string"
+    "squash_merge_commit_message   string"
+    "merge_commit_title            string"
+    "merge_commit_message          string"
   )
 
   local ts
@@ -497,6 +506,101 @@ _upsert_repo_setting() {
      end' \
     "$state_file" > "$tmp"
   mv "$tmp" "$state_file"
+}
+
+# ---------------------------------------------------------------------------
+# _copy_pages_settings — mirror GitHub Pages configuration for a repo.
+#
+# Pages are only mirrored when already enabled on the source repo.
+# Disabling Pages on a repo is not done here — the target either has Pages
+# or it doesn't; enabling it requires the source branch/path to exist.
+#
+# Limitations:
+#   - custom_domain: deliberately not copied (DNS must be reconfigured manually)
+#   - https_enforced: only applicable once a custom domain is set; skipped
+# ---------------------------------------------------------------------------
+_copy_pages_settings() {
+  local repo_name="$1"
+  local state_file="$2"
+
+  # Fetch source Pages config — 404 means Pages are not enabled (not an error)
+  local src_pages
+  src_pages="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/pages" \
+    2>/dev/null | jq -rs '.[0] // empty' 2>/dev/null || true)"
+
+  if [[ -z "$src_pages" ]]; then
+    return 0  # Pages not enabled on source
+  fi
+
+  local src_source_branch src_source_path src_build_type
+  src_source_branch="$(echo "$src_pages" | jq -r '.source.branch // "main"')"
+  src_source_path="$(echo   "$src_pages" | jq -r '.source.path   // "/"')"
+  src_build_type="$(echo    "$src_pages" | jq -r '.build_type    // "legacy"')"
+
+  log "  Syncing Pages settings for $repo_name (branch=$src_source_branch path=$src_source_path build=$src_build_type)..."
+
+  # Check whether Pages is already enabled on target
+  local tgt_pages
+  tgt_pages="$(gh api "repos/$TARGET_ORG/$repo_name/pages" \
+    2>/dev/null | jq -rs '.[0] // empty' 2>/dev/null || true)"
+
+  local ts
+  ts="$(now)"
+
+  if dry_run_skip "configure Pages for $TARGET_ORG/$repo_name (branch=$src_source_branch)"; then
+    _upsert_repo_setting "$state_file" "pages_source_branch" "$src_source_branch" "synced" "$ts"
+    return 0
+  fi
+
+  local status="synced"
+
+  if [[ -z "$tgt_pages" ]]; then
+    # Enable Pages on target
+    local create_payload
+    create_payload="$(jq -n \
+      --arg branch "$src_source_branch" \
+      --arg path   "$src_source_path" \
+      --arg build  "$src_build_type" \
+      '{"source":{"branch":$branch,"path":$path},"build_type":$build}')"
+
+    local create_result
+    create_result="$(gh api "repos/$TARGET_ORG/$repo_name/pages" \
+      --method POST \
+      --input <(echo "$create_payload") \
+      2>/dev/null || echo 'FAILED')"
+
+    if [[ "$create_result" == "FAILED" ]]; then
+      warn "  Failed to enable Pages for $repo_name (branch '$src_source_branch' may not exist yet)"
+      status="failed"
+    else
+      ok "  Enabled Pages for $repo_name"
+    fi
+  else
+    # Update existing Pages config
+    local update_payload
+    update_payload="$(jq -n \
+      --arg branch "$src_source_branch" \
+      --arg path   "$src_source_path" \
+      --arg build  "$src_build_type" \
+      '{"source":{"branch":$branch,"path":$path},"build_type":$build}')"
+
+    local update_result
+    update_result="$(gh api "repos/$TARGET_ORG/$repo_name/pages" \
+      --method PUT \
+      --input <(echo "$update_payload") \
+      2>/dev/null || echo 'FAILED')"
+
+    if [[ "$update_result" == "FAILED" ]]; then
+      warn "  Failed to update Pages settings for $repo_name"
+      status="failed"
+    else
+      ok "  Updated Pages settings for $repo_name"
+    fi
+  fi
+
+  _upsert_repo_setting "$state_file" "pages_source_branch" "$src_source_branch" "$status" "$ts"
+  _upsert_repo_setting "$state_file" "pages_source_path"   "$src_source_path"   "$status" "$ts"
+  _upsert_repo_setting "$state_file" "pages_build_type"    "$src_build_type"    "$status" "$ts"
 }
 
 main "$@"
