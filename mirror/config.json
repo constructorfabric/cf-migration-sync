@@ -41,7 +41,7 @@
   },
 
   "stage_05_mirror_issues": {
-    "exclude_repos": []
+    "exclude_repos": ["cyberware-rust", "cyberware-frontx", "cyber-constructor", "governance", "cf-template-rust"]
   },
 
   "stage_06_mirror_prs": {
