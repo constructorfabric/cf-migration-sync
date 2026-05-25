@@ -105,8 +105,9 @@ _copy_topics() {
     -H "Accept: application/vnd.github.mercy-preview+json" \
     2>/dev/null || echo '{"names":[]}')"
 
+  # Guard against extra runner output appended to stdout (RC-3)
   local topics_json
-  topics_json="$(echo "$src_topics" | jq '.names')"
+  topics_json="$(echo "$src_topics" | jq -rs '.[0].names // []' 2>/dev/null || echo '[]')"
   local topics_count
   topics_count="$(echo "$topics_json" | jq 'length')"
 

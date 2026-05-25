@@ -40,13 +40,14 @@ main() {
   log "Fetching GitHub Projects from $SOURCE_ORG..."
   local projects
   # Try v2 projects via GraphQL
+  # jq -rs: slurp guard against extra runner output appended to stdout (RC-3)
   projects="$(ghsrc api graphql \
     -f query='query($org:String!){organization(login:$org){projectsV2(first:20){nodes{id title url number}}}}' \
     -f org="$SOURCE_ORG" \
-    2>/dev/null | jq '.data.organization.projectsV2.nodes // []' || echo '[]')"
+    2>/dev/null | jq -rs '.[0].data.organization.projectsV2.nodes // []' 2>/dev/null || echo '[]')"
 
   local project_count
-  project_count="$(echo "$projects" | jq 'length')"
+  project_count="$(echo "$projects" | jq 'length' 2>/dev/null || echo 0)"
   log "Found $project_count GitHub Projects (v2)"
 
   while IFS= read -r proj; do
@@ -78,11 +79,12 @@ main() {
   # ---- 2. Installed GitHub Apps -----------------------------------------
   log "Fetching installed GitHub Apps on $SOURCE_ORG..."
   local apps
+  # jq -rs: slurp guard against extra runner output appended to stdout (RC-3)
   apps="$(ghsrc api "orgs/$SOURCE_ORG/installations" \
-    2>/dev/null | jq '.installations // []' || echo '[]')"
+    2>/dev/null | jq -rs '.[0].installations // []' 2>/dev/null || echo '[]')"
 
   local app_count
-  app_count="$(echo "$apps" | jq 'length')"
+  app_count="$(echo "$apps" | jq 'length' 2>/dev/null || echo 0)"
   log "Found $app_count installed GitHub Apps"
 
   while IFS= read -r app; do
@@ -112,9 +114,11 @@ main() {
   local webhooks
   webhooks="$(ghsrc api "orgs/$SOURCE_ORG/hooks" \
     2>/dev/null || echo '[]')"
+  # Normalize: guard against extra runner output appended to stdout (RC-3)
+  webhooks="$(echo "$webhooks" | jq -rs '.[0] // []' 2>/dev/null || echo '[]')"
 
   local webhook_count
-  webhook_count="$(echo "$webhooks" | jq 'length')"
+  webhook_count="$(echo "$webhooks" | jq 'length' 2>/dev/null || echo 0)"
   log "Found $webhook_count org webhooks"
 
   while IFS= read -r hook; do

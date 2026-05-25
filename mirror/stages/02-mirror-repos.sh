@@ -79,53 +79,46 @@ main() {
       pause 0.5
     fi
 
-    # ---- Clone mirror from source ---------------------------------------
+    # ---- Clone from source (bare, not mirror) ------------------------------
+    # We use --bare instead of --mirror deliberately:
+    #   --mirror fetches refs/pull/* (GitHub PR refs) which GitHub then rejects
+    #   on push because refs/pull/* is a server-managed read-only namespace.
+    #   --bare fetches only refs/heads/* and refs/tags/* — exactly what we want.
+    # This eliminates the push failure and the two-step fallback entirely.
     local clone_dir="$WORK_DIR/$name.git"
     rm -rf "$clone_dir"
 
     local source_url="https://${GH_TOKEN_SOURCE}@github.com/${SOURCE_ORG}/${name}.git"
     local target_url="https://${GH_TOKEN}@github.com/${TARGET_ORG}/${name}.git"
 
-    log "Cloning $SOURCE_ORG/$name (bare mirror)..."
-    if ! git clone --mirror "$source_url" "$clone_dir" 2>/dev/null; then
-      warn "Failed to clone $SOURCE_ORG/$name, skipping"
+    log "Cloning $SOURCE_ORG/$name..."
+    if ! git clone --bare "$source_url" "$clone_dir" 2>/dev/null; then
+      warn "Failed to clone $SOURCE_ORG/$name (empty repo or unreachable), skipping"
       failed_count=$((failed_count + 1))
       continue
     fi
 
-    # ---- Push mirror to target ------------------------------------------
-    log "Pushing mirror to $TARGET_ORG/$name..."
+    # ---- Push to target -------------------------------------------------
+    log "Pushing to $TARGET_ORG/$name..."
     cd "$clone_dir"
+    git remote set-url origin "$target_url"
 
-    # Set push remote
-    git remote set-url --push origin "$target_url"
+    # --prune removes branches/tags from target that were deleted in source.
+    # Explicit refspecs skip refs/pull/* and any other non-standard namespaces.
+    local push_ok=1
+    if ! git push --prune origin '+refs/heads/*:refs/heads/*' 2>/dev/null; then
+      warn "Failed to push branches for $name"
+      push_ok=0
+    fi
+    if ! git push --prune origin '+refs/tags/*:refs/tags/*' 2>/dev/null; then
+      warn "Failed to push tags for $name (non-fatal)"
+    fi
 
-    # Attempt full mirror push first
-    if git push --mirror 2>/dev/null; then
-      ok "Mirrored $name successfully"
+    if [[ "$push_ok" -eq 1 ]]; then
+      ok "Mirrored $name"
       success_count=$((success_count + 1))
     else
-      warn "Mirror push failed for $name (likely refs/pull/* rejection), trying explicit refspecs..."
-
-      # Fallback: unset mirror config and push explicit refspecs
-      git config --unset remote.origin.mirror 2>/dev/null || true
-
-      # Fetch all branch and tag refspecs explicitly
-      local push_ok=1
-      if ! git push origin '+refs/heads/*:refs/heads/*' 2>/dev/null; then
-        warn "Failed to push branches for $name"
-        push_ok=0
-      fi
-      if ! git push origin '+refs/tags/*:refs/tags/*' 2>/dev/null; then
-        warn "Failed to push tags for $name (non-fatal)"
-      fi
-
-      if [[ "$push_ok" -eq 1 ]]; then
-        ok "Mirrored $name (fallback refspecs)"
-        success_count=$((success_count + 1))
-      else
-        failed_count=$((failed_count + 1))
-      fi
+      failed_count=$((failed_count + 1))
     fi
 
     cd "$REPO_ROOT"

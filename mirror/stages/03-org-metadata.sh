@@ -37,6 +37,8 @@ main() {
   log "Fetching source org settings from $SOURCE_ORG..."
   local src_org
   src_org="$(ghsrc api "orgs/$SOURCE_ORG" 2>/dev/null || echo '{}')"
+  # Normalize: guard against extra runner output appended to stdout (RC-3)
+  src_org="$(echo "$src_org" | jq -rs '.[0] // {}' 2>/dev/null || echo '{}')"
 
   local default_repo_perm
   default_repo_perm="$(echo "$src_org" | jq -r '.default_repository_permission // "read"')"

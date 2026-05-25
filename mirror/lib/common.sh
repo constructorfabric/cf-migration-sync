@@ -259,9 +259,12 @@ gh_paginate() {
       batch="$(gh api "$url" 2>/dev/null || echo '[]')"
     fi
 
+    # Normalize: extract first JSON value to guard against extra runner output (RC-3)
+    batch="$(echo "$batch" | jq -rs '.[0] // []' 2>/dev/null || echo '[]')"
+
     # If empty array or null, stop
     local count
-    count="$(echo "$batch" | jq 'if type=="array" then length else 0 end')"
+    count="$(echo "$batch" | jq 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
     if [[ "$count" -eq 0 ]]; then
       break
     fi
