@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-25T10:05:34Z",
-    "last_run_at": "2026-05-25T10:14:14Z"
+    "last_run_at": "2026-05-25T11:18:26Z"
   },
   "items": [
     {
@@ -515,9 +515,9 @@
       "login": "Last-Christmas",
       "source_id": 253948635,
       "role": "member",
-      "status": "invited",
+      "status": "accepted",
       "invited_at": "2026-05-22T10:30:45.000Z",
-      "accepted_at": null
+      "accepted_at": "2026-05-25T11:18:28Z"
     },
     {
       "login": "lavacitalola",
@@ -595,9 +595,9 @@
       "login": "MightyDuckNew",
       "source_id": 96122681,
       "role": "member",
-      "status": "invited",
+      "status": "accepted",
       "invited_at": "2026-05-22T10:31:55.000Z",
-      "accepted_at": null
+      "accepted_at": "2026-05-25T11:18:29Z"
     },
     {
       "login": "MikeFalcon77",
