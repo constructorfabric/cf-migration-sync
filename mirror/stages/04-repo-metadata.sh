@@ -77,6 +77,9 @@ main() {
     # ---- Copy milestones ------------------------------------------------
     _copy_milestones "$name" "$state_file"
 
+    # ---- Copy repo settings (PATCH /repos) ------------------------------
+    _copy_repo_settings "$name" "$repo" "$state_file"
+
     state_update_stats "$state_file"
     pause 0.3
 
@@ -345,6 +348,155 @@ _copy_milestones() {
   done < <(echo "$src_milestones" | jq -c '.[]')
 
   ok "  Milestones synced for $repo_name"
+}
+
+# ---------------------------------------------------------------------------
+# _copy_repo_settings — sync PATCH /repos/{owner}/{repo} settings
+#
+# Settings table: "api_field  type"
+#   string → -f (JSON string)
+#   bool   → -F (type-inferred; "true"/"false" → JSON booleans)
+#
+# Ordering rules enforced below:
+#   1. Regular settings (any order)
+#   2. default_branch — after git mirror so branch already exists
+#   3. archived=true LAST — makes repo read-only; further PATCH calls fail
+#
+# Not synced intentionally:
+#   name       — would rename the repo
+#   visibility — risky; handled by --bare clone matching source privacy
+# ---------------------------------------------------------------------------
+_copy_repo_settings() {
+  local repo_name="$1"
+  local src_repo="$2"    # full source repo JSON object
+  local state_file="$3"
+
+  log "  Syncing repo settings for $repo_name..."
+
+  local REPO_SETTINGS=(
+    "has_issues                  bool"
+    "has_projects                bool"
+    "has_wiki                    bool"
+    "allow_merge_commit          bool"
+    "allow_squash_merge          bool"
+    "allow_rebase_merge          bool"
+    "allow_auto_merge            bool"
+    "delete_branch_on_merge      bool"
+    "allow_forking               bool"
+    "web_commit_signoff_required bool"
+    "homepage                    string"
+  )
+
+  local ts
+  ts="$(now)"
+
+  for setting_def in "${REPO_SETTINGS[@]}"; do
+    local field type
+    field="$(echo "$setting_def" | awk '{print $1}')"
+    type="$(echo  "$setting_def" | awk '{print $2}')"
+
+    local src_val
+    src_val="$(echo "$src_repo" | jq -r --arg f "$field" \
+      'if .[$f] != null then .[$f] | tostring else empty end' \
+      2>/dev/null || true)"
+
+    [[ -z "$src_val" ]] && continue
+
+    if dry_run_skip "PATCH repos/$TARGET_ORG/$repo_name $field=$src_val"; then
+      _upsert_repo_setting "$state_file" "$field" "$src_val" "synced" "$ts"
+      continue
+    fi
+
+    local result
+    if [[ "$type" == "bool" ]]; then
+      result="$(gh api "repos/$TARGET_ORG/$repo_name" \
+        --method PATCH -F "$field=$src_val" 2>/dev/null || echo 'FAILED')"
+    else
+      result="$(gh api "repos/$TARGET_ORG/$repo_name" \
+        --method PATCH -f "$field=$src_val" 2>/dev/null || echo 'FAILED')"
+    fi
+
+    if [[ "$result" == "FAILED" ]]; then
+      warn "  Failed to set $field=$src_val for $repo_name"
+      _upsert_repo_setting "$state_file" "$field" "$src_val" "failed" "$ts"
+    else
+      ok "  Set $field=$src_val for $repo_name"
+      _upsert_repo_setting "$state_file" "$field" "$src_val" "synced" "$ts"
+    fi
+    pause 0.2
+  done
+
+  # -- default_branch: after git mirror so the branch already exists in target --
+  local src_default_branch
+  src_default_branch="$(echo "$src_repo" | jq -r '.default_branch // empty' 2>/dev/null || true)"
+  if [[ -n "$src_default_branch" ]]; then
+    if dry_run_skip "PATCH repos/$TARGET_ORG/$repo_name default_branch=$src_default_branch"; then
+      _upsert_repo_setting "$state_file" "default_branch" "$src_default_branch" "synced" "$ts"
+    else
+      local result
+      result="$(gh api "repos/$TARGET_ORG/$repo_name" \
+        --method PATCH -f "default_branch=$src_default_branch" \
+        2>/dev/null || echo 'FAILED')"
+      if [[ "$result" == "FAILED" ]]; then
+        warn "  Failed to set default_branch=$src_default_branch for $repo_name"
+        _upsert_repo_setting "$state_file" "default_branch" "$src_default_branch" "failed" "$ts"
+      else
+        ok "  Set default_branch=$src_default_branch for $repo_name"
+        _upsert_repo_setting "$state_file" "default_branch" "$src_default_branch" "synced" "$ts"
+      fi
+      pause 0.2
+    fi
+  fi
+
+  # -- archived: MUST be set last — archiving makes the repo read-only --
+  local archived
+  archived="$(echo "$src_repo" | jq -r '.archived // "false"' 2>/dev/null || echo 'false')"
+  if [[ "$archived" == "true" ]]; then
+    if dry_run_skip "PATCH repos/$TARGET_ORG/$repo_name archived=true"; then
+      _upsert_repo_setting "$state_file" "archived" "true" "synced" "$ts"
+    else
+      local result
+      result="$(gh api "repos/$TARGET_ORG/$repo_name" \
+        --method PATCH -F "archived=true" 2>/dev/null || echo 'FAILED')"
+      if [[ "$result" == "FAILED" ]]; then
+        warn "  Failed to archive $repo_name"
+        _upsert_repo_setting "$state_file" "archived" "true" "failed" "$ts"
+      else
+        ok "  Archived $repo_name (source is archived)"
+        _upsert_repo_setting "$state_file" "archived" "true" "synced" "$ts"
+      fi
+    fi
+  fi
+
+  ok "  Repo settings synced for $repo_name"
+}
+
+# ---------------------------------------------------------------------------
+_upsert_repo_setting() {
+  local state_file="$1"
+  local field="$2"
+  local value="$3"
+  local status="$4"
+  local ts="$5"
+
+  local record
+  record="$(jq -n \
+    --arg type   "repo_setting" \
+    --arg name   "$field" \
+    --arg value  "$value" \
+    --arg status "$status" \
+    --arg ts     "$ts" \
+    '{"type":$type,"name":$name,"value":$value,"status":$status,"synced_at":$ts}')"
+
+  local tmp
+  tmp="$(mktemp)"
+  jq --arg field "$field" --argjson rec "$record" \
+    'if (.items | map(select(.type=="repo_setting" and .name==$field)) | length) > 0
+     then .items = [.items[] | if (.type=="repo_setting" and .name==$field) then $rec else . end]
+     else .items += [$rec]
+     end' \
+    "$state_file" > "$tmp"
+  mv "$tmp" "$state_file"
 }
 
 main "$@"

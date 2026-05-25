@@ -179,7 +179,52 @@ main() {
     fi
   done < <(echo "$repos" | jq -c '.[]' 2>/dev/null || true)
 
-  # ---- 5. Write state file ----------------------------------------------
+  # ---- 5. Releases (per repo) -------------------------------------------
+  log "Checking releases across repos in $SOURCE_ORG..."
+
+  while IFS= read -r repo; do
+    local repo_name
+    repo_name="$(echo "$repo" | jq -r '.name')"
+
+    local releases
+    releases="$(ghsrc api \
+      "repos/$SOURCE_ORG/$repo_name/releases?per_page=100" \
+      --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+
+    local rel_count
+    rel_count="$(echo "$releases" | jq 'length' 2>/dev/null || echo 0)"
+    [[ "$rel_count" -eq 0 ]] && continue
+
+    log "  Found $rel_count releases in $repo_name — inventorying..."
+
+    while IFS= read -r rel; do
+      local rel_name rel_tag rel_url
+      rel_name="$(echo "$rel" | jq -r '.name // .tag_name // "unnamed"')"
+      rel_tag="$(echo  "$rel" | jq -r '.tag_name // ""')"
+      rel_url="$(echo  "$rel" | jq -r '.html_url // ""')"
+
+      items="$(echo "$items" | jq \
+        --arg type    "release" \
+        --arg repo    "$repo_name" \
+        --arg name    "$rel_name" \
+        --arg tag     "$rel_tag" \
+        --arg url     "$rel_url" \
+        --arg ts      "$ts" \
+        '. + [{
+          "type":                  $type,
+          "repo":                  $repo,
+          "name":                  $name,
+          "tag":                   $tag,
+          "source_url":            $url,
+          "status":                "inventory",
+          "manual_action_required": true,
+          "reason":                "Release assets and descriptions require manual re-creation; git tags are mirrored by stage 02",
+          "inventoried_at":        $ts
+        }]')"
+    done < <(echo "$releases" | jq -c '.[]' 2>/dev/null || true)
+  done < <(echo "$repos" | jq -c '.[]' 2>/dev/null || true)
+
+  # ---- 6. Write state file ----------------------------------------------
   local item_count
   item_count="$(echo "$items" | jq 'length')"
 

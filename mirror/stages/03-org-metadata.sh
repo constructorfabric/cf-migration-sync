@@ -113,10 +113,25 @@ main() {
       continue
     fi
 
-    # Check for policy lock — RC-4: has() correctly handles false values.
+    # Check skip_settings — settings listed here are not synced; target keeps its value.
+    # skip_settings wins over locked_settings: explicit skip means "hands off".
+    local skip_flag
+    skip_flag="$(jq -r --arg f "$field" \
+      '.stage_03_org_metadata.skip_settings | map(select(. == $f)) | first // empty' \
+      "$MIRROR_CONFIG" 2>/dev/null || true)"
+    if [[ -n "$skip_flag" ]]; then
+      log "  Skipping $field (in config skip_settings — target value preserved)"
+      skipped=$((skipped + 1))
+      continue
+    fi
+
+    # Check for policy lock.
+    # RC-4: use has() so false values are detected (// treats false as falsy).
+    # Null guard: .[$f] != null prevents applying the string "null" to the API
+    # when someone writes  "field": null  in config by mistake.
     local locked_val
     locked_val="$(echo "$locked_settings" | jq -r --arg f "$field" \
-      'if has($f) then .[$f] | tostring else empty end' \
+      'if (has($f) and .[$f] != null) then .[$f] | tostring else empty end' \
       2>/dev/null || true)"
 
     local effective_val="$src_val"

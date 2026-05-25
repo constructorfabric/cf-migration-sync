@@ -152,6 +152,24 @@ _mirror_repo_issues() {
       "$state_file" 2>/dev/null | head -1 || true)"
 
     if [[ "$already_status" == "mirrored" ]]; then
+      local already_comments_status tgt_number_in_state
+      already_comments_status="$(jq -r --argjson n "$src_number" \
+        '.items[] | select(.source_number == $n) | .comments_status // empty' \
+        "$state_file" 2>/dev/null | head -1 || true)"
+      if [[ "$already_comments_status" == "done" ]]; then
+        # Issue body + comments both done — fully skip
+        skip_count=$((skip_count + 1))
+        continue
+      fi
+      # Body mirrored but comments not yet done — complete the comment sync
+      tgt_number_in_state="$(jq -r --argjson n "$src_number" \
+        '.items[] | select(.source_number == $n) | .target_number // empty' \
+        "$state_file" 2>/dev/null | head -1 || true)"
+      if [[ -n "$tgt_number_in_state" && "$tgt_number_in_state" != "null" ]]; then
+        log "  Issue #$src_number body already mirrored — completing comment sync..."
+        _mirror_issue_comments \
+          "$repo_name" "$src_number" "$tgt_number_in_state" "$state_file"
+      fi
       skip_count=$((skip_count + 1))
       continue
     fi
@@ -165,9 +183,11 @@ _mirror_repo_issues() {
       2>/dev/null | head -1 || true)"
 
     if [[ -n "$existing_target_number" ]]; then
-      log "  Issue #$src_number already mirrored as #$existing_target_number, updating state"
+      log "  Issue #$src_number already mirrored as #$existing_target_number, syncing state+comments"
       _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
         "$title" "$existing_target_number" "" "$assignees" "mirrored" "$(now)" "pending"
+      _mirror_issue_comments \
+        "$repo_name" "$src_number" "$existing_target_number" "$state_file"
       skip_count=$((skip_count + 1))
       continue
     fi
@@ -275,6 +295,9 @@ $marker"
     _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
       "$title" "$tgt_number" "$tgt_node_id" "$assignees" "mirrored" "$(now)" "$assignees_status"
 
+    # ---- Mirror issue comments -------------------------------------------
+    _mirror_issue_comments "$repo_name" "$src_number" "$tgt_number" "$state_file"
+
     new_count=$((new_count + 1))
     pause 0.3
 
@@ -322,16 +345,108 @@ _upsert_issue() {
       status:               $status,
       mirrored_at:          (if $mat == "" then null else $mat end),
       assignees_status:     $ast,
-      assignees_applied_at: null
+      assignees_applied_at: null,
+      comments_status:      "none",
+      comments_mirrored:    0
     }')"
 
   local tmp
   tmp="$(mktemp)"
+  # Preserve comments_status / comments_mirrored from existing record so that
+  # a re-run of issue creation does not reset the comment-sync progress.
   jq --argjson sn "$src_number" --argjson rec "$record" \
     'if (.items | map(select(.source_number == $sn)) | length) > 0
-     then .items = [.items[] | if .source_number == $sn then $rec else . end]
+     then .items = [.items[] | if .source_number == $sn then
+       . as $old | $rec |
+       .comments_status   = ($old.comments_status   // "none") |
+       .comments_mirrored = ($old.comments_mirrored // 0)
+     else . end]
      else .items += [$rec]
      end' \
+    "$state_file" > "$tmp"
+  mv "$tmp" "$state_file"
+}
+
+# ---------------------------------------------------------------------------
+# _mirror_issue_comments — fetch source comments and create in target
+# with attribution headers. Idempotent via state (comments_status=done).
+_mirror_issue_comments() {
+  local repo_name="$1"
+  local src_number="$2"
+  local tgt_number="$3"
+  local state_file="$4"
+
+  local comments
+  comments="$(ghsrc api \
+    "repos/$SOURCE_ORG/$repo_name/issues/$src_number/comments?per_page=100" \
+    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+
+  local total_comments
+  total_comments="$(echo "$comments" | jq 'length' 2>/dev/null || echo 0)"
+
+  if [[ "$total_comments" -eq 0 ]]; then
+    _update_comments_status "$state_file" "$src_number" "done" 0
+    return 0
+  fi
+
+  log "  Mirroring $total_comments comments for issue #$src_number -> #$tgt_number..."
+
+  local mirrored=0
+  while IFS= read -r comment; do
+    local c_id c_author c_created c_body
+    c_id="$(echo      "$comment" | jq -r '.id')"
+    c_author="$(echo  "$comment" | jq -r '.user.login // "unknown"')"
+    c_created="$(echo "$comment" | jq -r '.created_at // ""')"
+    c_body="$(echo    "$comment" | jq -r '.body // ""')"
+
+    # Marker for idempotency on future re-runs (stored in comment body)
+    local c_marker="<!-- cf-mirror-comment: $SOURCE_ORG/$repo_name#$src_number/$c_id -->"
+
+    local c_full_body
+    c_full_body="**@${c_author}** commented on ${c_created}:
+
+---
+
+${c_body}
+
+${c_marker}"
+
+    local c_payload
+    c_payload="$(jq -n --arg body "$c_full_body" '{"body":$body}')"
+
+    local c_result
+    c_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments" \
+      --method POST \
+      --input <(echo "$c_payload") \
+      2>/dev/null || echo 'FAILED')"
+
+    if [[ "$c_result" == "FAILED" ]]; then
+      warn "  Failed to mirror comment $c_id on issue #$src_number"
+    else
+      mirrored=$((mirrored + 1))
+    fi
+    pause 0.2
+  done < <(echo "$comments" | jq -c '.[]')
+
+  _update_comments_status "$state_file" "$src_number" "done" "$mirrored"
+  ok "  Mirrored $mirrored/$total_comments comments for issue #$src_number"
+}
+
+# ---------------------------------------------------------------------------
+_update_comments_status() {
+  local state_file="$1"
+  local src_number="$2"
+  local status="$3"
+  local count="$4"
+
+  local tmp
+  tmp="$(mktemp)"
+  jq --argjson sn "$src_number" --arg st "$status" --argjson count "$count" \
+    '.items = [.items[] |
+      if .source_number == $sn
+      then .comments_status = $st | .comments_mirrored = $count
+      else .
+      end]' \
     "$state_file" > "$tmp"
   mv "$tmp" "$state_file"
 }

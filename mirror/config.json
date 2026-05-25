@@ -14,6 +14,7 @@
   },
 
   "stage_03_org_metadata": {
+    "skip_settings": [],
     "locked_settings": {
       "members_can_fork_private_repositories": false
     }
@@ -33,5 +34,9 @@
 
   "stage_07_assign_issues": {},
 
-  "stage_08_other_objects": {}
+  "stage_08_other_objects": {},
+
+  "stage_09_mirror_teams": {
+    "exclude_teams": []
+  }
 }
