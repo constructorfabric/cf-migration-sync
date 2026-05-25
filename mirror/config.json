@@ -38,5 +38,9 @@
 
   "stage_09_mirror_teams": {
     "exclude_teams": []
+  },
+
+  "stage_10_mirror_releases": {
+    "exclude_repos": []
   }
 }
