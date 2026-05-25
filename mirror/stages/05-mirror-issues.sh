@@ -141,6 +141,9 @@ _mirror_repo_issues() {
     labels="$(echo "$issue" | jq -r '[.labels[].name]')"
     local milestone_title
     milestone_title="$(echo "$issue" | jq -r '.milestone.title // ""')"
+    local src_author src_created
+    src_author="$(echo "$issue" | jq -r '.user.login // "unknown"')"
+    src_created="$(echo "$issue" | jq -r '.created_at // ""')"
 
     processed=$((processed + 1))
     if (( processed % 25 == 0 )); then
@@ -199,15 +202,26 @@ _mirror_repo_issues() {
       continue
     fi
 
-    # ---- Build body with marker ----------------------------------------
+    # ---- Build body with visible attribution + idempotency marker ------
+    local src_url="https://github.com/$SOURCE_ORG/$repo_name/issues/$src_number"
+    local attribution="> 🔗 **Mirrored from** [$SOURCE_ORG/$repo_name#$src_number]($src_url)
+> Originally opened by **@${src_author}** on ${src_created}"
+
     local full_body
     if [[ -n "$body" ]]; then
-      full_body="$body
+      full_body="${attribution}
 
 ---
-$marker"
+
+${body}
+
+---
+${marker}"
     else
-      full_body="$marker"
+      full_body="${attribution}
+
+---
+${marker}"
     fi
 
     # ---- Lookup target milestone number --------------------------------

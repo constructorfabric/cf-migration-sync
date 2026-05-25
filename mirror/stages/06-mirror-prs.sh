@@ -217,8 +217,7 @@ _mirror_repo_prs() {
     fi
 
     local issue_body
-    issue_body="> **Mirrored PR** | Original: $pr_url
-> **Author:** @$pr_author | **Opened:** $pr_created | **Status:** $pr_status_str
+    issue_body="> 🔗 **Mirrored PR** [$SOURCE_ORG/$repo_name#$pr_number]($pr_url) | **Author:** @$pr_author | **Opened:** $pr_created | **Status:** $pr_status_str
 > *GitHub API does not allow setting PR author or timestamps — attribution preserved here.*
 
 ---
