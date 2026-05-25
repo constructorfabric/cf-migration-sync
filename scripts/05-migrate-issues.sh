@@ -32,17 +32,26 @@ DEFAULT_REPOS=(
   cf-docs              # 1 open
 )
 
+# Looks up a target milestone number by source milestone number.
+# Uses a temp TSV file instead of associative arrays (bash 3.2 compatible).
+ms_lookup() {
+  local src_ms="$1"
+  grep "^${src_ms}" "$MS_TSV" | cut -f2 | head -1
+}
+
 migrate_one_repo() {
   local REPO="$1"
   log "Migrating issues for ${REPO}"
 
-  # Build milestone number map (source → target by title)
-  declare -A MS_MAP
+  # Build milestone number map (source -> target by title) in a temp TSV file.
+  # Format: <source_num><tab><target_num> per line.
+  MS_TSV=$(mktemp)
+  trap "rm -f '$MS_TSV'" RETURN
   while IFS=$'\t' read -r src_num title; do
     [ -z "$src_num" ] && continue
     tgt_num=$(gh api "repos/${TARGET_ORG}/${REPO}/milestones?state=all" --paginate \
-      --jq ".[] | select(.title==\"${title}\") | .number" 2>/dev/null | head -1)
-    [ -n "$tgt_num" ] && MS_MAP["$src_num"]="$tgt_num"
+      --jq ".[] | select(.title==\"${title}\") | .number" 2>/dev/null | head -1 || true)
+    [ -n "$tgt_num" ] && echo -e "${src_num}\t${tgt_num}" >> "$MS_TSV"
   done < <(ghsrc api "repos/${SOURCE_ORG}/${REPO}/milestones?state=all" --paginate \
     --jq '.[] | [(.number | tostring), .title] | @tsv' 2>/dev/null)
 
@@ -74,24 +83,28 @@ migrate_one_repo() {
     fi
 
     new_body="${MARKER}
-> 📌 Originally by @${author} on ${created}
+> \u30c Originally by @${author} on ${created}
 
 ${body}"
 
+    # assignees omitted intentionally — avoids notification flood during migration.
+    # Run 12-reassign.sh afterwards to re-apply them.
     PAYLOAD=$(jq -n \
       --arg title "$title" \
       --arg body "$new_body" \
       --argjson labels "$labels" \
-      --argjson assignees "$assignees" \
-      '{title:$title,body:$body,labels:$labels,assignees:$assignees}')
+      '{title:$title,body:$body,labels:$labels}')
 
     # Add milestone if mapped
-    if [ -n "$src_ms" ] && [ -n "${MS_MAP[$src_ms]+x}" ]; then
-      PAYLOAD=$(echo "$PAYLOAD" | jq --argjson ms "${MS_MAP[$src_ms]}" '.+{milestone:$ms}')
+    if [ -n "$src_ms" ]; then
+      tgt_ms=$(ms_lookup "$src_ms")
+      if [ -n "$tgt_ms" ]; then
+        PAYLOAD=$(echo "$PAYLOAD" | jq --argjson ms "$tgt_ms" '.+{milestone:$ms}')
+      fi
     fi
 
-    NEW=$(gh api "repos/${TARGET_ORG}/${REPO}/issues" \
-      -X POST --input - <<< "$PAYLOAD" 2>/dev/null)
+    NEW=$(echo "$PAYLOAD" | gh api "repos/${TARGET_ORG}/${REPO}/issues" \
+      -X POST --input - 2>/dev/null || true)
     NEW_NUMBER=$(echo "$NEW" | jq -r '.number // empty')
     if [ -z "$NEW_NUMBER" ]; then
       err "Failed to create issue #${number}"
@@ -105,7 +118,7 @@ ${body}"
       c_created=$(echo "$comment" | jq -r '.created_at')
       c_body=$(echo "$comment"    | jq -r '.body')
       gh api "repos/${TARGET_ORG}/${REPO}/issues/${NEW_NUMBER}/comments" \
-        -X POST -f body="> 💬 Originally by @${c_author} on ${c_created}
+        -X POST -f body="> ᴜ Originally by @${c_author} on ${c_created}
 
 ${c_body}" >/dev/null 2>&1 || true
       pause 0.2

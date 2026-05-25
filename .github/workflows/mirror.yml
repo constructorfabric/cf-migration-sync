@@ -1,0 +1,220 @@
+name: Mirror — cyberfabric → constructorfabric
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours
+  workflow_dispatch:
+    inputs:
+      stages:
+        description: 'Stages to run (all, or comma-separated: 1,2,5)'
+        required: false
+        default: 'all'
+
+concurrency:
+  group: mirror
+  cancel-in-progress: false   # never cancel a running mirror
+
+permissions:
+  contents: write
+
+env:
+  GH_TOKEN:         ${{ secrets.GH_TOKEN }}
+  GH_TOKEN_SOURCE:  ${{ secrets.GH_TOKEN_SOURCE }}
+  SOURCE_ORG:       ${{ vars.SOURCE_ORG }}
+  TARGET_ORG:       constructorfabric
+
+jobs:
+  mirror:
+    name: Mirror org
+    runs-on: ubuntu-latest
+
+    steps:
+      # ------------------------------------------------------------------ #
+      - name: Checkout control repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0
+
+      # ------------------------------------------------------------------ #
+      - name: Set up git identity
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # ------------------------------------------------------------------ #
+      - name: Ensure tools available
+        run: |
+          which gh  || sudo apt-get install -y gh
+          which jq  || sudo apt-get install -y jq
+          which git || sudo apt-get install -y git
+          gh --version
+          jq --version
+
+      # ------------------------------------------------------------------ #
+      - name: Make stage scripts executable
+        run: chmod +x mirror/stages/*.sh mirror/lib/common.sh
+
+      # ------------------------------------------------------------------ #
+      - name: Resolve stages to run
+        id: stages
+        run: |
+          INPUT="${{ github.event.inputs.stages }}"
+          if [[ -z "$INPUT" || "$INPUT" == "all" ]]; then
+            echo "run_1=true"  >> "$GITHUB_OUTPUT"
+            echo "run_2=true"  >> "$GITHUB_OUTPUT"
+            echo "run_3=true"  >> "$GITHUB_OUTPUT"
+            echo "run_4=true"  >> "$GITHUB_OUTPUT"
+            echo "run_5=true"  >> "$GITHUB_OUTPUT"
+            echo "run_6=true"  >> "$GITHUB_OUTPUT"
+            echo "run_7=true"  >> "$GITHUB_OUTPUT"
+            echo "run_8=true"  >> "$GITHUB_OUTPUT"
+          else
+            for stage in 1 2 3 4 5 6 7 8; do
+              if echo "$INPUT" | grep -qE "(^|,)${stage}(,|$)"; then
+                echo "run_${stage}=true" >> "$GITHUB_OUTPUT"
+              else
+                echo "run_${stage}=false" >> "$GITHUB_OUTPUT"
+              fi
+            done
+          fi
+
+      # ================================================================== #
+      # Stage 1 — Invite people
+      # ================================================================== #
+      - name: Stage 01 — invite-people
+        if: steps.stages.outputs.run_1 == 'true'
+        run: mirror/stages/01-invite-people.sh
+
+      - name: Commit state after stage 01
+        if: steps.stages.outputs.run_1 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 01 (invite-people) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 01"
+          fi
+
+      # ================================================================== #
+      # Stage 2 — Mirror repos (no state commit needed)
+      # ================================================================== #
+      - name: Stage 02 — mirror-repos
+        if: steps.stages.outputs.run_2 == 'true'
+        run: mirror/stages/02-mirror-repos.sh
+
+      # ================================================================== #
+      # Stage 3 — Org metadata
+      # ================================================================== #
+      - name: Stage 03 — org-metadata
+        if: steps.stages.outputs.run_3 == 'true'
+        run: mirror/stages/03-org-metadata.sh
+
+      - name: Commit state after stage 03
+        if: steps.stages.outputs.run_3 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 03 (org-metadata) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 03"
+          fi
+
+      # ================================================================== #
+      # Stage 4 — Repo metadata
+      # ================================================================== #
+      - name: Stage 04 — repo-metadata
+        if: steps.stages.outputs.run_4 == 'true'
+        run: mirror/stages/04-repo-metadata.sh
+
+      - name: Commit state after stage 04
+        if: steps.stages.outputs.run_4 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 04 (repo-metadata) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 04"
+          fi
+
+      # ================================================================== #
+      # Stage 5 — Mirror issues
+      # ================================================================== #
+      - name: Stage 05 — mirror-issues
+        if: steps.stages.outputs.run_5 == 'true'
+        run: mirror/stages/05-mirror-issues.sh
+
+      - name: Commit state after stage 05
+        if: steps.stages.outputs.run_5 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 05 (mirror-issues) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 05"
+          fi
+
+      # ================================================================== #
+      # Stage 6 — Mirror PRs
+      # ================================================================== #
+      - name: Stage 06 — mirror-prs
+        if: steps.stages.outputs.run_6 == 'true'
+        run: mirror/stages/06-mirror-prs.sh
+
+      - name: Commit state after stage 06
+        if: steps.stages.outputs.run_6 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 06 (mirror-prs) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 06"
+          fi
+
+      # ================================================================== #
+      # Stage 7 — Assign issues
+      # ================================================================== #
+      - name: Stage 07 — assign-issues
+        if: steps.stages.outputs.run_7 == 'true'
+        run: mirror/stages/07-assign-issues.sh
+
+      - name: Commit state after stage 07
+        if: steps.stages.outputs.run_7 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 07 (assign-issues) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 07"
+          fi
+
+      # ================================================================== #
+      # Stage 8 — Other objects inventory
+      # ================================================================== #
+      - name: Stage 08 — other-objects
+        if: steps.stages.outputs.run_8 == 'true'
+        run: mirror/stages/08-other-objects.sh
+
+      - name: Commit state after stage 08
+        if: steps.stages.outputs.run_8 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 08 (other-objects) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 08"
+          fi

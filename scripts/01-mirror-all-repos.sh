@@ -35,8 +35,10 @@ list_source_repos | while IFS= read -r REPO; do
   fi
 
   # Clone source mirror (empty repos will fail — skip them)
+  # Use GH_TOKEN_SOURCE for the source clone when two accounts are in use.
+  SRC_TOKEN="${GH_TOKEN_SOURCE:-$GH_TOKEN}"
   if ! git clone --mirror \
-      "https://x-access-token:${GH_TOKEN}@github.com/${SOURCE_ORG}/${REPO}.git" \
+      "https://x-access-token:${SRC_TOKEN}@github.com/${SOURCE_ORG}/${REPO}.git" \
       "${WORKDIR}/${REPO}.git" 2>/dev/null; then
     warn "SKIP ${REPO}: empty or unreachable (target repo created but no refs)"
     continue
