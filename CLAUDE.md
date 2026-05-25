@@ -132,6 +132,36 @@ value="$(echo "$api_response" | jq -rs '.[0].field // empty' 2>/dev/null || true
 
 ---
 
+### RC-4 — jq `//` (alternative operator) silently discards `false` values
+
+**Root cause:** jq's `//` operator treats both `null` **and `false`** as falsy.
+`.field // empty` evaluates to `empty` when `.field` is `false`, silently
+discarding a valid boolean value. Any config-check or presence-test written
+with `//` will invisibly ignore `false` settings.
+
+The concrete failure: `members_can_fork_private_repositories: false` in
+`locked_settings` was silently ignored — the lock never fired — because
+`jq -r '.members_can_fork_private_repositories // empty'` returned empty.
+
+**Fix applied:** All presence checks on fields that may legitimately be `false`
+now use `has()` instead of `//`:
+
+```bash
+# WRONG — false // empty = empty; the false value is lost
+locked_val="$(echo "$obj" | jq -r '.some_bool_field // empty')"
+
+# CORRECT — has() tests key existence independently of value
+locked_val="$(echo "$obj" | jq -r \
+  'if has("some_bool_field") then .some_bool_field | tostring else empty end')"
+```
+
+**Prevention rule:** Never use `jq`'s `//` to test whether a key is present
+when the value may be `false`. Use `has("key")` for existence checks. Apply
+the `has()` pattern to every locked-settings lookup and every config-presence
+check in the codebase.
+
+---
+
 ## Pre-fetch over per-item API calls
 
 When a loop needs to check membership/existence for N items, fetch the full set
