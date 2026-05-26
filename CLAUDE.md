@@ -184,6 +184,12 @@ result="$(gh api ... 2>/dev/null)" || result="FAILED"
 for any call that writes to stdout before it can fail (network I/O, `gh api`, `curl`).
 Always put the sentinel assignment in the current shell: `cmd="$(external-call)" || cmd="FAILED"`.
 
+**Corollary — `|| echo '[]'` is equally unsafe.** Any array sentinel (`'[]'`, `'0'`,
+`'null'`) inside `$()` has the same defect. If the failing command emits partial stdout
+first, the captured variable becomes `<partial_output>\n[]` — a two-value stream that
+breaks every downstream `jq 'length'` or arithmetic `$((...))` consumer. Use the same
+out-of-band assignment pattern for all sentinels.
+
 ---
 
 ### RC-6 — `jq --arg` passes large strings as OS arguments, subject to ARG_MAX
@@ -238,6 +244,40 @@ this call for both real issues and PRs, and it is safe to call repeatedly.
 3. For closed/merged PRs the invariant set is: body present + closed in target + comments
    synced. Any idempotency path that touches a closed PR must call the close endpoint
    (idempotent; safe if already closed).
+
+---
+
+### RC-8 — `jq -s 'add // []'` on paginated output has no type guard for non-array pages
+
+**Root cause:** `gh api --paginate` can emit non-array JSON (e.g. `{"message":"..."}` error
+objects) when any page hits a transient error. `jq -s` wraps all input as an outer array,
+`add` merges the elements — but `add` on an array that contains objects produces a merged
+object, not an array. `add // []` only substitutes `[]` when `add` returns `null` (empty
+input); a merged object is truthy, so `// []` never fires. Downstream `map(.body)` or
+`jq 'length'` then operate on an object and crash or produce multi-line output.
+
+The concrete failure: `map(.body // "")` in `_mirror_pr_comments` crashed with
+`Cannot index string with string "body"`, and the multiline output from `jq 'length'`
+caused `$(( ic_total + rc_total + rv_total ))` to fail with `syntax error in expression`.
+
+**Fix applied:** All four paginated fetches in `_mirror_pr_comments` now use:
+```bash
+jq -rs '[.[] | select(type == "object") | ...]'
+```
+This processes the raw token stream, keeps only JSON objects, and always produces a
+single JSON array — immune to unexpected nesting, error pages, or extra text.
+
+**Prevention rule:** Never use `jq -s 'add // []'` to flatten `--paginate` output.
+Always use `jq -rs '[.[] | select(type == "object")]'`. The `select(type == "object")`
+guard is the minimum contract at any paginated API boundary.
+
+```bash
+# WRONG — crashes when any page is a non-array (error object, warning message)
+result="$(gh api ... --paginate | jq -s 'add // [] | map(.field)')"
+
+# CORRECT — type-safe token-stream processing
+result="$(gh api ... --paginate | jq -rs '[.[] | select(type == "object") | .field]')"
+```
 
 ---
 

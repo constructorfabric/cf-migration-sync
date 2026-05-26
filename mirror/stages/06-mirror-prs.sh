@@ -639,24 +639,26 @@ _mirror_pr_comments() {
   local issue_comments
   issue_comments="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues/$src_pr_number/comments?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]' || echo '[]')"
 
   local review_comments
   review_comments="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls/$src_pr_number/comments?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]' || echo '[]')"
 
   # Reviews: only those with a non-empty body (e.g. "LGTM" messages)
   local pr_reviews
   pr_reviews="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls/$src_pr_number/reviews?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -s 'add // [] | map(select(.body != null and .body != ""))' || echo '[]')"
+    jq -rs '[.[] | select(type == "object") | select(.body != null and .body != "")]' || echo '[]')"
 
   local ic_total rc_total rv_total
-  ic_total="$(echo "$issue_comments"  | jq 'length' 2>/dev/null || echo 0)"
-  rc_total="$(echo "$review_comments" | jq 'length' 2>/dev/null || echo 0)"
-  rv_total="$(echo "$pr_reviews"      | jq 'length' 2>/dev/null || echo 0)"
+  ic_total="$(echo "$issue_comments"  | jq -r 'if type == "array" then length else 0 end' 2>/dev/null || echo 0)"
+  rc_total="$(echo "$review_comments" | jq -r 'if type == "array" then length else 0 end' 2>/dev/null || echo 0)"
+  rv_total="$(echo "$pr_reviews"      | jq -r 'if type == "array" then length else 0 end' 2>/dev/null || echo 0)"
 
   local total_comments=$(( ic_total + rc_total + rv_total ))
 
@@ -671,7 +673,9 @@ _mirror_pr_comments() {
   local tgt_comment_bodies
   tgt_comment_bodies="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // [] | map(.body // "") | join("\n")' 2>/dev/null || echo '')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object") | .body // ""] | join("\n")' \
+    2>/dev/null || echo '')"
 
   local mirrored=0
 
