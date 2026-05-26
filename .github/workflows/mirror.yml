@@ -18,10 +18,10 @@ permissions:
   contents: write
 
 env:
-  GH_TOKEN:         ${{ secrets.GH_TOKEN }}
-  GH_TOKEN_SOURCE:  ${{ secrets.GH_TOKEN_SOURCE }}
-  #GH_TOKEN:         ${{ secrets.MIGRATION_TOKEN }}
-  #GH_TOKEN_SOURCE:  ${{ secrets.MIGRATION_TOKEN }}
+  #GH_TOKEN:         ${{ secrets.GH_TOKEN }}
+  #GH_TOKEN_SOURCE:  ${{ secrets.GH_TOKEN_SOURCE }}
+  GH_TOKEN:         ${{ secrets.MIGRATION_TOKEN }}
+  GH_TOKEN_SOURCE:  ${{ secrets.MIGRATION_TOKEN }}
   SOURCE_ORG:       ${{ vars.SOURCE_ORG }}
   TARGET_ORG:       constructorfabric
 

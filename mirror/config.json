@@ -55,7 +55,7 @@
       "Remove the entry (or set it to 0) once the repo is fully mirrored."
     ],
     "resume_after_pr": {
-      "cyberware-rust": 1319
+      "cyberware-rust": 1152
     }
   },
 
