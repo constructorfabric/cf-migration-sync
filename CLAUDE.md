@@ -264,7 +264,7 @@ done
 ---
 
 ## Token hygiene (non-negotiable)
-- `GH_TOKEN` — writes to TARGET org (`constructorfabric`) only
-- `GH_TOKEN_SOURCE` — reads from SOURCE org (`cyberfabric`) only, via `ghsrc` wrapper
+- `GH_TOKEN` — writes to TARGET org only
+- `GH_TOKEN_SOURCE` — reads from SOURCE org only, via `ghsrc` wrapper
 - Never commit token values to any file
-- Never invite or add to teams: `dfc-Acronis`, `alexpitsikoulis`, `gaidar`
+- Never invite or add to teams: any login listed in `config.json` → `stage_01_invite_people.exclude_logins`

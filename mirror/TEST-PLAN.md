@@ -1,7 +1,7 @@
 # Mirror System — Step-by-Step Test Plan
 
 Test each stage locally first, then test via GitHub Actions.
-All commands run from the repo root (`/Users/vz/cf-migration-sync`).
+All commands run from the repo root (`<repo-root>`).
 
 ---
 
@@ -18,21 +18,21 @@ git --version   # any recent version
 ### 2. Export tokens
 
 ```bash
-export GH_TOKEN=ghp_<constructorfabric-owner-token>
-export GH_TOKEN_SOURCE=ghp_<cyberfabric-reader-token>
-export SOURCE_ORG=cyberfabric
-export TARGET_ORG=constructorfabric
+export GH_TOKEN=ghp_<$TARGET_ORG-owner-token>
+export GH_TOKEN_SOURCE=ghp_<$SOURCE_ORG-reader-token>
+export SOURCE_ORG=$SOURCE_ORG
+export TARGET_ORG=$TARGET_ORG
 ```
 
 Verify tokens are valid:
 
 ```bash
 # Target token
-gh api user --jq '.login'                          # should print your constructorfabric login
-gh api orgs/constructorfabric --jq '.login'        # should print "constructorfabric"
+gh api user --jq '.login'                          # should print your $TARGET_ORG login
+gh api orgs/$TARGET_ORG --jq '.login'        # should print "$TARGET_ORG"
 
 # Source token
-GH_TOKEN="$GH_TOKEN_SOURCE" gh api orgs/cyberfabric --jq '.login'  # should print "cyberfabric"
+GH_TOKEN="$GH_TOKEN_SOURCE" gh api orgs/$SOURCE_ORG --jq '.login'  # should print "$SOURCE_ORG"
 ```
 
 ### 3. Permissions checklist
@@ -53,7 +53,7 @@ GH_TOKEN="$GH_TOKEN_SOURCE" gh api orgs/cyberfabric --jq '.login'  # should prin
 ```
 
 **Expected output:**
-- `[dry-run] would execute: gh api orgs/constructorfabric/invitations ...` lines
+- `[dry-run] would execute: gh api orgs/$TARGET_ORG/invitations ...` lines
 - No actual invitations sent
 - `state/people.yaml` is NOT created/modified (dry-run skips state commit)
 
@@ -71,12 +71,12 @@ cat state/people.yaml | jq '.meta.stage, .stats'
 # Count invited vs skipped
 cat state/people.yaml | jq '.stats'
 
-# Confirm excluded users were not invited
-cat state/people.yaml | jq '.items[] | select(.login == "dfc-Acronis" or .login == "alexpitsikoulis" or .login == "gaidar")'
-# Expected: no output (excluded users written with status=skipped OR not present at all)
+# Confirm excluded users (from config.json exclude_logins) were not invited
+cat state/people.yaml | jq '.items[] | select(.status == "skipped")'
+# Expected: only users listed in config.json exclude_logins appear here
 
 # Check pending invitations appeared on GitHub
-gh api orgs/constructorfabric/invitations --jq '.[].login' | head -10
+gh api orgs/$TARGET_ORG/invitations --jq '.[].login' | head -10
 ```
 
 **Common failures:**
@@ -98,7 +98,7 @@ one small repo first:
 REPO=cf-docs  # small repo
 SRC_TOKEN="${GH_TOKEN_SOURCE:-$GH_TOKEN}"
 git clone --mirror \
-  "https://x-access-token:${SRC_TOKEN}@github.com/cyberfabric/${REPO}.git" \
+  "https://x-access-token:${SRC_TOKEN}@github.com/$SOURCE_ORG/${REPO}.git" \
   /tmp/test-mirror-${REPO}.git
 
 # Verify clone
@@ -117,14 +117,14 @@ rm -rf /tmp/test-mirror-${REPO}.git
 **Verify:**
 ```bash
 # Compare repo counts
-SRC=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api "orgs/cyberfabric/repos" --paginate --jq '.[].name' | wc -l)
-TGT=$(gh api "orgs/constructorfabric/repos" --paginate --jq '.[].name' | wc -l)
+SRC=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api "orgs/$SOURCE_ORG/repos" --paginate --jq '.[].name' | wc -l)
+TGT=$(gh api "orgs/$TARGET_ORG/repos" --paginate --jq '.[].name' | wc -l)
 echo "Source: $SRC    Target: $TGT"
 # Should be equal
 
 # Spot-check branches on one repo
-SRC_BRANCHES=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api "repos/cyberfabric/cf-cli/branches" --paginate --jq '.[].name' | sort)
-TGT_BRANCHES=$(gh api "repos/constructorfabric/cf-cli/branches" --paginate --jq '.[].name' | sort)
+SRC_BRANCHES=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api "repos/$SOURCE_ORG/cf-cli/branches" --paginate --jq '.[].name' | sort)
+TGT_BRANCHES=$(gh api "repos/$TARGET_ORG/cf-cli/branches" --paginate --jq '.[].name' | sort)
 diff <(echo "$SRC_BRANCHES") <(echo "$TGT_BRANCHES")
 # Expected: no diff
 ```
@@ -148,8 +148,8 @@ diff <(echo "$SRC_BRANCHES") <(echo "$TGT_BRANCHES")
 cat state/org-metadata.yaml | jq '.meta, .items[0]'
 
 # Compare key settings
-SRC_PERM=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api orgs/cyberfabric --jq '.default_repository_permission')
-TGT_PERM=$(gh api orgs/constructorfabric --jq '.default_repository_permission')
+SRC_PERM=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api orgs/$SOURCE_ORG --jq '.default_repository_permission')
+TGT_PERM=$(gh api orgs/$TARGET_ORG --jq '.default_repository_permission')
 echo "Source: $SRC_PERM    Target: $TGT_PERM"
 # Should match
 ```
@@ -182,14 +182,14 @@ Before running all repos, test with one:
 **Verify:**
 ```bash
 # Labels on one repo
-SRC_LABELS=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api "repos/cyberfabric/cf-cli/labels" --paginate --jq '.[].name' | sort)
-TGT_LABELS=$(gh api "repos/constructorfabric/cf-cli/labels" --paginate --jq '.[].name' | sort)
+SRC_LABELS=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api "repos/$SOURCE_ORG/cf-cli/labels" --paginate --jq '.[].name' | sort)
+TGT_LABELS=$(gh api "repos/$TARGET_ORG/cf-cli/labels" --paginate --jq '.[].name' | sort)
 diff <(echo "$SRC_LABELS") <(echo "$TGT_LABELS")
 # Expected: no diff (or only new default labels added by GitHub)
 
 # Milestones
-SRC_MS=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api "repos/cyberfabric/cyberware-rust/milestones?state=all" --paginate --jq '.[].title' | sort)
-TGT_MS=$(gh api "repos/constructorfabric/cyberware-rust/milestones?state=all" --paginate --jq '.[].title' | sort)
+SRC_MS=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api "repos/$SOURCE_ORG/cyberware-rust/milestones?state=all" --paginate --jq '.[].title' | sort)
+TGT_MS=$(gh api "repos/$TARGET_ORG/cyberware-rust/milestones?state=all" --paginate --jq '.[].title' | sort)
 diff <(echo "$SRC_MS") <(echo "$TGT_MS")
 
 # State file for one repo
@@ -209,7 +209,7 @@ Stage 04 must complete before Stage 05, otherwise issue creation will get
 `Validation Failed` for unknown labels. Verify:
 
 ```bash
-gh api "repos/constructorfabric/cyberware-rust/labels" --paginate --jq '.[].name' | wc -l
+gh api "repos/$TARGET_ORG/cyberware-rust/labels" --paginate --jq '.[].name' | wc -l
 # Should be > 0
 ```
 
@@ -239,12 +239,12 @@ cat state/issues/cf-docs.yaml | jq '.stats'
 # Expected: {"total":1,"synced":1,"pending":0,"failed":0}
 
 # Verify issue exists in target with marker
-gh api "repos/constructorfabric/cf-docs/issues" --paginate \
+gh api "repos/$TARGET_ORG/cf-docs/issues" --paginate \
   --jq '.[] | select(.body | contains("cf-mirror:"))' | jq '.number, .title'
 
 # Idempotency check: re-run and confirm no duplicates
 ./mirror/stages/05-mirror-issues.sh 2>&1 | grep "cf-docs"
-gh api "repos/constructorfabric/cf-docs/issues" --paginate --jq '. | length'
+gh api "repos/$TARGET_ORG/cf-docs/issues" --paginate --jq '. | length'
 # Count should not increase
 ```
 
@@ -264,13 +264,13 @@ done
 
 # Compare total counts to source
 for repo in cyberware-rust cyber-insight cyberware-frontx; do
-  src=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api "repos/cyberfabric/$repo/issues?state=all" --paginate --jq '. | length')
+  src=$(GH_TOKEN="$GH_TOKEN_SOURCE" gh api "repos/$SOURCE_ORG/$repo/issues?state=all" --paginate --jq '. | length')
   tgt=$(jq -r '.stats.synced' "state/issues/$repo.yaml" 2>/dev/null || echo "N/A")
   echo "$repo: source=$src mirrored=$tgt"
 done
 
 # No issue should be doubled (check marker uniqueness)
-gh api "repos/constructorfabric/cyberware-rust/issues?state=all" --paginate \
+gh api "repos/$TARGET_ORG/cyberware-rust/issues?state=all" --paginate \
   --jq '[.[] | select(.body | contains("cf-mirror:"))] | length'
 # Should equal source issue count
 ```
@@ -287,7 +287,7 @@ gh api "repos/constructorfabric/cyberware-rust/issues?state=all" --paginate \
 **Verify:**
 ```bash
 # PRs appear as closed issues with [PR #N] prefix
-gh api "repos/constructorfabric/cyberware-rust/issues?state=closed" --paginate \
+gh api "repos/$TARGET_ORG/cyberware-rust/issues?state=closed" --paginate \
   --jq '[.[] | select(.title | startswith("[PR #"))] | length'
 
 # State
@@ -305,7 +305,7 @@ cat state/prs/cyberware-rust.yaml | jq '.stats'
 
 ```bash
 # Check who has accepted (membership=active)
-gh api "orgs/constructorfabric/members" --paginate --jq '.[].login' | sort > /tmp/tgt_members.txt
+gh api "orgs/$TARGET_ORG/members" --paginate --jq '.[].login' | sort > /tmp/tgt_members.txt
 cat state/people.yaml | jq -r '.items[] | select(.status == "accepted") | .login' | sort > /tmp/accepted.txt
 diff /tmp/tgt_members.txt /tmp/accepted.txt
 # Update state file manually if needed, or re-run Stage 01 to refresh statuses
@@ -396,10 +396,10 @@ For each stage, the output should show mostly `skipped` counts, not `created` co
 
 ```bash
 # Issue count should be stable
-BEFORE=$(gh api "repos/constructorfabric/cyberware-rust/issues?state=all" \
+BEFORE=$(gh api "repos/$TARGET_ORG/cyberware-rust/issues?state=all" \
   --paginate --jq '. | length')
 ./mirror/stages/05-mirror-issues.sh 2>&1 | grep "cyberware-rust"
-AFTER=$(gh api "repos/constructorfabric/cyberware-rust/issues?state=all" \
+AFTER=$(gh api "repos/$TARGET_ORG/cyberware-rust/issues?state=all" \
   --paginate --jq '. | length')
 echo "Before=$BEFORE After=$AFTER"
 # Must be equal
@@ -411,18 +411,18 @@ echo "Before=$BEFORE After=$AFTER"
 
 ### 1. Configure secrets and variables
 
-In the `constructorfabric/cf-migration-sync` repo settings:
+In the `$TARGET_ORG/cf-migration-sync` repo settings:
 
 | Setting                           | Type     | Value                                          |
 |-----------------------------------|----------|------------------------------------------------|
-| Settings → Secrets → `GH_TOKEN`        | Secret   | constructorfabric owner PAT                    |
-| Settings → Secrets → `GH_TOKEN_SOURCE` | Secret   | cyberfabric reader PAT                         |
-| Settings → Variables → `SOURCE_ORG`    | Variable | `cyberfabric`                                  |
+| Settings → Secrets → `GH_TOKEN`        | Secret   | $TARGET_ORG owner PAT                    |
+| Settings → Secrets → `GH_TOKEN_SOURCE` | Secret   | $SOURCE_ORG reader PAT                         |
+| Settings → Variables → `SOURCE_ORG`    | Variable | `$SOURCE_ORG`                                  |
 
 ### 2. Push this repo to GitHub
 
 ```bash
-cd /Users/vz/cf-migration-sync
+cd <repo-root>
 git add mirror/ state/ validation-reports/ .github/workflows/mirror.yml .github/workflows/validate.yml
 git commit -m "add: mirror system with 8-stage pipeline"
 git push
@@ -430,8 +430,8 @@ git push
 
 ### 3. Test workflow_dispatch (manual trigger)
 
-1. Go to: `https://github.com/constructorfabric/cf-migration-sync/actions`
-2. Click **Mirror — cyberfabric → constructorfabric**
+1. Go to: `https://github.com/$TARGET_ORG/cf-migration-sync/actions`
+2. Click **Mirror — $SOURCE_ORG → $TARGET_ORG**
 3. Click **Run workflow**
 4. In the `stages` field enter `3` (fast, safe org-metadata stage)
 5. Click **Run workflow**
