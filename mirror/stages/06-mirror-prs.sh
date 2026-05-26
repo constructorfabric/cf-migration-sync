@@ -24,9 +24,19 @@
 # State file: state/prs/<repo-name>.yaml
 #
 # Usage:
-#   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
-#   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
-#   ./mirror/stages/06-mirror-prs.sh [--dry-run]
+#   SOURCE_ORG=... TARGET_ORG=... GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
+#   ./mirror/stages/06-mirror-prs.sh [--dry-run] [--repo REPO] [--start-after-pr N]
+#
+# --repo REPO           Process only this repository (skip all others).
+# --start-after-pr N   In the closed-PR loop, fast-forward past all PRs with
+#                       number > N.  Use this to resume after a rate-limit stop:
+#                       if mirroring stalled at PR #1894, pass --start-after-pr 1894
+#                       and the script jumps straight to #1893 and below.
+#                       PRs already recorded as "mirrored" in the state file are
+#                       still skipped by the normal idempotency check, so this flag
+#                       is purely a fast-forward optimisation — it does not bypass
+#                       idempotency, it just avoids reading the state file for every
+#                       PR the user knows was already done.
 
 set -euo pipefail
 
@@ -88,10 +98,23 @@ _gh_err_hint() {
 
 # ---------------------------------------------------------------------------
 main() {
-  check_dry_run "$@"
+  # Parse our custom flags before passing the remainder to check_dry_run.
+  local start_after_pr="" only_repo=""
+  local passthrough_args=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --start-after-pr) start_after_pr="$2"; shift 2 ;;
+      --repo)           only_repo="$2";       shift 2 ;;
+      *)                passthrough_args+=("$1"); shift ;;
+    esac
+  done
+
+  check_dry_run "${passthrough_args[@]+"${passthrough_args[@]}"}"
   preflight
 
   log "Stage 06 — mirror-prs starting"
+  [[ -n "$only_repo"       ]] && log "  Single-repo mode: $only_repo"
+  [[ -n "$start_after_pr"  ]] && log "  Resume point: skipping closed PRs with number > $start_after_pr"
   mkdir -p "$STATE_DIR"
 
   log "Fetching source repos from $SOURCE_ORG..."
@@ -109,6 +132,13 @@ main() {
     log "Excluded repos: $(echo "$excluded_repos" | tr '\n' ' ')"
   fi
 
+  # ---- Load per-repo resume points from config ----------------------------
+  # resume_after_pr is a JSON object: { "repo-name": PR_NUMBER, ... }
+  # CLI --start-after-pr overrides the config value for the targeted repo.
+  local resume_map
+  resume_map="$(jq -r '.stage_06_mirror_prs.resume_after_pr // {}' \
+    "$MIRROR_CONFIG" 2>/dev/null || echo '{}')"
+
   local repo_idx=0
 
   while IFS= read -r repo; do
@@ -117,13 +147,26 @@ main() {
 
     repo_idx=$((repo_idx + 1))
 
+    # Single-repo filter
+    if [[ -n "$only_repo" && "$repo_name" != "$only_repo" ]]; then
+      continue
+    fi
+
     if [[ -n "$excluded_repos" ]] && echo "$excluded_repos" | grep -qx "$repo_name" 2>/dev/null; then
       log "[$repo_idx/$total_repos] Skipping excluded repo: $repo_name"
       continue
     fi
 
-    log "[$repo_idx/$total_repos] Processing PRs for $repo_name..."
-    _mirror_repo_prs "$repo_name"
+    # Resolve effective resume point: CLI flag > config map > none
+    local effective_resume="$start_after_pr"
+    if [[ -z "$effective_resume" ]]; then
+      effective_resume="$(echo "$resume_map" | \
+        jq -r --arg r "$repo_name" 'if has($r) and (.[$r] | . != null and . != 0) then .[$r] | tostring else empty end' \
+        2>/dev/null || true)"
+    fi
+
+    log "[$repo_idx/$total_repos] Processing PRs for $repo_name${effective_resume:+ (resume after PR #$effective_resume)}..."
+    _mirror_repo_prs "$repo_name" "$effective_resume"
     pause 0.5
 
   done < <(echo "$repos" | jq -c '.[]')
@@ -159,6 +202,7 @@ _create_or_update_branch() {
 # ---------------------------------------------------------------------------
 _mirror_repo_prs() {
   local repo_name="$1"
+  local start_after_pr="${2:-}"   # fast-forward: skip closed PRs with number > this
   local state_file="$STATE_DIR/$repo_name.yaml"
 
   state_init "$state_file" "06-mirror-prs"
@@ -350,6 +394,15 @@ ${marker}"
     processed=$((processed + 1))
     if (( processed % 25 == 0 )); then
       log "  Progress: $processed/$total_prs PRs..."
+    fi
+
+    # ---- Fast-forward skip (--start-after-pr) --------------------------------
+    # PRs are returned newest-first; anything above the resume point was already
+    # handled in a previous run.  This avoids reading the state file for every
+    # one of them, making the initial scan O(1) per skipped PR instead of O(n).
+    if [[ -n "$start_after_pr" ]] && (( pr_number > start_after_pr )); then
+      skip_count=$((skip_count + 1))
+      continue
     fi
 
     # ---- Idempotency: body vs comments split --------------------------------

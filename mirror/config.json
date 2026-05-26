@@ -45,7 +45,18 @@
   },
 
   "stage_06_mirror_prs": {
-    "exclude_repos": []
+    "exclude_repos": [],
+
+    "_comment_resume_after_pr": [
+      "Per-repo resume points for the closed-PR loop.",
+      "When a repo entry is present, the stage fast-forwards past all closed PRs",
+      "with number > the given value — identical to passing --start-after-pr N on",
+      "the command line but persistent across runs and scoped per repo.",
+      "Remove the entry (or set it to 0) once the repo is fully mirrored."
+    ],
+    "resume_after_pr": {
+      "cyberware-rust": 1625
+    }
   },
 
   "stage_07_rewrite_cross_references": {},
