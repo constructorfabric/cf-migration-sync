@@ -1,0 +1,185 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T19:45:17Z",
+    "last_run_at": "2026-05-26T19:45:17Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 16,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/16",
+      "source_state": "open",
+      "source_author": "devjow",
+      "target_issue_number": null,
+      "title": "[PR #16] feat: docker template command resolves",
+      "status": "skipped_open",
+      "mirrored_at": null,
+      "comments_status": "none",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 18,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/18",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 5,
+      "title": "[PR #18] add GitHub workflow and script to validate templates",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:45:24Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 17,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/17",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 6,
+      "title": "[PR #17] update dependencies to latest versions in Cargo.toml",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:45:30Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 12,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/12",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 7,
+      "title": "[PR #12] improve Cargo.toml workspace",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:45:36Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 11,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/11",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 8,
+      "title": "[PR #11] add configuration options for the background workers",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:45:43Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 10,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/10",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 9,
+      "title": "[PR #10] update modkit and add required db feature",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:45:51Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 9,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/9",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 10,
+      "title": "[PR #9] fix module name, add small readme and collect readmes in the package doc",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:45:59Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 8,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/8",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 11,
+      "title": "[PR #8] New ddd modules",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:46:06Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 7,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/7",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 12,
+      "title": "[PR #7] move out from template syntax",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:46:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 6,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/6",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 13,
+      "title": "[PR #6] fix background worker code generation",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:46:23Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 5,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/5",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 14,
+      "title": "[PR #5] bad await and add directory ignored",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:46:31Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 4,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/4",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 15,
+      "title": "[PR #4] simplify init project and add clippy rules",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:46:38Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 3,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/3",
+      "source_state": "closed",
+      "source_author": "QuietSyscall",
+      "target_issue_number": 16,
+      "title": "[PR #3] Add Modules sub-template with interactive TUI and ipinfo-fetcher example",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:46:45Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 2,
+      "source_url": "https://github.com/cyberfabric/cf-template-rust/pull/2",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 17,
+      "title": "[PR #2] creation of the init template to fire up a project",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:46:53Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 14,
+    "synced": 13,
+    "pending": 0,
+    "failed": 0
+  }
+}

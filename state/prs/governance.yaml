@@ -1,0 +1,125 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T19:44:15Z",
+    "last_run_at": "2026-05-26T19:44:15Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 14,
+      "source_url": "https://github.com/cyberfabric/governance/pull/14",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 5,
+      "title": "[PR #14] feat: added github_org_audit_to_xlsx.py to fetch repo settings and generate xlsx file",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:44:21Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 13,
+      "source_url": "https://github.com/cyberfabric/governance/pull/13",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 6,
+      "title": "[PR #13] docs: added SECURITY.md",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:44:28Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 12,
+      "source_url": "https://github.com/cyberfabric/governance/pull/12",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 7,
+      "title": "[PR #12] feat: added Roadmap and Summary sheets in the back_roadmap_to_xls.py",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:44:37Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 11,
+      "source_url": "https://github.com/cyberfabric/governance/pull/11",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 8,
+      "title": "[PR #11] fix: set proper root task as default in back_roadmap_to_xls.py",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:44:43Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 7,
+      "source_url": "https://github.com/cyberfabric/governance/pull/7",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 9,
+      "title": "[PR #7] feat: added src/back_roadmap_to_xls.py helper",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:44:50Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 6,
+      "source_url": "https://github.com/cyberfabric/governance/pull/6",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 10,
+      "title": "[PR #6] doc: added TOOLS.md with the list of GitHub integrations being configured",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:44:56Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 5,
+      "source_url": "https://github.com/cyberfabric/governance/pull/5",
+      "source_state": "closed",
+      "source_author": "frontgeeks",
+      "target_issue_number": 11,
+      "title": "[PR #5] Meeting update",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:45:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 4,
+      "source_url": "https://github.com/cyberfabric/governance/pull/4",
+      "source_state": "closed",
+      "source_author": "frontgeeks",
+      "target_issue_number": 12,
+      "title": "[PR #4] doc: meeting update",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:45:08Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 2,
+      "source_url": "https://github.com/cyberfabric/governance/pull/2",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 13,
+      "title": "[PR #2] doc: initial document drafts",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T19:45:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 9,
+    "synced": 9,
+    "pending": 0,
+    "failed": 0
+  }
+}
