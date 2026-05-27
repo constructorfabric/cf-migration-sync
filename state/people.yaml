@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-25T10:05:34Z",
-    "last_run_at": "2026-05-25T15:43:11Z"
+    "last_run_at": "2026-05-27T12:34:06Z"
   },
   "items": [
     {
@@ -555,9 +555,9 @@
       "login": "mattgarmon",
       "source_id": 22921875,
       "role": "member",
-      "status": "invited",
+      "status": "accepted",
       "invited_at": "2026-05-22T10:31:40.000Z",
-      "accepted_at": null
+      "accepted_at": "2026-05-27T12:34:09Z"
     },
     {
       "login": "maurolacy",
@@ -854,12 +854,28 @@
       "status": "invited",
       "invited_at": "2026-05-22T10:31:45.000Z",
       "accepted_at": null
+    },
+    {
+      "login": "Berrok",
+      "source_id": 163391113,
+      "role": "member",
+      "status": "failed",
+      "invited_at": null,
+      "accepted_at": null
+    },
+    {
+      "login": "mjollneer",
+      "source_id": 149518329,
+      "role": "member",
+      "status": "failed",
+      "invited_at": null,
+      "accepted_at": null
     }
   ],
   "stats": {
-    "total": 106,
+    "total": 108,
     "synced": 103,
     "pending": 0,
-    "failed": 0
+    "failed": 2
   }
 }
