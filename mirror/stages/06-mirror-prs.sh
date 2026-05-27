@@ -726,7 +726,7 @@ _mirror_pr_comments() {
     c_body="$(echo    "$c" | jq -r '.body // ""')"
     c_marker="<!-- cf-mirror-pr-comment: $SOURCE_ORG/$repo_name#$src_pr_number/$c_id -->"
 
-    if echo "$tgt_comment_bodies" | grep -qF "$c_marker" 2>/dev/null; then
+    if [[ "$tgt_comment_bodies" == *"$c_marker"* ]]; then
       mirrored=$((mirrored + 1)); continue
     fi
 
@@ -763,7 +763,7 @@ ${c_marker}"
     rv_body="$(echo      "$rv" | jq -r '.body // ""')"
     rv_marker="<!-- cf-mirror-pr-review: $SOURCE_ORG/$repo_name#$src_pr_number/$rv_id -->"
 
-    if echo "$tgt_comment_bodies" | grep -qF "$rv_marker" 2>/dev/null; then
+    if [[ "$tgt_comment_bodies" == *"$rv_marker"* ]]; then
       mirrored=$((mirrored + 1)); continue
     fi
 
@@ -800,7 +800,7 @@ ${rv_marker}"
     rc_line="$(echo    "$rc" | jq -r '(.line // .original_line) | tostring' 2>/dev/null || echo '?')"
     rc_marker="<!-- cf-mirror-pr-review-inline: $SOURCE_ORG/$repo_name#$src_pr_number/$rc_id -->"
 
-    if echo "$tgt_comment_bodies" | grep -qF "$rc_marker" 2>/dev/null; then
+    if [[ "$tgt_comment_bodies" == *"$rc_marker"* ]]; then
       mirrored=$((mirrored + 1)); continue
     fi
 

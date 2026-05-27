@@ -520,7 +520,7 @@ _mirror_issue_comments() {
     local c_marker="<!-- cf-mirror-comment: $SOURCE_ORG/$repo_name#$src_number/$c_id -->"
 
     # Skip if already posted in a previous (possibly interrupted) run
-    if echo "$tgt_comment_bodies" | grep -qF "$c_marker" 2>/dev/null; then
+    if [[ "$tgt_comment_bodies" == *"$c_marker"* ]]; then
       mirrored=$((mirrored + 1))
       continue
     fi
