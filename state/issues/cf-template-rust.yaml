@@ -4,12 +4,75 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-27T13:07:26Z",
-    "last_run_at": "2026-05-27T13:07:26Z"
+    "last_run_at": "2026-05-27T15:26:15Z"
   },
-  "items": [],
+  "items": [
+    {
+      "source_number": 1,
+      "source_id": 3921360421,
+      "source_state": "closed",
+      "target_number": 1,
+      "target_node_id": null,
+      "title": "Initial Roadmap",
+      "assignees": [
+        "Bechma"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:26:16Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 13,
+      "source_id": 4137682086,
+      "source_state": "open",
+      "target_number": 2,
+      "target_node_id": null,
+      "title": "[template] grpc-hub",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:26:19Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 14,
+      "source_id": 4137695253,
+      "source_state": "open",
+      "target_number": 3,
+      "target_node_id": null,
+      "title": "[template] authenticated api",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:26:19Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 15,
+      "source_id": 4137746308,
+      "source_state": "open",
+      "target_number": 4,
+      "target_node_id": null,
+      "title": "[system] Skeleton -> Templates",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:26:19Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
   "stats": {
-    "total": 0,
-    "synced": 0,
+    "total": 4,
+    "synced": 4,
     "pending": 0,
     "failed": 0
   }

@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-25T18:46:23Z",
-    "last_run_at": "2026-05-27T13:07:41Z"
+    "last_run_at": "2026-05-27T15:34:42Z"
   },
   "items": [
     {
@@ -16,7 +16,7 @@
       "title": "Run nginx as non-root user (switch to nginx-unprivileged base image)",
       "assignees": [],
       "status": "mirrored",
-      "mirrored_at": "2026-05-25T18:46:25Z",
+      "mirrored_at": "2026-05-27T15:34:47Z",
       "assignees_status": "none",
       "assignees_applied_at": null,
       "comments_status": "done",
@@ -31,7 +31,7 @@
       "title": "team-view: align TEAM_BULLET_* aggregates with the IR roster",
       "assignees": [],
       "status": "mirrored",
-      "mirrored_at": "2026-05-25T18:46:26Z",
+      "mirrored_at": "2026-05-27T15:34:50Z",
       "assignees_status": "none",
       "assignees_applied_at": null,
       "comments_status": "done",
@@ -48,7 +48,7 @@
         "cyberantonz"
       ],
       "status": "mirrored",
-      "mirrored_at": "2026-05-25T18:46:27Z",
+      "mirrored_at": "2026-05-27T15:34:53Z",
       "assignees_status": "pending",
       "assignees_applied_at": null,
       "comments_status": "done",

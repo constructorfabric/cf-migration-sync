@@ -4,12 +4,1502 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-27T13:07:18Z",
-    "last_run_at": "2026-05-27T13:07:18Z"
+    "last_run_at": "2026-05-27T15:22:52Z"
   },
-  "items": [],
+  "items": [
+    {
+      "source_number": 23,
+      "source_id": 3603578027,
+      "source_state": "closed",
+      "target_number": 1,
+      "target_node_id": null,
+      "title": "npm run build fails",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:22:58Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_number": 29,
+      "source_id": 3605318826,
+      "source_state": "closed",
+      "target_number": 2,
+      "target_node_id": null,
+      "title": "Damaged components lifecycle",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:01Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 30,
+      "source_id": 3605427127,
+      "source_state": "closed",
+      "target_number": 3,
+      "target_node_id": null,
+      "title": "Language resets on app reload",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:03Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 76,
+      "source_id": 3722538510,
+      "source_state": "closed",
+      "target_number": 4,
+      "target_node_id": null,
+      "title": "Microfrontends contract proposal",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:05Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 77,
+      "source_id": 3722544758,
+      "source_state": "open",
+      "target_number": 5,
+      "target_node_id": null,
+      "title": "Themes and styles contracts proposal",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:08Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 82,
+      "source_id": 3726156079,
+      "source_state": "closed",
+      "target_number": 6,
+      "target_node_id": null,
+      "title": "[Architecture] Implement SDK Mode (dual-mode architecture)",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:08Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 83,
+      "source_id": 3726156356,
+      "source_state": "closed",
+      "target_number": 7,
+      "target_node_id": null,
+      "title": "Add locale-aware formatting utilities (date, number, currency)",
+      "assignees": [
+        "tscbmstubp"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:10Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 84,
+      "source_id": 3726156535,
+      "source_state": "closed",
+      "target_number": 8,
+      "target_node_id": null,
+      "title": "Add remaining shadcn components: Table, Form, Toast",
+      "assignees": [
+        "Sprymery"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:13Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 85,
+      "source_id": 3726156782,
+      "source_state": "closed",
+      "target_number": 9,
+      "target_node_id": null,
+      "title": "[Architecture] Design and implement screenset-to-microfrontend migration",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:15Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 86,
+      "source_id": 3726157022,
+      "source_state": "open",
+      "target_number": 10,
+      "target_node_id": null,
+      "title": "Create @hai3/emulator package for API simulation",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:17Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 87,
+      "source_id": 3726157220,
+      "source_state": "open",
+      "target_number": 11,
+      "target_node_id": null,
+      "title": "Migrate main menu to support nested items (sub-menus)",
+      "assignees": [
+        "dAlcaSan"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:18Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 88,
+      "source_id": 3726157705,
+      "source_state": "open",
+      "target_number": 12,
+      "target_node_id": null,
+      "title": "Implement UI flags system with menu item visibility filtering",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:18Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 89,
+      "source_id": 3726157949,
+      "source_state": "open",
+      "target_number": 13,
+      "target_node_id": null,
+      "title": "Set up Storybook for component documentation",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:18Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_number": 90,
+      "source_id": 3726158366,
+      "source_state": "open",
+      "target_number": 14,
+      "target_node_id": null,
+      "title": "Implement popup/overlay/sidebar registration in screensets",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:19Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 94,
+      "source_id": 3730804668,
+      "source_state": "open",
+      "target_number": 15,
+      "target_node_id": null,
+      "title": "HAI3 command to add/edit/refactor screen content",
+      "assignees": [
+        "Sprymery"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:19Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 101,
+      "source_id": 3743541489,
+      "source_state": "closed",
+      "target_number": 16,
+      "target_node_id": null,
+      "title": "HAI3 routing support for screen",
+      "assignees": [
+        "GuilleX7"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:20Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 107,
+      "source_id": 3751973178,
+      "source_state": "closed",
+      "target_number": 17,
+      "target_node_id": null,
+      "title": "Add zod as explicit  dependency to @hai3/uikit",
+      "assignees": [
+        "dingoatemytokens"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:22Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 138,
+      "source_id": 3826814858,
+      "source_state": "closed",
+      "target_number": 18,
+      "target_node_id": null,
+      "title": "Specify the issue types here",
+      "assignees": [
+        "m231-a"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:25Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 139,
+      "source_id": 3826816556,
+      "source_state": "closed",
+      "target_number": 19,
+      "target_node_id": null,
+      "title": "When adding a screenset, the gitignore file is missing",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:27Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 140,
+      "source_id": 3826823885,
+      "source_state": "open",
+      "target_number": 20,
+      "target_node_id": null,
+      "title": "Create workflow for clarifying features or specs",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:29Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 141,
+      "source_id": 3826827611,
+      "source_state": "closed",
+      "target_number": 21,
+      "target_node_id": null,
+      "title": "Workflows for agents pointed to inexistent workflows single entries",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:30Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 142,
+      "source_id": 3826835547,
+      "source_state": "closed",
+      "target_number": 22,
+      "target_node_id": null,
+      "title": "[P0][Bug] Custom UI kit ignored — AI always falls back to HAI3/uikit or creates raw Shadcn components",
+      "assignees": [
+        "tscbmstubp"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:32Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 143,
+      "source_id": 3826841501,
+      "source_state": "open",
+      "target_number": 23,
+      "target_node_id": null,
+      "title": "New screenset always use internal tailwind config and internal visual theme",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:34Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 144,
+      "source_id": 3826858862,
+      "source_state": "open",
+      "target_number": 24,
+      "target_node_id": null,
+      "title": "The workflow for a new set of screens is not working efficiently.",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:35Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_number": 152,
+      "source_id": 3864296704,
+      "source_state": "closed",
+      "target_number": 25,
+      "target_node_id": null,
+      "title": "Upgrade to React 19",
+      "assignees": [
+        "abyssal-potato"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:35Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 153,
+      "source_id": 3864997347,
+      "source_state": "closed",
+      "target_number": 26,
+      "target_node_id": null,
+      "title": "Customization of routing modes (in-memory routing)",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:38Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 154,
+      "source_id": 3866546741,
+      "source_state": "closed",
+      "target_number": 27,
+      "target_node_id": null,
+      "title": "[CLI] Build fails on fresh CLI-created project (Option 1): @hai3/studio imports toggleMockMode from @hai3/react but export is missing",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:40Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_number": 158,
+      "source_id": 3886515280,
+      "source_state": "open",
+      "target_number": 28,
+      "target_node_id": null,
+      "title": "[DOCS] Design System Documentation",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:43Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 159,
+      "source_id": 3886523141,
+      "source_state": "open",
+      "target_number": 29,
+      "target_node_id": null,
+      "title": "[DOCS] OpenSpec Integration Opportunity",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:43Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 162,
+      "source_id": 3890601937,
+      "source_state": "closed",
+      "target_number": 30,
+      "target_node_id": null,
+      "title": "Upgrade to React 19: phase 2, forwardRef cleanup",
+      "assignees": [
+        "abyssal-potato"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:43Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 170,
+      "source_id": 3932056942,
+      "source_state": "closed",
+      "target_number": 31,
+      "target_node_id": null,
+      "title": "[BUG] [DX] Studio overlay — prevent out of bounds positioning",
+      "assignees": [
+        "tscbmstubp"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:46Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 172,
+      "source_id": 3932150045,
+      "source_state": "closed",
+      "target_number": 32,
+      "target_node_id": null,
+      "title": "[FEATURE] [DX] Studio overlay — preserve settings",
+      "assignees": [
+        "tscbmstubp"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:48Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 177,
+      "source_id": 4000161048,
+      "source_state": "closed",
+      "target_number": 33,
+      "target_node_id": null,
+      "title": "CLI: update all commands for MFE package model",
+      "assignees": [
+        "gs-layer"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:50Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 180,
+      "source_id": 4015159111,
+      "source_state": "closed",
+      "target_number": 34,
+      "target_node_id": null,
+      "title": "Test",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:52Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 181,
+      "source_id": 4015186867,
+      "source_state": "open",
+      "target_number": 35,
+      "target_node_id": null,
+      "title": "[P0] Establish stable roadmap with milestones and commit to stability periods",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:54Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 182,
+      "source_id": 4015189115,
+      "source_state": "open",
+      "target_number": 36,
+      "target_node_id": null,
+      "title": "[P0] Investigate and improve AI-generated code success rate from 40% to 70%+",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:55Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 183,
+      "source_id": 4015191147,
+      "source_state": "open",
+      "target_number": 37,
+      "target_node_id": null,
+      "title": "[P0][Docs] When to use Screen Sets vs not - decision guide with examples",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:55Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 184,
+      "source_id": 4015193949,
+      "source_state": "open",
+      "target_number": 38,
+      "target_node_id": null,
+      "title": "[P0] AI context overload - audit rules for necessity and simplify",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:55Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 185,
+      "source_id": 4015197090,
+      "source_state": "open",
+      "target_number": 39,
+      "target_node_id": null,
+      "title": "[P1] API layer too restrictive - support configurable content-types",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:56Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 186,
+      "source_id": 4015198879,
+      "source_state": "open",
+      "target_number": 40,
+      "target_node_id": null,
+      "title": "[P1][Docs] Create migration guide for upgrading HAI3 versions",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:56Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 187,
+      "source_id": 4015199755,
+      "source_state": "open",
+      "target_number": 41,
+      "target_node_id": null,
+      "title": "[P1] Separate demo code from production patterns to reduce confusion",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:56Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 188,
+      "source_id": 4015200846,
+      "source_state": "open",
+      "target_number": 42,
+      "target_node_id": null,
+      "title": "[P1] ESLint doesn't catch hardcoded strings - add i18n enforcement rule",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:57Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 189,
+      "source_id": 4015202294,
+      "source_state": "open",
+      "target_number": 43,
+      "target_node_id": null,
+      "title": "[P1][Docs] Create architecture documentation for human developers (not just AI)",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:57Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 190,
+      "source_id": 4015203500,
+      "source_state": "open",
+      "target_number": 44,
+      "target_node_id": null,
+      "title": "[P1] CLI initialization fails in some versions - ensure reliability",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:58Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 191,
+      "source_id": 4015204375,
+      "source_state": "open",
+      "target_number": 45,
+      "target_node_id": null,
+      "title": "[P2] AI creates custom components instead of using UI kit when given Figma/screenshots",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:58Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 192,
+      "source_id": 4015205736,
+      "source_state": "open",
+      "target_number": 46,
+      "target_node_id": null,
+      "title": "[P2][Docs] Document Event Handlers - developers don't know they exist",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:58Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 193,
+      "source_id": 4015207213,
+      "source_state": "open",
+      "target_number": 47,
+      "target_node_id": null,
+      "title": "[P2][Feature Request] Convert HAI3 workflows into AI agent skills format",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:59Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 194,
+      "source_id": 4015207845,
+      "source_state": "open",
+      "target_number": 48,
+      "target_node_id": null,
+      "title": "[Process] Include practicing developers in design discussions earlier",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:23:59Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 195,
+      "source_id": 4015208580,
+      "source_state": "open",
+      "target_number": 49,
+      "target_node_id": null,
+      "title": "[Process] Master class on HAI3 usage led by real adopters (not core team)",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:00Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 196,
+      "source_id": 4015228483,
+      "source_state": "open",
+      "target_number": 50,
+      "target_node_id": null,
+      "title": "[P1] Separate theoretical architecture from practical implementation (source code & workflows)",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:00Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 197,
+      "source_id": 4015281266,
+      "source_state": "closed",
+      "target_number": 51,
+      "target_node_id": null,
+      "title": "[MFE][Blocker] mfeActions.registerManifest() defined in spec but missing from tasks and ScreensetsRegistry API",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:00Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_number": 198,
+      "source_id": 4015282776,
+      "source_state": "closed",
+      "target_number": 52,
+      "target_node_id": null,
+      "title": "[MFE][Blocker] MfeContainer prop signature inconsistent across spec scenarios (extensionId vs entryTypeId)",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:03Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_number": 199,
+      "source_id": 4015284113,
+      "source_state": "closed",
+      "target_number": 53,
+      "target_node_id": null,
+      "title": "[MFE][High] mfeActions.preloadExtension() defined in spec but absent from tasks.md",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:06Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_number": 200,
+      "source_id": 4015285248,
+      "source_state": "closed",
+      "target_number": 54,
+      "target_node_id": null,
+      "title": "[MFE][High] conformsTo() utility undefined — unclear if string-based or plugin-dependent",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:08Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_number": 201,
+      "source_id": 4015285707,
+      "source_state": "closed",
+      "target_number": 55,
+      "target_node_id": null,
+      "title": "[MFE][Medium] BackendTypeInstanceProvider used as concrete class in spec but not a deliverable",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:11Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_number": 202,
+      "source_id": 4015292096,
+      "source_state": "closed",
+      "target_number": 56,
+      "target_node_id": null,
+      "title": "[MFE][Medium] Phase 7 and Phase 13 both define microfrontends() plugin — one supersedes the other",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:14Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_number": 204,
+      "source_id": 4026531586,
+      "source_state": "closed",
+      "target_number": 57,
+      "target_node_id": null,
+      "title": "Decouple extension domain contracts and shared property propagation from framework hardcoding",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:16Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 209,
+      "source_id": 4050071988,
+      "source_state": "open",
+      "target_number": 58,
+      "target_node_id": null,
+      "title": "Follow-up: Address PR #205 review findings",
+      "assignees": [
+        "gs-layer"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:18Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 212,
+      "source_id": 4055416400,
+      "source_state": "closed",
+      "target_number": 59,
+      "target_node_id": null,
+      "title": "[BUG] Hardcoded gtsPlugin in microfrontends package",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:19Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 213,
+      "source_id": 4055783966,
+      "source_state": "closed",
+      "target_number": 60,
+      "target_node_id": null,
+      "title": "Team lead skill missing architecture-critic and incomplete qa agent coverage",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:21Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 215,
+      "source_id": 4069911524,
+      "source_state": "closed",
+      "target_number": 61,
+      "target_node_id": null,
+      "title": "Redundant 'entries' field on mf_manifest.v1~ GTS schema",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:23Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 216,
+      "source_id": 4070032315,
+      "source_state": "open",
+      "target_number": 62,
+      "target_node_id": null,
+      "title": "Docs deployment workflow is broken: output path mismatch and missing assets",
+      "assignees": [
+        "tscbmstubp"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:25Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 217,
+      "source_id": 4070033933,
+      "source_state": "open",
+      "target_number": 63,
+      "target_node_id": null,
+      "title": "Documentation not updated after MFE architecture implementation",
+      "assignees": [
+        "tscbmstubp"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:26Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 218,
+      "source_id": 4070035514,
+      "source_state": "closed",
+      "target_number": 64,
+      "target_node_id": null,
+      "title": "AI tooling in .ai/ folder contains outdated guidance after MFE implementation",
+      "assignees": [
+        "tscbmstubp"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:26Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 225,
+      "source_id": 4088480618,
+      "source_state": "closed",
+      "target_number": 65,
+      "target_node_id": null,
+      "title": "[FEATURE] [DX] Enhance the hai3 create command to support multiple package managers (npm, yarn, pnpm)",
+      "assignees": [
+        "gs-layer"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:28Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 232,
+      "source_id": 4100902751,
+      "source_state": "closed",
+      "target_number": 66,
+      "target_node_id": null,
+      "title": "Three application-specific GTS derived schemas hardcoded in screensets L1 SDK",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:30Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 233,
+      "source_id": 4105642494,
+      "source_state": "closed",
+      "target_number": 67,
+      "target_node_id": null,
+      "title": "Remove verifyFirstClassSchemas() — breaks TypeSystemPlugin abstraction",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:33Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 236,
+      "source_id": 4126622015,
+      "source_state": "closed",
+      "target_number": 68,
+      "target_node_id": null,
+      "title": "Host screen domain should use ExtensionDomainSlot instead of bare container",
+      "assignees": [
+        "tscbmstubp"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:35Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 238,
+      "source_id": 4144080931,
+      "source_state": "open",
+      "target_number": 69,
+      "target_node_id": null,
+      "title": "[Enhancement] Default screen generation should create only en locale files unless additional locales are explicitly requested",
+      "assignees": [
+        "gs-layer"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:37Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 239,
+      "source_id": 4144505286,
+      "source_state": "closed",
+      "target_number": 70,
+      "target_node_id": null,
+      "title": "Inconsistent pre-commit setup + Husky issues on Windows",
+      "assignees": [
+        "Mitriyweb"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:38Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 240,
+      "source_id": 4144774165,
+      "source_state": "closed",
+      "target_number": 71,
+      "target_node_id": null,
+      "title": "CLI template issues: invalid engine constraints, missing CI workflow, and failing architecture checks",
+      "assignees": [
+        "Mitriyweb"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:40Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 246,
+      "source_id": 4153143291,
+      "source_state": "closed",
+      "target_number": 72,
+      "target_node_id": null,
+      "title": "Add dependency vulnerability checks to CI and pre-commit",
+      "assignees": [
+        "Mitriyweb"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:42Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 247,
+      "source_id": 4153418721,
+      "source_state": "closed",
+      "target_number": 73,
+      "target_node_id": null,
+      "title": "GTS action entities: schema/instance misclassification, missing payload contracts, skipped validation",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:44Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 249,
+      "source_id": 4176470307,
+      "source_state": "closed",
+      "target_number": 74,
+      "target_node_id": null,
+      "title": "[BUG] MfeHandlerMF is tightly coupled to @originjs/vite-plugin-federation output format",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:47Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 250,
+      "source_id": 4176485443,
+      "source_state": "closed",
+      "target_number": 75,
+      "target_node_id": null,
+      "title": "[BUG] MFE builds must disable minification and CSS code splitting due to blob URL loading mechanism",
+      "assignees": [
+        "tscbmstubp"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:49Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 251,
+      "source_id": 4176497906,
+      "source_state": "closed",
+      "target_number": 76,
+      "target_node_id": null,
+      "title": "[BUG] CSS from MFE bundle is not injected into the Shadow DOM",
+      "assignees": [
+        "tscbmstubp"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:51Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 252,
+      "source_id": 4176512222,
+      "source_state": "closed",
+      "target_number": 77,
+      "target_node_id": null,
+      "title": "[BUG] Shared dependency contract between host and MFE has no source of truth",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:53Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 253,
+      "source_id": 4176526632,
+      "source_state": "closed",
+      "target_number": 78,
+      "target_node_id": null,
+      "title": "[BUG] MfeHandlerMF has unbounded memory growth and does not release resources on unmount",
+      "assignees": [
+        "tscbmstubp",
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:55Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 254,
+      "source_id": 4176566226,
+      "source_state": "closed",
+      "target_number": 79,
+      "target_node_id": null,
+      "title": "[BUG] ChildMfeBridge does not expose onActionsChain — host-to-MFE action delivery has no public contract",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:24:57Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 255,
+      "source_id": 4176604027,
+      "source_state": "closed",
+      "target_number": 80,
+      "target_node_id": null,
+      "title": "[BUG] MfeContextValue.extensionId is a required field with no consumers",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:25:00Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 259,
+      "source_id": 4182552289,
+      "source_state": "closed",
+      "target_number": 81,
+      "target_node_id": null,
+      "title": "[FEATURE] Authentication provider for the HAI3 framework",
+      "assignees": [
+        "gs-layer"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:25:02Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 261,
+      "source_id": 4190395101,
+      "source_state": "open",
+      "target_number": 82,
+      "target_node_id": null,
+      "title": "[FEATURE] I want to be able to install frontx into existing repo, not only as new project/repo",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:25:04Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 266,
+      "source_id": 4207516119,
+      "source_state": "closed",
+      "target_number": 83,
+      "target_node_id": null,
+      "title": "[Removed by author]",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:25:04Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 274,
+      "source_id": 4277562887,
+      "source_state": "closed",
+      "target_number": 84,
+      "target_node_id": null,
+      "title": "[FEATURE] RBAC Contract",
+      "assignees": [
+        "gs-layer"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:25:07Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 277,
+      "source_id": 4300017540,
+      "source_state": "closed",
+      "target_number": 85,
+      "target_node_id": null,
+      "title": "MFE blob URL revoke: make behavior per-extension via flag",
+      "assignees": [
+        "tscbmstubp"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:25:09Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_number": 278,
+      "source_id": 4307439373,
+      "source_state": "open",
+      "target_number": 86,
+      "target_node_id": null,
+      "title": "Extensions domains silently enforce single-mount invariant; multi-widget domains unsupported",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:25:11Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 281,
+      "source_id": 4355970460,
+      "source_state": "open",
+      "target_number": 87,
+      "target_node_id": null,
+      "title": "Scanned HAI3 — scanner flagged a few things, sharing in case they're useful",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:25:12Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 283,
+      "source_id": 4365122239,
+      "source_state": "open",
+      "target_number": 88,
+      "target_node_id": null,
+      "title": "[FEATURE] allow choosing the parent directory when creating a new MFE",
+      "assignees": [
+        "gs-layer"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:25:12Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 288,
+      "source_id": 4453025153,
+      "source_state": "open",
+      "target_number": 89,
+      "target_node_id": null,
+      "title": "FrontX: Analysis before using",
+      "assignees": [
+        "GeraBart"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:25:12Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 289,
+      "source_id": 4485348519,
+      "source_state": "open",
+      "target_number": 90,
+      "target_node_id": null,
+      "title": "[BUG] Visible delay when loading MFE despite timely init trigger",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:25:13Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
   "stats": {
-    "total": 0,
-    "synced": 0,
+    "total": 90,
+    "synced": 90,
     "pending": 0,
     "failed": 0
   }
