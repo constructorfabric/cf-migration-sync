@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T21:20:11Z",
+    "last_run_at": "2026-05-26T21:20:11Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 3,
+      "source_url": "https://github.com/cyberfabric/cf-docs/pull/3",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 2,
+      "title": "[PR #3] Update documentation with architecture details and API reference",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:20:19Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 2,
+      "source_url": "https://github.com/cyberfabric/cf-docs/pull/2",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 3,
+      "title": "[PR #2] Add VitePress documentation site with configuration and initial content structure",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:20:26Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 2,
+    "synced": 2,
+    "pending": 0,
+    "failed": 0
+  }
+}

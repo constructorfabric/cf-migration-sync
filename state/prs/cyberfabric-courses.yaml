@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T21:25:29Z",
+    "last_run_at": "2026-05-26T21:25:29Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 4,
+      "source_url": "https://github.com/cyberfabric/cyberfabric-courses/pull/4",
+      "source_state": "open",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": null,
+      "title": "[PR #4] docs(rework course materials per review feedback and add ModKit hands-on)",
+      "status": "skipped_open",
+      "mirrored_at": null,
+      "comments_status": "none",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 3,
+      "source_url": "https://github.com/cyberfabric/cyberfabric-courses/pull/3",
+      "source_state": "open",
+      "source_author": "Bechma",
+      "target_issue_number": null,
+      "title": "[PR #3] fix: correct typos and improve clarity in course content and summary",
+      "status": "skipped_open",
+      "mirrored_at": null,
+      "comments_status": "none",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 2,
+      "source_url": "https://github.com/cyberfabric/cyberfabric-courses/pull/2",
+      "source_state": "open",
+      "source_author": "maurolacy",
+      "target_issue_number": null,
+      "title": "[PR #2] docs: Fix Markdown",
+      "status": "skipped_open",
+      "mirrored_at": null,
+      "comments_status": "none",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 7,
+      "source_url": "https://github.com/cyberfabric/cyberfabric-courses/pull/7",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1,
+      "title": "[PR #7] Constructor studio course draft",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:25:35Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 6,
+      "source_url": "https://github.com/cyberfabric/cyberfabric-courses/pull/6",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 2,
+      "title": "[PR #6] Constructor studio course",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:25:42Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 5,
+      "source_url": "https://github.com/cyberfabric/cyberfabric-courses/pull/5",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 3,
+      "title": "[PR #5] docs: fix logically inaccurate or misleading statements",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:25:48Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1,
+      "source_url": "https://github.com/cyberfabric/cyberfabric-courses/pull/1",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 4,
+      "title": "[PR #1] docs: initial commit with courses/cyberfabric-all-course-content.md",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:25:54Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 7,
+    "synced": 4,
+    "pending": 0,
+    "failed": 0
+  }
+}

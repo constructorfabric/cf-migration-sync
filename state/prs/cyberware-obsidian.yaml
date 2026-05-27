@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T21:26:22Z",
+    "last_run_at": "2026-05-26T21:26:22Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 6,
+      "source_url": "https://github.com/cyberfabric/cyberware-obsidian/pull/6",
+      "source_state": "closed",
+      "source_author": "vzhuman",
+      "target_issue_number": 1,
+      "title": "[PR #6] Bump version to 1.0.5 in manifest.json, package.json, and package-loc…",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:26:29Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 5,
+      "source_url": "https://github.com/cyberfabric/cyberware-obsidian/pull/5",
+      "source_state": "closed",
+      "source_author": "vzhuman",
+      "target_issue_number": 2,
+      "title": "[PR #5] Preparations for publishing",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:26:35Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 4,
+      "source_url": "https://github.com/cyberfabric/cyberware-obsidian/pull/4",
+      "source_state": "closed",
+      "source_author": "vzhuman",
+      "target_issue_number": 3,
+      "title": "[PR #4] Update README.md to include release instructions and version tagging …",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:26:41Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 3,
+      "source_url": "https://github.com/cyberfabric/cyberware-obsidian/pull/3",
+      "source_state": "closed",
+      "source_author": "vzhuman",
+      "target_issue_number": 4,
+      "title": "[PR #3] Just up for version to test automated release system",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:26:48Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 2,
+      "source_url": "https://github.com/cyberfabric/cyberware-obsidian/pull/2",
+      "source_state": "closed",
+      "source_author": "vzhuman",
+      "target_issue_number": 5,
+      "title": "[PR #2] Update manifest.json and package.json with correct author URLs and pl…",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:26:54Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1,
+      "source_url": "https://github.com/cyberfabric/cyberware-obsidian/pull/1",
+      "source_state": "closed",
+      "source_author": "vzhuman",
+      "target_issue_number": 6,
+      "title": "[PR #1] Update LICENSE and manifest.json with correct author information and …",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:27:00Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 6,
+    "synced": 6,
+    "pending": 0,
+    "failed": 0
+  }
+}

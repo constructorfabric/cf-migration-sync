@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T21:21:15Z",
+    "last_run_at": "2026-05-26T21:21:15Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 2,
+      "source_url": "https://github.com/cyberfabric/cyber-pilot-kit-sdlc/pull/2",
+      "source_state": "closed",
+      "source_author": "bsacrobatix",
+      "target_issue_number": 1,
+      "title": "[PR #2] fix(pr-status): report unresolved non-outdated review threads correctly",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:21:21Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1,
+      "source_url": "https://github.com/cyberfabric/cyber-pilot-kit-sdlc/pull/1",
+      "source_state": "closed",
+      "source_author": "GeraBart",
+      "target_issue_number": 2,
+      "title": "[PR #1] feat: migrate openspec workflow",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:21:29Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 2,
+    "synced": 2,
+    "pending": 0,
+    "failed": 0
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T21:21:37Z",
+    "last_run_at": "2026-05-26T21:21:37Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 8,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-back/pull/8",
+      "source_state": "open",
+      "source_author": "max0xf",
+      "target_issue_number": null,
+      "title": "[PR #8] feat(deploy): support Postgres + squash migrations to clean baseline",
+      "status": "skipped_open",
+      "mirrored_at": null,
+      "comments_status": "none",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 7,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-back/pull/7",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 1,
+      "title": "[PR #7] Misc fixes",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:21:44Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 6,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-back/pull/6",
+      "source_state": "closed",
+      "source_author": "Mitriyweb",
+      "target_issue_number": 2,
+      "title": "[PR #6] Update PR page and fix perf",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:21:52Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 5,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-back/pull/5",
+      "source_state": "closed",
+      "source_author": "Mitriyweb",
+      "target_issue_number": 3,
+      "title": "[PR #5] feat: worktree fixes, git-provider refactor, PR reviewers, token vali…",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:21:59Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 4,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-back/pull/4",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 4,
+      "title": "[PR #4] Multi-branch support + logs streaming",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:22:06Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 3,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-back/pull/3",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 5,
+      "title": "[PR #3] Misc fixes",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:22:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 2,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-back/pull/2",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 6,
+      "title": "[PR #2] Misc fixes + tests",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:22:22Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-back/pull/1",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 7,
+      "title": "[PR #1] feat: implement CyberWiki backend with service tokens and session man…",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:22:29Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 8,
+    "synced": 7,
+    "pending": 0,
+    "failed": 0
+  }
+}

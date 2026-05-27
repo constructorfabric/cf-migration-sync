@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T21:27:09Z",
+    "last_run_at": "2026-05-26T21:27:09Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 1,
+      "source_url": "https://github.com/cyberfabric/demo-repository/pull/1",
+      "source_state": "open",
+      "source_author": "vzhuman",
+      "target_issue_number": 1,
+      "title": "[PR #1] Add workflow badges to README",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:27:12Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 1,
+    "synced": 1,
+    "pending": 0,
+    "failed": 0
+  }
+}

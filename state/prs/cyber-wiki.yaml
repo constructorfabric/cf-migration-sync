@@ -1,0 +1,209 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T21:23:45Z",
+    "last_run_at": "2026-05-26T21:23:45Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 16,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/16",
+      "source_state": "open",
+      "source_author": "max0xf",
+      "target_issue_number": null,
+      "title": "[PR #16] feat(deploy): host-agnostic three-stage SSH deployment",
+      "status": "skipped_open",
+      "mirrored_at": null,
+      "comments_status": "none",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 15,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/15",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 1,
+      "title": "[PR #15] feat: enhance local setup script to create admin user and set role",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:23:53Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 14,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/14",
+      "source_state": "closed",
+      "source_author": "Mitriyweb",
+      "target_issue_number": 2,
+      "title": "[PR #14] Update backend port to 8888 and add Windsurf configuration",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:23:59Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 13,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/13",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 3,
+      "title": "[PR #13] feat: add document tagging and cross-repo linking requirements",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:24:06Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 12,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/12",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 4,
+      "title": "[PR #12] feat: setup multi-repo workspace structure with backend stub",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:24:13Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 11,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/11",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 5,
+      "title": "[PR #11]  rework frontend DESIGN to use FrontX architecture ",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:24:20Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 10,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/10",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 6,
+      "title": "[PR #10] Address PMs review",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:24:27Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 9,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/9",
+      "source_state": "closed",
+      "source_author": "ainetx",
+      "target_issue_number": 7,
+      "title": "[PR #9] chore(cypilot): up to v3.6.0-beta",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:24:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 8,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/8",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 8,
+      "title": "[PR #8] feat(design): Add comprehensive requirements traceability and design specifications",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:24:39Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 7,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/7",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 9,
+      "title": "[PR #7] docs(prd): add left navigation panel requirements (document view + fi…",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:24:46Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 6,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/6",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 10,
+      "title": "[PR #6] docs(prd): incorporate Git provider integration requirements from PoC…",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:24:52Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 5,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/5",
+      "source_state": "closed",
+      "source_author": "ainetx",
+      "target_issue_number": 11,
+      "title": "[PR #5] chore: update cypilot core to v3.3.0-beta",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:24:57Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 4,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/4",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 12,
+      "title": "[PR #4] docs: updated docs/specs/PRD.md",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:25:03Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 3,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/3",
+      "source_state": "closed",
+      "source_author": "Mitriyweb",
+      "target_issue_number": 13,
+      "title": "[PR #3] Delete frontend",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:25:10Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 2,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/2",
+      "source_state": "closed",
+      "source_author": "Mitriyweb",
+      "target_issue_number": 14,
+      "title": "[PR #2] Init frontend",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:25:17Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki/pull/1",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 15,
+      "title": "[PR #1] init cypilot + initial PRD",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:25:24Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 16,
+    "synced": 15,
+    "pending": 0,
+    "failed": 0
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T21:19:44Z",
+    "last_run_at": "2026-05-26T21:19:44Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 3,
+      "source_url": "https://github.com/cyberfabric/ai-courses/pull/3",
+      "source_state": "closed",
+      "source_author": "ainetx",
+      "target_issue_number": 1,
+      "title": "[PR #3] (feat): add Cyber Constructor references",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:19:50Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 2,
+      "source_url": "https://github.com/cyberfabric/ai-courses/pull/2",
+      "source_state": "closed",
+      "source_author": "mitevsyavor",
+      "target_issue_number": 2,
+      "title": "[PR #2] Add a new course PM-SpecCraft and add 2 articles. ",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:19:57Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1,
+      "source_url": "https://github.com/cyberfabric/ai-courses/pull/1",
+      "source_state": "closed",
+      "source_author": "mitevsyavor",
+      "target_issue_number": 3,
+      "title": "[PR #1] Create initial set of courses.",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:20:07Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 3,
+    "synced": 3,
+    "pending": 0,
+    "failed": 0
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T21:23:13Z",
+    "last_run_at": "2026-05-26T21:23:13Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 5,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-front/pull/5",
+      "source_state": "open",
+      "source_author": "max0xf",
+      "target_issue_number": null,
+      "title": "[PR #5] fix(build): co-locate react + react-dom + scheduler in one vendor chunk",
+      "status": "skipped_open",
+      "mirrored_at": null,
+      "comments_status": "none",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 4,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-front/pull/4",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 1,
+      "title": "[PR #4] FileMappingConfiguration dialog fix + misc improvement",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:23:20Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 3,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-front/pull/3",
+      "source_state": "closed",
+      "source_author": "Mitriyweb",
+      "target_issue_number": 2,
+      "title": "[PR #3] Updare prs page and fix comments",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:23:27Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 2,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-front/pull/2",
+      "source_state": "closed",
+      "source_author": "Mitriyweb",
+      "target_issue_number": 3,
+      "title": "[PR #2] [feat] Add debug diagnostics, blame view, and perf instrumentation",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:23:33Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-front/pull/1",
+      "source_state": "closed",
+      "source_author": "Mitriyweb",
+      "target_issue_number": 4,
+      "title": "[PR #1] Wiki ui",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:23:41Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 5,
+    "synced": 4,
+    "pending": 0,
+    "failed": 0
+  }
+}

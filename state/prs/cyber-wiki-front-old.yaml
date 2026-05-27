@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "stage": "06-mirror-prs",
+    "source_org": "cyberfabric",
+    "target_org": "constructorfabric",
+    "first_run_at": "2026-05-26T21:22:34Z",
+    "last_run_at": "2026-05-26T21:22:34Z"
+  },
+  "items": [
+    {
+      "source_pr_number": 5,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-front-old/pull/5",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 1,
+      "title": "[PR #5] misc fixes",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:22:41Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 4,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-front-old/pull/4",
+      "source_state": "closed",
+      "source_author": "max0xf",
+      "target_issue_number": 2,
+      "title": "[PR #4] Added login page, connected with backend",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:22:47Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 3,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-front-old/pull/3",
+      "source_state": "closed",
+      "source_author": "Mitriyweb",
+      "target_issue_number": 3,
+      "title": "[PR #3] Add demo component",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:22:55Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 2,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-front-old/pull/2",
+      "source_state": "closed",
+      "source_author": "Mitriyweb",
+      "target_issue_number": 4,
+      "title": "[PR #2] Update version of frontx and add a git page",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:23:02Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1,
+      "source_url": "https://github.com/cyberfabric/cyber-wiki-front-old/pull/1",
+      "source_state": "closed",
+      "source_author": "Mitriyweb",
+      "target_issue_number": 5,
+      "title": "[PR #1] Init",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-26T21:23:09Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
+  "stats": {
+    "total": 5,
+    "synced": 5,
+    "pending": 0,
+    "failed": 0
+  }
+}
