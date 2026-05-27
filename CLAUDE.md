@@ -509,6 +509,53 @@ Other files:  grep -rn "select(not " found no other occurrences.
 
 ---
 
+### RC-14 — "Retry" status applied to a permanently unresolvable condition
+
+```
+Bug:          Open PRs from personal forks (e.g. genericaccount-de:feature/X → main)
+              were permanently recorded as skipped_open and never appeared in the
+              target org, even after multiple mirror runs.
+
+5 Whys:
+  Why 1:  Every re-run still logs "head branch not in target — skipping". The PR is
+          never created in the target.
+  Why 2:  skipped_open means "retry on next run after stage 02 syncs the branch".
+          But stage 02 (git push --mirror) only mirrors cyberfabric/REPO →
+          constructorfabric/REPO. Personal fork repos (genericaccount-de/REPO) are
+          never touched. The branch will never appear in the target org.
+  Why 3:  The branch-existence check uses .head.ref (branch name) against the target
+          org's branch list. It does not inspect .head.repo.owner.login, so a fork PR
+          and a same-repo PR with a missing branch are treated identically.
+  Why 4:  skipped_open was designed for same-repo branches that will appear on the
+          next stage 02 run. Applying it to fork branches was never considered as a
+          distinct case.
+  Why 5:  The open-PR strategy (script header, lines 6-18) only addresses "branch
+          exists / doesn't exist" with no mention of forks. The design never modelled
+          fork PRs as a separate category requiring a different code path.
+
+Root cause:   When a "retry" or "skip" status is introduced, the conditions under which
+              a retry CAN succeed are never explicitly enumerated and verified to be
+              satisfiable. Fork PRs are a concrete class where the retry condition
+              (branch appears in target org) is permanently false — the status should
+              never have been applied to them.
+
+Fix applied:  Extract pr_head_owner from .head.repo.owner.login (falling back to
+              .head.label's owner prefix when the fork is deleted). If pr_head_owner
+              != SOURCE_ORG → pr_from_fork=1 → mirror as open issue immediately with
+              a note about the fork. Same-repo branches with a missing head keep
+              skipped_open behavior (retry after stage 02 is valid for them).
+
+Prevention:   1. Before introducing any "skip and retry later" status, explicitly
+                 enumerate the condition that makes retry succeed. If that condition
+                 can be permanently false for a subset of items, that subset needs a
+                 separate immediate-fallback path.
+              2. For every PR-related code path, check .head.repo.owner.login to
+                 distinguish same-repo branches (owner == SOURCE_ORG) from fork
+                 branches (owner != SOURCE_ORG). They require different handling.
+```
+
+---
+
 ## Pre-fetch over per-item API calls
 
 When a loop needs to check membership/existence for N items, fetch the full set

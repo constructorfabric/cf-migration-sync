@@ -500,13 +500,23 @@ _mirror_issue_comments() {
 
   log "  Mirroring $total_comments comments for issue #$src_number -> #$tgt_number..."
 
-  # BUG-03 fix: pre-fetch existing target comments so we can check markers before
-  # posting.  Without this, an interrupted run re-posts all comments (duplicates).
-  local tgt_comment_bodies
-  tgt_comment_bodies="$(gh api \
+  # Pre-fetch existing target comments for idempotency marker checks.
+  # Also validates target issue is accessible — if gh api fails (404 deleted, 403 locked)
+  # all comment POSTs would fail anyway; return early with a single diagnostic warning.
+  local _tgt_comments_raw tgt_comment_bodies
+  _tgt_comments_raw="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments?per_page=100" \
-    --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | .body // ""] | join("\n")')" || tgt_comment_bodies=''
+    --paginate 2>/dev/null)" || {
+    warn "  Issue #$src_number: cannot access comments on target #$tgt_number in $TARGET_ORG/$repo_name — issue may be deleted, locked, or issues disabled — skipping comment sync"
+    return 0
+  }
+  tgt_comment_bodies="$(echo "$_tgt_comments_raw" | \
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | .body // ""] | join("\n")')" \
+    || tgt_comment_bodies=''
+
+  local _post_err_tmp
+  _post_err_tmp="$(mktemp)"
+  trap 'rm -f "$_post_err_tmp"' RETURN
 
   local mirrored=0
   while IFS= read -r comment; do
@@ -544,10 +554,10 @@ ${c_marker}"
     c_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments" \
       --method POST \
       --input <(echo "$c_payload") \
-      2>/dev/null)" || c_result="FAILED"
+      2>"$_post_err_tmp")" || c_result="FAILED"
 
     if [[ "$c_result" == "FAILED" ]]; then
-      warn "  Failed to mirror comment $c_id on issue #$src_number"
+      warn "  Failed to mirror comment $c_id on issue #$src_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
     else
       mirrored=$((mirrored + 1))
     fi

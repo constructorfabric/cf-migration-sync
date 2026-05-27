@@ -4,7 +4,13 @@
 #
 # Strategy:
 #   OPEN PRs  — Created as real open PRs in target if the head branch exists.
-#               Recorded as skipped_open if the branch is missing.
+#               Falls back to an open issue (placeholder) when the branch is absent:
+#                 • Fork PRs: head branch is in a personal fork stage 02 never mirrors
+#                             → issue is permanent (branch will never appear in target).
+#                 • Same-repo PRs: branch not yet pushed → placeholder issue created now;
+#                             re-run stage 02 then stage 06 to create a real PR later.
+#               skipped_open is used only when the branch IS present but the PR API
+#               call itself failed transiently (retry on next run).
 #   CLOSED PRs — Created as closed PRs in target if head branch exists, which
 #                  preserves linked commits and file diffs. Falls back to a
 #                  closed issue when the branch is gone. In both cases:
@@ -14,8 +20,8 @@
 #                  • All inline review comments mirrored as comments with file/line context
 #
 # Why not always create real PRs?  The API requires the head branch to exist in
-# target.  For merged PRs the feature branch is often deleted; issues are the
-# reliable fallback for those cases.
+# target.  For merged/fork PRs the branch may be gone or in an unreachable repo;
+# issues are the reliable fallback for those cases.
 #
 # Attribution note: GitHub API does not allow setting the author of an issue
 # or comment — it will always appear as the token owner.  Attribution is
@@ -239,14 +245,21 @@ _mirror_repo_prs() {
   if [[ "$open_count" -gt 0 ]]; then
     while IFS= read -r pr; do
       local pr_number pr_title pr_body pr_author pr_created pr_url pr_head_ref pr_base_ref
-      pr_number="$(echo   "$pr" | jq -r '.number')"
-      pr_title="$(echo    "$pr" | jq -r '.title')"
-      pr_body="$(echo     "$pr" | jq -r '.body // ""')"
-      pr_author="$(echo   "$pr" | jq -r '.user.login // "unknown"')"
-      pr_created="$(echo  "$pr" | jq -r '.created_at // ""')"
-      pr_head_ref="$(echo "$pr" | jq -r '.head.ref // ""')"
-      pr_base_ref="$(echo "$pr" | jq -r '.base.ref // "main"')"
+      local pr_head_owner pr_from_fork
+      pr_number="$(echo      "$pr" | jq -r '.number')"
+      pr_title="$(echo       "$pr" | jq -r '.title')"
+      pr_body="$(echo        "$pr" | jq -r '.body // ""')"
+      pr_author="$(echo      "$pr" | jq -r '.user.login // "unknown"')"
+      pr_created="$(echo     "$pr" | jq -r '.created_at // ""')"
+      pr_head_ref="$(echo    "$pr" | jq -r '.head.ref // ""')"
+      pr_base_ref="$(echo    "$pr" | jq -r '.base.ref // "main"')"
       pr_url="https://github.com/$SOURCE_ORG/$repo_name/pull/$pr_number"
+      # Fork detection: .head.repo.owner.login is null when the fork is deleted;
+      # fall back to parsing .head.label ("owner:branch") in that case.
+      pr_head_owner="$(echo  "$pr" | jq -r \
+        '(.head.repo.owner.login) // (.head.label | split(":")[0]) // ""')"
+      pr_from_fork=0
+      [[ -n "$pr_head_owner" && "$pr_head_owner" != "$SOURCE_ORG" ]] && pr_from_fork=1
 
       # Idempotency: already fully mirrored
       local already_status
@@ -308,9 +321,64 @@ _mirror_repo_prs() {
       fi
 
       if [[ $branch_in_target -eq 0 ]]; then
-        log "  Open PR #$pr_number: head branch '$pr_head_ref' not in target — skipping"
-        _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
-          "$pr_title" "skipped_open" "" "$pr_author" "open"
+        # Branch is absent from the target — mirror as an open issue (placeholder).
+        # Two sub-cases; only the attribution note differs:
+        #   Fork PR:      head is in a personal fork stage 02 never mirrors → permanent.
+        #   Same-repo PR: head branch not yet pushed to target → may resolve after
+        #                 the next stage 02 git-mirror run.
+        local branch_note
+        if [[ $pr_from_fork -eq 1 ]]; then
+          log "  Open PR #$pr_number: head from fork '$pr_head_owner:$pr_head_ref' — mirroring as open issue"
+          branch_note="Head branch \`$pr_head_owner:$pr_head_ref\` is in a personal fork and cannot be recreated in the target org."
+        else
+          log "  Open PR #$pr_number: head branch '$pr_head_ref' not in target — mirroring as open issue (placeholder until branch is synced)"
+          branch_note="Head branch \`$pr_head_ref\` has not been synced to the target yet — this is a placeholder. Re-run stage 02 then stage 06 to create a real PR once the branch is available."
+        fi
+
+        pr_body="$(echo "$pr_body" | _encode_at_mentions)"
+        local no_branch_body
+        no_branch_body="> 🔗 **Mirrored PR** [$SOURCE_ORG/$repo_name#$pr_number]($pr_url) | **Author:** $pr_author | **Opened:** $pr_created | **Status:** open
+> *$branch_note Base branch: \`$pr_base_ref\`.*
+
+---
+
+${pr_body}
+
+---
+${marker}"
+
+        local no_branch_payload
+        no_branch_payload="$(printf '%s' "$no_branch_body" | jq -Rs \
+          --arg title "[PR #$pr_number] $pr_title" \
+          '{"title":$title,"body":.}')"
+
+        local no_branch_result
+        no_branch_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
+          --method POST \
+          --input <(echo "$no_branch_payload") \
+          2>/dev/null)" || no_branch_result="FAILED"
+
+        if [[ "$no_branch_result" == "FAILED" ]]; then
+          warn "  Failed to create placeholder issue for open PR #$pr_number in $TARGET_ORG/$repo_name"
+          _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
+            "$pr_title" "failed" "" "$pr_author" "open"
+          pause 0.5; continue
+        fi
+
+        local no_branch_tgt_number
+        no_branch_tgt_number="$(echo "$no_branch_result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
+        if [[ -z "$no_branch_tgt_number" || "$no_branch_tgt_number" == "null" ]]; then
+          warn "  Open PR #$pr_number: API returned no number for placeholder issue — marking failed"
+          _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
+            "$pr_title" "failed" "" "$pr_author" "open"
+          pause 0.5; continue
+        fi
+
+        ok "  Mirrored open PR #$pr_number as placeholder issue #$no_branch_tgt_number"
+        _upsert_pr "$state_file" "$pr_number" "$pr_url" \
+          "$no_branch_tgt_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "open"
+        _mirror_pr_comments "$repo_name" "$pr_number" "$no_branch_tgt_number" "$state_file"
+        pause 1.5
         continue
       fi
 
@@ -708,12 +776,24 @@ _mirror_pr_comments() {
   log "  PR #$src_pr_number: mirroring $ic_total discussion + $rv_total review-bodies + $rc_total inline-review comments..."
 
   # Pre-fetch existing target comments for idempotency marker checks.
-  local tgt_comment_bodies
-  tgt_comment_bodies="$(gh api \
+  # ALSO validates the target issue/PR is accessible: if gh api fails (404 deleted,
+  # 403 locked/issues-disabled, etc.) all comment POSTs would fail anyway — return
+  # early with a single diagnostic warning instead of 13 silent failures.
+  local _tgt_comments_raw tgt_comment_bodies
+  _tgt_comments_raw="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments?per_page=100" \
-    --paginate 2>/dev/null | \
+    --paginate 2>/dev/null)" || {
+    warn "  PR #$src_pr_number: cannot access comments on target #$tgt_issue_number in $TARGET_ORG/$repo_name — issue may be deleted, locked, or issues disabled — skipping comment sync"
+    return 0
+  }
+  tgt_comment_bodies="$(echo "$_tgt_comments_raw" | \
     jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | .body // ""] | join("\n")')" \
     || tgt_comment_bodies=''
+
+  # Shared temp file for capturing POST error messages across all three comment loops.
+  local _post_err_tmp
+  _post_err_tmp="$(mktemp)"
+  trap 'rm -f "$_post_err_tmp"' RETURN
 
   local mirrored=0
 
@@ -744,9 +824,9 @@ ${c_marker}"
     c_payload="$(printf '%s' "$c_full_body" | jq -Rs '{"body":.}')"
     c_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments" \
       --method POST --input <(echo "$c_payload") \
-      2>/dev/null)" || c_result="FAILED"
+      2>"$_post_err_tmp")" || c_result="FAILED"
     if [[ "$c_result" == "FAILED" ]]; then
-      warn "  Failed to mirror discussion comment $c_id on PR #$src_pr_number"
+      warn "  Failed to mirror discussion comment $c_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
     else
       mirrored=$((mirrored + 1))
     fi
@@ -780,9 +860,9 @@ ${rv_marker}"
     rv_payload="$(printf '%s' "$rv_full_body" | jq -Rs '{"body":.}')"
     rv_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments" \
       --method POST --input <(echo "$rv_payload") \
-      2>/dev/null)" || rv_result="FAILED"
+      2>"$_post_err_tmp")" || rv_result="FAILED"
     if [[ "$rv_result" == "FAILED" ]]; then
-      warn "  Failed to mirror review body $rv_id on PR #$src_pr_number"
+      warn "  Failed to mirror review body $rv_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
     else
       mirrored=$((mirrored + 1))
     fi
@@ -817,9 +897,9 @@ ${rc_marker}"
     rc_payload="$(printf '%s' "$rc_full_body" | jq -Rs '{"body":.}')"
     rc_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments" \
       --method POST --input <(echo "$rc_payload") \
-      2>/dev/null)" || rc_result="FAILED"
+      2>"$_post_err_tmp")" || rc_result="FAILED"
     if [[ "$rc_result" == "FAILED" ]]; then
-      warn "  Failed to mirror inline review comment $rc_id on PR #$src_pr_number"
+      warn "  Failed to mirror inline review comment $rc_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
     else
       mirrored=$((mirrored + 1))
     fi
