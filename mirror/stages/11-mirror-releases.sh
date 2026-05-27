@@ -91,10 +91,10 @@ _mirror_repo_releases() {
   local releases
   releases="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/releases?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object")]')" || releases='[]'
 
   local total
-  total="$(echo "$releases" | jq 'length')"
+  total="$(echo "$releases" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
 
   if [[ "$total" -eq 0 ]]; then
     log "  No releases in $repo_name"
@@ -107,7 +107,7 @@ _mirror_repo_releases() {
   local tgt_releases
   tgt_releases="$(gh api \
     "repos/$TARGET_ORG/$repo_name/releases?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object")]')" || tgt_releases='[]'
 
   local new_count=0 skip_count=0 failed_count=0
 

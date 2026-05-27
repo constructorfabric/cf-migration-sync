@@ -281,6 +281,36 @@ result="$(gh api ... --paginate | jq -rs '[.[] | select(type == "object") | .fie
 
 ---
 
+### RC-9 — RC prevention rules applied only to code written in the current session, never retroactively enforced
+
+**Root cause:** When a new RC rule is added to CLAUDE.md after discovering a bug, the rule is applied to the specific code path that was broken and to any new code written afterwards. Pre-existing code in other functions or other stages that contains the same pattern is never audited. The rules are documented but have no enforcement scope — they are advisory only within the session that adds them.
+
+The concrete failures discovered in this audit:
+- `07-rewrite-cross-references.sh` `_rewrite_item_comments`: `jq -s 'add // []'` (RC-8) and `|| echo '[]'` (RC-5) on paginated comment fetch — never fixed when RC-8 was discovered in stage 06.
+- `07-rewrite-cross-references.sh` `_rewrite_repo_items` and `_rewrite_item_comments`: `jq -n --arg b "$new_body"` (RC-6) and `|| echo 'FAILED'` (RC-5) on PATCH calls — never fixed when RC-5/RC-6 were documented.
+- `05-mirror-issues.sh` and `06-mirror-prs.sh` `_reconcile_*`: `|| echo '{}'` inside `$()` on single-item `tgt_json` fetch (RC-5) — applied the sentinel-outside rule to paginated calls but not to single-item fetches.
+
+**Fix applied:** All five violations corrected; see B1–B5 above.
+
+**Prevention rules:**
+1. After every RC rule is added to CLAUDE.md, immediately `grep -rn` all `mirror/stages/*.sh` and `mirror/lib/*.sh` files for the violation pattern. Fix **all** matches in the same commit — not just the triggering file.
+2. The scope of "apply this RC rule" is always the entire codebase, not just the file being changed.
+3. RC-5 scope clarification: the sentinel-outside-`$()` rule applies to **all** `gh api` calls piped through `jq`, whether paginated or single-item. A single-item fetch can also write partial stdout before exiting non-zero.
+
+**Grep patterns to run for each rule when adding:**
+```bash
+# RC-5: sentinel inside $()
+grep -rn "|| echo '\(FAILED\|\[\]\|{}\)'" mirror/stages/ mirror/lib/
+
+# RC-6: --arg for large variables
+grep -rn "jq -n --arg b \|jq.*--arg body \|jq.*--arg body" mirror/stages/ mirror/lib/
+
+# RC-8: unsafe paginated flatten
+grep -rn "jq -s 'add // \[\]'" mirror/stages/ mirror/lib/
+```
+
+---
+
 ## Pre-fetch over per-item API calls
 
 When a loop needs to check membership/existence for N items, fetch the full set

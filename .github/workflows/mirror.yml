@@ -9,6 +9,11 @@ on:
         description: 'Stages to run (all, or comma-separated: 1,2,5,10)'
         required: false
         default: 'all'
+      continuous:
+        description: 'Continuous reconciliation — re-sync open/closed status and pick up new comments on ALL already-mirrored issues and PRs (stages 05 and 06). Safe to run repeatedly; no duplicates are created.'
+        type: boolean
+        required: false
+        default: false
 
 concurrency:
   group: mirror
@@ -24,6 +29,7 @@ env:
   GH_TOKEN_SOURCE:  ${{ secrets.MIGRATION_TOKEN }}
   SOURCE_ORG:       ${{ vars.SOURCE_ORG }}
   TARGET_ORG:       constructorfabric
+  CONTINUOUS:       ${{ github.event.inputs.continuous }}
 
 jobs:
   mirror:
@@ -183,13 +189,23 @@ jobs:
       # Rewrites source-org links in all mirrored issue/PR bodies and
       # comments, and encodes @mentions to suppress notification emails.
       # Must run after stages 05 and 06 are complete.
+      #
+      # Auto-triggered: also runs whenever stage 05 or 06 ran, even if
+      # stage 7 was not explicitly requested.  This ensures newly mirrored
+      # items always have their cross-references rewritten in the same run.
       # ================================================================== #
       - name: Stage 07 — rewrite-cross-references
-        if: steps.stages.outputs.run_7 == 'true'
+        if: >
+          steps.stages.outputs.run_7 == 'true' ||
+          steps.stages.outputs.run_5 == 'true' ||
+          steps.stages.outputs.run_6 == 'true'
         run: mirror/stages/07-rewrite-cross-references.sh
 
       - name: Commit state after stage 07
-        if: steps.stages.outputs.run_7 == 'true'
+        if: >
+          steps.stages.outputs.run_7 == 'true' ||
+          steps.stages.outputs.run_5 == 'true' ||
+          steps.stages.outputs.run_6 == 'true'
         run: |
           git add state/ validation-reports/ || true
           if ! git diff --cached --quiet; then

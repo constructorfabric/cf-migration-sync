@@ -48,6 +48,20 @@ pause() {
   sleep "$secs"
 }
 
+# Remove a rewrite-crossrefs.yaml entry so stage 07 re-processes the body
+# on its next run.  Call after any PATCH that replaces a mirrored issue/PR body.
+_clear_crossref_record() {
+  local repo_name="$1"
+  local tgt_number="$2"
+  local crossrefs_file="${REPO_ROOT}/state/rewrite-crossrefs.yaml"
+  [[ -f "$crossrefs_file" ]] || return 0
+  local tmp
+  tmp="$(mktemp)"
+  jq --arg r "$repo_name" --argjson n "$tgt_number" \
+    '.items = [.items[] | select(not (.repo == $r and .target_number == $n))]' \
+    "$crossrefs_file" > "$tmp" && mv "$tmp" "$crossrefs_file" || rm -f "$tmp"
+}
+
 # ---------------------------------------------------------------------------
 # GitHub API helpers
 # ---------------------------------------------------------------------------

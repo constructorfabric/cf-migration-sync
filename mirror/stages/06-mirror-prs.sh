@@ -213,24 +213,27 @@ _mirror_repo_prs() {
   local tgt_issues
   tgt_issues="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues?state=all&per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]')" || tgt_issues='[]'
 
   # Branch list with tip SHAs — one API call instead of one per PR.
   # SHA is needed to verify the branch tip matches pr.head.sha exactly.
   local tgt_branches
   tgt_branches="$(gh api \
     "repos/$TARGET_ORG/$repo_name/branches?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // [] | [.[] | {name: .name, sha: .commit.sha}]' || echo '[]')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object") | {name: .name, sha: .commit.sha}]')" || tgt_branches='[]'
 
   # ---- 1. Open PRs — create as real PRs where head branch exists ----------
   log "  Fetching open PRs from $SOURCE_ORG/$repo_name..."
   local open_prs
   open_prs="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls?state=open&per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]')" || open_prs='[]'
 
   local open_count
-  open_count="$(echo "$open_prs" | jq 'length')"
+  open_count="$(echo "$open_prs" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
   log "  Found $open_count open PRs in $repo_name"
 
   if [[ "$open_count" -gt 0 ]]; then
@@ -256,12 +259,20 @@ _mirror_repo_prs() {
         already_comments_status="$(jq -r --argjson n "$pr_number" \
           '.items[] | select(.source_pr_number == $n) | .comments_status // empty' \
           "$state_file" 2>/dev/null | head -1 || true)"
-        if [[ "$already_comments_status" == "done" ]]; then
-          continue
-        fi
         tgt_in_state="$(jq -r --argjson n "$pr_number" \
           '.items[] | select(.source_pr_number == $n) | .target_issue_number // empty' \
           "$state_file" 2>/dev/null | head -1 || true)"
+
+        if [[ "${CONTINUOUS:-false}" == "true" && -n "$tgt_in_state" && "$tgt_in_state" != "null" ]]; then
+          # Full reconcile for open PRs: title, body, labels, and all comments
+          # (add new ones, update edited ones).
+          _reconcile_pr "$repo_name" "$pr" "$pr_number" "$tgt_in_state" "$state_file"
+          continue
+        fi
+
+        if [[ "$already_comments_status" == "done" ]]; then
+          continue
+        fi
         if [[ -n "$tgt_in_state" && "$tgt_in_state" != "null" ]]; then
           log "  Open PR #$pr_number body already mirrored — completing comment sync..."
           _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_in_state" "$state_file"
@@ -349,11 +360,12 @@ ${marker}"
         continue
       fi
 
+      pause 1.5   # rate-limit cooldown after POST /pulls
       ok "  Mirrored open PR #$pr_number -> PR #$tgt_open_pr_number in $TARGET_ORG/$repo_name"
       _upsert_pr "$state_file" "$pr_number" "$pr_url" \
         "$tgt_open_pr_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "open"
       _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_open_pr_number" "$state_file"
-      pause 0.3
+      pause 1.0   # rate-limit buffer between PRs
 
     done < <(echo "$open_prs" | jq -c '.[]' 2>/dev/null || true)
   fi
@@ -363,10 +375,11 @@ ${marker}"
   local prs
   prs="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls?state=closed&per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]')" || prs='[]'
 
   local total_prs
-  total_prs="$(echo "$prs" | jq 'length')"
+  total_prs="$(echo "$prs" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
   log "  Found $total_prs closed PRs in $repo_name"
 
   if [[ "$total_prs" -eq 0 ]]; then
@@ -416,13 +429,35 @@ ${marker}"
       already_comments_status="$(jq -r --argjson n "$pr_number" \
         '.items[] | select(.source_pr_number == $n) | .comments_status // empty' \
         "$state_file" 2>/dev/null | head -1 || true)"
+      tgt_issue_in_state="$(jq -r --argjson n "$pr_number" \
+        '.items[] | select(.source_pr_number == $n) | .target_issue_number // empty' \
+        "$state_file" 2>/dev/null | head -1 || true)"
+
+      if [[ "${CONTINUOUS:-false}" == "true" && -n "$tgt_issue_in_state" && "$tgt_issue_in_state" != "null" ]]; then
+        # Full reconcile if PR just transitioned open→closed (body status line needs
+        # updating, title/body may have changed before merge).
+        # Lightweight (close + new comments) if it was already closed last run.
+        local state_file_pr_state
+        state_file_pr_state="$(jq -r --argjson n "$pr_number" \
+          '.items[] | select(.source_pr_number == $n) | .source_state // empty' \
+          "$state_file" 2>/dev/null | head -1 || true)"
+
+        if [[ "$state_file_pr_state" == "open" ]]; then
+          _reconcile_pr "$repo_name" "$pr" "$pr_number" "$tgt_issue_in_state" "$state_file"
+        else
+          gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_in_state" \
+            --method PATCH -f state="closed" 2>/dev/null || true
+          pause 1.0
+          _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_issue_in_state" "$state_file"
+        fi
+        skip_count=$((skip_count + 1))
+        continue
+      fi
+
       if [[ "$already_comments_status" == "done" ]]; then
         skip_count=$((skip_count + 1))
         continue
       fi
-      tgt_issue_in_state="$(jq -r --argjson n "$pr_number" \
-        '.items[] | select(.source_pr_number == $n) | .target_issue_number // empty' \
-        "$state_file" 2>/dev/null | head -1 || true)"
       if [[ -n "$tgt_issue_in_state" && "$tgt_issue_in_state" != "null" ]]; then
         log "  PR #$pr_number body already mirrored — completing comment sync..."
         _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_issue_in_state" "$state_file"
@@ -573,7 +608,7 @@ ${marker}"
         _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
           "$pr_title" "failed" "" "$pr_author" "$pr_state"
         failed_count=$((failed_count + 1))
-        pause 0.3
+        pause 0.5
         continue
       fi
 
@@ -586,9 +621,11 @@ ${marker}"
       _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
         "$pr_title" "failed" "" "$pr_author" "$pr_state"
       failed_count=$((failed_count + 1))
-      pause 0.3
+      pause 0.5
       continue
     fi
+
+    pause 1.5   # rate-limit cooldown after POST /pulls or POST /issues
 
     # ---- Close the target (historical PR — closed or merged in source) ------
     if [[ $used_pr_api -eq 1 ]]; then
@@ -604,7 +641,7 @@ ${marker}"
         2>/dev/null || warn "  Failed to close issue #$tgt_issue_number in $TARGET_ORG/$repo_name"
       ok "  Mirrored PR #$pr_number -> issue #$tgt_issue_number in $TARGET_ORG/$repo_name"
     fi
-    pause 0.2
+    pause 1.0   # rate-limit cooldown after PATCH close
 
     _upsert_pr "$state_file" "$pr_number" "$pr_url" \
       "$tgt_issue_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "$pr_state"
@@ -612,7 +649,7 @@ ${marker}"
     _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_issue_number" "$state_file"
 
     new_count=$((new_count + 1))
-    pause 0.3
+    pause 1.0   # rate-limit buffer between PRs
 
   done < <(echo "$prs" | jq -c '.[]' 2>/dev/null || true)
 
@@ -640,20 +677,21 @@ _mirror_pr_comments() {
   issue_comments="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues/$src_pr_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]' || echo '[]')"
+    jq -rs '[.[] | select(type == "object")]')" || issue_comments='[]'
 
   local review_comments
   review_comments="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls/$src_pr_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]' || echo '[]')"
+    jq -rs '[.[] | select(type == "object")]')" || review_comments='[]'
 
   # Reviews: only those with a non-empty body (e.g. "LGTM" messages)
   local pr_reviews
   pr_reviews="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls/$src_pr_number/reviews?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object") | select(.body != null and .body != "")]' || echo '[]')"
+    jq -rs '[.[] | select(type == "object") | select(.body != null and .body != "")]')" \
+    || pr_reviews='[]'
 
   local ic_total rc_total rv_total
   ic_total="$(echo "$issue_comments"  | jq -r 'if type == "array" then length else 0 end' 2>/dev/null || echo 0)"
@@ -674,8 +712,8 @@ _mirror_pr_comments() {
   tgt_comment_bodies="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object") | .body // ""] | join("\n")' \
-    2>/dev/null || echo '')"
+    jq -rs '[.[] | select(type == "object") | .body // ""] | join("\n")')" \
+    || tgt_comment_bodies=''
 
   local mirrored=0
 
@@ -712,7 +750,7 @@ ${c_marker}"
     else
       mirrored=$((mirrored + 1))
     fi
-    pause 0.2
+    pause 1.0   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$issue_comments" | jq -c '.[]' 2>/dev/null || true)
 
   # -- 2. Review-level bodies (Approved / Changes requested + message) ------
@@ -748,7 +786,7 @@ ${rv_marker}"
     else
       mirrored=$((mirrored + 1))
     fi
-    pause 0.2
+    pause 1.0   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$pr_reviews" | jq -c '.[]' 2>/dev/null || true)
 
   # -- 3. Inline review comments (with file + line context) -----------------
@@ -785,7 +823,7 @@ ${rc_marker}"
     else
       mirrored=$((mirrored + 1))
     fi
-    pause 0.2
+    pause 1.0   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$review_comments" | jq -c '.[]' 2>/dev/null || true)
 
   _update_pr_comments_status "$state_file" "$src_pr_number" "done" "$mirrored"
@@ -860,6 +898,245 @@ _upsert_pr() {
      end' \
     "$state_file" > "$tmp"
   mv "$tmp" "$state_file"
+}
+
+# ---------------------------------------------------------------------------
+# _reconcile_pr — full re-sync of an already-mirrored PR.
+# Called in continuous mode for open PRs and PRs that just closed.
+# Syncs: title, body (including status line), labels, open/closed state, and
+# all three comment types (discussion, review-level, inline review).
+# ---------------------------------------------------------------------------
+_reconcile_pr() {
+  local repo_name="$1"
+  local pr_json="$2"
+  local pr_number="$3"
+  local tgt_issue_number="$4"
+  local state_file="$5"
+
+  local pr_state pr_title pr_body pr_author pr_created pr_merged pr_head_ref pr_base_ref
+  pr_state="$(echo   "$pr_json" | jq -r '.state')"
+  pr_title="$(echo   "$pr_json" | jq -r '.title')"
+  pr_body="$(echo    "$pr_json" | jq -r '.body // ""')"
+  pr_author="$(echo  "$pr_json" | jq -r '.user.login // "unknown"')"
+  pr_created="$(echo "$pr_json" | jq -r '.created_at // ""')"
+  pr_merged="$(echo  "$pr_json" | jq -r '.merged_at // ""')"
+  pr_head_ref="$(echo "$pr_json" | jq -r '.head.ref // ""')"
+  pr_base_ref="$(echo "$pr_json" | jq -r '.base.ref // "main"')"
+  local labels
+  labels="$(echo "$pr_json" | jq -r '[.labels[].name]')"
+  local pr_url="https://github.com/$SOURCE_ORG/$repo_name/pull/$pr_number"
+  local marker="<!-- cf-mirror-pr: $SOURCE_ORG/$repo_name#$pr_number -->"
+
+  # ---- Rebuild body with current status line -------------------------------
+  local pr_status_str="closed (not merged)"
+  if [[ -n "$pr_merged" && "$pr_merged" != "null" ]]; then
+    pr_status_str="merged on $pr_merged"
+  elif [[ "$pr_state" == "open" ]]; then
+    pr_status_str="open"
+  fi
+
+  local encoded_body
+  encoded_body="$(echo "$pr_body" | _encode_at_mentions)"
+  local new_body="> 🔗 **Mirrored PR** [$SOURCE_ORG/$repo_name#$pr_number]($pr_url) | **Author:** $pr_author | **Opened:** $pr_created | **Status:** $pr_status_str
+> *GitHub API does not allow setting PR author or timestamps — attribution preserved here.*
+
+---
+
+${encoded_body}
+
+---
+${marker}"
+
+  # ---- Fetch current target issue ------------------------------------------
+  local tgt_json
+  tgt_json="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number" \
+    2>/dev/null | jq -rs '.[0] // {}')" || tgt_json='{}'
+  local tgt_title tgt_body tgt_state tgt_labels_sorted
+  tgt_title="$(echo "$tgt_json"  | jq -r '.title // ""'                    2>/dev/null || true)"
+  tgt_body="$(echo "$tgt_json"   | jq -r '.body // ""'                     2>/dev/null || true)"
+  tgt_state="$(echo "$tgt_json"  | jq -r '.state // "open"'                2>/dev/null || true)"
+  tgt_labels_sorted="$(echo "$tgt_json" | jq -c '[.labels[].name] | sort'  2>/dev/null || echo '[]')"
+  pause 0.3
+
+  # ---- Compute what needs to change ----------------------------------------
+  local patch_payload="{}" body_changed=0
+  local new_title="[PR #$pr_number] $pr_title"
+
+  if [[ "$new_title" != "$tgt_title" ]]; then
+    patch_payload="$(echo "$patch_payload" | jq --arg v "$new_title" '.title = $v')"
+  fi
+
+  local new_body_norm tgt_body_norm
+  new_body_norm="$(echo "$new_body" | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
+  tgt_body_norm="$(echo "$tgt_body" | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
+  if [[ "$new_body_norm" != "$tgt_body_norm" ]]; then
+    patch_payload="$(printf '%s' "$new_body" | \
+      jq -Rs --argjson base "$patch_payload" '$base + {"body":.}')"
+    body_changed=1
+  fi
+
+  local src_labels_sorted
+  src_labels_sorted="$(echo "$labels" | jq -c 'sort' 2>/dev/null || echo '[]')"
+  if [[ "$src_labels_sorted" != "$tgt_labels_sorted" ]]; then
+    patch_payload="$(echo "$patch_payload" | jq --argjson v "$labels" '.labels = $v')"
+  fi
+
+  if [[ "$pr_state" == "closed" && "$tgt_state" != "closed" ]]; then
+    patch_payload="$(echo "$patch_payload" | jq '.state = "closed"')"
+  fi
+
+  if [[ "$patch_payload" != "{}" ]]; then
+    gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number" \
+      --method PATCH \
+      --input <(echo "$patch_payload") \
+      2>/dev/null || warn "  Failed to reconcile PR $repo_name#$pr_number → #$tgt_issue_number"
+    log "  Reconciled PR #$pr_number → #$tgt_issue_number ($(echo "$patch_payload" | jq -r 'keys | join(", ")'))"
+    pause 1.0
+    [[ "$body_changed" -eq 1 ]] && _clear_crossref_record "$repo_name" "$tgt_issue_number"
+  fi
+
+  # ---- Reconcile all comment types -----------------------------------------
+  _reconcile_pr_comments "$repo_name" "$pr_number" "$tgt_issue_number" "$state_file"
+
+  # ---- Update state file ---------------------------------------------------
+  _upsert_pr "$state_file" "$pr_number" "$pr_url" \
+    "$tgt_issue_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "$pr_state"
+}
+
+# ---------------------------------------------------------------------------
+# _reconcile_pr_comments — add new and update edited comments for all three
+# PR comment types (discussion, review-level bodies, inline review comments).
+# Uses the same normalise-before-compare strategy as _reconcile_issue_comments.
+# ---------------------------------------------------------------------------
+_reconcile_pr_comments() {
+  local repo_name="$1"
+  local src_pr_number="$2"
+  local tgt_issue_number="$3"
+  local state_file="$4"
+
+  # Fetch all three source comment types
+  local issue_comments review_comments pr_reviews
+  issue_comments="$(ghsrc api \
+    "repos/$SOURCE_ORG/$repo_name/issues/$src_pr_number/comments?per_page=100" \
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]')" || issue_comments='[]'
+
+  review_comments="$(ghsrc api \
+    "repos/$SOURCE_ORG/$repo_name/pulls/$src_pr_number/comments?per_page=100" \
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]')" || review_comments='[]'
+
+  pr_reviews="$(ghsrc api \
+    "repos/$SOURCE_ORG/$repo_name/pulls/$src_pr_number/reviews?per_page=100" \
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object") | select(.body != null and .body != "")]')" \
+    || pr_reviews='[]'
+
+  # Pre-fetch all target comments once — id + body needed for update path
+  local tgt_comments
+  tgt_comments="$(gh api \
+    "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments?per_page=100" \
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object") | {id, body}]')" || tgt_comments='[]'
+
+  local mirrored=0
+
+  # Shared helper: given marker + full_body, update if changed or create if absent.
+  # Sets $mirrored in the caller's scope (uses nameref-style side effect via echo).
+  _sync_comment() {
+    local c_marker="$1" c_full_body="$2"
+    local tgt_c_id
+    tgt_c_id="$(echo "$tgt_comments" | jq -r \
+      --arg m "$c_marker" \
+      '.[] | select(.body | contains($m)) | .id' 2>/dev/null | head -1 || true)"
+
+    if [[ -n "$tgt_c_id" && "$tgt_c_id" != "null" ]]; then
+      local tgt_c_body new_norm tgt_norm
+      tgt_c_body="$(echo "$tgt_comments" | jq -r \
+        --argjson id "$tgt_c_id" '.[] | select(.id == $id) | .body // ""' \
+        2>/dev/null || true)"
+      new_norm="$(echo "$c_full_body" | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
+      tgt_norm="$(echo "$tgt_c_body"  | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
+      if [[ "$new_norm" != "$tgt_norm" ]]; then
+        gh api "repos/$TARGET_ORG/$repo_name/issues/comments/$tgt_c_id" \
+          --method PATCH \
+          --input <(printf '%s' "$c_full_body" | jq -Rs '{"body":.}') \
+          2>/dev/null || warn "  Failed to update comment on PR #$src_pr_number"
+        pause 1.0
+      fi
+      mirrored=$((mirrored + 1))
+    else
+      local c_result
+      c_result="$(gh api \
+        "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments" \
+        --method POST \
+        --input <(printf '%s' "$c_full_body" | jq -Rs '{"body":.}') \
+        2>/dev/null)" || c_result="FAILED"
+      [[ "$c_result" != "FAILED" ]] && mirrored=$((mirrored + 1)) || \
+        warn "  Failed to create comment on PR #$src_pr_number"
+      pause 1.0
+    fi
+  }
+
+  # -- 1. Discussion comments ------------------------------------------------
+  while IFS= read -r c; do
+    local c_id c_author c_created c_body c_marker c_full_body
+    c_id="$(echo      "$c" | jq -r '.id')"
+    c_author="$(echo  "$c" | jq -r '.user.login // "unknown"')"
+    c_created="$(echo "$c" | jq -r '.created_at // ""')"
+    c_body="$(echo    "$c" | jq -r '.body // ""' | _encode_at_mentions)"
+    c_marker="<!-- cf-mirror-pr-comment: $SOURCE_ORG/$repo_name#$src_pr_number/$c_id -->"
+    c_full_body="**${c_author}** commented on ${c_created}:
+
+---
+
+${c_body}
+
+${c_marker}"
+    _sync_comment "$c_marker" "$c_full_body"
+  done < <(echo "$issue_comments" | jq -c '.[]' 2>/dev/null || true)
+
+  # -- 2. Review-level bodies (APPROVED / CHANGES_REQUESTED + message) -------
+  while IFS= read -r rv; do
+    local rv_id rv_author rv_state rv_submitted rv_body rv_marker rv_full_body
+    rv_id="$(echo        "$rv" | jq -r '.id')"
+    rv_author="$(echo    "$rv" | jq -r '.user.login // "unknown"')"
+    rv_state="$(echo     "$rv" | jq -r '.state // "COMMENTED"')"
+    rv_submitted="$(echo "$rv" | jq -r '.submitted_at // ""')"
+    rv_body="$(echo      "$rv" | jq -r '.body // ""' | _encode_at_mentions)"
+    rv_marker="<!-- cf-mirror-pr-review: $SOURCE_ORG/$repo_name#$src_pr_number/$rv_id -->"
+    rv_full_body="**${rv_author}** submitted review **${rv_state}** on ${rv_submitted}:
+
+---
+
+${rv_body}
+
+${rv_marker}"
+    _sync_comment "$rv_marker" "$rv_full_body"
+  done < <(echo "$pr_reviews" | jq -c '.[]' 2>/dev/null || true)
+
+  # -- 3. Inline review comments (with file + line context) ------------------
+  while IFS= read -r rc; do
+    local rc_id rc_author rc_created rc_body rc_path rc_line rc_marker rc_full_body
+    rc_id="$(echo      "$rc" | jq -r '.id')"
+    rc_author="$(echo  "$rc" | jq -r '.user.login // "unknown"')"
+    rc_created="$(echo "$rc" | jq -r '.created_at // ""')"
+    rc_body="$(echo    "$rc" | jq -r '.body // ""' | _encode_at_mentions)"
+    rc_path="$(echo    "$rc" | jq -r '.path // "(unknown file)"')"
+    rc_line="$(echo    "$rc" | jq -r '(.line // .original_line) | tostring' 2>/dev/null || echo '?')"
+    rc_marker="<!-- cf-mirror-pr-review-inline: $SOURCE_ORG/$repo_name#$src_pr_number/$rc_id -->"
+    rc_full_body="**${rc_author}** reviewed \`${rc_path}\` line ${rc_line} on ${rc_created}:
+
+---
+
+${rc_body}
+
+${rc_marker}"
+    _sync_comment "$rc_marker" "$rc_full_body"
+  done < <(echo "$review_comments" | jq -c '.[]' 2>/dev/null || true)
+
+  _update_pr_comments_status "$state_file" "$src_pr_number" "done" "$mirrored"
+  ok "  Reconciled $mirrored comments for PR #$src_pr_number"
 }
 
 main "$@"

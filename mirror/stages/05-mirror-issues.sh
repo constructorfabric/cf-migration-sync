@@ -130,18 +130,20 @@ _mirror_repo_issues() {
 
   issues_open="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues?state=open&per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]')" || issues_open='[]'
   issues_closed="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues?state=closed&per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]')" || issues_closed='[]'
 
   # Filter out pull requests; unique_by(.id) deduplicates issues that changed
   # state between the two API calls (BUG-16 fix).
   all_issues="$(echo "$issues_open $issues_closed" | \
-    jq -s 'add // [] | map(select(.pull_request == null)) | unique_by(.id)')"
+    jq -rs '[.[] | select(type == "object") | select(.pull_request == null)] | unique_by(.id)')"
 
   local total_issues
-  total_issues="$(echo "$all_issues" | jq 'length')"
+  total_issues="$(echo "$all_issues" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
   log "  Found $total_issues issues in $repo_name"
 
   if [[ "$total_issues" -eq 0 ]]; then
@@ -154,7 +156,8 @@ _mirror_repo_issues() {
   local tgt_issues
   tgt_issues="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues?state=all&per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]')" || tgt_issues='[]'
 
   local processed=0
   local new_count=0
@@ -198,15 +201,35 @@ _mirror_repo_issues() {
       already_comments_status="$(jq -r --argjson n "$src_number" \
         '.items[] | select(.source_number == $n) | .comments_status // empty' \
         "$state_file" 2>/dev/null | head -1 || true)"
+      tgt_number_in_state="$(jq -r --argjson n "$src_number" \
+        '.items[] | select(.source_number == $n) | .target_number // empty' \
+        "$state_file" 2>/dev/null | head -1 || true)"
+
+      if [[ "${CONTINUOUS:-false}" == "true" && -n "$tgt_number_in_state" && "$tgt_number_in_state" != "null" ]]; then
+        # Full reconcile for open issues (actively changing) and issues that just
+        # transitioned open→closed (title/body may have been edited before close).
+        # Already-closed issues get lightweight treatment: new comments only.
+        local state_file_src_state
+        state_file_src_state="$(jq -r --argjson n "$src_number" \
+          '.items[] | select(.source_number == $n) | .source_state // empty' \
+          "$state_file" 2>/dev/null | head -1 || true)"
+
+        if [[ "$src_state" == "open" || \
+              ( "$src_state" == "closed" && "$state_file_src_state" == "open" ) ]]; then
+          _reconcile_issue "$repo_name" "$issue" "$src_number" "$tgt_number_in_state" "$state_file"
+        else
+          _mirror_issue_comments "$repo_name" "$src_number" "$tgt_number_in_state" "$state_file"
+        fi
+        skip_count=$((skip_count + 1))
+        continue
+      fi
+
       if [[ "$already_comments_status" == "done" ]]; then
-        # Issue body + comments both done — fully skip
+        # Normal mode: body + comments both done — fully skip
         skip_count=$((skip_count + 1))
         continue
       fi
       # Body mirrored but comments not yet done — complete the comment sync
-      tgt_number_in_state="$(jq -r --argjson n "$src_number" \
-        '.items[] | select(.source_number == $n) | .target_number // empty' \
-        "$state_file" 2>/dev/null | head -1 || true)"
       if [[ -n "$tgt_number_in_state" && "$tgt_number_in_state" != "null" ]]; then
         log "  Issue #$src_number body already mirrored — completing comment sync..."
         _mirror_issue_comments \
@@ -226,15 +249,17 @@ _mirror_repo_issues() {
 
     if [[ -n "$existing_target_number" ]]; then
       log "  Issue #$src_number already mirrored as #$existing_target_number, syncing state+comments"
+      local _m_asgn_status="none"
+      [[ "$(echo "$assignees" | jq 'length')" -gt 0 ]] && _m_asgn_status="pending"
       _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
-        "$title" "$existing_target_number" "" "$assignees" "mirrored" "$(now)" "pending"
+        "$title" "$existing_target_number" "" "$assignees" "mirrored" "$(now)" "$_m_asgn_status"
       # Sync closed/open state in target if needed
       if [[ "$src_state" == "closed" ]]; then
         gh api "repos/$TARGET_ORG/$repo_name/issues/$existing_target_number" \
           --method PATCH \
           -f state="closed" \
           2>/dev/null || warn "  Failed to close issue #$existing_target_number in $TARGET_ORG/$repo_name"
-        pause 0.3
+        pause 1.0   # rate-limit cooldown after PATCH /issues
       fi
       _mirror_issue_comments \
         "$repo_name" "$src_number" "$existing_target_number" "$state_file"
@@ -328,7 +353,7 @@ ${marker}"
       _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
         "$title" "" "" "$assignees" "failed" "" "none"
       failed_count=$((failed_count + 1))
-      pause 0.3
+      pause 0.5
       continue
     fi
 
@@ -344,9 +369,11 @@ ${marker}"
       _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
         "$title" "" "" "$assignees" "failed" "" "none"
       failed_count=$((failed_count + 1))
-      pause 0.3
+      pause 0.5
       continue
     fi
+
+    pause 1.5   # rate-limit cooldown after POST /issues
 
     # ---- Close issue in target if source is closed ----------------------
     if [[ "$src_state" == "closed" ]]; then
@@ -354,7 +381,7 @@ ${marker}"
         --method PATCH \
         -f state="closed" \
         2>/dev/null || warn "  Failed to close issue #$tgt_number in $TARGET_ORG/$repo_name"
-      pause 0.3
+      pause 1.0   # rate-limit cooldown after PATCH /issues
     fi
 
     ok "  Created issue #$src_number -> #$tgt_number in $TARGET_ORG/$repo_name"
@@ -374,7 +401,7 @@ ${marker}"
     _mirror_issue_comments "$repo_name" "$src_number" "$tgt_number" "$state_file"
 
     new_count=$((new_count + 1))
-    pause 0.3
+    pause 1.0   # rate-limit buffer between issues
 
   done < <(echo "$all_issues" | jq -c '.[]')
 
@@ -454,10 +481,11 @@ _mirror_issue_comments() {
   local comments
   comments="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues/$src_number/comments?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]')" || comments='[]'
 
   local total_comments
-  total_comments="$(echo "$comments" | jq 'length' 2>/dev/null || echo 0)"
+  total_comments="$(echo "$comments" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
 
   if [[ "$total_comments" -eq 0 ]]; then
     _update_comments_status "$state_file" "$src_number" "done" 0
@@ -471,7 +499,8 @@ _mirror_issue_comments() {
   local tgt_comment_bodies
   tgt_comment_bodies="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // [] | map(.body // "") | join("\n")' || echo '')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object") | .body // ""] | join("\n")')" || tgt_comment_bodies=''
 
   local mirrored=0
   while IFS= read -r comment; do
@@ -516,7 +545,7 @@ ${c_marker}"
     else
       mirrored=$((mirrored + 1))
     fi
-    pause 0.2
+    pause 1.0   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$comments" | jq -c '.[]')
 
   _update_comments_status "$state_file" "$src_number" "done" "$mirrored"
@@ -540,6 +569,232 @@ _update_comments_status() {
       end]' \
     "$state_file" > "$tmp"
   mv "$tmp" "$state_file"
+}
+
+# ---------------------------------------------------------------------------
+# _reconcile_issue — full re-sync of an already-mirrored issue.
+# Called in continuous mode for open issues and issues that just closed.
+# Syncs: title, body, labels, milestone, open/closed state, and all comments
+# (adds new ones, updates edited ones).
+# Body comparison uses source→target URL normalisation to avoid false positives
+# from stage-07 rewrites that are already in the target.
+# ---------------------------------------------------------------------------
+_reconcile_issue() {
+  local repo_name="$1"
+  local issue_json="$2"
+  local src_number="$3"
+  local tgt_number="$4"
+  local state_file="$5"
+
+  local src_state title body labels milestone_title src_author src_created src_id assignees
+  src_state="$(echo "$issue_json"        | jq -r '.state')"
+  title="$(echo "$issue_json"            | jq -r '.title')"
+  body="$(echo "$issue_json"             | jq -r '.body // ""')"
+  labels="$(echo "$issue_json"           | jq -r '[.labels[].name]')"
+  milestone_title="$(echo "$issue_json"  | jq -r '.milestone.title // ""')"
+  src_author="$(echo "$issue_json"       | jq -r '.user.login // "unknown"')"
+  src_created="$(echo "$issue_json"      | jq -r '.created_at // ""')"
+  src_id="$(echo "$issue_json"           | jq -r '.id')"
+  assignees="$(echo "$issue_json"        | jq -r '[.assignees[].login]')"
+  local src_url="https://github.com/$SOURCE_ORG/$repo_name/issues/$src_number"
+  local marker="<!-- cf-mirror: $SOURCE_ORG/$repo_name#$src_number -->"
+
+  # ---- Rebuild body from current source content ----------------------------
+  local encoded_body
+  encoded_body="$(echo "$body" | _encode_at_mentions)"
+  local attribution="> 🔗 **Mirrored from** [$SOURCE_ORG/$repo_name#$src_number]($src_url)
+> Originally opened by **${src_author}** on ${src_created}"
+  local new_body
+  if [[ -n "$body" ]]; then
+    new_body="${attribution}
+
+---
+
+${encoded_body}
+
+---
+${marker}"
+  else
+    new_body="${attribution}
+
+---
+${marker}"
+  fi
+
+  # ---- Fetch current target issue ------------------------------------------
+  local tgt_json
+  tgt_json="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number" \
+    2>/dev/null | jq -rs '.[0] // {}')" || tgt_json='{}'
+  local tgt_title tgt_body tgt_state tgt_milestone_num tgt_node_id
+  tgt_title="$(echo "$tgt_json"         | jq -r '.title // ""'          2>/dev/null || true)"
+  tgt_body="$(echo "$tgt_json"          | jq -r '.body // ""'           2>/dev/null || true)"
+  tgt_state="$(echo "$tgt_json"         | jq -r '.state // "open"'      2>/dev/null || true)"
+  tgt_milestone_num="$(echo "$tgt_json" | jq -r '.milestone.number // "null"' 2>/dev/null || echo 'null')"
+  tgt_node_id="$(echo "$tgt_json"       | jq -r '.node_id // ""'        2>/dev/null || true)"
+  pause 0.3
+
+  # ---- Resolve target milestone number from source title -------------------
+  local new_milestone_number="null"
+  if [[ -n "$milestone_title" ]]; then
+    new_milestone_number="$(gh api \
+      "repos/$TARGET_ORG/$repo_name/milestones?per_page=100" 2>/dev/null | \
+      jq -r --arg t "$milestone_title" '.[] | select(.title == $t) | .number' \
+      2>/dev/null | head -1 || true)"
+    new_milestone_number="${new_milestone_number:-null}"
+  fi
+
+  # ---- Compute what needs to change ----------------------------------------
+  local patch_payload="{}" body_changed=0
+
+  # Title
+  if [[ "$title" != "$tgt_title" ]]; then
+    patch_payload="$(echo "$patch_payload" | jq --arg v "$title" '.title = $v')"
+  fi
+
+  # Body — normalise source-org URLs before comparing so stage-07 rewrites
+  # already in the target don't cause a spurious PATCH on every run.
+  local new_body_norm tgt_body_norm
+  new_body_norm="$(echo "$new_body" | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
+  tgt_body_norm="$(echo "$tgt_body" | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
+  if [[ "$new_body_norm" != "$tgt_body_norm" ]]; then
+    patch_payload="$(printf '%s' "$new_body" | \
+      jq -Rs --argjson base "$patch_payload" '$base + {"body":.}')"
+    body_changed=1
+  fi
+
+  # Labels — compare sorted; always include to handle removals
+  local src_labels_sorted tgt_labels_sorted
+  src_labels_sorted="$(echo "$labels"   | jq -c 'sort'                   2>/dev/null || echo '[]')"
+  tgt_labels_sorted="$(echo "$tgt_json" | jq -c '[.labels[].name] | sort' 2>/dev/null || echo '[]')"
+  if [[ "$src_labels_sorted" != "$tgt_labels_sorted" ]]; then
+    patch_payload="$(echo "$patch_payload" | jq --argjson v "$labels" '.labels = $v')"
+  fi
+
+  # Milestone — compare numbers
+  if [[ "$new_milestone_number" != "$tgt_milestone_num" ]]; then
+    patch_payload="$(echo "$patch_payload" | jq --argjson v "${new_milestone_number}" '.milestone = $v')"
+  fi
+
+  # State (open/closed)
+  if [[ "$src_state" != "$tgt_state" ]]; then
+    patch_payload="$(echo "$patch_payload" | jq --arg v "$src_state" '.state = $v')"
+  fi
+
+  # ---- Apply PATCH if anything changed -------------------------------------
+  if [[ "$patch_payload" != "{}" ]]; then
+    gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number" \
+      --method PATCH \
+      --input <(echo "$patch_payload") \
+      2>/dev/null || warn "  Failed to reconcile issue $repo_name#$src_number → #$tgt_number"
+    log "  Reconciled #$src_number → #$tgt_number ($(echo "$patch_payload" | jq -r 'keys | join(", ")'))"
+    pause 1.0
+    [[ "$body_changed" -eq 1 ]] && _clear_crossref_record "$repo_name" "$tgt_number"
+  fi
+
+  # ---- Reconcile comments (add new, update edited) -------------------------
+  _reconcile_issue_comments "$repo_name" "$src_number" "$tgt_number" "$state_file"
+
+  # ---- Update state file with current source values ------------------------
+  local assignees_count assignees_status
+  assignees_count="$(echo "$assignees" | jq 'length')"
+  assignees_status="none"
+  [[ "$assignees_count" -gt 0 ]] && assignees_status="pending"
+  _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
+    "$title" "$tgt_number" "$tgt_node_id" "$assignees" "mirrored" "$(now)" "$assignees_status"
+}
+
+# ---------------------------------------------------------------------------
+# _reconcile_issue_comments — add new comments and update edited ones.
+# For each source comment the corresponding target comment is found by its
+# embedded marker.  Bodies are normalised (source-org → target-org URL
+# replacement) before comparison so stage-07 rewrites don't cause
+# unnecessary PATCHes.  The raw (source-org) body is written to target so
+# that stage 07 can rewrite cross-references on its next run.
+# ---------------------------------------------------------------------------
+_reconcile_issue_comments() {
+  local repo_name="$1"
+  local src_number="$2"
+  local tgt_number="$3"
+  local state_file="$4"
+
+  local comments
+  comments="$(ghsrc api \
+    "repos/$SOURCE_ORG/$repo_name/issues/$src_number/comments?per_page=100" \
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]')" || comments='[]'
+
+  local total_comments
+  total_comments="$(echo "$comments" | jq -r 'if type=="array" then length else 0 end' \
+    2>/dev/null || echo 0)"
+
+  if [[ "$total_comments" -eq 0 ]]; then
+    _update_comments_status "$state_file" "$src_number" "done" 0
+    return 0
+  fi
+
+  log "  Reconciling $total_comments comments for issue #$src_number..."
+
+  # Pre-fetch target comments once — need id + body for the update path
+  local tgt_comments
+  tgt_comments="$(gh api \
+    "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments?per_page=100" \
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object") | {id, body}]')" || tgt_comments='[]'
+
+  local mirrored=0
+
+  while IFS= read -r c; do
+    local c_id c_author c_created c_body c_marker c_full_body
+    c_id="$(echo      "$c" | jq -r '.id')"
+    c_author="$(echo  "$c" | jq -r '.user.login // "unknown"')"
+    c_created="$(echo "$c" | jq -r '.created_at // ""')"
+    c_body="$(echo    "$c" | jq -r '.body // ""' | _encode_at_mentions)"
+    c_marker="<!-- cf-mirror-comment: $SOURCE_ORG/$repo_name#$src_number/$c_id -->"
+    c_full_body="**${c_author}** commented on ${c_created}:
+
+---
+
+${c_body}
+
+${c_marker}"
+
+    # Find matching target comment by marker
+    local tgt_c_id
+    tgt_c_id="$(echo "$tgt_comments" | jq -r \
+      --arg m "$c_marker" \
+      '.[] | select(.body | contains($m)) | .id' 2>/dev/null | head -1 || true)"
+
+    if [[ -n "$tgt_c_id" && "$tgt_c_id" != "null" ]]; then
+      # Comment exists — compare normalised bodies
+      local tgt_c_body new_norm tgt_norm
+      tgt_c_body="$(echo "$tgt_comments" | jq -r \
+        --argjson id "$tgt_c_id" '.[] | select(.id == $id) | .body // ""' \
+        2>/dev/null || true)"
+      new_norm="$(echo "$c_full_body" | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
+      tgt_norm="$(echo "$tgt_c_body"  | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
+      if [[ "$new_norm" != "$tgt_norm" ]]; then
+        gh api "repos/$TARGET_ORG/$repo_name/issues/comments/$tgt_c_id" \
+          --method PATCH \
+          --input <(printf '%s' "$c_full_body" | jq -Rs '{"body":.}') \
+          2>/dev/null || warn "  Failed to update comment $c_id on #$src_number"
+        pause 1.0
+      fi
+      mirrored=$((mirrored + 1))
+    else
+      # New comment — create it
+      local c_result
+      c_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments" \
+        --method POST \
+        --input <(printf '%s' "$c_full_body" | jq -Rs '{"body":.}') \
+        2>/dev/null)" || c_result="FAILED"
+      [[ "$c_result" != "FAILED" ]] && mirrored=$((mirrored + 1)) || \
+        warn "  Failed to create comment $c_id on #$src_number"
+      pause 1.0
+    fi
+  done < <(echo "$comments" | jq -c '.[]' 2>/dev/null || true)
+
+  _update_comments_status "$state_file" "$src_number" "done" "$mirrored"
+  ok "  Reconciled $mirrored/$total_comments comments for issue #$src_number"
 }
 
 main "$@"

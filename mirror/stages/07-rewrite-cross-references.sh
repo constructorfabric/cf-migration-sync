@@ -208,7 +208,11 @@ _rewrite_repo_items() {
     local tgt_num
     tgt_num="$(echo "$item" | jq -r '.tgt')"
 
-    # ---- Idempotency: skip if already recorded as rewritten/no_change -----
+    # ---- Idempotency: skip body rewrite if already done; always recheck comments.
+    # Comments are NOT skipped for already-processed issues because stages 05/06
+    # may have added new comments with source-org URLs after the last stage 07 run.
+    # _rewrite_item_comments has its own fast-path (grep for SOURCE_ORG) so clean
+    # comments are skipped with no API write.
     local already
     already="$(jq -r --arg r "$repo_name" --argjson n "$tgt_num" \
       '[.items[] | select(.repo == $r and .target_number == $n)] |
@@ -216,6 +220,7 @@ _rewrite_repo_items() {
       "$STATE_FILE" 2>/dev/null | head -1 || true)"
 
     if [[ "$already" == "rewritten" || "$already" == "no_change" ]]; then
+      _rewrite_item_comments "$repo_name" "$tgt_num"
       done_count=$((done_count + 1))
       continue
     fi
@@ -240,8 +245,8 @@ _rewrite_repo_items() {
         local patch_result
         patch_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_num" \
           --method PATCH \
-          --input <(jq -n --arg b "$new_body" '{"body":$b}') \
-          2>/dev/null || echo 'FAILED')"
+          --input <(printf '%s' "$new_body" | jq -Rs '{"body":.}') \
+          2>/dev/null)" || patch_result="FAILED"
         if [[ "$patch_result" == "FAILED" ]]; then
           warn "    Failed to patch body of $TARGET_ORG/$repo_name#$tgt_num"
           _upsert_rewrite_record "$repo_name" "$tgt_num" "failed"
@@ -279,10 +284,11 @@ _rewrite_item_comments() {
   local comments
   comments="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_num/comments?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'add // []' || echo '[]')"
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type == "object")]')" || comments='[]'
 
   local count
-  count="$(echo "$comments" | jq 'length')"
+  count="$(echo "$comments" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
   [[ "$count" -eq 0 ]] && return 0
 
   while IFS= read -r comment; do
@@ -313,8 +319,8 @@ _rewrite_item_comments() {
     patch_result="$(gh api \
       "repos/$TARGET_ORG/$repo_name/issues/comments/$c_id" \
       --method PATCH \
-      --input <(jq -n --arg b "$new_body" '{"body":$b}') \
-      2>/dev/null || echo 'FAILED')"
+      --input <(printf '%s' "$new_body" | jq -Rs '{"body":.}') \
+      2>/dev/null)" || patch_result="FAILED"
 
     if [[ "$patch_result" == "FAILED" ]]; then
       warn "    Failed to patch comment $c_id on #$tgt_issue_num"
