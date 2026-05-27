@@ -4,73 +4,79 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-25T10:48:24Z",
-    "last_run_at": "2026-05-27T12:35:46Z"
+    "last_run_at": "2026-05-27T12:58:29Z"
   },
   "items": [
+    {
+      "name": "default_repository_permission",
+      "value": "none",
+      "status": "synced",
+      "synced_at": "2026-05-27T12:58:29Z"
+    },
     {
       "name": "members_can_create_repositories",
       "value": "false",
       "status": "synced",
-      "synced_at": "2026-05-27T12:35:46Z"
+      "synced_at": "2026-05-27T12:58:29Z"
     },
     {
       "name": "members_can_create_public_repositories",
       "value": "false",
       "status": "synced",
-      "synced_at": "2026-05-27T12:35:46Z"
+      "synced_at": "2026-05-27T12:58:29Z"
     },
     {
       "name": "members_can_create_private_repositories",
       "value": "false",
       "status": "synced",
-      "synced_at": "2026-05-27T12:35:46Z"
+      "synced_at": "2026-05-27T12:58:29Z"
     },
     {
       "name": "members_can_fork_private_repositories",
       "value": "false",
       "status": "synced",
-      "synced_at": "2026-05-27T12:35:46Z"
+      "synced_at": "2026-05-27T12:58:29Z"
     },
     {
       "name": "web_commit_signoff_required",
       "value": "false",
       "status": "synced",
-      "synced_at": "2026-05-27T12:35:46Z"
+      "synced_at": "2026-05-27T12:58:29Z"
     },
     {
       "name": "members_can_create_pages",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-27T12:35:46Z"
+      "synced_at": "2026-05-27T12:58:29Z"
     },
     {
       "name": "members_can_create_public_pages",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-27T12:35:46Z"
+      "synced_at": "2026-05-27T12:58:29Z"
     },
     {
       "name": "members_can_create_private_pages",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-27T12:35:46Z"
+      "synced_at": "2026-05-27T12:58:29Z"
     },
     {
       "name": "has_organization_projects",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-27T12:35:46Z"
+      "synced_at": "2026-05-27T12:58:29Z"
     },
     {
       "name": "has_repository_projects",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-27T12:35:46Z"
+      "synced_at": "2026-05-27T12:58:29Z"
     }
   ],
   "stats": {
-    "total": 10,
-    "synced": 10,
+    "total": 11,
+    "synced": 11,
     "pending": 0,
     "failed": 0
   }

@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-25T14:25:55Z",
-    "last_run_at": "2026-05-25T15:46:21Z"
+    "last_run_at": "2026-05-27T13:00:58Z"
   },
   "items": [
     {
@@ -13,7 +13,7 @@
       "color": "#d73a4a",
       "description": "Something isn't working",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -21,7 +21,7 @@
       "color": "#7B1FA2",
       "description": "Analytics API",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -29,7 +29,7 @@
       "color": "#7B1FA2",
       "description": "Authz Plugin",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -37,7 +37,7 @@
       "color": "#7B1FA2",
       "description": "Shared ClickHouse crate",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -45,7 +45,7 @@
       "color": "#7B1FA2",
       "description": "UI app",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -53,7 +53,7 @@
       "color": "#7B1FA2",
       "description": "Identity Resolution",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -61,7 +61,7 @@
       "color": "#7B1FA2",
       "description": "Identity Service",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -69,7 +69,7 @@
       "color": "#7B1FA2",
       "description": "dbt / approved connector scope",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -77,7 +77,7 @@
       "color": "#7B1FA2",
       "description": "Helm chart / release installer",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -85,7 +85,7 @@
       "color": "#00897B",
       "description": "Individual connector",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -93,7 +93,7 @@
       "color": "#1d76db",
       "description": "Deployment subsystem: chart, gitops, install paths",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -101,7 +101,7 @@
       "color": "#0075ca",
       "description": "Improvements or additions to documentation",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -109,7 +109,7 @@
       "color": "#cfd3d7",
       "description": "This issue or pull request already exists",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -117,7 +117,7 @@
       "color": "#a2eeef",
       "description": "New feature or request",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -125,7 +125,7 @@
       "color": "#000000",
       "description": "",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -133,7 +133,7 @@
       "color": "#7057ff",
       "description": "Good for newcomers",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -141,7 +141,7 @@
       "color": "#125a28",
       "description": "",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -149,7 +149,7 @@
       "color": "#008672",
       "description": "Extra attention is needed",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -157,7 +157,7 @@
       "color": "#c62a67",
       "description": "",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -165,7 +165,7 @@
       "color": "#e4e669",
       "description": "This doesn't seem right",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -173,7 +173,7 @@
       "color": "#795548",
       "description": "Scope and environment lock",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -181,7 +181,7 @@
       "color": "#795548",
       "description": "MVP foundation",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -189,7 +189,7 @@
       "color": "#795548",
       "description": "First installable demo release",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -197,7 +197,7 @@
       "color": "#795548",
       "description": "P1 business scenarios",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -205,7 +205,7 @@
       "color": "#795548",
       "description": "Separate backlog",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -213,7 +213,7 @@
       "color": "#B60205",
       "description": "Critical path — blocks first installable release",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -221,7 +221,7 @@
       "color": "#FBCA04",
       "description": "Meaningful demo features",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -229,7 +229,7 @@
       "color": "#9E9E9E",
       "description": "Second wave",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -237,7 +237,7 @@
       "color": "#EDEDED",
       "description": "Hardening & advanced",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -245,7 +245,7 @@
       "color": "#d876e3",
       "description": "Further information is requested",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -253,7 +253,7 @@
       "color": "#C0C0C0",
       "description": "Silver layer related changes",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -261,7 +261,7 @@
       "color": "#0b40a0",
       "description": "",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -269,7 +269,7 @@
       "color": "#0052CC",
       "description": "Backend Rust services",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -277,7 +277,7 @@
       "color": "#D93F0B",
       "description": "Ingestion and dbt",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -285,7 +285,7 @@
       "color": "#2EA44F",
       "description": "Frontend (frontx)",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -293,7 +293,7 @@
       "color": "#009688",
       "description": "Release packaging, Helm, environments",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -301,7 +301,7 @@
       "color": "#E91E63",
       "description": "Test installation and scenario validation",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "label",
@@ -309,83 +309,83 @@
       "color": "#ffffff",
       "description": "This will not be worked on",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:24Z"
+      "synced_at": "2026-05-27T13:01:01Z"
     },
     {
       "type": "repo_setting",
       "name": "has_issues",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:47Z"
+      "synced_at": "2026-05-27T13:01:28Z"
     },
     {
       "type": "repo_setting",
       "name": "has_projects",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:47Z"
+      "synced_at": "2026-05-27T13:01:28Z"
     },
     {
       "type": "repo_setting",
       "name": "has_wiki",
       "value": "false",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:47Z"
+      "synced_at": "2026-05-27T13:01:28Z"
     },
     {
       "type": "repo_setting",
       "name": "allow_forking",
       "value": "true",
-      "status": "synced",
-      "synced_at": "2026-05-25T15:46:47Z"
+      "status": "failed",
+      "synced_at": "2026-05-27T13:01:28Z"
     },
     {
       "type": "repo_setting",
       "name": "web_commit_signoff_required",
       "value": "false",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:47Z"
+      "synced_at": "2026-05-27T13:01:28Z"
     },
     {
       "type": "repo_setting",
       "name": "homepage",
       "value": "https://www.cyberfabric.org",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:47Z"
+      "synced_at": "2026-05-27T13:01:28Z"
     },
     {
       "type": "repo_setting",
       "name": "default_branch",
       "value": "main",
       "status": "synced",
-      "synced_at": "2026-05-25T15:46:47Z"
+      "synced_at": "2026-05-27T13:01:28Z"
     },
     {
       "type": "repo_setting",
       "name": "pages_source_branch",
       "value": "main",
-      "status": "synced",
-      "synced_at": "2026-05-25T15:46:51Z"
+      "status": "failed",
+      "synced_at": "2026-05-27T13:01:32Z"
     },
     {
       "type": "repo_setting",
       "name": "pages_source_path",
       "value": "/",
-      "status": "synced",
-      "synced_at": "2026-05-25T15:46:51Z"
+      "status": "failed",
+      "synced_at": "2026-05-27T13:01:32Z"
     },
     {
       "type": "repo_setting",
       "name": "pages_build_type",
       "value": "legacy",
-      "status": "synced",
-      "synced_at": "2026-05-25T15:46:51Z"
+      "status": "failed",
+      "synced_at": "2026-05-27T13:01:32Z"
     }
   ],
   "stats": {
     "total": 48,
-    "synced": 48,
+    "synced": 44,
     "pending": 0,
-    "failed": 0
+    "failed": 4
   }
 }

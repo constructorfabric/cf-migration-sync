@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-25T10:05:34Z",
-    "last_run_at": "2026-05-27T12:34:06Z"
+    "last_run_at": "2026-05-27T12:53:44Z"
   },
   "items": [
     {
@@ -859,23 +859,23 @@
       "login": "Berrok",
       "source_id": 163391113,
       "role": "member",
-      "status": "failed",
-      "invited_at": null,
+      "status": "invited",
+      "invited_at": "2026-05-27T12:53:46.000Z",
       "accepted_at": null
     },
     {
       "login": "mjollneer",
       "source_id": 149518329,
       "role": "member",
-      "status": "failed",
-      "invited_at": null,
+      "status": "invited",
+      "invited_at": "2026-05-27T12:53:47.000Z",
       "accepted_at": null
     }
   ],
   "stats": {
     "total": 108,
-    "synced": 103,
+    "synced": 105,
     "pending": 0,
-    "failed": 2
+    "failed": 0
   }
 }
