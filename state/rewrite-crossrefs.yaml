@@ -62,24 +62,6 @@
       "rewritten_at": "2026-05-27T10:52:34Z"
     },
     {
-      "repo": "cyber-insight-front",
-      "target_number": 1,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:52:36Z"
-    },
-    {
-      "repo": "cyber-insight-front",
-      "target_number": 2,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:52:38Z"
-    },
-    {
-      "repo": "cyber-insight-front",
-      "target_number": 3,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:52:39Z"
-    },
-    {
       "repo": "cyber-insight",
       "target_number": 1,
       "status": "no_change",
@@ -609,30 +591,6 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 89,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:54:19Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 90,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:54:20Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 91,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:54:22Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 92,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:54:23Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 93,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:54:25Z"
@@ -642,12 +600,6 @@
       "target_number": 94,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:54:26Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 95,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:54:28Z"
     },
     {
       "repo": "cyber-insight",
@@ -666,24 +618,6 @@
       "target_number": 98,
       "status": "no_change",
       "rewritten_at": "2026-05-27T10:54:32Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 99,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:54:33Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 100,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:54:35Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 101,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:54:36Z"
     },
     {
       "repo": "cyber-insight",
@@ -729,12 +663,6 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 109,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:54:45Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 110,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:54:47Z"
@@ -747,21 +675,9 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 112,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:54:49Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 113,
       "status": "no_change",
       "rewritten_at": "2026-05-27T10:54:50Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 114,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:54:52Z"
     },
     {
       "repo": "cyber-insight",
@@ -801,12 +717,6 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 121,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:00Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 122,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:55:01Z"
@@ -837,30 +747,6 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 127,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:06Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 128,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:08Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 129,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:09Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 130,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:11Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 131,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:55:12Z"
@@ -879,63 +765,9 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 134,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:17Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 135,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:19Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 136,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:20Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 137,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:22Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 138,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:24Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 139,
       "status": "no_change",
       "rewritten_at": "2026-05-27T10:55:24Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 140,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:26Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 141,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:27Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 142,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:29Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 143,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:31Z"
     },
     {
       "repo": "cyber-insight",
@@ -951,57 +783,15 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 146,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:35Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 147,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:55:37Z"
     },
     {
       "repo": "cyber-insight",
-      "target_number": 148,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:39Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 149,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:55:41Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 150,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:42Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 151,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:44Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 152,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:46Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 153,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:48Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 154,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:49Z"
     },
     {
       "repo": "cyber-insight",
@@ -1014,48 +804,6 @@
       "target_number": 156,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:55:53Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 157,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:54Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 158,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:56Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 159,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:57Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 160,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:55:59Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 161,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:00Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 162,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:02Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 163,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:03Z"
     },
     {
       "repo": "cyber-insight",
@@ -1074,54 +822,6 @@
       "target_number": 166,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:56:08Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 167,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:10Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 168,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:11Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 169,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:13Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 170,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:14Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 171,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:16Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 172,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:18Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 173,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:19Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 174,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:21Z"
     },
     {
       "repo": "cyber-insight",
@@ -1164,12 +864,6 @@
       "target_number": 181,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:56:30Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 182,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:32Z"
     },
     {
       "repo": "cyber-insight",
@@ -1239,12 +933,6 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 194,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:47Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 195,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:56:49Z"
@@ -1260,12 +948,6 @@
       "target_number": 197,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:56:51Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 198,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:53Z"
     },
     {
       "repo": "cyber-insight",
@@ -1290,18 +972,6 @@
       "target_number": 202,
       "status": "no_change",
       "rewritten_at": "2026-05-27T10:56:57Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 203,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:56:59Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 204,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:00Z"
     },
     {
       "repo": "cyber-insight",
@@ -1335,12 +1005,6 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 210,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:08Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 211,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:57:10Z"
@@ -1365,39 +1029,9 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 215,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:16Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 216,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:18Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 217,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:19Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 218,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:57:21Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 219,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:22Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 220,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:24Z"
     },
     {
       "repo": "cyber-insight",
@@ -1413,39 +1047,9 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 223,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:27Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 224,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:57:28Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 225,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:30Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 226,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:31Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 227,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:33Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 228,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:34Z"
     },
     {
       "repo": "cyber-insight",
@@ -1461,24 +1065,6 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 231,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:38Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 232,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:40Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 233,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:41Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 234,
       "status": "no_change",
       "rewritten_at": "2026-05-27T10:57:42Z"
@@ -1488,18 +1074,6 @@
       "target_number": 235,
       "status": "no_change",
       "rewritten_at": "2026-05-27T10:57:43Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 236,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:44Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 237,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:46Z"
     },
     {
       "repo": "cyber-insight",
@@ -1551,21 +1125,9 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 246,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:56Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 247,
       "status": "no_change",
       "rewritten_at": "2026-05-27T10:57:57Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 248,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:57:59Z"
     },
     {
       "repo": "cyber-insight",
@@ -1578,30 +1140,6 @@
       "target_number": 250,
       "status": "no_change",
       "rewritten_at": "2026-05-27T10:58:00Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 251,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:02Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 252,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:03Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 253,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:05Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 254,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:07Z"
     },
     {
       "repo": "cyber-insight",
@@ -1665,48 +1203,6 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 265,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:17Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 266,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:18Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 267,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:20Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 268,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:21Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 269,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:23Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 270,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:24Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 271,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:26Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 272,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:58:28Z"
@@ -1716,12 +1212,6 @@
       "target_number": 273,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T10:58:29Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 274,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:31Z"
     },
     {
       "repo": "cyber-insight",
@@ -1761,153 +1251,15 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 281,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:42Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 282,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:43Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 283,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:45Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 284,
       "status": "no_change",
       "rewritten_at": "2026-05-27T10:58:45Z"
     },
     {
       "repo": "cyber-insight",
-      "target_number": 285,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:47Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 286,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:49Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 287,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:50Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 288,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:52Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 289,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:53Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 290,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:55Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 291,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:57Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 292,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:58:58Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 293,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:00Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 294,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:01Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 295,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:03Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 296,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:04Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 297,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:06Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 298,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:08Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 299,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:09Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 300,
       "status": "no_change",
       "rewritten_at": "2026-05-27T10:59:10Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 301,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:12Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 302,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:13Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 303,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:15Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 304,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:17Z"
-    },
-    {
-      "repo": "cyber-insight",
-      "target_number": 305,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T10:59:18Z"
     },
     {
       "repo": "DNA",

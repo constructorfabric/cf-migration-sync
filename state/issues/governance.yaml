@@ -4,12 +4,77 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-27T13:07:24Z",
-    "last_run_at": "2026-05-27T13:07:24Z"
+    "last_run_at": "2026-05-27T15:26:11Z"
   },
-  "items": [],
+  "items": [
+    {
+      "source_number": 1,
+      "source_id": 3851888245,
+      "source_state": "open",
+      "target_number": 1,
+      "target_node_id": null,
+      "title": "Define the way document management is organized for all repos",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:26:13Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 3,
+      "source_id": 3852972371,
+      "source_state": "open",
+      "target_number": 2,
+      "target_node_id": null,
+      "title": "SDD methodology and tooling / frameworks as a part (core?) of CyberFabric",
+      "assignees": [],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:26:13Z",
+      "assignees_status": "none",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_number": 9,
+      "source_id": 4058482433,
+      "source_state": "open",
+      "target_number": 3,
+      "target_node_id": null,
+      "title": "CORE - GDPR, SOC-2, FIPS-3 and HIIPA compliance readiness",
+      "assignees": [
+        "Artifizer"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:26:13Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_number": 10,
+      "source_id": 4072025745,
+      "source_state": "open",
+      "target_number": 4,
+      "target_node_id": null,
+      "title": "Create roadmap dashboards",
+      "assignees": [
+        "Artifizer"
+      ],
+      "status": "mirrored",
+      "mirrored_at": "2026-05-27T15:26:14Z",
+      "assignees_status": "pending",
+      "assignees_applied_at": null,
+      "comments_status": "done",
+      "comments_mirrored": 0
+    }
+  ],
   "stats": {
-    "total": 0,
-    "synced": 0,
+    "total": 4,
+    "synced": 4,
     "pending": 0,
     "failed": 0
   }

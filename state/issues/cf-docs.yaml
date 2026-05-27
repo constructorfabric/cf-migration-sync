@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-25T18:46:19Z",
-    "last_run_at": "2026-05-27T13:07:39Z"
+    "last_run_at": "2026-05-27T15:34:38Z"
   },
   "items": [
     {
@@ -18,7 +18,7 @@
         "Bechma"
       ],
       "status": "mirrored",
-      "mirrored_at": "2026-05-25T18:46:21Z",
+      "mirrored_at": "2026-05-27T15:34:40Z",
       "assignees_status": "pending",
       "assignees_applied_at": null,
       "comments_status": "done",
