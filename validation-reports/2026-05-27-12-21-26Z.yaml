@@ -1,0 +1,181 @@
+{
+  "generated_at": "2026-05-27T12:21:26Z",
+  "source_org": "cyberfabric",
+  "target_org": "constructorfabric",
+  "summary": {
+    "total_checks": 16,
+    "passed": 6,
+    "failed": 0,
+    "warnings": 10
+  },
+  "checks": [
+    {
+      "name": "members",
+      "status": "warning",
+      "source_count": 108,
+      "target_count": 76,
+      "details": "Source: 108, Target: 76 — 33 members not yet in target (may be pending invitation)",
+      "missing": [
+        "7er9gx",
+        "adrienlaaboudi",
+        "albinpla",
+        "alexpitsikoulis",
+        "berrok",
+        "binarycode",
+        "bit8shift",
+        "bsacrobatix",
+        "bukem",
+        "cashmisa",
+        "corw1n-of-amber",
+        "devjow",
+        "dfc-acronis",
+        "enjiruuuu",
+        "finnjost",
+        "gaidar",
+        "hitengajjar",
+        "hyphen-2025",
+        "joseph-cx",
+        "lansfy",
+        "lizreu",
+        "lobster40",
+        "m231-a",
+        "maxcherey",
+        "mjollneer",
+        "nanoandrew4",
+        "necobaka",
+        "pavel-kalmykov",
+        "pm-pltfrm",
+        "twh09",
+        "vibetosh",
+        "yoskini",
+        "ziqwerty"
+      ]
+    },
+    {
+      "name": "repos",
+      "status": "passed",
+      "source_count": 33,
+      "target_count": 34,
+      "details": "Source: 33, Target: 34",
+      "missing": []
+    },
+    {
+      "name": "git_refs_sample",
+      "status": "passed",
+      "details": "Sampled repos: cyberware-rust(branches:0vs0,tags:0vs0) DNA(branches:0vs0,tags:0vs0) cyberware-frontx(branches:0vs0,tags:0vs0) cyber-constructor(branches:0vs0,tags:0vs0) governance(branches:0vs0,tags:0vs0)",
+      "mismatches": []
+    },
+    {
+      "name": "org_settings",
+      "status": "warning",
+      "details": "default_repo_perm: src=none tgt=none; fork_private: src=true tgt=false",
+      "diffs": [
+        {
+          "key": "members_can_fork_private_repositories",
+          "source": "true",
+          "target": "false"
+        }
+      ]
+    },
+    {
+      "name": "labels",
+      "status": "warning",
+      "source_count": 345,
+      "target_count": 354,
+      "repos_checked": 33,
+      "details": "Label counts per repo",
+      "mismatches": [
+        {
+          "repo": "cyberware-rust",
+          "source": 22,
+          "target": 28
+        },
+        {
+          "repo": "cyber-constructor",
+          "source": 7,
+          "target": 10
+        }
+      ]
+    },
+    {
+      "name": "milestones",
+      "status": "passed",
+      "source_count": 29,
+      "target_count": 29,
+      "details": "Milestone counts per repo",
+      "mismatches": []
+    },
+    {
+      "name": "issues",
+      "status": "passed",
+      "source_count": 1531,
+      "target_count": 317,
+      "failed_count": 0,
+      "details": "Issues mirrored vs source count"
+    },
+    {
+      "name": "prs",
+      "status": "warning",
+      "source_count": 0,
+      "target_count": 1218,
+      "failed_count": 3,
+      "details": "Closed PRs mirrored as issues vs source count"
+    },
+    {
+      "name": "assignees",
+      "status": "warning",
+      "pending_count": 194,
+      "details": "Issues with assignees not yet applied"
+    },
+    {
+      "name": "manual_items",
+      "status": "warning",
+      "details": "other-objects.yaml not found",
+      "pending_count": 0,
+      "items": []
+    },
+    {
+      "name": "teams",
+      "status": "passed",
+      "source_count": 6,
+      "target_count": 7,
+      "missing": 0,
+      "failed_count": 0,
+      "details": "Team count: source vs target"
+    },
+    {
+      "name": "releases",
+      "status": "warning",
+      "details": "No releases state directory — stage 11 not yet run",
+      "mirrored": 0,
+      "failed": 0
+    },
+    {
+      "name": "branch_protections",
+      "status": "warning",
+      "details": "No branch-protections state — stage 12 not yet run",
+      "synced": 0,
+      "failed": 0
+    },
+    {
+      "name": "actions_variables",
+      "status": "warning",
+      "details": "No actions-variables state — stage 13 not yet run",
+      "synced": 0,
+      "failed": 0
+    },
+    {
+      "name": "outside_collaborators",
+      "status": "passed",
+      "details": "No outside-collaborators state — stage 13 not run or no collaborators found",
+      "synced": 0,
+      "failed": 0
+    },
+    {
+      "name": "webhooks",
+      "status": "warning",
+      "details": "other-objects state not found — stage 08 not yet run",
+      "total": 0
+    }
+  ]
+}
