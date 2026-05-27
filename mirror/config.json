@@ -41,7 +41,7 @@
   },
 
   "stage_05_mirror_issues": {
-    "exclude_repos": ["cyberware-rust", "cyberware-frontx", "cyber-constructor", "governance", "cf-template-rust"]
+    "exclude_repos": []
   },
 
   "stage_06_mirror_prs": {
@@ -54,9 +54,7 @@
       "the command line but persistent across runs and scoped per repo.",
       "Remove the entry (or set it to 0) once the repo is fully mirrored."
     ],
-    "resume_after_pr": {
-      "cyberware-rust": 149
-    }
+    "resume_after_pr": {}
   },
 
   "stage_07_rewrite_cross_references": {},
