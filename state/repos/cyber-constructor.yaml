@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-25T14:24:59Z",
-    "last_run_at": "2026-05-25T15:45:26Z"
+    "last_run_at": "2026-05-27T12:59:50Z"
   },
   "items": [
     {
@@ -13,7 +13,7 @@
       "color": "#d73a4a",
       "description": "Something isn't working",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:28Z"
+      "synced_at": "2026-05-27T12:59:54Z"
     },
     {
       "type": "label",
@@ -21,7 +21,7 @@
       "color": "#0075ca",
       "description": "Improvements or additions to documentation",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:28Z"
+      "synced_at": "2026-05-27T12:59:54Z"
     },
     {
       "type": "label",
@@ -29,7 +29,7 @@
       "color": "#cfd3d7",
       "description": "This issue or pull request already exists",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:28Z"
+      "synced_at": "2026-05-27T12:59:54Z"
     },
     {
       "type": "label",
@@ -37,7 +37,7 @@
       "color": "#a2eeef",
       "description": "New feature or request",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:28Z"
+      "synced_at": "2026-05-27T12:59:54Z"
     },
     {
       "type": "label",
@@ -45,7 +45,7 @@
       "color": "#7057ff",
       "description": "Good for newcomers",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:28Z"
+      "synced_at": "2026-05-27T12:59:54Z"
     },
     {
       "type": "label",
@@ -53,7 +53,7 @@
       "color": "#008672",
       "description": "Extra attention is needed",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:28Z"
+      "synced_at": "2026-05-27T12:59:54Z"
     },
     {
       "type": "label",
@@ -61,160 +61,160 @@
       "color": "#c5def5",
       "description": "Specification development task",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:28Z"
+      "synced_at": "2026-05-27T12:59:54Z"
     },
     {
       "type": "milestone",
       "title": "2026-01-23",
       "state": "closed",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:34Z"
+      "synced_at": "2026-05-27T13:00:00Z"
     },
     {
       "type": "milestone",
       "title": "2026-01-30",
       "state": "closed",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:34Z"
+      "synced_at": "2026-05-27T13:00:00Z"
     },
     {
       "type": "milestone",
       "title": "2026-02-13",
       "state": "open",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:34Z"
+      "synced_at": "2026-05-27T13:00:00Z"
     },
     {
       "type": "milestone",
       "title": "2026-02-27",
       "state": "open",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:34Z"
+      "synced_at": "2026-05-27T13:00:00Z"
     },
     {
       "type": "milestone",
       "title": "2026-03-13",
       "state": "open",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:34Z"
+      "synced_at": "2026-05-27T13:00:00Z"
     },
     {
       "type": "milestone",
       "title": "2026-02-06",
       "state": "closed",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:34Z"
+      "synced_at": "2026-05-27T13:00:00Z"
     },
     {
       "type": "milestone",
       "title": "2026-02-20",
       "state": "open",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:34Z"
+      "synced_at": "2026-05-27T13:00:00Z"
     },
     {
       "type": "milestone",
       "title": "2026-03-20",
       "state": "open",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:34Z"
+      "synced_at": "2026-05-27T13:00:00Z"
     },
     {
       "type": "milestone",
       "title": "2026-03-27",
       "state": "open",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:34Z"
+      "synced_at": "2026-05-27T13:00:00Z"
     },
     {
       "type": "milestone",
       "title": "2026-04-03",
       "state": "open",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:34Z"
+      "synced_at": "2026-05-27T13:00:00Z"
     },
     {
       "type": "milestone",
       "title": "2026-04-10",
       "state": "open",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:34Z"
+      "synced_at": "2026-05-27T13:00:00Z"
     },
     {
       "type": "repo_setting",
       "name": "has_issues",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:40Z"
+      "synced_at": "2026-05-27T13:00:07Z"
     },
     {
       "type": "repo_setting",
       "name": "has_projects",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:40Z"
+      "synced_at": "2026-05-27T13:00:07Z"
     },
     {
       "type": "repo_setting",
       "name": "has_wiki",
       "value": "false",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:40Z"
+      "synced_at": "2026-05-27T13:00:07Z"
     },
     {
       "type": "repo_setting",
       "name": "allow_forking",
       "value": "true",
-      "status": "synced",
-      "synced_at": "2026-05-25T15:45:40Z"
+      "status": "failed",
+      "synced_at": "2026-05-27T13:00:07Z"
     },
     {
       "type": "repo_setting",
       "name": "web_commit_signoff_required",
       "value": "true",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:40Z"
+      "synced_at": "2026-05-27T13:00:07Z"
     },
     {
       "type": "repo_setting",
       "name": "homepage",
       "value": "https://www.cyberfabric.org",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:40Z"
+      "synced_at": "2026-05-27T13:00:07Z"
     },
     {
       "type": "repo_setting",
       "name": "default_branch",
       "value": "main",
       "status": "synced",
-      "synced_at": "2026-05-25T15:45:40Z"
+      "synced_at": "2026-05-27T13:00:07Z"
     },
     {
       "type": "repo_setting",
       "name": "pages_source_branch",
       "value": "main",
-      "status": "synced",
-      "synced_at": "2026-05-25T15:45:44Z"
+      "status": "failed",
+      "synced_at": "2026-05-27T13:00:12Z"
     },
     {
       "type": "repo_setting",
       "name": "pages_source_path",
       "value": "/",
-      "status": "synced",
-      "synced_at": "2026-05-25T15:45:44Z"
+      "status": "failed",
+      "synced_at": "2026-05-27T13:00:12Z"
     },
     {
       "type": "repo_setting",
       "name": "pages_build_type",
       "value": "legacy",
-      "status": "synced",
-      "synced_at": "2026-05-25T15:45:44Z"
+      "status": "failed",
+      "synced_at": "2026-05-27T13:00:12Z"
     }
   ],
   "stats": {
     "total": 28,
-    "synced": 28,
+    "synced": 24,
     "pending": 0,
-    "failed": 0
+    "failed": 4
   }
 }
