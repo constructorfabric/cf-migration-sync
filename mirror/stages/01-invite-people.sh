@@ -68,9 +68,17 @@ main() {
   log "Found $target_member_count existing members in $TARGET_ORG"
 
   # ---- 3. Fetch pending invitations to target org -------------------------
+  # Use --paginate so orgs with >100 pending invitations are fully covered.
+  # Without pagination, Branch E misses invitees past page 1, Branch F tries to
+  # re-invite them, GitHub returns 422, and they are incorrectly marked failed.
   log "Fetching pending invitations to $TARGET_ORG..."
   local pending_invites
-  pending_invites="$(gh api "orgs/$TARGET_ORG/invitations?per_page=100" 2>/dev/null)" || pending_invites='[]'
+  pending_invites="$(gh api "orgs/$TARGET_ORG/invitations?per_page=100" \
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type=="object")]')" \
+    || pending_invites='[]'
+  local pending_count
+  pending_count="$(echo "$pending_invites" | jq -r 'if type=="array" then length else 0 end')"
+  log "Found $pending_count pending invitations in $TARGET_ORG"
   local pending_logins
   pending_logins="$(echo "$pending_invites" | jq -r '.[].login // empty' | tr '[:upper:]' '[:lower:]')"
 
@@ -180,12 +188,17 @@ main() {
       invited_count=$((invited_count + 1))
     else
       log "Inviting $login (id=$source_id) to $TARGET_ORG..."
-      local invite_result
+      local invite_result invite_err
+      # Capture stderr to a temp file so we can log the GitHub error reason on failure.
+      local _err_tmp
+      _err_tmp="$(mktemp)"
       invite_result="$(gh api "orgs/$TARGET_ORG/invitations" \
         --method POST \
         -F invitee_id="$source_id" \
         -f role="direct_member" \
-        2>/dev/null)" || invite_result='FAILED'
+        2>"$_err_tmp")" || invite_result='FAILED'
+      invite_err="$(cat "$_err_tmp" 2>/dev/null || true)"
+      rm -f "$_err_tmp"
 
       if [[ "$invite_result" == "FAILED" ]]; then
         # Race condition check: did they accept between the pre-fetch and the invite POST?
@@ -196,8 +209,14 @@ main() {
           warn "$login — invitation blocked: they joined during this run (race condition, all OK)"
           _upsert_person "$login" "$source_id" "accepted" "" ""
           already_member_count=$((already_member_count + 1))
+        elif echo "$invite_err" | grep -qi "already been invited\|already a member\|422"; then
+          # GitHub rejected because an invitation already exists (missed by pagination
+          # or created externally). Record as invited so re-runs don't keep trying.
+          warn "$login — already has a pending invitation (422); recording as invited"
+          _upsert_person "$login" "$source_id" "invited" "" ""
+          invited_count=$((invited_count + 1))
         else
-          warn "Failed to invite $login"
+          warn "Failed to invite $login — GitHub error: ${invite_err:-<no details>}"
           _upsert_person "$login" "$source_id" "failed" "" ""
           failed_count=$((failed_count + 1))
         fi
