@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-25T10:05:34Z",
-    "last_run_at": "2026-05-27T12:53:44Z"
+    "last_run_at": "2026-05-27T13:59:01Z"
   },
   "items": [
     {
@@ -867,9 +867,9 @@
       "login": "mjollneer",
       "source_id": 149518329,
       "role": "member",
-      "status": "invited",
+      "status": "accepted",
       "invited_at": "2026-05-27T12:53:47.000Z",
-      "accepted_at": null
+      "accepted_at": "2026-05-27T13:59:05Z"
     }
   ],
   "stats": {
