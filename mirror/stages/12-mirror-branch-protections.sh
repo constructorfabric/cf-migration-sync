@@ -101,13 +101,13 @@ _mirror_repo_protections() {
   # Pre-fetch target teams (slug → id) for bypass actor mapping.
   local tgt_teams
   tgt_teams="$(gh api "orgs/$TARGET_ORG/teams?per_page=100" \
-    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object")]')" || tgt_teams='[]'
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || tgt_teams='[]'
 
   # BUG-11 fix: pre-fetch source teams once here so _apply_ruleset can look up
   # bypass-actor team slugs without making a fresh paginated API call per actor.
   local src_teams
   src_teams="$(ghsrc api "orgs/$SOURCE_ORG/teams?per_page=100" \
-    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object")]')" || src_teams='[]'
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || src_teams='[]'
 
   # ---- A. Repository Rulesets -------------------------------------------
   log "  Fetching rulesets for $repo_name..."
@@ -151,7 +151,7 @@ _mirror_repo_protections() {
   local protected_branches
   protected_branches="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/branches?protected=true&per_page=100" \
-    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object")]')" || protected_branches='[]'
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || protected_branches='[]'
 
   local pb_count
   pb_count="$(echo "$protected_branches" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"

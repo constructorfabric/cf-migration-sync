@@ -285,7 +285,7 @@ _rewrite_item_comments() {
   comments="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_num/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || comments='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || comments='[]'
 
   local count
   count="$(echo "$comments" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"

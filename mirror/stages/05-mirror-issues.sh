@@ -128,19 +128,25 @@ _mirror_repo_issues() {
   log "  Fetching issues from $SOURCE_ORG/$repo_name..."
   local issues_open issues_closed all_issues
 
+  # RC-8 fix (paginated REST arrays): gh api --paginate emits one JSON array per
+  # page. jq -rs slurps them into [[page1_items...],[page2_items...]]. The outer
+  # .[] yields arrays (not objects), so select(type=="object") must be preceded by
+  # select(type=="array") | .[] to unwrap each page first.
   issues_open="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues?state=open&per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || issues_open='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || issues_open='[]'
   issues_closed="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues?state=closed&per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || issues_closed='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || issues_closed='[]'
 
   # Filter out pull requests; unique_by(.id) deduplicates issues that changed
   # state between the two API calls (BUG-16 fix).
-  all_issues="$(echo "$issues_open $issues_closed" | \
-    jq -rs '[.[] | select(type == "object") | select(.pull_request == null)] | unique_by(.id)')"
+  # printf keeps the two already-flat arrays as separate top-level JSON values
+  # so the same page-unwrapping pattern works correctly.
+  all_issues="$(printf '%s\n' "$issues_open" "$issues_closed" | \
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | select(.pull_request == null)] | unique_by(.id)')"
 
   local total_issues
   total_issues="$(echo "$all_issues" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
@@ -157,7 +163,7 @@ _mirror_repo_issues() {
   tgt_issues="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues?state=all&per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || tgt_issues='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || tgt_issues='[]'
 
   local processed=0
   local new_count=0
@@ -482,7 +488,7 @@ _mirror_issue_comments() {
   comments="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues/$src_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || comments='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || comments='[]'
 
   local total_comments
   total_comments="$(echo "$comments" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
@@ -500,7 +506,7 @@ _mirror_issue_comments() {
   tgt_comment_bodies="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object") | .body // ""] | join("\n")')" || tgt_comment_bodies=''
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | .body // ""] | join("\n")')" || tgt_comment_bodies=''
 
   local mirrored=0
   while IFS= read -r comment; do
@@ -721,7 +727,7 @@ _reconcile_issue_comments() {
   comments="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues/$src_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || comments='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || comments='[]'
 
   local total_comments
   total_comments="$(echo "$comments" | jq -r 'if type=="array" then length else 0 end' \
@@ -739,7 +745,7 @@ _reconcile_issue_comments() {
   tgt_comments="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object") | {id, body}]')" || tgt_comments='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | {id, body}]')" || tgt_comments='[]'
 
   local mirrored=0
 

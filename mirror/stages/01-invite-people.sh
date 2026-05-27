@@ -74,7 +74,7 @@ main() {
   log "Fetching pending invitations to $TARGET_ORG..."
   local pending_invites
   pending_invites="$(gh api "orgs/$TARGET_ORG/invitations?per_page=100" \
-    --paginate 2>/dev/null | jq -rs '[.[] | select(type=="object")]')" \
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" \
     || pending_invites='[]'
   local pending_count
   pending_count="$(echo "$pending_invites" | jq -r 'if type=="array" then length else 0 end')"

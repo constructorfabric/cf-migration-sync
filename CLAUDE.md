@@ -260,24 +260,31 @@ The concrete failure: `map(.body // "")` in `_mirror_pr_comments` crashed with
 `Cannot index string with string "body"`, and the multiline output from `jq 'length'`
 caused `$(( ic_total + rc_total + rv_total ))` to fail with `syntax error in expression`.
 
-**Fix applied:** All four paginated fetches in `_mirror_pr_comments` now use:
-```bash
-jq -rs '[.[] | select(type == "object") | ...]'
-```
-This processes the raw token stream, keeps only JSON objects, and always produces a
-single JSON array — immune to unexpected nesting, error pages, or extra text.
-
-**Prevention rule:** Never use `jq -s 'add // []'` to flatten `--paginate` output.
-Always use `jq -rs '[.[] | select(type == "object")]'`. The `select(type == "object")`
-guard is the minimum contract at any paginated API boundary.
+**Fix applied (revised):** `gh api --paginate` on REST endpoints that return arrays
+emits ONE JSON array per page. `jq -rs` slurps them into `[[page1_items...],[page2_items...]]`.
+The outer `.[]` therefore yields **arrays** (one per page), not objects. The pattern
+`[.[] | select(type == "object")]` incorrectly filters out the entire page-arrays, producing
+`[]` silently. The correct pattern unwraps each page first:
 
 ```bash
-# WRONG — crashes when any page is a non-array (error object, warning message)
+# WRONG — jq -s 'add // []' crashes when any page is an error object
 result="$(gh api ... --paginate | jq -s 'add // [] | map(.field)')"
 
-# CORRECT — type-safe token-stream processing
+# WRONG — select(type=="object") on page-level; all page-arrays are silently discarded → []
 result="$(gh api ... --paginate | jq -rs '[.[] | select(type == "object") | .field]')"
+
+# CORRECT — select(type=="array") unwraps each page; inner .[] iterates items
+result="$(gh api ... --paginate | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | .field]')"
 ```
+
+**Prevention rule:** For REST `--paginate` calls whose responses are arrays-per-page, always use
+`select(type=="array") | .[] | select(type=="object")` — two levels of iteration. The outer
+`select(type=="array")` also guards against error-object pages (RC-8's original concern).
+
+**Important distinction:**
+- REST paginated array endpoints: `[.[] | select(type=="array") | .[] | select(type=="object")]`
+- Single-item REST fetch (no `--paginate`): `jq -rs '.[0] // {}'` (returns first and only value)
+- GraphQL or object-per-page: `[.[] | select(type=="object")]` (pages are objects, not arrays)
 
 ---
 
@@ -358,7 +365,7 @@ The concrete violations found:
   outside-collaborators): comments said "stage 10–13" but the correct stage numbers are 11–14.
 
 **Fix applied:** All violations corrected in `mirror/validate/run-validation.sh`:
-- RC-8: `jq -rs '[.[] | select(type=="object")] | length'` in `_check_git_refs`.
+- RC-8: `_check_git_refs` now uses `jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")] | length'` (two-level iteration; see RC-12 for why `select(type=="object")` alone was wrong).
 - RC-5: sentinel assignments moved outside `$()` for all direct `gh api` calls.
 - Stage numbers corrected in both the JSON `details` strings and the early-return warning messages.
 
@@ -369,6 +376,67 @@ The concrete violations found:
 3. Stage numbers referenced in validation details strings must match `mirror.yml` stage indices.
    Use `mirror.yml` as the single source of truth; update validation strings atomically when
    stage order changes.
+
+---
+
+### RC-12 — An RC "fix" pattern was itself wrong and propagated to all scripts without empirical verification
+
+```
+Bug:          All paginated REST fetches silently returned [] — zero issues, PRs, and comments
+              fetched in stages 05, 06, 07, and run-validation.sh. Invisible in normal mode
+              (state-file skip fires first) but exposed by continuous=true, which bypasses skips
+              and actually fetches items.
+
+5 Whys:
+  Why 1:  jq filter [.[] | select(type=="object")] on --paginate output returns [] for every
+          REST array endpoint — so stages 05/06/07 found 0 issues and 0 PRs.
+  Why 2:  The filter returns [] because jq -rs slurps --paginate output into
+          [[page1_items...],[page2_items...]] — outer .[] yields arrays (one per page),
+          and select(type=="object") silently discards all of them.
+  Why 3:  The filter was applied as the RC-8 "fix" across all stages because it appeared
+          in CLAUDE.md as the canonical correct pattern.
+  Why 4:  The RC-8 rule was written on reasoning alone, using an incorrect mental model:
+          author believed --paginate emits a stream of individual objects, when in fact
+          each page is output as a complete JSON array.
+  Why 5:  There is no verification step in the rule-creation process. Once a pattern is
+          written into CLAUDE.md as "CORRECT", it is treated as ground truth and propagated
+          to every matching site without independent testing. The CLAUDE.md update process
+          has no gate between "wrote the rule" and "applied the rule everywhere."
+
+Root cause:   RC prevention rules are canonized in CLAUDE.md on reasoning alone, with no
+              empirical verification. A plausible-but-wrong pattern can be marked "CORRECT"
+              and spread across the entire codebase in one sweep — with no runtime signal,
+              because the downstream [] is only an error when code takes a non-skip path.
+
+Fix applied:  All 9 occurrences of the wrong pattern updated to the two-level form:
+              [.[] | select(type=="array") | .[] | select(type=="object")]
+              Files fixed: 01-invite-people.sh, 10-mirror-teams.sh (×2),
+              11-mirror-releases.sh (×2), 12-mirror-branch-protections.sh (×3),
+              14-mirror-outside-collaborators.sh, run-validation.sh (×4).
+              RC-8 entry in CLAUDE.md revised to document both wrong patterns and the
+              correct pattern, with a clear distinction block.
+
+Prevention:   1. Before canonizing ANY jq pattern in CLAUDE.md, test it against synthetic
+                 multi-page output to confirm it is non-empty:
+                 printf '[{"a":1}]\n[{"a":2}]\n' | jq -rs '[.[] | <PATTERN>]'
+                 The result must NOT be [].
+              2. When retroactively applying a new RC rule to multiple files, treat the first
+                 two or three edits as a hypothesis. After applying, do a quick sanity check
+                 (echo output | jq -rs '[<pattern>] | length') before sweeping the rest.
+              3. The RC-9 grep for RC-8 now checks for BOTH wrong forms (see updated patterns
+                 below).
+
+Other files:  Stages 09 and 13 intentionally use [.[] | select(type=="object")] because their
+              endpoints return wrapper objects per page (not arrays). These are EXEMPT — do
+              not change them. The distinction is documented in RC-8 above.
+```
+
+**Updated RC-8 grep pattern (catches both wrong forms):**
+```bash
+# RC-8: wrong paginated flatten — catches original jq -s form AND the intermediate wrong fix
+grep -rn "jq -s 'add // \[\]'\|select(type==\"object\")\]'" mirror/stages/ mirror/lib/ mirror/validate/ \
+  | grep -v "select(type==\"array\")\|13-mirror-actions-variables\|09-other-objects"
+```
 
 ---
 

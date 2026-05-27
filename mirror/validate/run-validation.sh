@@ -302,20 +302,21 @@ _check_git_refs() {
     [[ -z "$repo_name" ]] && continue
 
     # BUG-12 fix: use --paginate so the count isn't capped at 100 for large repos.
-    # RC-8: jq -rs + select(type=="object") guards against non-array error pages.
+    # RC-8: two-level iteration — select(type=="array") unwraps each page-array,
+    #        then .[] iterates items, then select(type=="object") guards each item.
     # RC-5: sentinel assigned outside $() so partial stdout is discarded on failure.
     local src_branches tgt_branches src_tags tgt_tags
     src_branches="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/branches?per_page=100" \
-      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="object")] | length')" \
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")] | length')" \
       || src_branches=0
     tgt_branches="$(gh api "repos/$TARGET_ORG/$repo_name/branches?per_page=100" \
-      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="object")] | length')" \
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")] | length')" \
       || tgt_branches=0
     src_tags="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/tags?per_page=100" \
-      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="object")] | length')" \
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")] | length')" \
       || src_tags=0
     tgt_tags="$(gh api "repos/$TARGET_ORG/$repo_name/tags?per_page=100" \
-      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="object")] | length')" \
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")] | length')" \
       || tgt_tags=0
 
     details="$details $repo_name(branches:${src_branches}vs${tgt_branches},tags:${src_tags}vs${tgt_tags})"

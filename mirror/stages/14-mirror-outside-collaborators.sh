@@ -84,7 +84,7 @@ main() {
     local collabs
     collabs="$(ghsrc api \
       "repos/$SOURCE_ORG/$repo_name/collaborators?affiliation=outside&per_page=100" \
-      --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object")]')" || collabs='[]'
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || collabs='[]'
 
     local collab_count
     collab_count="$(echo "$collabs" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"

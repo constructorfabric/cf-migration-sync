@@ -214,7 +214,7 @@ _mirror_repo_prs() {
   tgt_issues="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues?state=all&per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || tgt_issues='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || tgt_issues='[]'
 
   # Branch list with tip SHAs — one API call instead of one per PR.
   # SHA is needed to verify the branch tip matches pr.head.sha exactly.
@@ -222,7 +222,7 @@ _mirror_repo_prs() {
   tgt_branches="$(gh api \
     "repos/$TARGET_ORG/$repo_name/branches?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object") | {name: .name, sha: .commit.sha}]')" || tgt_branches='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | {name: .name, sha: .commit.sha}]')" || tgt_branches='[]'
 
   # ---- 1. Open PRs — create as real PRs where head branch exists ----------
   log "  Fetching open PRs from $SOURCE_ORG/$repo_name..."
@@ -230,7 +230,7 @@ _mirror_repo_prs() {
   open_prs="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls?state=open&per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || open_prs='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || open_prs='[]'
 
   local open_count
   open_count="$(echo "$open_prs" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
@@ -376,7 +376,7 @@ ${marker}"
   prs="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls?state=closed&per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || prs='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || prs='[]'
 
   local total_prs
   total_prs="$(echo "$prs" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
@@ -677,20 +677,20 @@ _mirror_pr_comments() {
   issue_comments="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues/$src_pr_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || issue_comments='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || issue_comments='[]'
 
   local review_comments
   review_comments="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls/$src_pr_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || review_comments='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || review_comments='[]'
 
   # Reviews: only those with a non-empty body (e.g. "LGTM" messages)
   local pr_reviews
   pr_reviews="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls/$src_pr_number/reviews?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object") | select(.body != null and .body != "")]')" \
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | select(.body != null and .body != "")]')" \
     || pr_reviews='[]'
 
   local ic_total rc_total rv_total
@@ -712,7 +712,7 @@ _mirror_pr_comments() {
   tgt_comment_bodies="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object") | .body // ""] | join("\n")')" \
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | .body // ""] | join("\n")')" \
     || tgt_comment_bodies=''
 
   local mirrored=0
@@ -1019,17 +1019,17 @@ _reconcile_pr_comments() {
   issue_comments="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/issues/$src_pr_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || issue_comments='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || issue_comments='[]'
 
   review_comments="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls/$src_pr_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object")]')" || review_comments='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || review_comments='[]'
 
   pr_reviews="$(ghsrc api \
     "repos/$SOURCE_ORG/$repo_name/pulls/$src_pr_number/reviews?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object") | select(.body != null and .body != "")]')" \
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | select(.body != null and .body != "")]')" \
     || pr_reviews='[]'
 
   # Pre-fetch all target comments once — id + body needed for update path
@@ -1037,7 +1037,7 @@ _reconcile_pr_comments() {
   tgt_comments="$(gh api \
     "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments?per_page=100" \
     --paginate 2>/dev/null | \
-    jq -rs '[.[] | select(type == "object") | {id, body}]')" || tgt_comments='[]'
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | {id, body}]')" || tgt_comments='[]'
 
   local mirrored=0
 

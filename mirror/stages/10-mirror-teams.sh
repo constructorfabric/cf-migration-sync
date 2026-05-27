@@ -288,7 +288,7 @@ _sync_team_members() {
   local members
   members="$(ghsrc api \
     "orgs/$SOURCE_ORG/teams/$src_slug/members?per_page=100&role=all" \
-    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object")]')" || members='[]'
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || members='[]'
 
   local member_count
   member_count="$(echo "$members" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
@@ -357,7 +357,7 @@ _sync_team_repos() {
   local team_repos
   team_repos="$(ghsrc api \
     "orgs/$SOURCE_ORG/teams/$src_slug/repos?per_page=100" \
-    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object")]')" || team_repos='[]'
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || team_repos='[]'
 
   local repo_count
   repo_count="$(echo "$team_repos" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
