@@ -173,7 +173,7 @@ main() {
 
     log "[$repo_idx/$total_repos] Processing PRs for $repo_name${effective_resume:+ (resume after PR #$effective_resume)}..."
     _mirror_repo_prs "$repo_name" "$effective_resume"
-    pause 0.5
+    pause 1.0
 
   done < <(echo "$repos" | jq -c '.[]')
 
@@ -362,7 +362,7 @@ ${marker}"
           warn "  Failed to create placeholder issue for open PR #$pr_number in $TARGET_ORG/$repo_name"
           _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
             "$pr_title" "failed" "" "$pr_author" "open"
-          pause 0.5; continue
+          pause 1.0; continue
         fi
 
         local no_branch_tgt_number
@@ -371,14 +371,14 @@ ${marker}"
           warn "  Open PR #$pr_number: API returned no number for placeholder issue — marking failed"
           _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
             "$pr_title" "failed" "" "$pr_author" "open"
-          pause 0.5; continue
+          pause 1.0; continue
         fi
 
         ok "  Mirrored open PR #$pr_number as placeholder issue #$no_branch_tgt_number"
         _upsert_pr "$state_file" "$pr_number" "$pr_url" \
           "$no_branch_tgt_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "open"
         _mirror_pr_comments "$repo_name" "$pr_number" "$no_branch_tgt_number" "$state_file"
-        pause 1.5
+        pause 2.0
         continue
       fi
 
@@ -428,12 +428,12 @@ ${marker}"
         continue
       fi
 
-      pause 1.5   # rate-limit cooldown after POST /pulls
+      pause 2.0   # rate-limit cooldown after POST /pulls
       ok "  Mirrored open PR #$pr_number -> PR #$tgt_open_pr_number in $TARGET_ORG/$repo_name"
       _upsert_pr "$state_file" "$pr_number" "$pr_url" \
         "$tgt_open_pr_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "open"
       _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_open_pr_number" "$state_file"
-      pause 1.0   # rate-limit buffer between PRs
+      pause 1.5   # rate-limit buffer between PRs
 
     done < <(echo "$open_prs" | jq -c '.[]' 2>/dev/null || true)
   fi
@@ -515,7 +515,7 @@ ${marker}"
         else
           gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_in_state" \
             --method PATCH -f state="closed" 2>/dev/null || true
-          pause 1.0
+          pause 1.5
           _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_issue_in_state" "$state_file"
         fi
         skip_count=$((skip_count + 1))
@@ -676,7 +676,7 @@ ${marker}"
         _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
           "$pr_title" "failed" "" "$pr_author" "$pr_state"
         failed_count=$((failed_count + 1))
-        pause 0.5
+        pause 1.0
         continue
       fi
 
@@ -689,11 +689,11 @@ ${marker}"
       _upsert_pr "$state_file" "$pr_number" "$pr_url" "" \
         "$pr_title" "failed" "" "$pr_author" "$pr_state"
       failed_count=$((failed_count + 1))
-      pause 0.5
+      pause 1.0
       continue
     fi
 
-    pause 1.5   # rate-limit cooldown after POST /pulls or POST /issues
+    pause 2.0   # rate-limit cooldown after POST /pulls or POST /issues
 
     # ---- Close the target (historical PR — closed or merged in source) ------
     if [[ $used_pr_api -eq 1 ]]; then
@@ -709,7 +709,7 @@ ${marker}"
         2>/dev/null || warn "  Failed to close issue #$tgt_issue_number in $TARGET_ORG/$repo_name"
       ok "  Mirrored PR #$pr_number -> issue #$tgt_issue_number in $TARGET_ORG/$repo_name"
     fi
-    pause 1.0   # rate-limit cooldown after PATCH close
+    pause 1.5   # rate-limit cooldown after PATCH close
 
     _upsert_pr "$state_file" "$pr_number" "$pr_url" \
       "$tgt_issue_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "$pr_state"
@@ -717,7 +717,7 @@ ${marker}"
     _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_issue_number" "$state_file"
 
     new_count=$((new_count + 1))
-    pause 1.0   # rate-limit buffer between PRs
+    pause 1.5   # rate-limit buffer between PRs
 
   done < <(echo "$prs" | jq -c '.[]' 2>/dev/null || true)
 
@@ -830,7 +830,7 @@ ${c_marker}"
     else
       mirrored=$((mirrored + 1))
     fi
-    pause 1.0   # rate-limit cooldown after POST /issues/{n}/comments
+    pause 1.5   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$issue_comments" | jq -c '.[]' 2>/dev/null || true)
 
   # -- 2. Review-level bodies (Approved / Changes requested + message) ------
@@ -866,7 +866,7 @@ ${rv_marker}"
     else
       mirrored=$((mirrored + 1))
     fi
-    pause 1.0   # rate-limit cooldown after POST /issues/{n}/comments
+    pause 1.5   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$pr_reviews" | jq -c '.[]' 2>/dev/null || true)
 
   # -- 3. Inline review comments (with file + line context) -----------------
@@ -903,7 +903,7 @@ ${rc_marker}"
     else
       mirrored=$((mirrored + 1))
     fi
-    pause 1.0   # rate-limit cooldown after POST /issues/{n}/comments
+    pause 1.5   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$review_comments" | jq -c '.[]' 2>/dev/null || true)
 
   _update_pr_comments_status "$state_file" "$src_pr_number" "done" "$mirrored"
@@ -1036,7 +1036,7 @@ ${marker}"
   tgt_body="$(echo "$tgt_json"   | jq -r '.body // ""'                     2>/dev/null || true)"
   tgt_state="$(echo "$tgt_json"  | jq -r '.state // "open"'                2>/dev/null || true)"
   tgt_labels_sorted="$(echo "$tgt_json" | jq -c '[.labels[].name] | sort'  2>/dev/null || echo '[]')"
-  pause 0.3
+  pause 0.5
 
   # ---- Compute what needs to change ----------------------------------------
   local patch_payload="{}" body_changed=0
@@ -1071,7 +1071,7 @@ ${marker}"
       --input <(echo "$patch_payload") \
       2>/dev/null || warn "  Failed to reconcile PR $repo_name#$pr_number → #$tgt_issue_number"
     log "  Reconciled PR #$pr_number → #$tgt_issue_number ($(echo "$patch_payload" | jq -r 'keys | join(", ")'))"
-    pause 1.0
+    pause 1.5
     [[ "$body_changed" -eq 1 ]] && _clear_crossref_record "$repo_name" "$tgt_issue_number"
   fi
 
@@ -1142,7 +1142,7 @@ _reconcile_pr_comments() {
           --method PATCH \
           --input <(printf '%s' "$c_full_body" | jq -Rs '{"body":.}') \
           2>/dev/null || warn "  Failed to update comment on PR #$src_pr_number"
-        pause 1.0
+        pause 1.5
       fi
       mirrored=$((mirrored + 1))
     else
@@ -1154,7 +1154,7 @@ _reconcile_pr_comments() {
         2>/dev/null)" || c_result="FAILED"
       [[ "$c_result" != "FAILED" ]] && mirrored=$((mirrored + 1)) || \
         warn "  Failed to create comment on PR #$src_pr_number"
-      pause 1.0
+      pause 1.5
     fi
   }
 

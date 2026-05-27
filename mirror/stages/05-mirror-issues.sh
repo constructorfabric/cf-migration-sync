@@ -105,7 +105,7 @@ main() {
     fi
 
     _mirror_repo_issues "$repo_name"
-    pause 0.5
+    pause 1.0
 
   done < <(echo "$repos" | jq -c '.[]')
 
@@ -265,7 +265,7 @@ _mirror_repo_issues() {
           --method PATCH \
           -f state="closed" \
           2>/dev/null || warn "  Failed to close issue #$existing_target_number in $TARGET_ORG/$repo_name"
-        pause 1.0   # rate-limit cooldown after PATCH /issues
+        pause 1.5   # rate-limit cooldown after PATCH /issues
       fi
       _mirror_issue_comments \
         "$repo_name" "$src_number" "$existing_target_number" "$state_file"
@@ -359,7 +359,7 @@ ${marker}"
       _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
         "$title" "" "" "$assignees" "failed" "" "none"
       failed_count=$((failed_count + 1))
-      pause 0.5
+      pause 1.0
       continue
     fi
 
@@ -375,11 +375,11 @@ ${marker}"
       _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
         "$title" "" "" "$assignees" "failed" "" "none"
       failed_count=$((failed_count + 1))
-      pause 0.5
+      pause 1.0
       continue
     fi
 
-    pause 1.5   # rate-limit cooldown after POST /issues
+    pause 2.0   # rate-limit cooldown after POST /issues
 
     # ---- Close issue in target if source is closed ----------------------
     if [[ "$src_state" == "closed" ]]; then
@@ -387,7 +387,7 @@ ${marker}"
         --method PATCH \
         -f state="closed" \
         2>/dev/null || warn "  Failed to close issue #$tgt_number in $TARGET_ORG/$repo_name"
-      pause 1.0   # rate-limit cooldown after PATCH /issues
+      pause 1.5   # rate-limit cooldown after PATCH /issues
     fi
 
     ok "  Created issue #$src_number -> #$tgt_number in $TARGET_ORG/$repo_name"
@@ -407,7 +407,7 @@ ${marker}"
     _mirror_issue_comments "$repo_name" "$src_number" "$tgt_number" "$state_file"
 
     new_count=$((new_count + 1))
-    pause 1.0   # rate-limit buffer between issues
+    pause 1.5   # rate-limit buffer between issues
 
   done < <(echo "$all_issues" | jq -c '.[]')
 
@@ -561,7 +561,7 @@ ${c_marker}"
     else
       mirrored=$((mirrored + 1))
     fi
-    pause 1.0   # rate-limit cooldown after POST /issues/{n}/comments
+    pause 1.5   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$comments" | jq -c '.[]')
 
   _update_comments_status "$state_file" "$src_number" "done" "$mirrored"
@@ -647,7 +647,7 @@ ${marker}"
   tgt_state="$(echo "$tgt_json"         | jq -r '.state // "open"'      2>/dev/null || true)"
   tgt_milestone_num="$(echo "$tgt_json" | jq -r '.milestone.number // "null"' 2>/dev/null || echo 'null')"
   tgt_node_id="$(echo "$tgt_json"       | jq -r '.node_id // ""'        2>/dev/null || true)"
-  pause 0.3
+  pause 0.5
 
   # ---- Resolve target milestone number from source title -------------------
   local new_milestone_number="null"
@@ -703,7 +703,7 @@ ${marker}"
       --input <(echo "$patch_payload") \
       2>/dev/null || warn "  Failed to reconcile issue $repo_name#$src_number → #$tgt_number"
     log "  Reconciled #$src_number → #$tgt_number ($(echo "$patch_payload" | jq -r 'keys | join(", ")'))"
-    pause 1.0
+    pause 1.5
     [[ "$body_changed" -eq 1 ]] && _clear_crossref_record "$repo_name" "$tgt_number"
   fi
 
@@ -793,7 +793,7 @@ ${c_marker}"
           --method PATCH \
           --input <(printf '%s' "$c_full_body" | jq -Rs '{"body":.}') \
           2>/dev/null || warn "  Failed to update comment $c_id on #$src_number"
-        pause 1.0
+        pause 1.5
       fi
       mirrored=$((mirrored + 1))
     else
@@ -805,7 +805,7 @@ ${c_marker}"
         2>/dev/null)" || c_result="FAILED"
       [[ "$c_result" != "FAILED" ]] && mirrored=$((mirrored + 1)) || \
         warn "  Failed to create comment $c_id on #$src_number"
-      pause 1.0
+      pause 1.5
     fi
   done < <(echo "$comments" | jq -c '.[]' 2>/dev/null || true)
 
