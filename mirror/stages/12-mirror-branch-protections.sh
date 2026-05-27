@@ -113,7 +113,7 @@ _mirror_repo_protections() {
   log "  Fetching rulesets for $repo_name..."
   local rulesets
   rulesets="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/rulesets?per_page=100" \
-    2>/dev/null | jq -rs '.[0] // []' 2>/dev/null || echo '[]')"
+    2>/dev/null | jq -rs '.[0] // []' 2>/dev/null)" || rulesets='[]'
 
   local rs_count
   rs_count="$(echo "$rulesets" | jq 'length' 2>/dev/null || echo 0)"
@@ -124,7 +124,7 @@ _mirror_repo_protections() {
     # Pre-fetch existing target rulesets for idempotency
     local tgt_rulesets
     tgt_rulesets="$(gh api "repos/$TARGET_ORG/$repo_name/rulesets?per_page=100" \
-      2>/dev/null | jq -rs '.[0] // []' 2>/dev/null || echo '[]')"
+      2>/dev/null | jq -rs '.[0] // []' 2>/dev/null)" || tgt_rulesets='[]'
 
     while IFS= read -r rs; do
       local rs_id rs_name
@@ -266,7 +266,7 @@ _apply_ruleset() {
     local patch_result
     patch_result="$(gh api "repos/$TARGET_ORG/$repo_name/rulesets/$existing_id" \
       --method PUT --input <(echo "$payload") \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || patch_result='FAILED'
     if [[ "$patch_result" == "FAILED" ]]; then
       warn "  Failed to update ruleset '$rs_name' in $TARGET_ORG/$repo_name"
       status="failed"
@@ -277,7 +277,7 @@ _apply_ruleset() {
     local create_result
     create_result="$(gh api "repos/$TARGET_ORG/$repo_name/rulesets" \
       --method POST --input <(echo "$payload") \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || create_result='FAILED'
     if [[ "$create_result" == "FAILED" ]]; then
       warn "  Failed to create ruleset '$rs_name' in $TARGET_ORG/$repo_name"
       status="failed"
@@ -377,7 +377,7 @@ _apply_legacy_protection() {
     local result
     result="$(gh api "repos/$TARGET_ORG/$repo_name/branches/$branch_name/protection" \
       --method PUT --input <(echo "$payload") \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || result='FAILED'
 
     if [[ "$result" == "FAILED" ]]; then
       warn "  Failed to set protection for $TARGET_ORG/$repo_name/$branch_name (branch may not exist yet)"

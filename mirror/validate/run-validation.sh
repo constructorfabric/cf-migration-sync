@@ -218,8 +218,8 @@ _tally_check() {
 # Check 1: Members
 _check_members() {
   local src_members tgt_members src_count tgt_count
-  src_members="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/members" 2>/dev/null || echo '[]')"
-  tgt_members="$(gh_paginate gh   "orgs/$TARGET_ORG/members" 2>/dev/null || echo '[]')"
+  src_members="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/members" 2>/dev/null)" || src_members='[]'
+  tgt_members="$(gh_paginate gh   "orgs/$TARGET_ORG/members" 2>/dev/null)" || tgt_members='[]'
 
   src_count="$(echo "$src_members" | jq 'length')"
   tgt_count="$(echo "$tgt_members" | jq 'length')"
@@ -252,8 +252,8 @@ _check_members() {
 # Check 2: Repos
 _check_repos() {
   local src_repos tgt_repos src_count tgt_count
-  src_repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null || echo '[]')"
-  tgt_repos="$(gh_paginate gh   "orgs/$TARGET_ORG/repos" 2>/dev/null || echo '[]')"
+  src_repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null)" || src_repos='[]'
+  tgt_repos="$(gh_paginate gh   "orgs/$TARGET_ORG/repos" 2>/dev/null)" || tgt_repos='[]'
 
   src_count="$(echo "$src_repos" | jq 'length')"
   tgt_count="$(echo "$tgt_repos" | jq 'length')"
@@ -286,7 +286,7 @@ _check_repos() {
 # Check 3: Git refs (sample 3-5 repos)
 _check_git_refs() {
   local src_repos
-  src_repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null || echo '[]')"
+  src_repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null)" || src_repos='[]'
 
   # Pick up to 5 non-empty repos
   local sample_repos
@@ -302,15 +302,21 @@ _check_git_refs() {
     [[ -z "$repo_name" ]] && continue
 
     # BUG-12 fix: use --paginate so the count isn't capped at 100 for large repos.
+    # RC-8: jq -rs + select(type=="object") guards against non-array error pages.
+    # RC-5: sentinel assigned outside $() so partial stdout is discarded on failure.
     local src_branches tgt_branches src_tags tgt_tags
     src_branches="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/branches?per_page=100" \
-      --paginate 2>/dev/null | jq -s 'add // [] | length' || echo 0)"
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="object")] | length')" \
+      || src_branches=0
     tgt_branches="$(gh api "repos/$TARGET_ORG/$repo_name/branches?per_page=100" \
-      --paginate 2>/dev/null | jq -s 'add // [] | length' || echo 0)"
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="object")] | length')" \
+      || tgt_branches=0
     src_tags="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/tags?per_page=100" \
-      --paginate 2>/dev/null | jq -s 'add // [] | length' || echo 0)"
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="object")] | length')" \
+      || src_tags=0
     tgt_tags="$(gh api "repos/$TARGET_ORG/$repo_name/tags?per_page=100" \
-      --paginate 2>/dev/null | jq -s 'add // [] | length' || echo 0)"
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type=="object")] | length')" \
+      || tgt_tags=0
 
     details="$details $repo_name(branches:${src_branches}vs${tgt_branches},tags:${src_tags}vs${tgt_tags})"
 
@@ -342,9 +348,10 @@ _check_git_refs() {
 # ---------------------------------------------------------------------------
 # Check 4: Org settings
 _check_org_settings() {
+  # RC-5: sentinel assigned outside $() so partial stdout is discarded on failure.
   local src_org tgt_org
-  src_org="$(ghsrc api "orgs/$SOURCE_ORG" 2>/dev/null || echo '{}')"
-  tgt_org="$(gh api "orgs/$TARGET_ORG" 2>/dev/null || echo '{}')"
+  src_org="$(ghsrc api "orgs/$SOURCE_ORG" 2>/dev/null)" || src_org='{}'
+  tgt_org="$(gh api "orgs/$TARGET_ORG" 2>/dev/null)" || tgt_org='{}'
 
   local src_perm tgt_perm
   src_perm="$(echo "$src_org" | jq -r '.default_repository_permission // "read"')"
@@ -385,7 +392,7 @@ _check_org_settings() {
 # Check 5: Labels
 _check_labels() {
   local repos
-  repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null || echo '[]')"
+  repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null)" || repos='[]'
 
   local total_src=0 total_tgt=0 repos_with_issues=0 mismatches="[]"
 
@@ -398,11 +405,12 @@ _check_labels() {
     [[ "$has_issues" != "true" ]] && continue
 
     repos_with_issues=$((repos_with_issues + 1))
+    # RC-5: sentinel assigned outside $() so partial stdout is discarded on failure.
     local sc tc
     sc="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/labels?per_page=100" \
-      2>/dev/null | jq 'length' || echo 0)"
+      2>/dev/null | jq -r 'if type=="array" then length else 0 end')" || sc=0
     tc="$(gh api "repos/$TARGET_ORG/$repo_name/labels?per_page=100" \
-      2>/dev/null | jq 'length' || echo 0)"
+      2>/dev/null | jq -r 'if type=="array" then length else 0 end')" || tc=0
 
     total_src=$((total_src + sc))
     total_tgt=$((total_tgt + tc))
@@ -438,17 +446,18 @@ _check_labels() {
 # Check 6: Milestones
 _check_milestones() {
   local repos
-  repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null || echo '[]')"
+  repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null)" || repos='[]'
 
   local total_src=0 total_tgt=0 mismatches="[]"
 
   while IFS= read -r repo_name; do
     [[ -z "$repo_name" ]] && continue
+    # RC-5: sentinel assigned outside $() so partial stdout is discarded on failure.
     local sc tc
     sc="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/milestones?per_page=100&state=all" \
-      2>/dev/null | jq 'length' || echo 0)"
+      2>/dev/null | jq -r 'if type=="array" then length else 0 end')" || sc=0
     tc="$(gh api "repos/$TARGET_ORG/$repo_name/milestones?per_page=100&state=all" \
-      2>/dev/null | jq 'length' || echo 0)"
+      2>/dev/null | jq -r 'if type=="array" then length else 0 end')" || tc=0
 
     total_src=$((total_src + sc))
     total_tgt=$((total_tgt + tc))
@@ -489,16 +498,17 @@ _check_issues() {
   fi
 
   local repos
-  repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null || echo '[]')"
+  repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null)" || repos='[]'
 
   while IFS= read -r repo_name; do
     [[ -z "$repo_name" ]] && continue
 
     # BUG-06 fix: per_page=1 + jq length always returns 0 or 1.
     # GitHub Search API returns total_count for issue counts without full pagination.
+    # RC-5: sentinel assigned outside $() so partial stdout is discarded on failure.
     local sc
     sc="$(ghsrc api "search/issues?q=repo:$SOURCE_ORG/$repo_name+is:issue&per_page=1" \
-      2>/dev/null | jq '.total_count // 0' || echo 0)"
+      2>/dev/null | jq -r '.total_count // 0')" || sc=0
     total_src=$((total_src + sc))
 
     # Count from state file
@@ -541,15 +551,16 @@ _check_prs() {
   fi
 
   local repos
-  repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null || echo '[]')"
+  repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos" 2>/dev/null)" || repos='[]'
 
   while IFS= read -r repo_name; do
     [[ -z "$repo_name" ]] && continue
 
     # BUG-06 fix: per_page=1 + jq length always returns 0 or 1.
+    # RC-5: sentinel assigned outside $() so partial stdout is discarded on failure.
     local sc
     sc="$(ghsrc api "search/issues?q=repo:$SOURCE_ORG/$repo_name+is:pr+is:closed&per_page=1" \
-      2>/dev/null | jq '.total_count // 0' || echo 0)"
+      2>/dev/null | jq -r '.total_count // 0')" || sc=0
     total_src=$((total_src + sc))
 
     local state_file="$state_prs_dir/$repo_name.yaml"
@@ -641,9 +652,15 @@ _check_manual_items() {
 # ---------------------------------------------------------------------------
 # Check 11: Teams
 _check_teams() {
+  # RC-5: with pipefail set, a failing gh_paginate causes the pipeline exit code
+  # to be non-zero even if jq succeeded — sentinel outside $() prevents appending
+  # to partial jq output.
   local src_count tgt_count
-  src_count="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/teams" 2>/dev/null | jq 'length' || echo 0)"
-  tgt_count="$(gh_paginate gh   "orgs/$TARGET_ORG/teams" 2>/dev/null | jq 'length' || echo 0)"
+  local _src_teams _tgt_teams
+  _src_teams="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/teams" 2>/dev/null)" || _src_teams='[]'
+  _tgt_teams="$(gh_paginate gh   "orgs/$TARGET_ORG/teams" 2>/dev/null)" || _tgt_teams='[]'
+  src_count="$(echo "$_src_teams" | jq -r 'if type=="array" then length else 0 end')" || src_count=0
+  tgt_count="$(echo "$_tgt_teams" | jq -r 'if type=="array" then length else 0 end')" || tgt_count=0
 
   local state_file="$STATE_DIR/teams.yaml"
   local failed_count=0
@@ -676,7 +693,7 @@ _check_releases() {
   local state_dir="$STATE_DIR/releases"
 
   if [[ ! -d "$state_dir" ]]; then
-    jq -n '{"name":"releases","status":"warning","details":"No releases state directory — stage 10 not yet run","mirrored":0,"failed":0}'
+    jq -n '{"name":"releases","status":"warning","details":"No releases state directory — stage 11 not yet run","mirrored":0,"failed":0}'
     return 0
   fi
 
@@ -702,7 +719,7 @@ _check_releases() {
     --argjson mir  "$total_mirrored" \
     --argjson fail "$total_failed" \
     '{"name":$name,"status":$status,"repos_with_releases":$repos,"mirrored":$mir,
-      "failed":$fail,"details":"Releases mirrored per state files (stage 10)"}'
+      "failed":$fail,"details":"Releases mirrored per state files (stage 11)"}'
 }
 
 # ---------------------------------------------------------------------------
@@ -711,7 +728,7 @@ _check_branch_protections() {
   local state_dir="$STATE_DIR/branch-protections"
 
   if [[ ! -d "$state_dir" ]]; then
-    jq -n '{"name":"branch_protections","status":"warning","details":"No branch-protections state — stage 11 not yet run","synced":0,"failed":0}'
+    jq -n '{"name":"branch_protections","status":"warning","details":"No branch-protections state — stage 12 not yet run","synced":0,"failed":0}'
     return 0
   fi
 
@@ -737,7 +754,7 @@ _check_branch_protections() {
     --argjson sync "$total_synced" \
     --argjson fail "$total_failed" \
     '{"name":$name,"status":$status,"repos_checked":$repos,"synced":$sync,
-      "failed":$fail,"details":"Rulesets and legacy branch protection rules (stage 11)"}'
+      "failed":$fail,"details":"Rulesets and legacy branch protection rules (stage 12)"}'
 }
 
 # ---------------------------------------------------------------------------
@@ -746,7 +763,7 @@ _check_actions_variables() {
   local state_file="$STATE_DIR/actions-variables.yaml"
 
   if [[ ! -f "$state_file" ]]; then
-    jq -n '{"name":"actions_variables","status":"warning","details":"No actions-variables state — stage 12 not yet run","synced":0,"failed":0}'
+    jq -n '{"name":"actions_variables","status":"warning","details":"No actions-variables state — stage 13 not yet run","synced":0,"failed":0}'
     return 0
   fi
 
@@ -754,14 +771,15 @@ _check_actions_variables() {
   synced="$(jq '[.items[] | select(.status=="synced")] | length' "$state_file" 2>/dev/null || echo 0)"
   failed="$(jq '[.items[] | select(.status=="failed")] | length' "$state_file" 2>/dev/null || echo 0)"
 
-  # Cross-check: live org-level variable count on target
+  # Cross-check: live org-level variable count on target.
+  # RC-5: sentinel assigned outside $() so partial stdout is discarded on failure.
   local tgt_org_var_count
   tgt_org_var_count="$(gh api "orgs/$TARGET_ORG/actions/variables?per_page=1" \
-    2>/dev/null | jq '.total_count // 0' || echo 0)"
+    2>/dev/null | jq -r '.total_count // 0')" || tgt_org_var_count=0
 
   local src_org_var_count
   src_org_var_count="$(ghsrc api "orgs/$SOURCE_ORG/actions/variables?per_page=1" \
-    2>/dev/null | jq '.total_count // 0' || echo 0)"
+    2>/dev/null | jq -r '.total_count // 0')" || src_org_var_count=0
 
   local status="passed"
   [[ "$failed" -gt 0 ]] && status="warning"
@@ -776,7 +794,7 @@ _check_actions_variables() {
     --argjson tgt_org "$tgt_org_var_count" \
     '{"name":$name,"status":$status,"state_synced":$synced,"state_failed":$failed,
       "source_org_vars":$src_org,"target_org_vars":$tgt_org,
-      "details":"Actions variables org+repo level (stage 12); visibility=selected vars widened to all"}'
+      "details":"Actions variables org+repo level (stage 13); visibility=selected vars widened to all"}'
 }
 
 # ---------------------------------------------------------------------------
@@ -811,7 +829,7 @@ _check_outside_collaborators() {
     --argjson sync "$total_synced" \
     --argjson fail "$total_failed" \
     '{"name":$name,"status":$status,"repos_checked":$repos,"synced":$sync,
-      "failed":$fail,"details":"Per-repo outside collaborators (stage 13)"}'
+      "failed":$fail,"details":"Per-repo outside collaborators (stage 14)"}'
 }
 
 # ---------------------------------------------------------------------------

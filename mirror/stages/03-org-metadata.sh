@@ -71,7 +71,7 @@ main() {
   # ---- 1. Fetch source org settings ----------------------------------------
   log "Fetching source org settings from $SOURCE_ORG..."
   local src_org
-  src_org="$(ghsrc api "orgs/$SOURCE_ORG" 2>/dev/null || echo '{}')"
+  src_org="$(ghsrc api "orgs/$SOURCE_ORG" 2>/dev/null)" || src_org='{}'
   # RC-3: guard against extra runner output appended to stdout
   src_org="$(echo "$src_org" | jq -rs '.[0] // {}' 2>/dev/null || echo '{}')"
 
@@ -193,12 +193,12 @@ _apply_setting() {
     result="$(gh api "orgs/$TARGET_ORG" \
       --method PATCH \
       -F "$field=$value" \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || result='FAILED'
   else
     result="$(gh api "orgs/$TARGET_ORG" \
       --method PATCH \
       -f "$field=$value" \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || result='FAILED'
   fi
 
   local status

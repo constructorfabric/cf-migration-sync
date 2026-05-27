@@ -300,14 +300,75 @@ The concrete failures discovered in this audit:
 **Grep patterns to run for each rule when adding:**
 ```bash
 # RC-5: sentinel inside $()
-grep -rn "|| echo '\(FAILED\|\[\]\|{}\)'" mirror/stages/ mirror/lib/
+grep -rn "|| echo '\(FAILED\|\[\]\|{}\)'" mirror/stages/ mirror/lib/ mirror/validate/
 
 # RC-6: --arg for large variables
-grep -rn "jq -n --arg b \|jq.*--arg body \|jq.*--arg body" mirror/stages/ mirror/lib/
+grep -rn "jq -n --arg b \|jq.*--arg body \|jq.*--arg body" mirror/stages/ mirror/lib/ mirror/validate/
 
 # RC-8: unsafe paginated flatten
-grep -rn "jq -s 'add // \[\]'" mirror/stages/ mirror/lib/
+grep -rn "jq -s 'add // \[\]'" mirror/stages/ mirror/lib/ mirror/validate/
 ```
+
+---
+
+### RC-10 — Secret name changes in one workflow file silently break sibling workflow files
+
+**Root cause:** GitHub Actions workflow files that share the same secrets have no single source
+of truth for secret names. When a secret is renamed in one workflow (e.g., `GH_TOKEN` →
+`MIGRATION_TOKEN` in `mirror.yml`), sibling files (`validate.yml`) retain the old name
+silently — the runner substitutes an empty string with no error, making all API calls
+unauthenticated. Validation runs appear to succeed while checking nothing.
+
+The same applies to `with:token:` in the checkout step — it reads `${{ secrets.X }}`
+directly (not through env mapping), so an env-level rename has no effect on it.
+
+**Fix applied:**
+- `validate.yml` env block: `secrets.GH_TOKEN` / `secrets.GH_TOKEN_SOURCE` → `secrets.MIGRATION_TOKEN` / `secrets.MIGRATION_TOKEN`
+- `validate.yml` checkout `with:token:` → `secrets.MIGRATION_TOKEN`
+- `validate.yml` `workflow_run` trigger added so validation fires automatically after Mirror completes successfully (eliminating the need to run manually)
+- `validate.yml` `chmod +x mirror/stages/*.sh` added defensively
+
+**Prevention rules:**
+1. Whenever a secret is renamed in any workflow file, immediately grep all `.github/workflows/*.yml`
+   for the old name and update every reference atomically.
+2. `with:token:` in checkout steps reads the secret directly — it is NOT affected by env-level
+   mappings. Always specify the exact secret name in both `env:` and `with:token:`.
+3. Every workflow that shares secrets with another must have a comment naming the canonical
+   secret and cross-referencing any sibling file that uses it.
+4. Validation workflows must have a `workflow_run` trigger on the workflow that writes state,
+   so correctness is verified automatically — not only when an operator remembers to run it.
+
+---
+
+### RC-11 — New script files not audited against existing RC rules at creation time
+
+**Root cause:** `mirror/validate/run-validation.sh` was created and extended without applying
+RC-5, RC-8, or RC-9 rules that already existed in CLAUDE.md. The RC-9 grep patterns listed
+`mirror/stages/` and `mirror/lib/` but omitted `mirror/validate/`, so the script was invisible
+to the mandatory post-rule audit sweep.
+
+The concrete violations found:
+- RC-8 in `_check_git_refs`: `jq -s 'add // [] | length'` on `--paginate` output for branches
+  and tags. If any page returns a non-array error object, `add` produces a merged object and
+  `length` returns a key count, not a branch/tag count.
+- RC-5 in seven check functions (`_check_org_settings`, `_check_labels`, `_check_milestones`,
+  `_check_issues`, `_check_prs`, `_check_teams`, `_check_actions_variables`): `|| echo 0` / 
+  `|| echo '{}'` inside `$()` on direct `gh api` / `ghsrc api` calls.
+- Stage number off-by-one in details/warning strings for checks 12–15 (releases through
+  outside-collaborators): comments said "stage 10–13" but the correct stage numbers are 11–14.
+
+**Fix applied:** All violations corrected in `mirror/validate/run-validation.sh`:
+- RC-8: `jq -rs '[.[] | select(type=="object")] | length'` in `_check_git_refs`.
+- RC-5: sentinel assignments moved outside `$()` for all direct `gh api` calls.
+- Stage numbers corrected in both the JSON `details` strings and the early-return warning messages.
+
+**Prevention rules:**
+1. `mirror/validate/` is now included in all RC grep patterns (updated above).
+2. When creating any new script file anywhere in this repo, run the full RC-5/RC-8/RC-9 grep
+   sweep against the new file before committing.
+3. Stage numbers referenced in validation details strings must match `mirror.yml` stage indices.
+   Use `mirror.yml` as the single source of truth; update validation strings atomically when
+   stage order changes.
 
 ---
 

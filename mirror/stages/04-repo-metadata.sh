@@ -170,7 +170,7 @@ _copy_labels() {
 
   # Fetch existing target labels (for upsert logic)
   local tgt_labels
-  tgt_labels="$(gh_paginate gh "repos/$TARGET_ORG/$repo_name/labels" 2>/dev/null || echo '[]')"
+  tgt_labels="$(gh_paginate gh "repos/$TARGET_ORG/$repo_name/labels" 2>/dev/null)" || tgt_labels='[]'
 
   local ts
   ts="$(now)"
@@ -254,12 +254,12 @@ _copy_milestones() {
   # Fetch source milestones (open + closed)
   local src_open src_closed src_milestones
   src_open="$(gh_paginate ghsrc "repos/$SOURCE_ORG/$repo_name/milestones" \
-    2>/dev/null || echo '[]')"
+    2>/dev/null)" || src_open='[]'
   src_closed="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/milestones?state=closed&per_page=100" \
-    2>/dev/null || echo '[]')"
+    2>/dev/null)" || src_closed='[]'
   # BUG-13 fix: dedup by id — a milestone crossing open→closed between API calls
   # would appear in both arrays; unique_by(.id) collapses duplicates.
-  src_milestones="$(echo "$src_open $src_closed" | jq -s 'add // [] | unique_by(.id)')"
+  src_milestones="$(printf '%s\n' "$src_open" "$src_closed" | jq -rs '[.[] | select(type == "array") | .[] | select(type == "object")] | unique_by(.id)')"
 
   local ms_count
   ms_count="$(echo "$src_milestones" | jq 'length')"
@@ -273,10 +273,10 @@ _copy_milestones() {
   # Fetch existing target milestones
   local tgt_open tgt_closed tgt_milestones
   tgt_open="$(gh_paginate gh "repos/$TARGET_ORG/$repo_name/milestones" \
-    2>/dev/null || echo '[]')"
+    2>/dev/null)" || tgt_open='[]'
   tgt_closed="$(gh api "repos/$TARGET_ORG/$repo_name/milestones?state=closed&per_page=100" \
-    2>/dev/null || echo '[]')"
-  tgt_milestones="$(echo "$tgt_open $tgt_closed" | jq -s 'add // []')"
+    2>/dev/null)" || tgt_closed='[]'
+  tgt_milestones="$(printf '%s\n' "$tgt_open" "$tgt_closed" | jq -rs '[.[] | select(type == "array") | .[] | select(type == "object")]')"
 
   local ts
   ts="$(now)"
@@ -428,10 +428,10 @@ _copy_repo_settings() {
     local result
     if [[ "$type" == "bool" ]]; then
       result="$(gh api "repos/$TARGET_ORG/$repo_name" \
-        --method PATCH -F "$field=$src_val" 2>/dev/null || echo 'FAILED')"
+        --method PATCH -F "$field=$src_val" 2>/dev/null)" || result='FAILED'
     else
       result="$(gh api "repos/$TARGET_ORG/$repo_name" \
-        --method PATCH -f "$field=$src_val" 2>/dev/null || echo 'FAILED')"
+        --method PATCH -f "$field=$src_val" 2>/dev/null)" || result='FAILED'
     fi
 
     if [[ "$result" == "FAILED" ]]; then
@@ -454,7 +454,7 @@ _copy_repo_settings() {
       local result
       result="$(gh api "repos/$TARGET_ORG/$repo_name" \
         --method PATCH -f "default_branch=$src_default_branch" \
-        2>/dev/null || echo 'FAILED')"
+        2>/dev/null)" || result='FAILED'
       if [[ "$result" == "FAILED" ]]; then
         warn "  Failed to set default_branch=$src_default_branch for $repo_name"
         _upsert_repo_setting "$state_file" "default_branch" "$src_default_branch" "failed" "$ts"
@@ -475,7 +475,7 @@ _copy_repo_settings() {
     else
       local result
       result="$(gh api "repos/$TARGET_ORG/$repo_name" \
-        --method PATCH -F "archived=true" 2>/dev/null || echo 'FAILED')"
+        --method PATCH -F "archived=true" 2>/dev/null)" || result='FAILED'
       if [[ "$result" == "FAILED" ]]; then
         warn "  Failed to archive $repo_name"
         _upsert_repo_setting "$state_file" "archived" "true" "failed" "$ts"
@@ -576,7 +576,7 @@ _copy_pages_settings() {
     create_result="$(gh api "repos/$TARGET_ORG/$repo_name/pages" \
       --method POST \
       --input <(echo "$create_payload") \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || create_result='FAILED'
 
     if [[ "$create_result" == "FAILED" ]]; then
       warn "  Failed to enable Pages for $repo_name (branch '$src_source_branch' may not exist yet)"
@@ -597,7 +597,7 @@ _copy_pages_settings() {
     update_result="$(gh api "repos/$TARGET_ORG/$repo_name/pages" \
       --method PUT \
       --input <(echo "$update_payload") \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || update_result='FAILED'
 
     if [[ "$update_result" == "FAILED" ]]; then
       warn "  Failed to update Pages settings for $repo_name"

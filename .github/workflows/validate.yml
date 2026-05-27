@@ -2,13 +2,17 @@ name: Validate mirror state
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Mirror"]
+    types: [completed]
+    branches: [main]
 
 permissions:
   contents: write
 
 env:
-  GH_TOKEN:         ${{ secrets.GH_TOKEN }}
-  GH_TOKEN_SOURCE:  ${{ secrets.GH_TOKEN_SOURCE }}
+  GH_TOKEN:         ${{ secrets.MIGRATION_TOKEN }}
+  GH_TOKEN_SOURCE:  ${{ secrets.MIGRATION_TOKEN }}
   SOURCE_ORG:       ${{ vars.SOURCE_ORG }}
   TARGET_ORG:       constructorfabric
 
@@ -16,13 +20,17 @@ jobs:
   validate:
     name: Run validation checks
     runs-on: ubuntu-latest
+    # Run on manual trigger, or automatically after Mirror completes successfully
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
 
     steps:
       # ------------------------------------------------------------------ #
       - name: Checkout control repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.MIGRATION_TOKEN }}
           fetch-depth: 0
 
       # ------------------------------------------------------------------ #
@@ -43,6 +51,7 @@ jobs:
         run: |
           chmod +x mirror/validate/run-validation.sh
           chmod +x mirror/lib/common.sh
+          chmod +x mirror/stages/*.sh 2>/dev/null || true
 
       # ------------------------------------------------------------------ #
       - name: Run validation

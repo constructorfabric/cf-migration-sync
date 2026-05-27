@@ -70,7 +70,7 @@ main() {
   # ---- 3. Fetch pending invitations to target org -------------------------
   log "Fetching pending invitations to $TARGET_ORG..."
   local pending_invites
-  pending_invites="$(gh api "orgs/$TARGET_ORG/invitations?per_page=100" 2>/dev/null || echo '[]')"
+  pending_invites="$(gh api "orgs/$TARGET_ORG/invitations?per_page=100" 2>/dev/null)" || pending_invites='[]'
   local pending_logins
   pending_logins="$(echo "$pending_invites" | jq -r '.[].login // empty' | tr '[:upper:]' '[:lower:]')"
 
@@ -185,7 +185,7 @@ main() {
         --method POST \
         -F invitee_id="$source_id" \
         -f role="direct_member" \
-        2>/dev/null || echo 'FAILED')"
+        2>/dev/null)" || invite_result='FAILED'
 
       if [[ "$invite_result" == "FAILED" ]]; then
         # Race condition check: did they accept between the pre-fetch and the invite POST?

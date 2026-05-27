@@ -59,7 +59,7 @@ main() {
   # Use map()+add to concatenate .variables arrays from all pages.
   local org_vars
   org_vars="$(ghsrc api "orgs/$SOURCE_ORG/actions/variables?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'map(.variables // []) | add // []' || echo '[]')"
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object")]')" || org_vars='[]'
 
   local org_var_count
   org_var_count="$(echo "$org_vars" | jq 'length' 2>/dev/null || echo 0)"
@@ -68,7 +68,7 @@ main() {
   # Pre-fetch existing target org vars for upsert
   local tgt_org_vars
   tgt_org_vars="$(gh api "orgs/$TARGET_ORG/actions/variables?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'map(.variables // []) | add // [] | [.[].name]' || echo '[]')"
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object") | .name]')" || tgt_org_vars='[]'
 
   while IFS= read -r var; do
     local vname vvalue vvis
@@ -108,7 +108,7 @@ main() {
 
     local repo_vars
     repo_vars="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/actions/variables?per_page=100" \
-      --paginate 2>/dev/null | jq -s 'map(.variables // []) | add // []' || echo '[]')"
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object")]')" || repo_vars='[]'
 
     local rv_count
     rv_count="$(echo "$repo_vars" | jq 'length' 2>/dev/null || echo 0)"
@@ -122,7 +122,7 @@ main() {
     # Pre-fetch existing target repo vars
     local tgt_repo_vars
     tgt_repo_vars="$(gh api "repos/$TARGET_ORG/$repo_name/actions/variables?per_page=100" \
-      --paginate 2>/dev/null | jq -s 'map(.variables // []) | add // [] | [.[].name]' || echo '[]')"
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object") | .name]')" || tgt_repo_vars='[]'
 
     while IFS= read -r var; do
       local vname vvalue
@@ -171,7 +171,7 @@ _upsert_org_variable() {
     result="$(gh api "orgs/$TARGET_ORG/actions/variables/$vname" \
       --method PATCH \
       -f name="$vname" -f value="$vvalue" -f visibility="$vvis" \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || result='FAILED'
     [[ "$result" == "FAILED" ]] && { warn "  Failed to update org variable '$vname'"; status="failed"; } || \
       ok "  Updated org variable '$vname'"
   else
@@ -179,7 +179,7 @@ _upsert_org_variable() {
     result="$(gh api "orgs/$TARGET_ORG/actions/variables" \
       --method POST \
       -f name="$vname" -f value="$vvalue" -f visibility="$vvis" \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || result='FAILED'
     [[ "$result" == "FAILED" ]] && { warn "  Failed to create org variable '$vname'"; status="failed"; } || \
       ok "  Created org variable '$vname'"
   fi
@@ -224,7 +224,7 @@ _upsert_repo_variable() {
     result="$(gh api "repos/$TARGET_ORG/$repo_name/actions/variables/$vname" \
       --method PATCH \
       -f name="$vname" -f value="$vvalue" \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || result='FAILED'
     [[ "$result" == "FAILED" ]] && { warn "  Failed to update variable '$vname' in $repo_name"; status="failed"; } || \
       ok "  Updated variable '$vname' in $repo_name"
   else
@@ -232,7 +232,7 @@ _upsert_repo_variable() {
     result="$(gh api "repos/$TARGET_ORG/$repo_name/actions/variables" \
       --method POST \
       -f name="$vname" -f value="$vvalue" \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || result='FAILED'
     [[ "$result" == "FAILED" ]] && { warn "  Failed to create variable '$vname' in $repo_name"; status="failed"; } || \
       ok "  Created variable '$vname' in $repo_name"
   fi

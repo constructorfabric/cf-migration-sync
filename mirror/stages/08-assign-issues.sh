@@ -145,7 +145,7 @@ main() {
       result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/assignees" \
         --method POST \
         --input <(echo "$payload") \
-        2>/dev/null || echo 'FAILED')"
+        2>/dev/null)" || result='FAILED'
 
       if [[ "$result" == "FAILED" ]]; then
         warn "  Failed to assign all assignees to $TARGET_ORG/$repo_name#$tgt_number, trying one by one..."
@@ -174,7 +174,7 @@ main() {
           single_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/assignees" \
             --method POST \
             --input <(echo "$single_payload") \
-            2>/dev/null || echo 'FAILED')"
+            2>/dev/null)" || single_result='FAILED'
 
           if [[ "$single_result" != "FAILED" ]]; then
             applied_any=1

@@ -310,13 +310,13 @@ gh_paginate() {
     local batch
 
     if [[ "$cmd" == "ghsrc" ]]; then
-      batch="$(ghsrc api "$url" 2>/dev/null || echo '[]')"
+      batch="$(ghsrc api "$url" 2>/dev/null)" || batch='[]'
     else
-      batch="$(gh api "$url" 2>/dev/null || echo '[]')"
+      batch="$(gh api "$url" 2>/dev/null)" || batch='[]'
     fi
 
     # Normalize: extract first JSON value to guard against extra runner output (RC-3)
-    batch="$(echo "$batch" | jq -rs '.[0] // []' 2>/dev/null || echo '[]')"
+    batch="$(echo "$batch" | jq -rs '.[0] // []' 2>/dev/null)" || batch='[]'
 
     # If empty array or null, stop
     local count

@@ -192,7 +192,7 @@ ${rel_body}"
     create_result="$(gh api "repos/$TARGET_ORG/$repo_name/releases" \
       --method POST \
       --input <(echo "$payload") \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || create_result='FAILED'
 
     if [[ "$create_result" == "FAILED" ]]; then
       warn "  Failed to create release '$rel_tag' in $TARGET_ORG/$repo_name"
@@ -250,7 +250,7 @@ _mirror_release_assets() {
   local tgt_asset_names
   tgt_asset_names="$(gh api \
     "repos/$TARGET_ORG/$repo_name/releases/$tgt_release_id/assets" \
-    2>/dev/null | jq -rs '.[0] // [] | [.[].name]' 2>/dev/null || echo '[]')"
+    2>/dev/null | jq -rs '.[0] // [] | [.[].name]' 2>/dev/null)" || tgt_asset_names='[]'
 
   local tmp_dir
   tmp_dir="$(mktemp -d)"

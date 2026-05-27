@@ -59,7 +59,7 @@ main() {
   projects="$(ghsrc api graphql \
     -f query='query($org:String!){organization(login:$org){projectsV2(first:20){nodes{id title url number}}}}' \
     -f org="$SOURCE_ORG" \
-    2>/dev/null | jq -rs '.[0].data.organization.projectsV2.nodes // []' 2>/dev/null || echo '[]')"
+    2>/dev/null | jq -rs '.[0].data.organization.projectsV2.nodes // []' 2>/dev/null)" || projects='[]'
 
   local project_count
   project_count="$(echo "$projects" | jq 'length' 2>/dev/null || echo 0)"
@@ -83,7 +83,7 @@ main() {
   log "Fetching installed GitHub Apps on $SOURCE_ORG..."
   local apps
   apps="$(ghsrc api "orgs/$SOURCE_ORG/installations" \
-    2>/dev/null | jq -rs '.[0].installations // []' 2>/dev/null || echo '[]')"
+    2>/dev/null | jq -rs '.[0].installations // []' 2>/dev/null)" || apps='[]'
 
   local app_count
   app_count="$(echo "$apps" | jq 'length' 2>/dev/null || echo 0)"
@@ -105,7 +105,7 @@ main() {
   log "Fetching org webhooks from $SOURCE_ORG..."
   local org_webhooks
   org_webhooks="$(ghsrc api "orgs/$SOURCE_ORG/hooks" \
-    2>/dev/null | jq -rs '.[0] // []' 2>/dev/null || echo '[]')"
+    2>/dev/null | jq -rs '.[0] // []' 2>/dev/null)" || org_webhooks='[]'
 
   local org_wh_count
   org_wh_count="$(echo "$org_webhooks" | jq 'length' 2>/dev/null || echo 0)"
@@ -115,7 +115,7 @@ main() {
   local tgt_org_hook_urls
   tgt_org_hook_urls="$(gh api "orgs/$TARGET_ORG/hooks?per_page=100" \
     2>/dev/null | jq -rs '.[0] // [] | [.[].config.url // ""] | map(select(. != ""))' \
-    2>/dev/null || echo '[]')"
+    2>/dev/null)" || tgt_org_hook_urls='[]'
 
   while IFS= read -r hook; do
     local hook_name hook_url hook_ct hook_ssl hook_active hook_events hook_id
@@ -152,7 +152,7 @@ main() {
         local wh_result
         wh_result="$(gh api "orgs/$TARGET_ORG/hooks" \
           --method POST --input <(echo "$wh_payload") \
-          2>/dev/null || echo 'FAILED')"
+          2>/dev/null)" || wh_result='FAILED'
 
         if [[ "$wh_result" == "FAILED" ]]; then
           warn "  Failed to create org webhook $hook_url in $TARGET_ORG"
@@ -203,7 +203,7 @@ main() {
 
     local repo_hooks
     repo_hooks="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/hooks?per_page=100" \
-      2>/dev/null | jq -rs '.[0] // []' 2>/dev/null || echo '[]')"
+      2>/dev/null | jq -rs '.[0] // []' 2>/dev/null)" || repo_hooks='[]'
 
     local rh_count
     rh_count="$(echo "$repo_hooks" | jq 'length' 2>/dev/null || echo 0)"
@@ -215,7 +215,7 @@ main() {
     local tgt_repo_hook_urls
     tgt_repo_hook_urls="$(gh api "repos/$TARGET_ORG/$repo_name/hooks?per_page=100" \
       2>/dev/null | jq -rs '.[0] // [] | [.[].config.url // ""] | map(select(. != ""))' \
-      2>/dev/null || echo '[]')"
+      2>/dev/null)" || tgt_repo_hook_urls='[]'
 
     while IFS= read -r hook; do
       local hook_url hook_ct hook_ssl hook_active hook_events hook_id
@@ -249,7 +249,7 @@ main() {
           local rh_result
           rh_result="$(gh api "repos/$TARGET_ORG/$repo_name/hooks" \
             --method POST --input <(echo "$rh_payload") \
-            2>/dev/null || echo 'FAILED')"
+            2>/dev/null)" || rh_result='FAILED'
 
           if [[ "$rh_result" == "FAILED" ]]; then
             warn "  Failed to create repo webhook $hook_url in $TARGET_ORG/$repo_name"
@@ -288,7 +288,7 @@ main() {
   # last page's .secrets array.  Use map()+add to concatenate all pages' arrays.
   local org_secrets
   org_secrets="$(ghsrc api "orgs/$SOURCE_ORG/actions/secrets?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'map(.secrets // []) | add // []' || echo '[]')"
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("secrets")) | .secrets[] | select(type == "object")]')" || org_secrets='[]'
 
   while IFS= read -r secret; do
     local sname svis
@@ -310,7 +310,7 @@ main() {
 
     local repo_secrets
     repo_secrets="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/actions/secrets?per_page=100" \
-      --paginate 2>/dev/null | jq -s 'map(.secrets // []) | add // []' || echo '[]')"
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("secrets")) | .secrets[] | select(type == "object")]')" || repo_secrets='[]'
 
     while IFS= read -r secret; do
       local sname
@@ -329,7 +329,7 @@ main() {
   # Org-level Dependabot secrets
   local dep_secrets
   dep_secrets="$(ghsrc api "orgs/$SOURCE_ORG/dependabot/secrets?per_page=100" \
-    --paginate 2>/dev/null | jq -s 'map(.secrets // []) | add // []' || echo '[]')"
+    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("secrets")) | .secrets[] | select(type == "object")]')" || dep_secrets='[]'
 
   while IFS= read -r secret; do
     local sname svis
@@ -348,7 +348,7 @@ main() {
   log "Inventorying self-hosted runners from $SOURCE_ORG..."
   local runners
   runners="$(ghsrc api "orgs/$SOURCE_ORG/actions/runners?per_page=100" \
-    2>/dev/null | jq -rs '.[0].runners // []' 2>/dev/null || echo '[]')"
+    2>/dev/null | jq -rs '.[0].runners // []' 2>/dev/null)" || runners='[]'
 
   local runner_count
   runner_count="$(echo "$runners" | jq 'length' 2>/dev/null || echo 0)"
@@ -383,7 +383,7 @@ main() {
 
     local keys
     keys="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/keys?per_page=100" \
-      2>/dev/null | jq -rs '.[0] // []' 2>/dev/null || echo '[]')"
+      2>/dev/null | jq -rs '.[0] // []' 2>/dev/null)" || keys='[]'
 
     local key_count
     key_count="$(echo "$keys" | jq 'length' 2>/dev/null || echo 0)"

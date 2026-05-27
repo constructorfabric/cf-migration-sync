@@ -68,7 +68,7 @@ main() {
   # ---- 2. Pre-fetch existing target teams ---------------------------------
   log "Fetching existing teams in $TARGET_ORG..."
   local tgt_teams_json
-  tgt_teams_json="$(gh_paginate gh "orgs/$TARGET_ORG/teams" 2>/dev/null || echo '[]')"
+  tgt_teams_json="$(gh_paginate gh "orgs/$TARGET_ORG/teams" 2>/dev/null)" || tgt_teams_json='[]'
 
   # ---- 3. Create teams — multi-pass topological sort ----------------------
   # Parents must be created before children. We loop until all teams are
@@ -257,7 +257,7 @@ _create_or_update_team() {
   result="$(gh api "orgs/$TARGET_ORG/teams" \
     --method POST \
     --input <(echo "$payload") \
-    2>/dev/null || echo 'FAILED')"
+    2>/dev/null)" || result='FAILED'
 
   if [[ "$result" == "FAILED" ]]; then
     warn "  Failed to create team '$src_slug'"
@@ -332,7 +332,7 @@ _sync_team_members() {
     result="$(gh api "orgs/$TARGET_ORG/teams/$src_slug/memberships/$login" \
       --method PUT \
       -f role="$role" \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || result='FAILED'
 
     if [[ "$result" == "FAILED" ]]; then
       warn "  Failed to add $login to team '$src_slug' (user may not be in target org yet)"
@@ -387,7 +387,7 @@ _sync_team_repos() {
     result="$(gh api "orgs/$TARGET_ORG/teams/$src_slug/repos/$TARGET_ORG/$repo_name" \
       --method PUT \
       -f permission="$permission" \
-      2>/dev/null || echo 'FAILED')"
+      2>/dev/null)" || result='FAILED'
 
     if [[ "$result" == "FAILED" ]]; then
       warn "  Failed to set $permission on $repo_name for team '$src_slug'"

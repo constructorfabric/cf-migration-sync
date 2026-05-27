@@ -147,7 +147,7 @@ main() {
       result="$(gh api "repos/$TARGET_ORG/$repo_name/collaborators/$login" \
         --method PUT \
         -f permission="$permission" \
-        2>/dev/null || echo 'FAILED')"
+        2>/dev/null)" || result='FAILED'
 
       if [[ "$result" == "FAILED" ]]; then
         warn "  Failed to add $login ($permission) to $TARGET_ORG/$repo_name"
