@@ -3,8 +3,8 @@
     "stage": "05-mirror-issues",
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
-    "first_run_at": "2026-05-25T18:46:40Z",
-    "last_run_at": "2026-05-27T13:07:55Z"
+    "first_run_at": "2026-05-27T13:07:26Z",
+    "last_run_at": "2026-05-27T13:07:26Z"
   },
   "items": [],
   "stats": {
