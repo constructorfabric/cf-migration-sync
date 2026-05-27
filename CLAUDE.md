@@ -190,6 +190,26 @@ first, the captured variable becomes `<partial_output>\n[]` — a two-value stre
 breaks every downstream `jq 'length'` or arithmetic `$((...))` consumer. Use the same
 out-of-band assignment pattern for all sentinels.
 
+**Corollary — piping through `jq` is equally unsafe for exit-code detection.** The pattern
+`var="$(gh api ... 2>/dev/null | jq -rs '.[0] // empty' 2>/dev/null || true)"` silently
+sets `var` to the 404 error JSON even when `gh api` fails. Reason: `gh api` writes the
+error response body (`{"message":"Not Found",...}`) to **stdout** on failure. The pipe
+feeds this to `jq`, which parses it successfully (exit 0). With `pipefail`, the pipeline
+exit code is `jq`'s (0), so `|| true` never fires. `var` is left holding the error JSON,
+which is non-empty — so any `[[ -z "$var" ]]` guard is bypassed.
+
+This affects any fetch used to test whether a resource exists (Pages config, team membership,
+etc.). The fix is always: fetch without piping and check the exit code out-of-band:
+```bash
+# WRONG — 404 error JSON body captured; [[ -z "$var" ]] guard bypassed
+var="$(gh api "repos/$ORG/$repo/pages" 2>/dev/null | jq -rs '.[0] // empty' || true)"
+
+# CORRECT — non-zero exit from gh api resets var="" regardless of stdout content
+var="$(gh api "repos/$ORG/$repo/pages" 2>/dev/null)" || var=""
+# Then parse separately when needed:
+branch="$(echo "$var" | jq -r '.source.branch // "main"')"
+```
+
 ---
 
 ### RC-6 — `jq --arg` passes large strings as OS arguments, subject to ARG_MAX
@@ -436,6 +456,55 @@ Other files:  Stages 09 and 13 intentionally use [.[] | select(type=="object")] 
 # RC-8: wrong paginated flatten — catches original jq -s form AND the intermediate wrong fix
 grep -rn "jq -s 'add // \[\]'\|select(type==\"object\")\]'" mirror/stages/ mirror/lib/ mirror/validate/ \
   | grep -v "select(type==\"array\")\|13-mirror-actions-variables\|09-other-objects"
+```
+
+---
+
+### RC-13 — jq `not` used as prefix function instead of postfix filter
+
+```
+Bug:          _clear_crossref_record in mirror/lib/common.sh emitted a compile error on
+              every call: "jq: error: not/1 is not defined". The crossref state record
+              was never cleared, so stage 07 would skip re-processing bodies that stages
+              05/06 had just reconciled.
+
+5 Whys:
+  Why 1:  jq reported "not/1 is not defined" and exited non-zero — the filter was never
+          applied, so the rewrite-crossrefs.yaml entry was not removed.
+  Why 2:  The filter used select(not (expr)) — treating `not` as a prefix function.
+          jq's `not` is a postfix filter: it takes its input from the pipeline
+          (expr | not), not as a function argument. `not/1` (arity-1 function) does
+          not exist in jq.
+  Why 3:  The developer wrote the filter by analogy with Python / JavaScript / shell,
+          where `not expr` or `!expr` is standard prefix negation. jq diverges from
+          every common language on this operator.
+  Why 4:  The filter was never tested before being committed. A one-line smoke test
+          (echo '{}' | jq 'select(not (.a == 1))') would have caught it immediately.
+  Why 5:  There is no step in the development workflow that validates jq filter syntax
+          in shell scripts before they reach CI or production. jq expressions embedded
+          in bash strings are invisible to shellcheck and similar linters, and are only
+          executed when the specific code path is hit at runtime.
+
+Root cause:   jq filter syntax in shell scripts is never validated before runtime. jq has
+              operator semantics that differ from every major language (postfix `not`,
+              no ternary, etc.) — making it a predictable source of silent human error.
+              Without a smoke-test discipline or automated syntax check, errors are only
+              discovered when the exact code path is exercised in production.
+
+Fix applied:  Changed select(not (.repo == $r and .target_number == $n))
+              to     select((.repo == $r and .target_number == $n) | not)
+              in mirror/lib/common.sh line 61.
+
+Prevention:   1. jq `not` is ALWAYS postfix: write (expr) | not, never not(expr).
+              2. After writing any non-trivial jq filter in a shell string, run a
+                 one-line smoke test before committing:
+                 echo '{"items":[{"repo":"r","target_number":1}]}' | \
+                   jq --arg r "r" --argjson n 1 '<filter>'
+                 The smoke test must produce non-error output.
+              3. Grep for the wrong pattern after any jq editing session:
+                 grep -rn "select(not " mirror/stages/ mirror/lib/ mirror/validate/
+
+Other files:  grep -rn "select(not " found no other occurrences.
 ```
 
 ---

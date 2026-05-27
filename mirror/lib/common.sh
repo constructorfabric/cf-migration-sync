@@ -58,7 +58,7 @@ _clear_crossref_record() {
   local tmp
   tmp="$(mktemp)"
   jq --arg r "$repo_name" --argjson n "$tgt_number" \
-    '.items = [.items[] | select(not (.repo == $r and .target_number == $n))]' \
+    '.items = [.items[] | select((.repo == $r and .target_number == $n) | not)]' \
     "$crossrefs_file" > "$tmp" && mv "$tmp" "$crossrefs_file" || rm -f "$tmp"
 }
 

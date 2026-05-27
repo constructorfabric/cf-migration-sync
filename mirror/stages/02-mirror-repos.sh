@@ -75,8 +75,10 @@ main() {
     fi
 
     # ---- Create target repo if it doesn't exist -------------------------
+    # Exit-code pattern: gh api writes 404 error JSON to stdout even on failure, so
+    # piping through jq hides the non-zero exit. Use sentinel-outside-$() instead.
     local target_exists
-    target_exists="$(gh api "repos/$TARGET_ORG/$name" 2>/dev/null | jq -r '.name // empty' || true)"
+    target_exists="$(gh api "repos/$TARGET_ORG/$name" 2>/dev/null)" || target_exists=""
 
     if [[ -z "$target_exists" ]]; then
       log "Creating target repo $TARGET_ORG/$name (private=$private)..."

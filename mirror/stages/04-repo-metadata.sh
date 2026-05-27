@@ -532,10 +532,12 @@ _copy_pages_settings() {
   local repo_name="$1"
   local state_file="$2"
 
-  # Fetch source Pages config — 404 means Pages are not enabled (not an error)
+  # Fetch source Pages config — 404 means Pages are not enabled (not an error).
+  # RC-5 / exit-code pattern: gh api writes the 404 error JSON to stdout even on failure,
+  # so piping through jq hides the non-zero exit and makes src_pages non-empty on 404.
+  # Use the sentinel-outside-$() form: non-zero exit from gh api resets src_pages="".
   local src_pages
-  src_pages="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/pages" \
-    2>/dev/null | jq -rs '.[0] // empty' 2>/dev/null || true)"
+  src_pages="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/pages" 2>/dev/null)" || src_pages=""
 
   if [[ -z "$src_pages" ]]; then
     return 0  # Pages not enabled on source
@@ -548,10 +550,11 @@ _copy_pages_settings() {
 
   log "  Syncing Pages settings for $repo_name (branch=$src_source_branch path=$src_source_path build=$src_build_type)..."
 
-  # Check whether Pages is already enabled on target
+  # Check whether Pages is already enabled on target.
+  # Same exit-code pattern: 404 → gh api exits non-zero → tgt_pages="" → POST branch.
+  # Without this, the 404 JSON body would be captured as non-empty, triggering PUT instead.
   local tgt_pages
-  tgt_pages="$(gh api "repos/$TARGET_ORG/$repo_name/pages" \
-    2>/dev/null | jq -rs '.[0] // empty' 2>/dev/null || true)"
+  tgt_pages="$(gh api "repos/$TARGET_ORG/$repo_name/pages" 2>/dev/null)" || tgt_pages=""
 
   local ts
   ts="$(now)"
