@@ -564,7 +564,8 @@ _copy_pages_settings() {
   local status="synced"
 
   if [[ -z "$tgt_pages" ]]; then
-    # Enable Pages on target
+    # Enable Pages on target.
+    # Try with build_type first; fall back without it if the org blocks legacy builds.
     local create_payload
     create_payload="$(jq -n \
       --arg branch "$src_source_branch" \
@@ -572,20 +573,42 @@ _copy_pages_settings() {
       --arg build  "$src_build_type" \
       '{"source":{"branch":$branch,"path":$path},"build_type":$build}')"
 
+    local _pages_err_tmp
+    _pages_err_tmp="$(mktemp)"
     local create_result
     create_result="$(gh api "repos/$TARGET_ORG/$repo_name/pages" \
       --method POST \
       --input <(echo "$create_payload") \
-      2>/dev/null)" || create_result='FAILED'
+      2>"$_pages_err_tmp")" || create_result='FAILED'
+    local _pages_err
+    _pages_err="$(cat "$_pages_err_tmp" 2>/dev/null || true)"
+    rm -f "$_pages_err_tmp"
 
     if [[ "$create_result" == "FAILED" ]]; then
-      warn "  Failed to enable Pages for $repo_name (branch '$src_source_branch' may not exist yet)"
-      status="failed"
+      # Fallback: try without build_type — some orgs only allow workflow (Actions) builds.
+      local create_payload_no_build
+      create_payload_no_build="$(jq -n \
+        --arg branch "$src_source_branch" \
+        --arg path   "$src_source_path" \
+        '{"source":{"branch":$branch,"path":$path}}')"
+      local create_result2
+      create_result2="$(gh api "repos/$TARGET_ORG/$repo_name/pages" \
+        --method POST \
+        --input <(echo "$create_payload_no_build") \
+        2>/dev/null)" || create_result2='FAILED'
+      if [[ "$create_result2" == "FAILED" ]]; then
+        warn "  Failed to enable Pages for $repo_name (branch '$src_source_branch' may not exist yet, or org Pages policy blocks this config) — GitHub: ${_pages_err:-<no details>}"
+        status="failed"
+      else
+        ok "  Enabled Pages for $repo_name (without build_type — org may restrict legacy builds)"
+      fi
     else
       ok "  Enabled Pages for $repo_name"
     fi
   else
-    # Update existing Pages config
+    # Update existing Pages config.
+    # Try with build_type first; fall back without it if the org blocks legacy builds or
+    # the target was already in workflow mode (GitHub rejects legacy downgrade via API).
     local update_payload
     update_payload="$(jq -n \
       --arg branch "$src_source_branch" \
@@ -593,15 +616,36 @@ _copy_pages_settings() {
       --arg build  "$src_build_type" \
       '{"source":{"branch":$branch,"path":$path},"build_type":$build}')"
 
+    local _pages_err_tmp
+    _pages_err_tmp="$(mktemp)"
     local update_result
     update_result="$(gh api "repos/$TARGET_ORG/$repo_name/pages" \
       --method PUT \
       --input <(echo "$update_payload") \
-      2>/dev/null)" || update_result='FAILED'
+      2>"$_pages_err_tmp")" || update_result='FAILED'
+    local _pages_err
+    _pages_err="$(cat "$_pages_err_tmp" 2>/dev/null || true)"
+    rm -f "$_pages_err_tmp"
 
     if [[ "$update_result" == "FAILED" ]]; then
-      warn "  Failed to update Pages settings for $repo_name"
-      status="failed"
+      # Fallback: update only source (branch/path), omit build_type.
+      # Handles: org restricts legacy, target already in workflow mode, etc.
+      local update_payload_no_build
+      update_payload_no_build="$(jq -n \
+        --arg branch "$src_source_branch" \
+        --arg path   "$src_source_path" \
+        '{"source":{"branch":$branch,"path":$path}}')"
+      local update_result2
+      update_result2="$(gh api "repos/$TARGET_ORG/$repo_name/pages" \
+        --method PUT \
+        --input <(echo "$update_payload_no_build") \
+        2>/dev/null)" || update_result2='FAILED'
+      if [[ "$update_result2" == "FAILED" ]]; then
+        warn "  Failed to update Pages settings for $repo_name — GitHub: ${_pages_err:-<no details>}"
+        status="failed"
+      else
+        ok "  Updated Pages source for $repo_name (build_type skipped — GitHub: ${_pages_err:-org policy})"
+      fi
     else
       ok "  Updated Pages settings for $repo_name"
     fi
