@@ -105,7 +105,7 @@ main() {
     fi
 
     _mirror_repo_issues "$repo_name"
-    pause 1.0
+    pause 2.0
 
   done < <(echo "$repos" | jq -c '.[]')
 
@@ -172,6 +172,7 @@ _mirror_repo_issues() {
   local new_count=0
   local skip_count=0
   local failed_count=0
+  local wrote_count=0   # counts actual state writes; drives checkpoint commits
 
   while IFS= read -r issue; do
     local src_number
@@ -196,9 +197,7 @@ _mirror_repo_issues() {
 
     processed=$((processed + 1))
     if (( processed % 25 == 0 )); then
-      log "  Progress: $processed/$total_issues issues..."
-      [[ "$DRY_RUN" -eq 0 ]] && \
-        commit_state "mirror: checkpoint ${processed}/${total_issues} issues in $repo_name [skip ci]"
+      log "  Progress: $processed/$total_issues issues (wrote=$wrote_count new=$new_count skipped=$skip_count)..."
     fi
 
     # ---- Check idempotency via state file --------------------------------
@@ -270,10 +269,14 @@ _mirror_repo_issues() {
           --method PATCH \
           -f state="closed" \
           2>/dev/null || warn "  Failed to close issue #$existing_target_number in $TARGET_ORG/$repo_name"
-        pause 1.5   # rate-limit cooldown after PATCH /issues
+        pause 3.0   # rate-limit cooldown after PATCH /issues
       fi
       _mirror_issue_comments \
         "$repo_name" "$src_number" "$existing_target_number" "$state_file"
+      wrote_count=$((wrote_count + 1))
+      if (( wrote_count % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+        commit_state "mirror: checkpoint $wrote_count issue writes in $repo_name [skip ci]"
+      fi
       skip_count=$((skip_count + 1))
       continue
     fi
@@ -367,7 +370,7 @@ ${marker}"
       _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
         "$title" "" "" "$assignees" "failed" "" "none"
       failed_count=$((failed_count + 1))
-      pause 1.0
+      pause 2.0
       continue
     fi
 
@@ -383,11 +386,11 @@ ${marker}"
       _upsert_issue "$state_file" "$src_number" "$src_id" "$src_state" \
         "$title" "" "" "$assignees" "failed" "" "none"
       failed_count=$((failed_count + 1))
-      pause 1.0
+      pause 2.0
       continue
     fi
 
-    pause 2.0   # rate-limit cooldown after POST /issues
+    pause 4.0   # rate-limit cooldown after POST /issues
 
     # ---- Close issue in target if source is closed ----------------------
     if [[ "$src_state" == "closed" ]]; then
@@ -395,7 +398,7 @@ ${marker}"
         --method PATCH \
         -f state="closed" \
         2>/dev/null || warn "  Failed to close issue #$tgt_number in $TARGET_ORG/$repo_name"
-      pause 1.5   # rate-limit cooldown after PATCH /issues
+      pause 3.0   # rate-limit cooldown after PATCH /issues
     fi
 
     ok "  Created issue #$src_number -> #$tgt_number in $TARGET_ORG/$repo_name"
@@ -415,7 +418,11 @@ ${marker}"
     _mirror_issue_comments "$repo_name" "$src_number" "$tgt_number" "$state_file"
 
     new_count=$((new_count + 1))
-    pause 1.5   # rate-limit buffer between issues
+    wrote_count=$((wrote_count + 1))
+    if (( wrote_count % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+      commit_state "mirror: checkpoint $wrote_count issue writes in $repo_name [skip ci]"
+    fi
+    pause 3.0   # rate-limit buffer between issues
 
   done < <(echo "$all_issues" | jq -c '.[]')
 
@@ -574,7 +581,7 @@ ${c_marker}"
         commit_state "mirror: checkpoint issue #$src_number comments ($posted_since_commit posted) in $repo_name [skip ci]"
       fi
     fi
-    pause 1.5   # rate-limit cooldown after POST /issues/{n}/comments
+    pause 3.0   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$comments" | jq -c '.[]')
 
   _update_comments_status "$state_file" "$src_number" "done" "$mirrored"
@@ -664,7 +671,7 @@ ${marker}"
   tgt_state="$(echo "$tgt_json"         | jq -r '.state // "open"'      2>/dev/null || true)"
   tgt_milestone_num="$(echo "$tgt_json" | jq -r '.milestone.number // "null"' 2>/dev/null || echo 'null')"
   tgt_node_id="$(echo "$tgt_json"       | jq -r '.node_id // ""'        2>/dev/null || true)"
-  pause 0.5
+  pause 1.0
 
   # ---- Resolve target milestone number from source title -------------------
   local new_milestone_number="null"
@@ -721,7 +728,7 @@ ${marker}"
       --input "$_body_tmp" \
       2>/dev/null || warn "  Failed to reconcile issue $repo_name#$src_number → #$tgt_number"
     log "  Reconciled #$src_number → #$tgt_number ($(echo "$patch_payload" | jq -r 'keys | join(", ")'))"
-    pause 1.5
+    pause 3.0
     [[ "$body_changed" -eq 1 ]] && _clear_crossref_record "$repo_name" "$tgt_number"
   fi
 
@@ -816,7 +823,7 @@ ${c_marker}"
           --method PATCH \
           --input "$_body_tmp" \
           2>/dev/null || warn "  Failed to update comment $c_id on #$src_number"
-        pause 1.5
+        pause 3.0
       fi
       mirrored=$((mirrored + 1))
     else
@@ -829,7 +836,7 @@ ${c_marker}"
         2>/dev/null)" || c_result="FAILED"
       [[ "$c_result" != "FAILED" ]] && mirrored=$((mirrored + 1)) || \
         warn "  Failed to create comment $c_id on #$src_number"
-      pause 1.5
+      pause 3.0
     fi
   done < <(echo "$comments" | jq -c '.[]' 2>/dev/null || true)
 
