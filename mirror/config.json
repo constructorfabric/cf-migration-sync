@@ -54,7 +54,9 @@
       "the command line but persistent across runs and scoped per repo.",
       "Remove the entry (or set it to 0) once the repo is fully mirrored."
     ],
-    "resume_after_pr": { }
+    "resume_after_pr": {
+      "cyberware-rust": 602
+    }
   },
 
   "stage_07_rewrite_cross_references": {},
