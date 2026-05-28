@@ -834,6 +834,7 @@ ${c_marker}"
       mirrored=$((mirrored + 1))
       posted_since_commit=$((posted_since_commit + 1))
       if (( posted_since_commit % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+        _update_pr_comments_status "$state_file" "$src_pr_number" "in_progress" "$mirrored"
         commit_state "mirror: checkpoint PR #$src_pr_number comments ($posted_since_commit posted) in $repo_name [skip ci]"
       fi
     fi
@@ -874,6 +875,7 @@ ${rv_marker}"
       mirrored=$((mirrored + 1))
       posted_since_commit=$((posted_since_commit + 1))
       if (( posted_since_commit % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+        _update_pr_comments_status "$state_file" "$src_pr_number" "in_progress" "$mirrored"
         commit_state "mirror: checkpoint PR #$src_pr_number comments ($posted_since_commit posted) in $repo_name [skip ci]"
       fi
     fi
@@ -915,6 +917,7 @@ ${rc_marker}"
       mirrored=$((mirrored + 1))
       posted_since_commit=$((posted_since_commit + 1))
       if (( posted_since_commit % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+        _update_pr_comments_status "$state_file" "$src_pr_number" "in_progress" "$mirrored"
         commit_state "mirror: checkpoint PR #$src_pr_number comments ($posted_since_commit posted) in $repo_name [skip ci]"
       fi
     fi
