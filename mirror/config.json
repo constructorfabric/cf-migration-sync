@@ -45,6 +45,8 @@
   },
 
   "stage_06_mirror_prs": {
+    "skip_open_prs": true,
+
     "exclude_repos": [],
 
     "_comment_resume_after_pr": [
@@ -55,7 +57,7 @@
       "Remove the entry (or set it to 0) once the repo is fully mirrored."
     ],
     "resume_after_pr": {
-      "cyberware-rust": 602
+      "cyberware-rust": 218
     }
   },
 

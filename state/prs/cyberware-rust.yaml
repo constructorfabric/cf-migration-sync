@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-26T07:04:01Z",
-    "last_run_at": "2026-05-28T15:36:35Z"
+    "last_run_at": "2026-05-28T19:39:27Z"
   },
   "items": [
     {
@@ -4625,7 +4625,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:23:34Z",
       "comments_status": "done",
-      "comments_mirrored": 144
+      "comments_mirrored": 159
     },
     {
       "source_pr_number": 431,
@@ -4637,7 +4637,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:23:45Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 33
     },
     {
       "source_pr_number": 427,
@@ -4649,7 +4649,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:23:53Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 6
     },
     {
       "source_pr_number": 424,
@@ -4661,7 +4661,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:24:00Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 423,
@@ -4673,7 +4673,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:24:06Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 420,
@@ -4685,7 +4685,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:24:13Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 417,
@@ -4697,7 +4697,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:24:21Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 12
     },
     {
       "source_pr_number": 415,
@@ -4709,7 +4709,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:24:27Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 413,
@@ -4721,7 +4721,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:24:33Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 412,
@@ -4733,7 +4733,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:24:40Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 410,
@@ -4745,7 +4745,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:24:45Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 406,
@@ -4757,7 +4757,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:24:53Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 400,
@@ -4769,7 +4769,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:25:01Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 57
     },
     {
       "source_pr_number": 399,
@@ -4781,7 +4781,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:25:10Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 395,
@@ -4793,7 +4793,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:25:17Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 394,
@@ -4805,7 +4805,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:25:25Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 391,
@@ -4817,7 +4817,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:25:32Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 7
     },
     {
       "source_pr_number": 388,
@@ -4829,7 +4829,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:25:39Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 66
     },
     {
       "source_pr_number": 387,
@@ -4841,7 +4841,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:25:48Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 121
     },
     {
       "source_pr_number": 385,
@@ -4853,7 +4853,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:25:58Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 159
     },
     {
       "source_pr_number": 382,
@@ -4865,7 +4865,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:26:07Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 42
     },
     {
       "source_pr_number": 378,
@@ -4877,7 +4877,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:26:17Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 373,
@@ -4889,7 +4889,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:26:23Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 6
     },
     {
       "source_pr_number": 371,
@@ -4901,7 +4901,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:26:30Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 27
     },
     {
       "source_pr_number": 370,
@@ -4913,7 +4913,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:26:39Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 338,
@@ -4925,7 +4925,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:26:45Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 336,
@@ -4937,7 +4937,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:26:51Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 335,
@@ -4949,7 +4949,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:26:58Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 334,
@@ -4961,7 +4961,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:27:05Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 7
     },
     {
       "source_pr_number": 333,
@@ -4973,7 +4973,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:27:11Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 332,
@@ -4985,7 +4985,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:27:16Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 331,
@@ -4997,7 +4997,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:27:21Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 329,
@@ -5009,7 +5009,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:27:28Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 15
     },
     {
       "source_pr_number": 328,
@@ -5021,7 +5021,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:27:34Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 35
     },
     {
       "source_pr_number": 327,
@@ -5033,7 +5033,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:27:41Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 326,
@@ -5045,7 +5045,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:27:49Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 325,
@@ -5057,7 +5057,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:27:55Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 324,
@@ -5069,7 +5069,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:28:02Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 61
     },
     {
       "source_pr_number": 323,
@@ -5081,7 +5081,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:28:11Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 322,
@@ -5093,7 +5093,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:28:17Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 95
     },
     {
       "source_pr_number": 321,
@@ -5105,7 +5105,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:28:24Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 319,
@@ -5117,7 +5117,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:28:31Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 46
     },
     {
       "source_pr_number": 318,
@@ -5129,7 +5129,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:28:38Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 317,
@@ -5141,7 +5141,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:28:44Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 316,
@@ -5153,7 +5153,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:28:50Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 315,
@@ -5165,7 +5165,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:28:57Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 25
     },
     {
       "source_pr_number": 314,
@@ -5177,7 +5177,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:29:04Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 14
     },
     {
       "source_pr_number": 313,
@@ -5189,7 +5189,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:29:12Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 308,
@@ -5201,7 +5201,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:29:20Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 307,
@@ -5213,7 +5213,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:29:27Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 305,
@@ -5225,7 +5225,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:29:34Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 304,
@@ -5237,7 +5237,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:29:41Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 303,
@@ -5249,7 +5249,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:29:47Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 21
     },
     {
       "source_pr_number": 301,
@@ -5261,7 +5261,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:29:56Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 39
     },
     {
       "source_pr_number": 300,
@@ -5273,7 +5273,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:30:04Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 14
     },
     {
       "source_pr_number": 295,
