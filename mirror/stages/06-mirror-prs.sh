@@ -43,6 +43,9 @@
 #                       is purely a fast-forward optimisation — it does not bypass
 #                       idempotency, it just avoids reading the state file for every
 #                       PR the user knows was already done.
+# --skip-open-prs      Skip the open-PR loop entirely; process only closed PRs.
+#                      Can also be set in config.json as:
+#                        "stage_06_mirror_prs": { "skip_open_prs": true }
 
 set -euo pipefail
 
@@ -105,12 +108,13 @@ _gh_err_hint() {
 # ---------------------------------------------------------------------------
 main() {
   # Parse our custom flags before passing the remainder to check_dry_run.
-  local start_after_pr="" only_repo=""
+  local start_after_pr="" only_repo="" skip_open_prs=0
   local passthrough_args=()
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --start-after-pr) start_after_pr="$2"; shift 2 ;;
       --repo)           only_repo="$2";       shift 2 ;;
+      --skip-open-prs)  skip_open_prs=1;      shift   ;;
       *)                passthrough_args+=("$1"); shift ;;
     esac
   done
@@ -118,9 +122,19 @@ main() {
   check_dry_run "${passthrough_args[@]+"${passthrough_args[@]}"}"
   preflight
 
+  # Load skip_open_prs from config if not already set by CLI flag (RC-4: use has())
+  if [[ "$skip_open_prs" -eq 0 ]]; then
+    local _cfg_skip
+    _cfg_skip="$(jq -r \
+      'if (.stage_06_mirror_prs | type == "object" and has("skip_open_prs")) then .stage_06_mirror_prs.skip_open_prs | tostring else "false" end' \
+      "$MIRROR_CONFIG" 2>/dev/null || echo 'false')"
+    [[ "$_cfg_skip" == "true" ]] && skip_open_prs=1
+  fi
+
   log "Stage 06 — mirror-prs starting"
   [[ -n "$only_repo"       ]] && log "  Single-repo mode: $only_repo"
   [[ -n "$start_after_pr"  ]] && log "  Resume point: skipping closed PRs with number > $start_after_pr"
+  [[ "$skip_open_prs" -eq 1 ]] && log "  skip-open-prs: open PR loop will be skipped"
   mkdir -p "$STATE_DIR"
 
   log "Fetching source repos from $SOURCE_ORG..."
@@ -172,7 +186,7 @@ main() {
     fi
 
     log "[$repo_idx/$total_repos] Processing PRs for $repo_name${effective_resume:+ (resume after PR #$effective_resume)}..."
-    _mirror_repo_prs "$repo_name" "$effective_resume"
+    _mirror_repo_prs "$repo_name" "$effective_resume" "$skip_open_prs"
     pause 2.0
 
   done < <(echo "$repos" | jq -c '.[]')
@@ -209,6 +223,7 @@ _create_or_update_branch() {
 _mirror_repo_prs() {
   local repo_name="$1"
   local start_after_pr="${2:-}"   # fast-forward: skip closed PRs with number > this
+  local skip_open_prs="${3:-0}"   # 1 = skip open-PR loop entirely
   local state_file="$STATE_DIR/$repo_name.yaml"
 
   state_init "$state_file" "06-mirror-prs"
@@ -235,6 +250,9 @@ _mirror_repo_prs() {
     jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | {name: .name, sha: .commit.sha}]')" || tgt_branches='[]'
 
   # ---- 1. Open PRs — create as real PRs where head branch exists ----------
+  if [[ "$skip_open_prs" -eq 1 ]]; then
+    log "  Skipping open PRs (skip_open_prs=true)"
+  else
   log "  Fetching open PRs from $SOURCE_ORG/$repo_name..."
   local open_prs
   open_prs="$(ghsrc api \
@@ -443,6 +461,7 @@ ${marker}"
 
     done < <(echo "$open_prs" | jq -c '.[]' 2>/dev/null || true)
   fi
+  fi  # end skip_open_prs check
 
   # ---- 2. Closed PRs — real PR if branch exists, else issue ---------------
   log "  Fetching closed PRs from $SOURCE_ORG/$repo_name..."

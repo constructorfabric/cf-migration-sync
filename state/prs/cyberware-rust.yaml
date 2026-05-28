@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-26T07:04:01Z",
-    "last_run_at": "2026-05-28T10:03:04Z"
+    "last_run_at": "2026-05-28T15:35:36Z"
   },
   "items": [
     {
@@ -51,7 +51,7 @@
       "target_issue_number": 2261,
       "title": "[PR #1961] feat(dylint): enforce `docs.rs.all-features` for publishable crates",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:03:52Z",
+      "mirrored_at": "2026-05-28T11:50:41Z",
       "comments_status": "done",
       "comments_mirrored": 9
     },
@@ -63,7 +63,7 @@
       "target_issue_number": 2262,
       "title": "[PR #1957] feat (modkit oop):",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:03:56Z",
+      "mirrored_at": "2026-05-28T11:50:44Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -75,7 +75,7 @@
       "target_issue_number": 2263,
       "title": "[PR #1952] feat(modkit-contracts) PoC",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:03:59Z",
+      "mirrored_at": "2026-05-28T11:50:48Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -87,7 +87,7 @@
       "target_issue_number": 2264,
       "title": "[PR #1948] docs(serverless-runtime): add Composed Runtime + Starlark + native Rust ADRs",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:03Z",
+      "mirrored_at": "2026-05-28T11:50:52Z",
       "comments_status": "done",
       "comments_mirrored": 3
     },
@@ -99,7 +99,7 @@
       "target_issue_number": 1406,
       "title": "[PR #1929] fix(resource-group): drop RG-prefix requirement for allowed_memberships",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:09Z",
+      "mirrored_at": "2026-05-28T11:50:58Z",
       "comments_status": "done",
       "comments_mirrored": 4
     },
@@ -147,7 +147,7 @@
       "target_issue_number": 1410,
       "title": "[PR #1915] chore(deps): bump rcgen from 0.14.7 to 0.14.8",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:13Z",
+      "mirrored_at": "2026-05-28T11:51:02Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -159,7 +159,7 @@
       "target_issue_number": 1411,
       "title": "[PR #1914] chore(deps): bump serde-saphyr from 0.0.22 to 0.0.24",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:17Z",
+      "mirrored_at": "2026-05-28T11:51:05Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -171,7 +171,7 @@
       "target_issue_number": 1412,
       "title": "[PR #1913] chore(deps): bump jsonwebtoken from 10.3.0 to 10.4.0",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:21Z",
+      "mirrored_at": "2026-05-28T11:51:09Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -183,7 +183,7 @@
       "target_issue_number": 1413,
       "title": "[PR #1912] chore(deps): bump jsonschema from 0.40.2 to 0.46.5",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:25Z",
+      "mirrored_at": "2026-05-28T11:51:14Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -195,7 +195,7 @@
       "target_issue_number": 1414,
       "title": "[PR #1911] chore(deps): bump opentelemetry_sdk from 0.31.0 to 0.32.1",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:29Z",
+      "mirrored_at": "2026-05-28T11:51:18Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -219,7 +219,7 @@
       "target_issue_number": 1416,
       "title": "[PR #1900] fix(resource-group): enforce AuthZ on type endpoints and tenant-scope on memberships",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:33Z",
+      "mirrored_at": "2026-05-28T11:51:23Z",
       "comments_status": "done",
       "comments_mirrored": 8
     },
@@ -231,7 +231,7 @@
       "target_issue_number": 1417,
       "title": "[PR #1889] Add architecture-level PR review tier to Rust review guidelines",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:38Z",
+      "mirrored_at": "2026-05-28T11:51:27Z",
       "comments_status": "done",
       "comments_mirrored": 8
     },
@@ -243,7 +243,7 @@
       "target_issue_number": 2265,
       "title": "[PR #1857] feat(file-storage): P1 implementation aligned with rust-traits.md",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:42Z",
+      "mirrored_at": "2026-05-28T11:51:32Z",
       "comments_status": "done",
       "comments_mirrored": 4
     },
@@ -267,7 +267,7 @@
       "target_issue_number": 2266,
       "title": "[PR #1570] feat(tracing): deepen instrumentation across host, handlers, auth, DB, and retries",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:49Z",
+      "mirrored_at": "2026-05-28T11:51:38Z",
       "comments_status": "done",
       "comments_mirrored": 26
     },
@@ -279,7 +279,7 @@
       "target_issue_number": 1418,
       "title": "[PR #1564] docs(file-storage): add P1 DESIGN + companion specs",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:04:58Z",
+      "mirrored_at": "2026-05-28T11:51:47Z",
       "comments_status": "done",
       "comments_mirrored": 57
     },
@@ -291,7 +291,7 @@
       "target_issue_number": 2267,
       "title": "[PR #1539] chore(deps): reduce feature footprint and remove duplicate crates",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:05:02Z",
+      "mirrored_at": "2026-05-28T11:51:52Z",
       "comments_status": "done",
       "comments_mirrored": 6
     },
@@ -303,7 +303,7 @@
       "target_issue_number": 2268,
       "title": "[PR #1535] feat(model-registry): Model registry SDK types",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:05:12Z",
+      "mirrored_at": "2026-05-28T11:52:00Z",
       "comments_status": "done",
       "comments_mirrored": 55
     },
@@ -315,7 +315,7 @@
       "target_issue_number": 2269,
       "title": "[PR #1494] feat(resource-group): REST API and server wiring [3/4]",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:05:25Z",
+      "mirrored_at": "2026-05-28T11:52:13Z",
       "comments_status": "done",
       "comments_mirrored": 96
     },
@@ -327,7 +327,7 @@
       "target_issue_number": 2270,
       "title": "[PR #1493] feat(resource-group): domain services and storage layer [2/4]",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:05:32Z",
+      "mirrored_at": "2026-05-28T11:52:22Z",
       "comments_status": "done",
       "comments_mirrored": 51
     },
@@ -339,7 +339,7 @@
       "target_issue_number": 2271,
       "title": "[PR #1467] docs: credentials storage plugin",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:05:41Z",
+      "mirrored_at": "2026-05-28T11:52:31Z",
       "comments_status": "done",
       "comments_mirrored": 73
     },
@@ -351,7 +351,7 @@
       "target_issue_number": 2272,
       "title": "[PR #1419] feat(license-service)- PRD is created",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:05:48Z",
+      "mirrored_at": "2026-05-28T11:52:38Z",
       "comments_status": "done",
       "comments_mirrored": 17
     },
@@ -363,7 +363,7 @@
       "target_issue_number": 2273,
       "title": "[PR #1352] refactor(oagw): derive error instances from request URIs",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:05:54Z",
+      "mirrored_at": "2026-05-28T11:52:44Z",
       "comments_status": "done",
       "comments_mirrored": 17
     },
@@ -375,7 +375,7 @@
       "target_issue_number": 2274,
       "title": "[PR #1328] refactor(errors): replace String errors with typed thiserror chains",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:05:59Z",
+      "mirrored_at": "2026-05-28T11:52:50Z",
       "comments_status": "done",
       "comments_mirrored": 16
     },
@@ -387,7 +387,7 @@
       "target_issue_number": 1419,
       "title": "[PR #1174] doc: document RELEASE_POLICY.md",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:06:04Z",
+      "mirrored_at": "2026-05-28T11:52:54Z",
       "comments_status": "done",
       "comments_mirrored": 8
     },
@@ -399,7 +399,7 @@
       "target_issue_number": 2275,
       "title": "[PR #1148] Move credentials storage as a plugin",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:06:09Z",
+      "mirrored_at": "2026-05-28T11:53:00Z",
       "comments_status": "done",
       "comments_mirrored": 14
     },
@@ -411,7 +411,7 @@
       "target_issue_number": 2276,
       "title": "[PR #814] fix(modkit): oop reconnect issue  #671",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:06:15Z",
+      "mirrored_at": "2026-05-28T11:53:07Z",
       "comments_status": "done",
       "comments_mirrored": 38
     },
@@ -423,7 +423,7 @@
       "target_issue_number": 2277,
       "title": "[PR #700] docs: convert oagw spec to cypilot",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:06:22Z",
+      "mirrored_at": "2026-05-28T11:53:15Z",
       "comments_status": "done",
       "comments_mirrored": 45
     },
@@ -435,7 +435,7 @@
       "target_issue_number": 2278,
       "title": "[PR #601] feat(log): add build configuration to logs",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:06:29Z",
+      "mirrored_at": "2026-05-28T11:53:21Z",
       "comments_status": "done",
       "comments_mirrored": 43
     },
@@ -447,7 +447,7 @@
       "target_issue_number": 2279,
       "title": "[PR #562] feat: add deep-review skill and CLAUDE.md project instructions",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:06:37Z",
+      "mirrored_at": "2026-05-28T11:53:28Z",
       "comments_status": "done",
       "comments_mirrored": 59
     },
@@ -459,7 +459,7 @@
       "target_issue_number": 2280,
       "title": "[PR #519] 486: Refactor Makefile targets and add Windows E2E support with file-parser config",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:06:45Z",
+      "mirrored_at": "2026-05-28T11:53:36Z",
       "comments_status": "done",
       "comments_mirrored": 59
     },
@@ -471,7 +471,7 @@
       "target_issue_number": 2281,
       "title": "[PR #477] [WIP] [feat](settings_service): PRD, Design, and ADR documents as per FDD",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:07:01Z",
+      "mirrored_at": "2026-05-28T11:53:52Z",
       "comments_status": "done",
       "comments_mirrored": 170
     },
@@ -483,7 +483,7 @@
       "target_issue_number": 2282,
       "title": "[PR #402] [WIP] feat(web-search-gateway): add PRD and Design for Web Search Gateway",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:07:13Z",
+      "mirrored_at": "2026-05-28T11:54:04Z",
       "comments_status": "done",
       "comments_mirrored": 134
     },
@@ -495,7 +495,7 @@
       "target_issue_number": 2283,
       "title": "[PR #320] ci: add new make targets to run e2e tests with postgres and mariadb",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:07:24Z",
+      "mirrored_at": "2026-05-28T11:54:16Z",
       "comments_status": "done",
       "comments_mirrored": 106
     },
@@ -507,7 +507,7 @@
       "target_issue_number": 2284,
       "title": "[PR #244] [WIP] docs(workflow_engine): add PRD and ADRs for Workflow Engine",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:07:29Z",
+      "mirrored_at": "2026-05-28T11:54:21Z",
       "comments_status": "done",
       "comments_mirrored": 2
     },
@@ -519,7 +519,7 @@
       "target_issue_number": 2285,
       "title": "[PR #243] [WIP] docs(serverless_runtime): add PRD and ADRs for entrypoint + Starlark …",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:07:42Z",
+      "mirrored_at": "2026-05-28T11:54:32Z",
       "comments_status": "done",
       "comments_mirrored": 135
     },
@@ -4349,7 +4349,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:20:43Z",
       "comments_status": "done",
-      "comments_mirrored": 8
+      "comments_mirrored": 51
     },
     {
       "source_pr_number": 487,
@@ -4361,7 +4361,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:20:50Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 71
     },
     {
       "source_pr_number": 484,
@@ -4373,7 +4373,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:20:58Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 246
     },
     {
       "source_pr_number": 482,
@@ -4385,7 +4385,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:21:08Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 80
     },
     {
       "source_pr_number": 478,
@@ -4397,7 +4397,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:21:15Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 30
     },
     {
       "source_pr_number": 475,
@@ -4409,7 +4409,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:21:23Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 9
     },
     {
       "source_pr_number": 473,
@@ -4421,7 +4421,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:21:31Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 470,
@@ -4433,7 +4433,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:21:38Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 16
     },
     {
       "source_pr_number": 469,
@@ -6795,7 +6795,7 @@
       "target_issue_number": 2253,
       "title": "[PR #1977] Add design document for MCP servers support feature.",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:03:32Z",
+      "mirrored_at": "2026-05-28T11:50:21Z",
       "comments_status": "done",
       "comments_mirrored": 3
     },
@@ -6807,7 +6807,7 @@
       "target_issue_number": 2254,
       "title": "[PR #1974] feat(usage-collector): reset specs to simplified design and drop SDK scaffold",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:03:36Z",
+      "mirrored_at": "2026-05-28T11:50:25Z",
       "comments_status": "done",
       "comments_mirrored": 2
     },
@@ -6819,7 +6819,7 @@
       "target_issue_number": 2255,
       "title": "[PR #1973] Chat engine service",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:03:43Z",
+      "mirrored_at": "2026-05-28T11:50:32Z",
       "comments_status": "done",
       "comments_mirrored": 21
     },
@@ -6831,7 +6831,7 @@
       "target_issue_number": 2256,
       "title": "[PR #1972] docs(approval-service): propose PRD scope and generalize approval scenarios",
       "status": "mirrored",
-      "mirrored_at": "2026-05-28T10:03:47Z",
+      "mirrored_at": "2026-05-28T11:50:35Z",
       "comments_status": "done",
       "comments_mirrored": 2
     },
@@ -10662,6 +10662,18 @@
       "mirrored_at": "2026-05-28T07:44:38Z",
       "comments_status": "done",
       "comments_mirrored": 11
+    },
+    {
+      "source_pr_number": 1978,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1978",
+      "source_state": "open",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 2286,
+      "title": "[PR #1978] docs(event-broker): module design + SDK",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T11:50:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
     }
   ],
   "stats": {
