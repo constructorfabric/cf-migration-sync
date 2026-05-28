@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-26T07:04:01Z",
-    "last_run_at": "2026-05-28T04:45:53Z"
+    "last_run_at": "2026-05-28T07:03:40Z"
   },
   "items": [
     {
@@ -15,31 +15,31 @@
       "target_issue_number": 2259,
       "title": "[PR #1965] Support configurable vendor in static_audit and single-tenant-tr plugins.",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:39Z",
+      "mirrored_at": "2026-05-28T07:04:27Z",
       "comments_status": "done",
       "comments_mirrored": 10
     },
     {
       "source_pr_number": 1963,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1963",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "Artifizer",
-      "target_issue_number": null,
+      "target_issue_number": 2251,
       "title": "[PR #1963] docs(guidelines): add GTS PR review guide and wire into review configs",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:09:36Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 1962,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1962",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "asmith987",
       "target_issue_number": 2260,
       "title": "[PR #1962] feat(canonical-errors): SDK canonical-projection pattern (ADR 0005)",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:42Z",
+      "mirrored_at": "2026-05-28T07:09:50Z",
       "comments_status": "done",
       "comments_mirrored": 8
     },
@@ -51,7 +51,7 @@
       "target_issue_number": 2261,
       "title": "[PR #1961] feat(dylint): enforce `docs.rs.all-features` for publishable crates",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:46Z",
+      "mirrored_at": "2026-05-28T07:04:31Z",
       "comments_status": "done",
       "comments_mirrored": 9
     },
@@ -63,7 +63,7 @@
       "target_issue_number": 2262,
       "title": "[PR #1957] feat (modkit oop):",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:49Z",
+      "mirrored_at": "2026-05-28T07:04:36Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -75,7 +75,7 @@
       "target_issue_number": 2263,
       "title": "[PR #1952] feat(modkit-contracts) PoC",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:51Z",
+      "mirrored_at": "2026-05-28T07:04:40Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -87,7 +87,7 @@
       "target_issue_number": 2264,
       "title": "[PR #1948] docs(serverless-runtime): add Composed Runtime + Starlark + native Rust ADRs",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:54Z",
+      "mirrored_at": "2026-05-28T07:04:44Z",
       "comments_status": "done",
       "comments_mirrored": 3
     },
@@ -99,45 +99,45 @@
       "target_issue_number": 1406,
       "title": "[PR #1929] fix(resource-group): drop RG-prefix requirement for allowed_memberships",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:18Z",
+      "mirrored_at": "2026-05-28T07:04:48Z",
       "comments_status": "done",
       "comments_mirrored": 4
     },
     {
       "source_pr_number": 1927,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1927",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "capybutler",
       "target_issue_number": 1407,
       "title": "[PR #1927] feat(usage-collector): [5/6] add TimescaleDB production storage plugin",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:21Z",
+      "mirrored_at": "2026-05-28T07:10:36Z",
       "comments_status": "done",
-      "comments_mirrored": 36
+      "comments_mirrored": 37
     },
     {
       "source_pr_number": 1926,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1926",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "capybutler",
       "target_issue_number": 1408,
       "title": "[PR #1926] feat(usage-collector): [4/6] add query API (aggregated and raw endpoints)",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:25Z",
+      "mirrored_at": "2026-05-28T07:10:42Z",
       "comments_status": "done",
-      "comments_mirrored": 14
+      "comments_mirrored": 15
     },
     {
       "source_pr_number": 1919,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1919",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "capybutler",
       "target_issue_number": 1409,
       "title": "[PR #1919] feat(usage-collector): [3/6] add REST client crate for remote ingest delivery",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:29Z",
+      "mirrored_at": "2026-05-28T07:10:59Z",
       "comments_status": "done",
-      "comments_mirrored": 25
+      "comments_mirrored": 26
     },
     {
       "source_pr_number": 1915,
@@ -147,7 +147,7 @@
       "target_issue_number": 1410,
       "title": "[PR #1915] chore(deps): bump rcgen from 0.14.7 to 0.14.8",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:34Z",
+      "mirrored_at": "2026-05-28T07:04:57Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -159,7 +159,7 @@
       "target_issue_number": 1411,
       "title": "[PR #1914] chore(deps): bump serde-saphyr from 0.0.22 to 0.0.24",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:36Z",
+      "mirrored_at": "2026-05-28T07:05:00Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -171,7 +171,7 @@
       "target_issue_number": 1412,
       "title": "[PR #1913] chore(deps): bump jsonwebtoken from 10.3.0 to 10.4.0",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:38Z",
+      "mirrored_at": "2026-05-28T07:05:08Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -183,7 +183,7 @@
       "target_issue_number": 1413,
       "title": "[PR #1912] chore(deps): bump jsonschema from 0.40.2 to 0.46.5",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:41Z",
+      "mirrored_at": "2026-05-28T07:05:12Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
@@ -193,23 +193,23 @@
       "source_state": "open",
       "source_author": "dependabot[bot]",
       "target_issue_number": 1414,
-      "title": "[PR #1911] chore(deps): bump opentelemetry_sdk from 0.31.0 to 0.32.0",
+      "title": "[PR #1911] chore(deps): bump opentelemetry_sdk from 0.31.0 to 0.32.1",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:43Z",
+      "mirrored_at": "2026-05-28T07:05:26Z",
       "comments_status": "done",
       "comments_mirrored": 1
     },
     {
       "source_pr_number": 1908,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1908",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "capybutler",
       "target_issue_number": 1415,
       "title": "[PR #1908] feat(usage-collector): [2/6] add emitter, gateway, REST client, and noop storage plugin crates",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:46Z",
+      "mirrored_at": "2026-05-28T07:11:28Z",
       "comments_status": "done",
-      "comments_mirrored": 45
+      "comments_mirrored": 46
     },
     {
       "source_pr_number": 1900,
@@ -219,7 +219,7 @@
       "target_issue_number": 1416,
       "title": "[PR #1900] fix(resource-group): enforce AuthZ on type endpoints and tenant-scope on memberships",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:50Z",
+      "mirrored_at": "2026-05-28T07:05:31Z",
       "comments_status": "done",
       "comments_mirrored": 8
     },
@@ -231,7 +231,7 @@
       "target_issue_number": 1417,
       "title": "[PR #1889] Add architecture-level PR review tier to Rust review guidelines",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:53Z",
+      "mirrored_at": "2026-05-28T07:05:36Z",
       "comments_status": "done",
       "comments_mirrored": 8
     },
@@ -243,21 +243,21 @@
       "target_issue_number": 2265,
       "title": "[PR #1857] feat(file-storage): P1 implementation aligned with rust-traits.md",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:57Z",
+      "mirrored_at": "2026-05-28T07:05:41Z",
       "comments_status": "done",
       "comments_mirrored": 4
     },
     {
       "source_pr_number": 1835,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1835",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "capybutler",
-      "target_issue_number": null,
+      "target_issue_number": 2252,
       "title": "[PR #1835] feat(usage-collector): [6/6] end-to-end test suite",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:13Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 1570,
@@ -267,7 +267,7 @@
       "target_issue_number": 2266,
       "title": "[PR #1570] feat(tracing): deepen instrumentation across host, handlers, auth, DB, and retries",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:00Z",
+      "mirrored_at": "2026-05-28T07:05:47Z",
       "comments_status": "done",
       "comments_mirrored": 26
     },
@@ -279,7 +279,7 @@
       "target_issue_number": 1418,
       "title": "[PR #1564] docs(file-storage): add P1 DESIGN + companion specs",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:04:57Z",
+      "mirrored_at": "2026-05-28T07:05:56Z",
       "comments_status": "done",
       "comments_mirrored": 57
     },
@@ -291,7 +291,7 @@
       "target_issue_number": 2267,
       "title": "[PR #1539] chore(deps): reduce feature footprint and remove duplicate crates",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:04Z",
+      "mirrored_at": "2026-05-28T07:06:00Z",
       "comments_status": "done",
       "comments_mirrored": 6
     },
@@ -303,7 +303,7 @@
       "target_issue_number": 2268,
       "title": "[PR #1535] feat(model-registry): Model registry SDK types",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:07Z",
+      "mirrored_at": "2026-05-28T07:06:10Z",
       "comments_status": "done",
       "comments_mirrored": 55
     },
@@ -315,7 +315,7 @@
       "target_issue_number": 2269,
       "title": "[PR #1494] feat(resource-group): REST API and server wiring [3/4]",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:12Z",
+      "mirrored_at": "2026-05-28T07:06:23Z",
       "comments_status": "done",
       "comments_mirrored": 96
     },
@@ -327,7 +327,7 @@
       "target_issue_number": 2270,
       "title": "[PR #1493] feat(resource-group): domain services and storage layer [2/4]",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:22Z",
+      "mirrored_at": "2026-05-28T07:06:32Z",
       "comments_status": "done",
       "comments_mirrored": 51
     },
@@ -339,7 +339,7 @@
       "target_issue_number": 2271,
       "title": "[PR #1467] docs: credentials storage plugin",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:27Z",
+      "mirrored_at": "2026-05-28T07:06:42Z",
       "comments_status": "done",
       "comments_mirrored": 73
     },
@@ -351,7 +351,7 @@
       "target_issue_number": 2272,
       "title": "[PR #1419] feat(license-service)- PRD is created",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:34Z",
+      "mirrored_at": "2026-05-28T07:06:49Z",
       "comments_status": "done",
       "comments_mirrored": 17
     },
@@ -363,7 +363,7 @@
       "target_issue_number": 2273,
       "title": "[PR #1352] refactor(oagw): derive error instances from request URIs",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:38Z",
+      "mirrored_at": "2026-05-28T07:06:55Z",
       "comments_status": "done",
       "comments_mirrored": 17
     },
@@ -375,7 +375,7 @@
       "target_issue_number": 2274,
       "title": "[PR #1328] refactor(errors): replace String errors with typed thiserror chains",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:42Z",
+      "mirrored_at": "2026-05-28T07:07:01Z",
       "comments_status": "done",
       "comments_mirrored": 16
     },
@@ -387,7 +387,7 @@
       "target_issue_number": 1419,
       "title": "[PR #1174] doc: document RELEASE_POLICY.md",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T07:05:04Z",
+      "mirrored_at": "2026-05-28T07:07:06Z",
       "comments_status": "done",
       "comments_mirrored": 8
     },
@@ -399,7 +399,7 @@
       "target_issue_number": 2275,
       "title": "[PR #1148] Move credentials storage as a plugin",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:45Z",
+      "mirrored_at": "2026-05-28T07:07:11Z",
       "comments_status": "done",
       "comments_mirrored": 14
     },
@@ -411,7 +411,7 @@
       "target_issue_number": 2276,
       "title": "[PR #814] fix(modkit): oop reconnect issue  #671",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:49Z",
+      "mirrored_at": "2026-05-28T07:07:18Z",
       "comments_status": "done",
       "comments_mirrored": 38
     },
@@ -423,7 +423,7 @@
       "target_issue_number": 2277,
       "title": "[PR #700] docs: convert oagw spec to cypilot",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:54Z",
+      "mirrored_at": "2026-05-28T07:07:25Z",
       "comments_status": "done",
       "comments_mirrored": 45
     },
@@ -435,7 +435,7 @@
       "target_issue_number": 2278,
       "title": "[PR #601] feat(log): add build configuration to logs",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:57:58Z",
+      "mirrored_at": "2026-05-28T07:07:31Z",
       "comments_status": "done",
       "comments_mirrored": 43
     },
@@ -447,7 +447,7 @@
       "target_issue_number": 2279,
       "title": "[PR #562] feat: add deep-review skill and CLAUDE.md project instructions",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:58:02Z",
+      "mirrored_at": "2026-05-28T07:07:39Z",
       "comments_status": "done",
       "comments_mirrored": 59
     },
@@ -459,7 +459,7 @@
       "target_issue_number": 2280,
       "title": "[PR #519] 486: Refactor Makefile targets and add Windows E2E support with file-parser config",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:58:06Z",
+      "mirrored_at": "2026-05-28T07:07:48Z",
       "comments_status": "done",
       "comments_mirrored": 59
     },
@@ -471,7 +471,7 @@
       "target_issue_number": 2281,
       "title": "[PR #477] [WIP] [feat](settings_service): PRD, Design, and ADR documents as per FDD",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:58:11Z",
+      "mirrored_at": "2026-05-28T07:08:03Z",
       "comments_status": "done",
       "comments_mirrored": 170
     },
@@ -483,7 +483,7 @@
       "target_issue_number": 2282,
       "title": "[PR #402] [WIP] feat(web-search-gateway): add PRD and Design for Web Search Gateway",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:58:21Z",
+      "mirrored_at": "2026-05-28T07:08:15Z",
       "comments_status": "done",
       "comments_mirrored": 134
     },
@@ -495,7 +495,7 @@
       "target_issue_number": 2283,
       "title": "[PR #320] ci: add new make targets to run e2e tests with postgres and mariadb",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:58:28Z",
+      "mirrored_at": "2026-05-28T07:08:27Z",
       "comments_status": "done",
       "comments_mirrored": 106
     },
@@ -507,7 +507,7 @@
       "target_issue_number": 2284,
       "title": "[PR #244] [WIP] docs(workflow_engine): add PRD and ADRs for Workflow Engine",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:58:34Z",
+      "mirrored_at": "2026-05-28T07:08:31Z",
       "comments_status": "done",
       "comments_mirrored": 2
     },
@@ -519,7 +519,7 @@
       "target_issue_number": 2285,
       "title": "[PR #243] [WIP] docs(serverless_runtime): add PRD and ADRs for entrypoint + Starlark …",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:58:36Z",
+      "mirrored_at": "2026-05-28T07:08:43Z",
       "comments_status": "done",
       "comments_mirrored": 135
     },
@@ -533,7 +533,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T07:05:26Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 44
     },
     {
       "source_pr_number": 1319,
@@ -1517,19 +1517,19 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T11:38:31Z",
       "comments_status": "done",
-      "comments_mirrored": 50
+      "comments_mirrored": 67
     },
     {
       "source_pr_number": 1137,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1137",
       "source_state": "closed",
       "source_author": "MikeFalcon77",
-      "target_issue_number": null,
+      "target_issue_number": 1717,
       "title": "[PR #1137] Chore(release-plz)",
-      "status": "failed",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:37:29Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 1018,
@@ -1985,31 +1985,31 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T15:31:29Z",
       "comments_status": "done",
-      "comments_mirrored": 22
+      "comments_mirrored": 34
     },
     {
       "source_pr_number": 948,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/948",
       "source_state": "closed",
       "source_author": "Artifizer",
-      "target_issue_number": null,
+      "target_issue_number": 1788,
       "title": "[PR #948] chore: disable PR bots that send notification messages to Telegram since they are too verbose",
-      "status": "failed",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:43:54Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 946,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/946",
       "source_state": "closed",
       "source_author": "striped-zebra-dev",
-      "target_issue_number": null,
+      "target_issue_number": 1789,
       "title": "[PR #946] Feat/mini chat streaming turn lifecycle",
-      "status": "failed",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:43:57Z",
+      "comments_status": "done",
+      "comments_mirrored": 11
     },
     {
       "source_pr_number": 922,
@@ -2021,7 +2021,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:55:54Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 33
     },
     {
       "source_pr_number": 921,
@@ -2045,7 +2045,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:56:06Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 29
     },
     {
       "source_pr_number": 919,
@@ -2057,7 +2057,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:56:13Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 6
     },
     {
       "source_pr_number": 917,
@@ -2069,7 +2069,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:56:22Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 916,
@@ -2093,7 +2093,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:56:34Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 85
     },
     {
       "source_pr_number": 912,
@@ -2105,7 +2105,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:56:43Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 11
     },
     {
       "source_pr_number": 908,
@@ -2117,7 +2117,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:56:50Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 99
     },
     {
       "source_pr_number": 907,
@@ -2129,7 +2129,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:56:58Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 19
     },
     {
       "source_pr_number": 906,
@@ -2141,7 +2141,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:57:06Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 35
     },
     {
       "source_pr_number": 903,
@@ -2165,7 +2165,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:57:18Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 900,
@@ -2177,7 +2177,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:57:24Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 54
     },
     {
       "source_pr_number": 898,
@@ -2189,7 +2189,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:57:32Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 34
     },
     {
       "source_pr_number": 896,
@@ -2201,7 +2201,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:57:38Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 893,
@@ -2213,7 +2213,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:57:45Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 892,
@@ -2237,7 +2237,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:57:59Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 883,
@@ -2249,7 +2249,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:58:06Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 882,
@@ -2261,7 +2261,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:58:12Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 222
     },
     {
       "source_pr_number": 879,
@@ -2273,7 +2273,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:58:26Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 876,
@@ -2285,7 +2285,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:58:33Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 18
     },
     {
       "source_pr_number": 875,
@@ -2297,7 +2297,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:58:41Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 36
     },
     {
       "source_pr_number": 872,
@@ -2309,7 +2309,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:58:49Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 39
     },
     {
       "source_pr_number": 870,
@@ -2321,7 +2321,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:58:58Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 868,
@@ -2333,7 +2333,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:59:06Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 13
     },
     {
       "source_pr_number": 866,
@@ -2345,7 +2345,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:59:14Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 128
     },
     {
       "source_pr_number": 864,
@@ -2357,7 +2357,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:59:25Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 57
     },
     {
       "source_pr_number": 860,
@@ -2369,7 +2369,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:59:35Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 22
     },
     {
       "source_pr_number": 859,
@@ -2381,7 +2381,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:59:41Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 18
     },
     {
       "source_pr_number": 858,
@@ -2393,7 +2393,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:59:49Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 855,
@@ -2405,7 +2405,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T17:59:57Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 94
     },
     {
       "source_pr_number": 853,
@@ -2417,7 +2417,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:00:05Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 852,
@@ -2429,7 +2429,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:00:12Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 127
     },
     {
       "source_pr_number": 850,
@@ -2441,7 +2441,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:00:24Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 12
     },
     {
       "source_pr_number": 847,
@@ -2453,7 +2453,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:00:31Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 38
     },
     {
       "source_pr_number": 845,
@@ -2465,7 +2465,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:00:40Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 843,
@@ -2477,7 +2477,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:00:47Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 831,
@@ -2489,7 +2489,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:00:54Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 830,
@@ -2501,7 +2501,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:01:01Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 11
     },
     {
       "source_pr_number": 829,
@@ -2513,7 +2513,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:01:08Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 21
     },
     {
       "source_pr_number": 828,
@@ -2525,7 +2525,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:01:16Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 827,
@@ -2537,7 +2537,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:01:23Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 9
     },
     {
       "source_pr_number": 826,
@@ -2549,7 +2549,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:01:31Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 16
     },
     {
       "source_pr_number": 825,
@@ -2561,7 +2561,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:01:38Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 24
     },
     {
       "source_pr_number": 824,
@@ -2573,7 +2573,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:01:46Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 16
     },
     {
       "source_pr_number": 823,
@@ -2585,7 +2585,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:01:54Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 7
     },
     {
       "source_pr_number": 822,
@@ -2597,7 +2597,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:02:01Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 13
     },
     {
       "source_pr_number": 821,
@@ -2609,7 +2609,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:02:10Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 13
     },
     {
       "source_pr_number": 812,
@@ -2621,7 +2621,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:02:17Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 16
     },
     {
       "source_pr_number": 810,
@@ -2633,7 +2633,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:02:26Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 26
     },
     {
       "source_pr_number": 807,
@@ -2645,7 +2645,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:02:35Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 22
     },
     {
       "source_pr_number": 806,
@@ -2657,7 +2657,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:02:44Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 36
     },
     {
       "source_pr_number": 804,
@@ -2669,7 +2669,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:02:54Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 36
     },
     {
       "source_pr_number": 802,
@@ -2681,7 +2681,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:03:02Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 799,
@@ -2693,7 +2693,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:03:09Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 14
     },
     {
       "source_pr_number": 797,
@@ -2705,7 +2705,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:03:18Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 37
     },
     {
       "source_pr_number": 796,
@@ -2717,7 +2717,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:03:25Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 795,
@@ -2729,7 +2729,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:03:32Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 794,
@@ -2741,7 +2741,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:03:40Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 793,
@@ -2789,7 +2789,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:04:05Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 32
     },
     {
       "source_pr_number": 788,
@@ -2801,7 +2801,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:04:12Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 786,
@@ -2813,7 +2813,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:04:20Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 13
     },
     {
       "source_pr_number": 783,
@@ -2825,7 +2825,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:04:29Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 63
     },
     {
       "source_pr_number": 782,
@@ -2837,7 +2837,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:04:36Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 780,
@@ -2849,7 +2849,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:04:43Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 235
     },
     {
       "source_pr_number": 775,
@@ -2873,7 +2873,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:05:03Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 6
     },
     {
       "source_pr_number": 771,
@@ -2897,7 +2897,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:05:16Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 27
     },
     {
       "source_pr_number": 764,
@@ -2909,7 +2909,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:05:24Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 763,
@@ -2921,7 +2921,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:05:32Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 761,
@@ -2933,7 +2933,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:05:40Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 35
     },
     {
       "source_pr_number": 759,
@@ -2957,7 +2957,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:05:55Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 756,
@@ -2969,7 +2969,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:06:03Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 7
     },
     {
       "source_pr_number": 755,
@@ -2993,7 +2993,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:06:18Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 78
     },
     {
       "source_pr_number": 750,
@@ -3005,7 +3005,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:06:27Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 68
     },
     {
       "source_pr_number": 749,
@@ -3029,7 +3029,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:06:42Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 41
     },
     {
       "source_pr_number": 739,
@@ -3041,7 +3041,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:06:51Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 148
     },
     {
       "source_pr_number": 738,
@@ -3053,7 +3053,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:07:02Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 31
     },
     {
       "source_pr_number": 735,
@@ -3065,7 +3065,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:07:10Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 83
     },
     {
       "source_pr_number": 733,
@@ -3077,7 +3077,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:07:18Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 75
     },
     {
       "source_pr_number": 730,
@@ -3089,7 +3089,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:07:28Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 26
     },
     {
       "source_pr_number": 727,
@@ -3101,7 +3101,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:07:37Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 133
     },
     {
       "source_pr_number": 726,
@@ -3113,7 +3113,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:07:48Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 94
     },
     {
       "source_pr_number": 723,
@@ -3125,7 +3125,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:07:58Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 10
     },
     {
       "source_pr_number": 719,
@@ -3137,7 +3137,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:08:06Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 73
     },
     {
       "source_pr_number": 718,
@@ -3149,7 +3149,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:08:16Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 29
     },
     {
       "source_pr_number": 716,
@@ -3161,7 +3161,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:08:26Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 712,
@@ -3173,7 +3173,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:08:34Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 8
     },
     {
       "source_pr_number": 709,
@@ -3185,7 +3185,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:08:42Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 78
     },
     {
       "source_pr_number": 707,
@@ -3197,7 +3197,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:08:52Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 11
     },
     {
       "source_pr_number": 705,
@@ -3209,7 +3209,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:08:59Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 17
     },
     {
       "source_pr_number": 701,
@@ -3221,7 +3221,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:09:06Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 13
     },
     {
       "source_pr_number": 697,
@@ -3233,7 +3233,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:09:15Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 695,
@@ -3245,7 +3245,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:09:22Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 694,
@@ -3269,7 +3269,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:09:36Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 690,
@@ -3281,7 +3281,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:09:43Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 688,
@@ -3293,7 +3293,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:09:50Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 687,
@@ -3305,7 +3305,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:09:58Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 686,
@@ -3329,7 +3329,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:10:13Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 682,
@@ -3341,7 +3341,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:10:21Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 8
     },
     {
       "source_pr_number": 681,
@@ -3353,7 +3353,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:10:27Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 679,
@@ -3365,7 +3365,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:10:34Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 35
     },
     {
       "source_pr_number": 677,
@@ -3377,7 +3377,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:10:42Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 53
     },
     {
       "source_pr_number": 675,
@@ -3389,7 +3389,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:10:49Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 6
     },
     {
       "source_pr_number": 673,
@@ -3401,7 +3401,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:10:57Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 670,
@@ -3413,7 +3413,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:11:04Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 13
     },
     {
       "source_pr_number": 664,
@@ -3437,7 +3437,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:11:18Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 660,
@@ -3449,7 +3449,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:11:26Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 8
     },
     {
       "source_pr_number": 659,
@@ -3485,7 +3485,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:11:47Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 653,
@@ -3497,7 +3497,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:11:54Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 11
     },
     {
       "source_pr_number": 652,
@@ -3521,7 +3521,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:12:07Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 7
     },
     {
       "source_pr_number": 649,
@@ -3545,7 +3545,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:12:20Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 43
     },
     {
       "source_pr_number": 645,
@@ -3557,7 +3557,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:12:28Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 643,
@@ -3569,7 +3569,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:12:35Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 24
     },
     {
       "source_pr_number": 641,
@@ -3581,7 +3581,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:12:44Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 16
     },
     {
       "source_pr_number": 640,
@@ -3593,7 +3593,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:12:51Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 635,
@@ -3605,7 +3605,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:12:57Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 132
     },
     {
       "source_pr_number": 628,
@@ -3617,7 +3617,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:13:06Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 626,
@@ -3629,7 +3629,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:13:15Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 215
     },
     {
       "source_pr_number": 624,
@@ -3641,7 +3641,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:13:28Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 127
     },
     {
       "source_pr_number": 619,
@@ -3653,7 +3653,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:13:38Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 129
     },
     {
       "source_pr_number": 616,
@@ -3665,7 +3665,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:13:46Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 615,
@@ -3677,7 +3677,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:13:54Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 49
     },
     {
       "source_pr_number": 612,
@@ -3689,7 +3689,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:14:03Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 28
     },
     {
       "source_pr_number": 609,
@@ -3701,7 +3701,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:14:10Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 38
     },
     {
       "source_pr_number": 606,
@@ -3713,7 +3713,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:14:18Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 69
     },
     {
       "source_pr_number": 602,
@@ -6795,7 +6795,7 @@
       "target_issue_number": 2253,
       "title": "[PR #1977] Add design document for MCP servers support feature.",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:20Z",
+      "mirrored_at": "2026-05-28T07:04:07Z",
       "comments_status": "done",
       "comments_mirrored": 3
     },
@@ -6807,7 +6807,7 @@
       "target_issue_number": 2254,
       "title": "[PR #1974] feat(usage-collector): reset specs to simplified design and drop SDK scaffold",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:22Z",
+      "mirrored_at": "2026-05-28T07:04:12Z",
       "comments_status": "done",
       "comments_mirrored": 2
     },
@@ -6819,7 +6819,7 @@
       "target_issue_number": 2255,
       "title": "[PR #1973] Chat engine service",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:25Z",
+      "mirrored_at": "2026-05-28T07:04:18Z",
       "comments_status": "done",
       "comments_mirrored": 21
     },
@@ -6831,33 +6831,33 @@
       "target_issue_number": 2256,
       "title": "[PR #1972] docs(approval-service): propose PRD scope and generalize approval scenarios",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:30Z",
+      "mirrored_at": "2026-05-28T07:04:21Z",
       "comments_status": "done",
       "comments_mirrored": 2
     },
     {
       "source_pr_number": 1970,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1970",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "mattgarmon",
       "target_issue_number": 2257,
       "title": "[PR #1970] fix(modkit-auth): replace aliri_tokens with in-house token watcher",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:33Z",
+      "mirrored_at": "2026-05-28T07:09:14Z",
       "comments_status": "done",
       "comments_mirrored": 2
     },
     {
       "source_pr_number": 1969,
       "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1969",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "asmith987",
       "target_issue_number": 2258,
       "title": "[PR #1969] feat(oagw): emit basic proxy metrics",
       "status": "mirrored",
-      "mirrored_at": "2026-05-27T20:56:36Z",
+      "mirrored_at": "2026-05-28T07:09:24Z",
       "comments_status": "done",
-      "comments_mirrored": 5
+      "comments_mirrored": 8
     },
     {
       "source_pr_number": 291,
@@ -7446,6 +7446,3222 @@
       "mirrored_at": "2026-05-28T05:05:46Z",
       "comments_status": "done",
       "comments_mirrored": 20
+    },
+    {
+      "source_pr_number": 1976,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1976",
+      "source_state": "closed",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 2249,
+      "title": "[PR #1976] fix(quickstart): make example bootable (#1971)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:08:58Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1975,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1975",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 2250,
+      "title": "[PR #1975] fix: md-fabric - improve md-fabric filter and selection behavior",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:09:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1968,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1968",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1397,
+      "title": "[PR #1968] feat(account-management): OData filter/orderby on /users + first/lasе name read-projection",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:09:24Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1967,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1967",
+      "source_state": "closed",
+      "source_author": "nonameffh",
+      "target_issue_number": 1398,
+      "title": "[PR #1967] docs(quota-enforcement): PRD & DESIGN",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:09:28Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1966,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1966",
+      "source_state": "closed",
+      "source_author": "fluiderson",
+      "target_issue_number": 1399,
+      "title": "[PR #1966] fix: compilation, linter, formatting issues",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:09:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1960,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1960",
+      "source_state": "closed",
+      "source_author": "mattgarmon",
+      "target_issue_number": 1400,
+      "title": "[PR #1960] fix(oagw): FIPS-aware crypto provider for tests and TLS server config factory",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:09:50Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1959,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1959",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1401,
+      "title": "[PR #1959] chore: continue renaming of cf-sdlc to cyberware-sdlc",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:09:53Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1958,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1958",
+      "source_state": "closed",
+      "source_author": "AntonBraer",
+      "target_issue_number": 1402,
+      "title": "[PR #1958] docs(serverless-runtime): add host crate decomposition and renumber NEXT_ADR_SCOPE after ADR-0005",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:09:57Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1955,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1955",
+      "source_state": "closed",
+      "source_author": "maurolacy",
+      "target_issue_number": 1403,
+      "title": "[PR #1955] docs: Fix some doctests",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:10:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1954,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1954",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1404,
+      "title": "[PR #1954] feat(modkit): add error_502/503/504 OperationBuilder helpers",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:10:04Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1953,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1953",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1405,
+      "title": "[PR #1953] feat(account-management): public v1 REST surface + plugins + e2e",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:10:08Z",
+      "comments_status": "done",
+      "comments_mirrored": 10
+    },
+    {
+      "source_pr_number": 1951,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1951",
+      "source_state": "closed",
+      "source_author": "maurolacy",
+      "target_issue_number": 1420,
+      "title": "[PR #1951] Fix: FIPS support for MacOS 26 Tahoe",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:10:13Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1950,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1950",
+      "source_state": "closed",
+      "source_author": "maurolacy",
+      "target_issue_number": 1421,
+      "title": "[PR #1950] Fix: ResourceType initialisation",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:10:18Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1946,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1946",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1422,
+      "title": "[PR #1946] refactor!: remove modkit-errors crate, migrate to modkit-canonical-errors",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:10:21Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1945,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1945",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1423,
+      "title": "[PR #1945] refactor(authz-resolver-sdk): accept runtime resource type names",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:10:26Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1925,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1925",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1424,
+      "title": "[PR #1925] docs: added 'make md-map' target to build markdown files relationship map",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:10:42Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1924,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1924",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1425,
+      "title": "[PR #1924] feat(modkit): Windows CNG rustls CryptoProvider for Windows FIPS",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:10:46Z",
+      "comments_status": "done",
+      "comments_mirrored": 8
+    },
+    {
+      "source_pr_number": 1923,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1923",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1426,
+      "title": "[PR #1923] fix: investigate and address RUSTSEC-2023-0071",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:10:50Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1918,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1918",
+      "source_state": "closed",
+      "source_author": "mattgarmon",
+      "target_issue_number": 1427,
+      "title": "[PR #1918] refactor(oagw): clean up control plane, split proxy_request, make aliases immutable, configurable ssrf",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:10:59Z",
+      "comments_status": "done",
+      "comments_mirrored": 13
+    },
+    {
+      "source_pr_number": 1917,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1917",
+      "source_state": "closed",
+      "source_author": "fluiderson",
+      "target_issue_number": 1428,
+      "title": "[PR #1917] chore(dylint): clean up dylint workspace",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:11:04Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1916,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1916",
+      "source_state": "closed",
+      "source_author": "fluiderson",
+      "target_issue_number": 1429,
+      "title": "[PR #1916] fix(dylint): fix lint annotation line reporting",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:11:08Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1910,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1910",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1430,
+      "title": "[PR #1910] refactor: move base API URL prefix from /cf (cyberfabric) to /cw (cybeware) and make it configurable",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:11:11Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1909,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1909",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1431,
+      "title": "[PR #1909] feat(minichat): Add support of Anthropic API",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:11:15Z",
+      "comments_status": "done",
+      "comments_mirrored": 12
+    },
+    {
+      "source_pr_number": 1907,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1907",
+      "source_state": "closed",
+      "source_author": "capybutler",
+      "target_issue_number": 1432,
+      "title": "[PR #1907] feat(usage-collector): [1/6] add SDK crate and design documentation",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:11:28Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1906,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1906",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1433,
+      "title": "[PR #1906] feat(account-management): tenant-metadata + list_children OData + AM …",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:11:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 49
+    },
+    {
+      "source_pr_number": 1905,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1905",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1434,
+      "title": "[PR #1905] feat(tools): add gts-analyze CLI for GTS usage analysis",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:11:38Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1904,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1904",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1435,
+      "title": "[PR #1904] feat(account-management): conversion service + IdP user ops",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:11:41Z",
+      "comments_status": "done",
+      "comments_mirrored": 10
+    },
+    {
+      "source_pr_number": 1903,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1903",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1436,
+      "title": "[PR #1903] refactor: migrate modkit-odata and resource-group to canonical errors",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:11:47Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1902,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1902",
+      "source_state": "closed",
+      "source_author": "fluiderson",
+      "target_issue_number": 1437,
+      "title": "[PR #1902] feat(oidc-authn-plugin): add OIDC Authentication Resolver Plugin",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:11:50Z",
+      "comments_status": "done",
+      "comments_mirrored": 64
+    },
+    {
+      "source_pr_number": 1901,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1901",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1438,
+      "title": "[PR #1901] feat(modkit): Apple corecrypto rustls CryptoProvider for macOS FIPS",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:11:57Z",
+      "comments_status": "done",
+      "comments_mirrored": 30
+    },
+    {
+      "source_pr_number": 1899,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1899",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1439,
+      "title": "[PR #1899] refactor: api-gateway canonical errors migration, middleware, and shim cleanup",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:02Z",
+      "comments_status": "done",
+      "comments_mirrored": 6
+    },
+    {
+      "source_pr_number": 1898,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1898",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1440,
+      "title": "[PR #1898] [DRAFT] feat(minichat): Add support of Anthropic API",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:06Z",
+      "comments_status": "done",
+      "comments_mirrored": 26
+    },
+    {
+      "source_pr_number": 1897,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1897",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1441,
+      "title": "[PR #1897] refactor: move base API URL prefix from /cf (cyberfabric) to /cw (cybeware) and make it configurable",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:12Z",
+      "comments_status": "done",
+      "comments_mirrored": 13
+    },
+    {
+      "source_pr_number": 1896,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1896",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1442,
+      "title": "[PR #1896] refactor(mini-chat): migrate to canonical errors",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:17Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1895,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1895",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1443,
+      "title": "[PR #1895] feat(account-management): conversion service + IdP user ops",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:21Z",
+      "comments_status": "done",
+      "comments_mirrored": 51
+    },
+    {
+      "source_pr_number": 1894,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1894",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1444,
+      "title": "[PR #1894] MAJOR: keep CyberFabric name for vendor name and use CyberWare for the middleware",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:29Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1892,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1892",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1445,
+      "title": "[PR #1892] feat(account-management): in-process Tenant Resolver plugin + hierarchy integrity + platform bootstrap",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1891,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1891",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1446,
+      "title": "[PR #1891] feat(authz): add InTenantSubtree predicate (#1813)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:37Z",
+      "comments_status": "done",
+      "comments_mirrored": 12
+    },
+    {
+      "source_pr_number": 1890,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1890",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1447,
+      "title": "[PR #1890] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:42Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1887,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1887",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1448,
+      "title": "[PR #1887] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:45Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1886,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1886",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1449,
+      "title": "[PR #1886] chore: disable automatic PR tracking issue creation for every PR",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:49Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1884,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1884",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1450,
+      "title": "[PR #1884] feat(account-management): hierarchy integrity check + auto-repair + platform-bootstrap saga",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:52Z",
+      "comments_status": "done",
+      "comments_mirrored": 29
+    },
+    {
+      "source_pr_number": 1878,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1878",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1451,
+      "title": "[PR #1878] chore(deps): bump peg from 0.8.5 to 0.8.6",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:12:57Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1877,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1877",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1452,
+      "title": "[PR #1877] chore(deps): bump tonic-prost-build from 0.14.5 to 0.14.6",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1876,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1876",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1453,
+      "title": "[PR #1876] chore(deps): bump gts from 0.9.0 to 0.9.3",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:05Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1875,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1875",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1454,
+      "title": "[PR #1875] chore(deps): bump sha2 from 0.10.9 to 0.11.0",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:09Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1874,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1874",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1455,
+      "title": "[PR #1874] chore(deps): bump testcontainers from 0.27.2 to 0.27.3",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:13Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1869,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1869",
+      "source_state": "closed",
+      "source_author": "fluiderson",
+      "target_issue_number": 1456,
+      "title": "[PR #1869] feat(oidc-authn-plugin): add OIDC Authentication Resolver Plugin",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:18Z",
+      "comments_status": "done",
+      "comments_mirrored": 62
+    },
+    {
+      "source_pr_number": 1868,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1868",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1457,
+      "title": "[PR #1868] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:25Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1866,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1866",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1458,
+      "title": "[PR #1866] feat(skills) - Windsurf, Cursor and Codex modkit pull request review are added",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:29Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1862,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1862",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1459,
+      "title": "[PR #1862] refactor(oagw): migrate oagw to use canonical errors",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 7
+    },
+    {
+      "source_pr_number": 1861,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1861",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1460,
+      "title": "[PR #1861] feat(modkit-auth): add OAuth2 bearer auto-refresh tower layer",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:37Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1860,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1860",
+      "source_state": "closed",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 1461,
+      "title": "[PR #1860] docs(event-broker): module design",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:41Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1855,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1855",
+      "source_state": "closed",
+      "source_author": "capybutler",
+      "target_issue_number": 1462,
+      "title": "[PR #1855] feat(static-authn-plugin): propagate bearer_token through S2S credential exchange",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:44Z",
+      "comments_status": "done",
+      "comments_mirrored": 9
+    },
+    {
+      "source_pr_number": 1852,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1852",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1463,
+      "title": "[PR #1852] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:48Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1850,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1850",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1464,
+      "title": "[PR #1850] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:52Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1849,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1849",
+      "source_state": "closed",
+      "source_author": "mattgarmon",
+      "target_issue_number": 1465,
+      "title": "[PR #1849] refactor(oagw): clean up control plane and split proxy_request into smaller functions",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:13:55Z",
+      "comments_status": "done",
+      "comments_mirrored": 56
+    },
+    {
+      "source_pr_number": 1847,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1847",
+      "source_state": "closed",
+      "source_author": "AntonBraer",
+      "target_issue_number": 1466,
+      "title": "[PR #1847] Serverless Runtime: align DESIGN with thin-host ADR",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 12
+    },
+    {
+      "source_pr_number": 1844,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1844",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1467,
+      "title": "[PR #1844] Refactor/migrate to canonical errors pt3",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:05Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1843,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1843",
+      "source_state": "closed",
+      "source_author": "cyberantonz",
+      "target_issue_number": 1468,
+      "title": "[PR #1843] GatewayRoutePolicy.resolve checked is_authenticated before is_public",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:09Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1833,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1833",
+      "source_state": "closed",
+      "source_author": "mattgarmon",
+      "target_issue_number": 1469,
+      "title": "[PR #1833] feat(oagw): ssrf protection",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:17Z",
+      "comments_status": "done",
+      "comments_mirrored": 41
+    },
+    {
+      "source_pr_number": 1830,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1830",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1470,
+      "title": "[PR #1830] feat(account-management): tenant service domain layer + AM module init",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:22Z",
+      "comments_status": "done",
+      "comments_mirrored": 35
+    },
+    {
+      "source_pr_number": 1829,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1829",
+      "source_state": "closed",
+      "source_author": "refur-nfn",
+      "target_issue_number": 1471,
+      "title": "[PR #1829] feat(http): add with_metrics_layer extension point to HttpClientBuilder",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:27Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1827,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1827",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1472,
+      "title": "[PR #1827] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:31Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1819,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1819",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1473,
+      "title": "[PR #1819] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:34Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1818,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1818",
+      "source_state": "closed",
+      "source_author": "capybutler",
+      "target_issue_number": 1474,
+      "title": "[PR #1818] feat(usage-collector): [5/6] add TimescaleDB production storage plugin",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:38Z",
+      "comments_status": "done",
+      "comments_mirrored": 17
+    },
+    {
+      "source_pr_number": 1817,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1817",
+      "source_state": "closed",
+      "source_author": "capybutler",
+      "target_issue_number": 1475,
+      "title": "[PR #1817] feat(usage-collector): [4/6] add query API (aggregated and raw endpoints)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:43Z",
+      "comments_status": "done",
+      "comments_mirrored": 9
+    },
+    {
+      "source_pr_number": 1816,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1816",
+      "source_state": "closed",
+      "source_author": "capybutler",
+      "target_issue_number": 1476,
+      "title": "[PR #1816] feat(usage-collector): [3/6] add REST client crate for remote ingest delivery",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:48Z",
+      "comments_status": "done",
+      "comments_mirrored": 17
+    },
+    {
+      "source_pr_number": 1814,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1814",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1477,
+      "title": "[PR #1814] chore(gts): GTS - migrate vendor slug from `x` to `cf`",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:53Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1811,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1811",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1478,
+      "title": "[PR #1811] docs: update docs/ARCHITECTURE_MANIFEST.md to reflect recent changes",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:14:56Z",
+      "comments_status": "done",
+      "comments_mirrored": 39
+    },
+    {
+      "source_pr_number": 1810,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1810",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1479,
+      "title": "[PR #1810] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:02Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1808,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1808",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1480,
+      "title": "[PR #1808] chore: update rcgen library 0.13 -> 0.14",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:06Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1807,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1807",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1481,
+      "title": "[PR #1807] chore: update rcgen library 0.13 -> 0.14",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:09Z",
+      "comments_status": "done",
+      "comments_mirrored": 7
+    },
+    {
+      "source_pr_number": 1805,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1805",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1482,
+      "title": "[PR #1805] docs: massive renaming of different artifacts from HyperSport -> CyberFabric to finalize project transition under CyberFabric",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:15Z",
+      "comments_status": "done",
+      "comments_mirrored": 6
+    },
+    {
+      "source_pr_number": 1804,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1804",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1483,
+      "title": "[PR #1804] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:18Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1803,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1803",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1484,
+      "title": "[PR #1803] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:22Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1800,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1800",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1485,
+      "title": "[PR #1800] test: added missing 'websockets' module into testing/requirements.txt",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:26Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1799,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1799",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1486,
+      "title": "[PR #1799] docs: actualized docs/MODULES.md and modules architecture diagram, some work is still in progress",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:30Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1798,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1798",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1487,
+      "title": "[PR #1798] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:33Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1792,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1792",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1488,
+      "title": "[PR #1792] chore(deps): bump psl from 2.1.203 to 2.1.206",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:37Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1791,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1791",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1489,
+      "title": "[PR #1791] chore(deps): bump rustls-pki-types from 1.14.0 to 1.14.1",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:41Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1790,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1790",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1490,
+      "title": "[PR #1790] chore(deps): bump octocrab from 0.49.7 to 0.49.9",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:44Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1789,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1789",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1491,
+      "title": "[PR #1789] chore(deps): bump tokio-metrics from 0.4.9 to 0.5.0",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:47Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1788,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1788",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1492,
+      "title": "[PR #1788] chore(deps): bump rcgen from 0.13.2 to 0.14.7",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:51Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1787,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1787",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1493,
+      "title": "[PR #1787] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:54Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1783,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1783",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1494,
+      "title": "[PR #1783] chore: bump dependencies versions - rand and ureq",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:15:58Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1780,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1780",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1495,
+      "title": "[PR #1780] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:02Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1778,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1778",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1496,
+      "title": "[PR #1778] refactor: migrate file-parser, simple-user-settings, node-registry and type-registry to canonical errors",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:06Z",
+      "comments_status": "done",
+      "comments_mirrored": 17
+    },
+    {
+      "source_pr_number": 1772,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1772",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1497,
+      "title": "[PR #1772] test: added Python 3.9 (default on MacOS) support in testing/e2e/modules/resource_group",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:10Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1771,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1771",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1498,
+      "title": "[PR #1771] chore: bumpt gts library version from 0.8.4 -> 0.9.0",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1768,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1768",
+      "source_state": "closed",
+      "source_author": "mattgarmon",
+      "target_issue_number": 1499,
+      "title": "[PR #1768] fix(release-plz): add explicit publish=true",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:17Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1766,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1766",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1500,
+      "title": "[PR #1766] fix(oagw): apply WS handshake retry to multi-value Connection header test",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:21Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1765,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1765",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1501,
+      "title": "[PR #1765] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:25Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1757,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1757",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1502,
+      "title": "[PR #1757] chore: regenerate api.json after #1746",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:29Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1756,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1756",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1503,
+      "title": "[PR #1756] feat(account-management): add SDK + storage-floor crates",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:33Z",
+      "comments_status": "done",
+      "comments_mirrored": 83
+    },
+    {
+      "source_pr_number": 1753,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1753",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1504,
+      "title": "[PR #1753] chore(release): publish resource-group crates and unblock cf-rg-tr-plugin",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:40Z",
+      "comments_status": "done",
+      "comments_mirrored": 7
+    },
+    {
+      "source_pr_number": 1749,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1749",
+      "source_state": "closed",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 1505,
+      "title": "[PR #1749] chore(dylint): bump lint toolchain to nightly-2026-01-22 (rustc 1.95)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:45Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1746,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1746",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1506,
+      "title": "[PR #1746] feat(resource-group): add tenant_id to GroupFilterField whitelist",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:48Z",
+      "comments_status": "done",
+      "comments_mirrored": 6
+    },
+    {
+      "source_pr_number": 1745,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1745",
+      "source_state": "closed",
+      "source_author": "vgprod",
+      "target_issue_number": 1507,
+      "title": "[PR #1745] chore(deps): bump astral-tokio-tar to fix RUSTSEC-2026-0112",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:52Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1738,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1738",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1508,
+      "title": "[PR #1738] feat: seed initial canonical-errors migration",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:16:55Z",
+      "comments_status": "done",
+      "comments_mirrored": 29
+    },
+    {
+      "source_pr_number": 1737,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1737",
+      "source_state": "closed",
+      "source_author": "vgprod",
+      "target_issue_number": 1509,
+      "title": "[PR #1737] [Stacked on #1606, #1736] refactor(modkit): builder pattern for ModuleCtx db/db_manager fields",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:17:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1736,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1736",
+      "source_state": "closed",
+      "source_author": "vgprod",
+      "target_issue_number": 1510,
+      "title": "[PR #1736] [Stacked on #1606] refactor(modkit): use OnceLock<Result<_>> for crypto provider init",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:17:05Z",
+      "comments_status": "done",
+      "comments_mirrored": 14
+    },
+    {
+      "source_pr_number": 1735,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1735",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1511,
+      "title": "[PR #1735] feat(modkit): operation-level OAuth scopes for authenticated routes",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:17:10Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1734,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1734",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1512,
+      "title": "[PR #1734] feat(types-registry): rework SDK with typed schema/instance APIs",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:17:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 54
+    },
+    {
+      "source_pr_number": 1733,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1733",
+      "source_state": "closed",
+      "source_author": "capybutler",
+      "target_issue_number": 1513,
+      "title": "[PR #1733] feat(usage-collector): [2/6] add emitter, gateway, REST client, and noop storage plugin crates",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:17:21Z",
+      "comments_status": "done",
+      "comments_mirrored": 34
+    },
+    {
+      "source_pr_number": 1732,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1732",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1514,
+      "title": "[PR #1732] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:17:26Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1731,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1731",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1515,
+      "title": "[PR #1731] test: add Python 3.9 support for testing/e2e/modules/oagw/test_budget_allocation.py",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:17:30Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1722,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1722",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1516,
+      "title": "[PR #1722] feat(modkit-http): OPTIONS and HEAD methods are supported",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:17:34Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1629,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1629",
+      "source_state": "closed",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 1517,
+      "title": "[PR #1629] docs(cluster): add PRD, DESIGN, and ADR for cluster system module",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:17:38Z",
+      "comments_status": "done",
+      "comments_mirrored": 60
+    },
+    {
+      "source_pr_number": 1623,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1623",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1519,
+      "title": "[PR #1623] [Poc] Module Contracts and transport bindings",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:17:55Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1622,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1622",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1520,
+      "title": "[PR #1622] Modkit OoP requirments and draft design",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:17:58Z",
+      "comments_status": "done",
+      "comments_mirrored": 28
+    },
+    {
+      "source_pr_number": 1620,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1620",
+      "source_state": "closed",
+      "source_author": "capybutler",
+      "target_issue_number": 1521,
+      "title": "[PR #1620] feat(usage-collector): [1/6] add SDK crate and design documentation",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:03Z",
+      "comments_status": "done",
+      "comments_mirrored": 42
+    },
+    {
+      "source_pr_number": 1618,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1618",
+      "source_state": "closed",
+      "source_author": "nonameffh",
+      "target_issue_number": 1522,
+      "title": "[PR #1618] docs(quota-enforcement): PRD & DESIGN",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:09Z",
+      "comments_status": "done",
+      "comments_mirrored": 29
+    },
+    {
+      "source_pr_number": 1615,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1615",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1523,
+      "title": "[PR #1615] chore: use proper rust toolchain version from rust-toolchain.toml in Makefile and CI",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:17Z",
+      "comments_status": "done",
+      "comments_mirrored": 6
+    },
+    {
+      "source_pr_number": 1614,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1614",
+      "source_state": "closed",
+      "source_author": "mattgarmon",
+      "target_issue_number": 1524,
+      "title": "[PR #1614] feat(oagw): types-registry static entities config and oagw read-only management API",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:20Z",
+      "comments_status": "done",
+      "comments_mirrored": 10
+    },
+    {
+      "source_pr_number": 1612,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1612",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1525,
+      "title": "[PR #1612] fix: validate rust toolchain version on 'make all'",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:25Z",
+      "comments_status": "done",
+      "comments_mirrored": 8
+    },
+    {
+      "source_pr_number": 1610,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1610",
+      "source_state": "closed",
+      "source_author": "fluiderson",
+      "target_issue_number": 1526,
+      "title": "[PR #1610] fix: update Rust version in E2E tests",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:29Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1608,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1608",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1527,
+      "title": "[PR #1608] chore(deps): bump zip from 2.4.2 to 4.6.1",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:33Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1606,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1606",
+      "source_state": "closed",
+      "source_author": "vgprod",
+      "target_issue_number": 1528,
+      "title": "[PR #1606] ci(clippy): run cargo-hack --each-feature to cover cfg-gated branches",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:37Z",
+      "comments_status": "done",
+      "comments_mirrored": 29
+    },
+    {
+      "source_pr_number": 1604,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1604",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1529,
+      "title": "[PR #1604] docs(account-management) decomposition",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:42Z",
+      "comments_status": "done",
+      "comments_mirrored": 15
+    },
+    {
+      "source_pr_number": 1602,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1602",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1530,
+      "title": "[PR #1602] ci: switch Rust toolchain to `stable` channel so MSRV bumps stop breaking e2e",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:46Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1600,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1600",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1531,
+      "title": "[PR #1600] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:51Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1599,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1599",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1532,
+      "title": "[PR #1599] feat(gts): extract modkit-gts crate and add permission type",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:18:54Z",
+      "comments_status": "done",
+      "comments_mirrored": 31
+    },
+    {
+      "source_pr_number": 1595,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1595",
+      "source_state": "closed",
+      "source_author": "AntonBraer",
+      "target_issue_number": 1533,
+      "title": "[PR #1595] fix(serverless-runtime): add ADR entries for workflow DSL and temporal workflow engine",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1593,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1593",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1534,
+      "title": "[PR #1593] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:05Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1592,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1592",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1535,
+      "title": "[PR #1592] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:08Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1588,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1588",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1536,
+      "title": "[PR #1588] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:13Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1586,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1586",
+      "source_state": "closed",
+      "source_author": "fluiderson",
+      "target_issue_number": 1537,
+      "title": "[PR #1586] chore: bump the Rust version to 1.95.0",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:16Z",
+      "comments_status": "done",
+      "comments_mirrored": 12
+    },
+    {
+      "source_pr_number": 1584,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1584",
+      "source_state": "closed",
+      "source_author": "Ritmix3300",
+      "target_issue_number": 1538,
+      "title": "[PR #1584] add chat engine sdk",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:21Z",
+      "comments_status": "done",
+      "comments_mirrored": 56
+    },
+    {
+      "source_pr_number": 1583,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1583",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1539,
+      "title": "[PR #1583] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:26Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1581,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1581",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1540,
+      "title": "[PR #1581] doc(tenant-resolver-plugin) PRD + DESIGN",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:30Z",
+      "comments_status": "done",
+      "comments_mirrored": 47
+    },
+    {
+      "source_pr_number": 1579,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1579",
+      "source_state": "closed",
+      "source_author": "AntonBraer",
+      "target_issue_number": 1541,
+      "title": "[PR #1579] feat(serverless-runtime): add ADR-0005 for thin host module, fat runtime plugins",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:36Z",
+      "comments_status": "done",
+      "comments_mirrored": 13
+    },
+    {
+      "source_pr_number": 1577,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1577",
+      "source_state": "closed",
+      "source_author": "vgprod",
+      "target_issue_number": 1542,
+      "title": "[PR #1577] DE1302 (error_from_to_string): Implement lint for to_string in Error that has From impl",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:41Z",
+      "comments_status": "done",
+      "comments_mirrored": 17
+    },
+    {
+      "source_pr_number": 1575,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1575",
+      "source_state": "closed",
+      "source_author": "bit8shift",
+      "target_issue_number": 1543,
+      "title": "[PR #1575] chore: move build/tool directories under tools/",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:45Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1572,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1572",
+      "source_state": "closed",
+      "source_author": "mattgarmon",
+      "target_issue_number": 1544,
+      "title": "[PR #1572] feat(oagw): support deploy with static config and read-only management API",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:49Z",
+      "comments_status": "done",
+      "comments_mirrored": 33
+    },
+    {
+      "source_pr_number": 1556,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1556",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1545,
+      "title": "[PR #1556] test(resource-group): REST tests + E2E + integration (part 2/2) [6/6]",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:19:55Z",
+      "comments_status": "done",
+      "comments_mirrored": 22
+    },
+    {
+      "source_pr_number": 1555,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1555",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1546,
+      "title": "[PR #1555] test(resource-group): integration tests for service layer [5/6]",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:00Z",
+      "comments_status": "done",
+      "comments_mirrored": 31
+    },
+    {
+      "source_pr_number": 1554,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1554",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1547,
+      "title": "[PR #1554] feat(resource-group): REST API + OpenAPI + plugin activation [4/6]",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:06Z",
+      "comments_status": "done",
+      "comments_mirrored": 24
+    },
+    {
+      "source_pr_number": 1553,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1553",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1574,
+      "title": "[PR #1553] feat(resource-group): implement module backend (domain + infra) [3/6]",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:12Z",
+      "comments_status": "done",
+      "comments_mirrored": 48
+    },
+    {
+      "source_pr_number": 1552,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1552",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1575,
+      "title": "[PR #1552] feat(resource-group): add SDK crate + contracts + documentation [1/6]",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:19Z",
+      "comments_status": "done",
+      "comments_mirrored": 21
+    },
+    {
+      "source_pr_number": 1550,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1550",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1576,
+      "title": "[PR #1550] feat(authz, tenant-resolver): add plugin crates (compile-only) [2/6]",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:24Z",
+      "comments_status": "done",
+      "comments_mirrored": 61
+    },
+    {
+      "source_pr_number": 1548,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1548",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1577,
+      "title": "[PR #1548] feat(resource-group): add SDK crate + contracts + documentation [1/6]",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:31Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1545,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1545",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1578,
+      "title": "[PR #1545] fix(bootstrap): unify crypto provider init in main() for both FIPS and non-FIPS modes",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:34Z",
+      "comments_status": "done",
+      "comments_mirrored": 8
+    },
+    {
+      "source_pr_number": 1543,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1543",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1579,
+      "title": "[PR #1543] feat(tenant-resolver): adopt single-root tree topology",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:38Z",
+      "comments_status": "done",
+      "comments_mirrored": 16
+    },
+    {
+      "source_pr_number": 1541,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1541",
+      "source_state": "closed",
+      "source_author": "fluiderson",
+      "target_issue_number": 1580,
+      "title": "[PR #1541] fix(grpc-hub): add advertise_addr config for Directory registration",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:43Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1536,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1536",
+      "source_state": "closed",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 1581,
+      "title": "[PR #1536] docs(modkit-contract-binding): PRD, DESIGN, and ADRs for cross-boundary contract binding",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:48Z",
+      "comments_status": "done",
+      "comments_mirrored": 18
+    },
+    {
+      "source_pr_number": 1534,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1534",
+      "source_state": "closed",
+      "source_author": "fluiderson",
+      "target_issue_number": 1582,
+      "title": "[PR #1534] refactor: fix new warnings from Clippy 1.95",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:54Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1532,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1532",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1583,
+      "title": "[PR #1532] fix(bootstrap): unify crypto provider init in main() for both FIPS and non-FIPS modes",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:20:58Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1530,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1530",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1584,
+      "title": "[PR #1530] feat(oagw): implement rate limiting with hierarchical budget allocation",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:02Z",
+      "comments_status": "done",
+      "comments_mirrored": 27
+    },
+    {
+      "source_pr_number": 1529,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1529",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1585,
+      "title": "[PR #1529] feat(oagw): implement rate limiting with hierarchical budget allocation",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:08Z",
+      "comments_status": "done",
+      "comments_mirrored": 16
+    },
+    {
+      "source_pr_number": 1526,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1526",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1586,
+      "title": "[PR #1526] chore: update SECURITY.md and added the MAINTAINERS.md file",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:13Z",
+      "comments_status": "done",
+      "comments_mirrored": 9
+    },
+    {
+      "source_pr_number": 1515,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1515",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1587,
+      "title": "[PR #1515] build(deps): bump chrono-tz from 0.9.0 to 0.10.4",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:17Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1514,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1514",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1588,
+      "title": "[PR #1514] chore(deps): bump nix from 0.29.0 to 0.31.2",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:20Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1513,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1513",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1548,
+      "title": "[PR #1513] chore(deps): Bump ureq from 2.12.1 to 3.3.0",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:24Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1512,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1512",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1549,
+      "title": "[PR #1512] chore(deps): bump rand from 0.9.4 to 0.10.1",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:28Z",
+      "comments_status": "done",
+      "comments_mirrored": 6
+    },
+    {
+      "source_pr_number": 1511,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1511",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1550,
+      "title": "[PR #1511] chore(deps): bump starship-battery from 0.10.3 to 0.11.0",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1509,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1509",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1551,
+      "title": "[PR #1509] docs: update docs/security/SECURITY.md according to recent changes",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:35Z",
+      "comments_status": "done",
+      "comments_mirrored": 6
+    },
+    {
+      "source_pr_number": 1502,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1502",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1552,
+      "title": "[PR #1502] fix(tls): install CryptoProvider at startup, update api.json, fix stale server in make openapi",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:39Z",
+      "comments_status": "done",
+      "comments_mirrored": 13
+    },
+    {
+      "source_pr_number": 1501,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1501",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1553,
+      "title": "[PR #1501] build(deps): bump rand from 0.9.2 to 0.9.4 in /dylint_lints",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:43Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1500,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1500",
+      "source_state": "closed",
+      "source_author": "dependabot[bot]",
+      "target_issue_number": 1554,
+      "title": "[PR #1500] build(deps): bump rand from 0.9.2 to 0.9.3",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:47Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1492,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1492",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1555,
+      "title": "[PR #1492] feat(resource-group): SDK and module contracts",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:50Z",
+      "comments_status": "done",
+      "comments_mirrored": 101
+    },
+    {
+      "source_pr_number": 1491,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1491",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1556,
+      "title": "[PR #1491] feat(resource-group): SDK and module contracts",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:21:59Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1489,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1489",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1557,
+      "title": "[PR #1489] docs(oidc-authn-plugin) PRD + DESIGN",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:03Z",
+      "comments_status": "done",
+      "comments_mirrored": 40
+    },
+    {
+      "source_pr_number": 1487,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1487",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1558,
+      "title": "[PR #1487] chore(oagw-sdk): add usage examples when interacting with 3rd party API clients",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:08Z",
+      "comments_status": "done",
+      "comments_mirrored": 8
+    },
+    {
+      "source_pr_number": 1481,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1481",
+      "source_state": "closed",
+      "source_author": "joseph-cx",
+      "target_issue_number": 1559,
+      "title": "[PR #1481] tests: api_contracts should not generate and compare api.json",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:13Z",
+      "comments_status": "done",
+      "comments_mirrored": 9
+    },
+    {
+      "source_pr_number": 1480,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1480",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1560,
+      "title": "[PR #1480] fix(oagw): retry WebSocket handshake on early Close to prevent flaky CI tests",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:16Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1479,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1479",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1561,
+      "title": "[PR #1479] feat(oagw): wire DP rate limiter to effective config and add response header support",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:20Z",
+      "comments_status": "done",
+      "comments_mirrored": 8
+    },
+    {
+      "source_pr_number": 1477,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1477",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1562,
+      "title": "[PR #1477] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:24Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1475,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1475",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1563,
+      "title": "[PR #1475] feat(authn-resolver): add draft multi-plugin selection design",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:29Z",
+      "comments_status": "done",
+      "comments_mirrored": 7
+    },
+    {
+      "source_pr_number": 1473,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1473",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1564,
+      "title": "[PR #1473] fix(oagw): increase WebSocket idle timeout in tests to prevent CI flakiness",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:33Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1466,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1466",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 1565,
+      "title": "[PR #1466] bugfix: compile error when no-default-features are specified",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:36Z",
+      "comments_status": "done",
+      "comments_mirrored": 6
+    },
+    {
+      "source_pr_number": 1462,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1462",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1566,
+      "title": "[PR #1462] feat(dylint): DE1101 — extract inline tests into separate files",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:40Z",
+      "comments_status": "done",
+      "comments_mirrored": 60
+    },
+    {
+      "source_pr_number": 1461,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1461",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1567,
+      "title": "[PR #1461] feat(minichat): Add concurrent upload semaphore for memory backpressure",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:48Z",
+      "comments_status": "done",
+      "comments_mirrored": 20
+    },
+    {
+      "source_pr_number": 1458,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1458",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1568,
+      "title": "[PR #1458] fix(minichat): Cancel provider stream before finalization on tool limit exceeded",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:53Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1455,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1455",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1569,
+      "title": "[PR #1455] fix(oagw): stabilize flaky WebSocket tests with Ping/Pong readiness probe",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:22:56Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1453,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1453",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1570,
+      "title": "[PR #1453] feat: add cargo xtask split-debug for post-build symbol stripping",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:23:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 29
+    },
+    {
+      "source_pr_number": 1450,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1450",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1571,
+      "title": "[PR #1450] fix(minichat): Preserve quota fields in Done event on finalization failure",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:23:05Z",
+      "comments_status": "done",
+      "comments_mirrored": 10
+    },
+    {
+      "source_pr_number": 1449,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1449",
+      "source_state": "closed",
+      "source_author": "refur-nfn",
+      "target_issue_number": 1572,
+      "title": "[PR #1449] feat(mini-chat-sdk): simplify ModelGeneralConfig and add tool search configs",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:23:09Z",
+      "comments_status": "done",
+      "comments_mirrored": 42
+    },
+    {
+      "source_pr_number": 1443,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1443",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1573,
+      "title": "[PR #1443] feat(minichat): implement thread summary worker (transactional outbox)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:23:15Z",
+      "comments_status": "done",
+      "comments_mirrored": 189
+    },
+    {
+      "source_pr_number": 1438,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1438",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1589,
+      "title": "[PR #1438] fix(openapi): fix the problem of keeping the server running after `make openapi` and make api.json deterministically ordered",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:23:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 15
+    },
+    {
+      "source_pr_number": 1429,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1429",
+      "source_state": "closed",
+      "source_author": "Artifizer",
+      "target_issue_number": 1590,
+      "title": "[PR #1429] docs: review findings and gaps for PR #1401",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:23:35Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1425,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1425",
+      "source_state": "closed",
+      "source_author": "fluiderson",
+      "target_issue_number": 1591,
+      "title": "[PR #1425] refactor(modkit): split required and defaulted module config loading",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:23:39Z",
+      "comments_status": "done",
+      "comments_mirrored": 31
+    },
+    {
+      "source_pr_number": 1423,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1423",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1592,
+      "title": "[PR #1423] fix(oagw): handle CORS preflight without tenant context",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:23:44Z",
+      "comments_status": "done",
+      "comments_mirrored": 25
+    },
+    {
+      "source_pr_number": 1418,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1418",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1593,
+      "title": "[PR #1418] feat(minichat): Persist web_search/code_interpreter completed counts in chat_turns",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:23:50Z",
+      "comments_status": "done",
+      "comments_mirrored": 13
+    },
+    {
+      "source_pr_number": 1417,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1417",
+      "source_state": "closed",
+      "source_author": "ainetx",
+      "target_issue_number": 1634,
+      "title": "[PR #1417] chore(cypilot): up to v3.6.0-beta",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:23:54Z",
+      "comments_status": "done",
+      "comments_mirrored": 8
+    },
+    {
+      "source_pr_number": 1408,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1408",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1635,
+      "title": "[PR #1408] feat(resource-group): full RG module + rg-tr-plugin + tr-authz-plugin [4/4]",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:23:58Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1407,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1407",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1636,
+      "title": "[PR #1407] feat(resource-group): module implementation",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1406,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1406",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1637,
+      "title": "[PR #1406] feat(authz): InGroup/InGroupSubtree predicates",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:05Z",
+      "comments_status": "done",
+      "comments_mirrored": 29
+    },
+    {
+      "source_pr_number": 1405,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1405",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1638,
+      "title": "[PR #1405] feat(db+security): transaction config, deadlock detection, InGroup scope filter",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:10Z",
+      "comments_status": "done",
+      "comments_mirrored": 21
+    },
+    {
+      "source_pr_number": 1404,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1404",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1639,
+      "title": "[PR #1404] feat(odata): InList filter, property paths, has_next/prev_page",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:16Z",
+      "comments_status": "done",
+      "comments_mirrored": 29
+    },
+    {
+      "source_pr_number": 1403,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1403",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1640,
+      "title": "[PR #1403] feat(dylint): add de1101 lint for tests in separate files",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:20Z",
+      "comments_status": "done",
+      "comments_mirrored": 12
+    },
+    {
+      "source_pr_number": 1402,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1402",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1641,
+      "title": "[PR #1402] fix: replace .to_string() with format!(\"{}\") in error conversions",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:25Z",
+      "comments_status": "done",
+      "comments_mirrored": 14
+    },
+    {
+      "source_pr_number": 1401,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1401",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1642,
+      "title": "[PR #1401] docs(resource-group): add design docs and artifacts.toml ignore",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:30Z",
+      "comments_status": "done",
+      "comments_mirrored": 80
+    },
+    {
+      "source_pr_number": 1397,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1397",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1643,
+      "title": "[PR #1397] [do not merge] experiment: recreate security context error with OPTIONS request in oagw",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:39Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1395,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1395",
+      "source_state": "closed",
+      "source_author": "ffedoroff",
+      "target_issue_number": 1644,
+      "title": "[PR #1395] fix(oagw): handle missing SecurityContext for CORS preflight requests",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:43Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1393,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1393",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1645,
+      "title": "[PR #1393] feat(minichat): Add post-upload storage limit check for chunked uploads",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:47Z",
+      "comments_status": "done",
+      "comments_mirrored": 12
+    },
+    {
+      "source_pr_number": 1390,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1390",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1646,
+      "title": "[PR #1390] feat(oagw): add HTTP protocol version cache and SSE streaming idle timeout",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:51Z",
+      "comments_status": "done",
+      "comments_mirrored": 10
+    },
+    {
+      "source_pr_number": 1388,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1388",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1647,
+      "title": "[PR #1388] feat(minichat): add vLLM Responses API provider with think-tag parsing plus nextest for CI",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:24:55Z",
+      "comments_status": "done",
+      "comments_mirrored": 36
+    },
+    {
+      "source_pr_number": 1386,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1386",
+      "source_state": "closed",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 1648,
+      "title": "[PR #1386] docs(datagrid): add PRD, DESIGN, and ADR for datagrid system module",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:25:00Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1384,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1384",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1594,
+      "title": "[PR #1384] fix(minichat): Add safe filename truncation with extension preservation",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:25:04Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1381,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1381",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1595,
+      "title": "[PR #1381] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:25:08Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1380,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1380",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 1596,
+      "title": "[PR #1380] feat: add ADR-0004 for module and plugin declaration and resolution",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:25:11Z",
+      "comments_status": "done",
+      "comments_mirrored": 20
+    },
+    {
+      "source_pr_number": 1377,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1377",
+      "source_state": "closed",
+      "source_author": "joseph-cx",
+      "target_issue_number": 1597,
+      "title": "[PR #1377] ci: redesign api_contracts.yml with two-phase spec validation and oasdiff enforcement",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:25:15Z",
+      "comments_status": "done",
+      "comments_mirrored": 10
+    },
+    {
+      "source_pr_number": 1375,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1375",
+      "source_state": "closed",
+      "source_author": "ainetx",
+      "target_issue_number": 1598,
+      "title": "[PR #1375] chore(cypilot): up to v3.5.0-beta",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:25:19Z",
+      "comments_status": "done",
+      "comments_mirrored": 63
+    },
+    {
+      "source_pr_number": 1373,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1373",
+      "source_state": "closed",
+      "source_author": "diffora",
+      "target_issue_number": 1599,
+      "title": "[PR #1373] docs(account-management) PRD + DESIGN proposal",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:25:27Z",
+      "comments_status": "done",
+      "comments_mirrored": 132
+    },
+    {
+      "source_pr_number": 1370,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1370",
+      "source_state": "closed",
+      "source_author": "nullhypothesic",
+      "target_issue_number": 1600,
+      "title": "[PR #1370] Draft: docs: adapt credstore design docs",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:25:39Z",
+      "comments_status": "done",
+      "comments_mirrored": 7
+    },
+    {
+      "source_pr_number": 1368,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1368",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1601,
+      "title": "[PR #1368] feat(minichat): Persist web_search flag",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:25:43Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1361,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1361",
+      "source_state": "closed",
+      "source_author": "AntonBraer",
+      "target_issue_number": 1602,
+      "title": "[PR #1361] feat(serverless-runtime): add ADRs for Serverless Workflow Specification and Temporal",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:25:47Z",
+      "comments_status": "done",
+      "comments_mirrored": 31
+    },
+    {
+      "source_pr_number": 1359,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1359",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1603,
+      "title": "[PR #1359] feat(minichat): implement orphan turn detection and finalization",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:25:52Z",
+      "comments_status": "done",
+      "comments_mirrored": 72
+    },
+    {
+      "source_pr_number": 1357,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1357",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1604,
+      "title": "[PR #1357] feat(minichat): implement cleanup worker for provider resource deletion",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:00Z",
+      "comments_status": "done",
+      "comments_mirrored": 43
+    },
+    {
+      "source_pr_number": 1354,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1354",
+      "source_state": "closed",
+      "source_author": "lansfy",
+      "target_issue_number": 1605,
+      "title": "[PR #1354] refactor(errors): convert resource_error macro to attribute macro",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:06Z",
+      "comments_status": "done",
+      "comments_mirrored": 17
+    },
+    {
+      "source_pr_number": 1350,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1350",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1606,
+      "title": "[PR #1350] docs(mini-chat): add Anthropic provider support feature spec",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:11Z",
+      "comments_status": "done",
+      "comments_mirrored": 30
+    },
+    {
+      "source_pr_number": 1348,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1348",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1607,
+      "title": "[PR #1348] feat(oagw): support websockets as part of proxy request",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:17Z",
+      "comments_status": "done",
+      "comments_mirrored": 27
+    },
+    {
+      "source_pr_number": 1346,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1346",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1608,
+      "title": "[PR #1346] fix(minichat): Add thumbnail generation in attachment API",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:22Z",
+      "comments_status": "done",
+      "comments_mirrored": 26
+    },
+    {
+      "source_pr_number": 1342,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1342",
+      "source_state": "closed",
+      "source_author": "mattgarmon",
+      "target_issue_number": 1649,
+      "title": "[PR #1342] fix(oagw): close Pingora read pipe on streaming body limit breach",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:27Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1337,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1337",
+      "source_state": "closed",
+      "source_author": "mattgarmon",
+      "target_issue_number": 1650,
+      "title": "[PR #1337] feat(oagw): validate content-type header",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:31Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1336,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1336",
+      "source_state": "closed",
+      "source_author": "lansfy",
+      "target_issue_number": 1651,
+      "title": "[PR #1336] fix: fix test_reject_duplicate_keys_in_module_file test on windows",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:34Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1335,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1335",
+      "source_state": "closed",
+      "source_author": "mattgarmon",
+      "target_issue_number": 1652,
+      "title": "[PR #1335] feat(oagw): apply response header rules, validate header values",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:38Z",
+      "comments_status": "done",
+      "comments_mirrored": 6
+    },
+    {
+      "source_pr_number": 1332,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1332",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1653,
+      "title": "[PR #1332] fix(minichat): Add validation for cases when user message exceeds the maximum input token limit",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:43Z",
+      "comments_status": "done",
+      "comments_mirrored": 7
+    },
+    {
+      "source_pr_number": 1331,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1331",
+      "source_state": "closed",
+      "source_author": "Bechma",
+      "target_issue_number": 1654,
+      "title": "[PR #1331] refactor: streamline configuration loading and initialization procedures",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:47Z",
+      "comments_status": "done",
+      "comments_mirrored": 15
+    },
+    {
+      "source_pr_number": 1327,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1327",
+      "source_state": "closed",
+      "source_author": "Ritmix3300",
+      "target_issue_number": 1655,
+      "title": "[PR #1327] added chat engine decomposition and features docs",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:51Z",
+      "comments_status": "done",
+      "comments_mirrored": 43
+    },
+    {
+      "source_pr_number": 1325,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1325",
+      "source_state": "closed",
+      "source_author": "lansfy",
+      "target_issue_number": 1656,
+      "title": "[PR #1325] new: switch user-info endpoints to canonical errors",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:26:57Z",
+      "comments_status": "done",
+      "comments_mirrored": 23
+    },
+    {
+      "source_pr_number": 1324,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1324",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1657,
+      "title": "[PR #1324] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:27:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1322,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1322",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1658,
+      "title": "[PR #1322] docs(mini-chat): migrate DESIGN.md from task-table/polling to outbox-driven model for thread summary and cleanup worker",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:27:05Z",
+      "comments_status": "done",
+      "comments_mirrored": 27
+    },
+    {
+      "source_pr_number": 1320,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1320",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1659,
+      "title": "[PR #1320] feat(minichat): Add next_reset field to QuotaWarning",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:27:09Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1135,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1135",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1718,
+      "title": "[PR #1135] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:37:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1134,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1134",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1719,
+      "title": "[PR #1134] chjore(version bump)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:37:34Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1133,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1133",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1720,
+      "title": "[PR #1133] test(mini-chat): add attachment API coverage to scripts/smoke-test-api.py",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:37:37Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1130,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1130",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1721,
+      "title": "[PR #1130] refactor(modkit-utils): replace custom to_snake_case with heck crate",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:37:40Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1129,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1129",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1722,
+      "title": "[PR #1129] Feature/mini chat workers design update",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:37:43Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1127,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1127",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1723,
+      "title": "[PR #1127] fix(mini-chat): align AttachmentDetailDto with OpenAPI contract",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:37:46Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 1124,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1124",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1724,
+      "title": "[PR #1124] feat(api-gateway): add configurable prefix for HTTP metrics instrument names",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:37:49Z",
+      "comments_status": "done",
+      "comments_mirrored": 3
+    },
+    {
+      "source_pr_number": 1123,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1123",
+      "source_state": "closed",
+      "source_author": "genericaccount-de",
+      "target_issue_number": 1725,
+      "title": "[PR #1123] Add profiling capabilities with separate http server.",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:37:52Z",
+      "comments_status": "done",
+      "comments_mirrored": 10
+    },
+    {
+      "source_pr_number": 1122,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1122",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1726,
+      "title": "[PR #1122] chore(bump)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:37:56Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1120,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1120",
+      "source_state": "closed",
+      "source_author": "lansfy",
+      "target_issue_number": 1727,
+      "title": "[PR #1120] fix(odata): copy not-maintained dependency and fix exponential call in it",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:00Z",
+      "comments_status": "done",
+      "comments_mirrored": 22
+    },
+    {
+      "source_pr_number": 1094,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1094",
+      "source_state": "closed",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 1728,
+      "title": "[PR #1094] feat(mini-chat): file attachments, RAG retrieval, multi-provider storage, context truncation",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:04Z",
+      "comments_status": "done",
+      "comments_mirrored": 114
+    },
+    {
+      "source_pr_number": 1062,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1062",
+      "source_state": "closed",
+      "source_author": "refur-nfn",
+      "target_issue_number": 1729,
+      "title": "[PR #1062] fix(mini-chat-sdk): add missing #[serde(default)] to ModelCatalogEntry fields",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1060,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1060",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1730,
+      "title": "[PR #1060] feat(api-gateway): add HTTP server metrics middleware using OpenTelemetry",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:18Z",
+      "comments_status": "done",
+      "comments_mirrored": 10
+    },
+    {
+      "source_pr_number": 1058,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1058",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1731,
+      "title": "[PR #1058] feat(mini-chat): add my_reaction field to message list responses",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:21Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
+    },
+    {
+      "source_pr_number": 1057,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1057",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1732,
+      "title": "[PR #1057] bump mini-chat version",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:25Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1048,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1048",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1733,
+      "title": "[PR #1048] fix(mini-chat): table-qualify column in ON CONFLICT to fix PostgreSQL ambiguity",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:28Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1046,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1046",
+      "source_state": "closed",
+      "source_author": "ainetx",
+      "target_issue_number": 1734,
+      "title": "[PR #1046] refactor(cypilot): migrate to cyber pilot v3",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 1043,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1043",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1735,
+      "title": "[PR #1043] chore(manual release)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:35Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1041,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1041",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1736,
+      "title": "[PR #1041] feat(mini-chat): add OpenTelemetry metrics instrumentation",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:38Z",
+      "comments_status": "done",
+      "comments_mirrored": 26
+    },
+    {
+      "source_pr_number": 1040,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1040",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1737,
+      "title": "[PR #1040] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:43Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1038,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1038",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1738,
+      "title": "[PR #1038] chore(release): increase publish timeout to 10m",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:46Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1037,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1037",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1739,
+      "title": "[PR #1037] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:49Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1035,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1035",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1740,
+      "title": "[PR #1035] fix(mini-chat): fail-fast on tenant upstream registration and avoid secret declassification",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:52Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1034,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1034",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1741,
+      "title": "[PR #1034] feat(mini-chat): use S2S client credentials for OAGW upstream provisioning",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:56Z",
+      "comments_status": "done",
+      "comments_mirrored": 11
+    },
+    {
+      "source_pr_number": 1032,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1032",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1742,
+      "title": "[PR #1032] docs(mini-chat): update RAG retrieval model, attachment deletion, and…",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:38:59Z",
+      "comments_status": "done",
+      "comments_mirrored": 41
+    },
+    {
+      "source_pr_number": 1029,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1029",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1743,
+      "title": "[PR #1029] feat(authn-resolver): add S2S authentication via OAuth2 client credentials",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:39:05Z",
+      "comments_status": "done",
+      "comments_mirrored": 21
+    },
+    {
+      "source_pr_number": 1028,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1028",
+      "source_state": "closed",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 1744,
+      "title": "[PR #1028] revert(mini-chat): restore direct OAGW API calls for upstream/route provisioning",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:39:10Z",
+      "comments_status": "done",
+      "comments_mirrored": 12
+    },
+    {
+      "source_pr_number": 1026,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1026",
+      "source_state": "closed",
+      "source_author": "MikeFalcon77",
+      "target_issue_number": 1745,
+      "title": "[PR #1026] chore(versions):",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:39:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1025,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1025",
+      "source_state": "closed",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 1746,
+      "title": "[PR #1025] feat(oagw,mini-chat): upgrade GTS to 0.8.4, register all providers via types-registry",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:39:17Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 1023,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1023",
+      "source_state": "closed",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 1747,
+      "title": "[PR #1023] perf(outbox): CTE enqueue, idle-when-drained sequencer, prioritizer decomposition",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:39:20Z",
+      "comments_status": "done",
+      "comments_mirrored": 86
+    },
+    {
+      "source_pr_number": 1022,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1022",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1748,
+      "title": "[PR #1022] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:39:28Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 1019,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/1019",
+      "source_state": "closed",
+      "source_author": "jalankulkija",
+      "target_issue_number": 1749,
+      "title": "[PR #1019] fix(modkit-auth): Avoid calling jsonwebtoken::decode in token_validate function",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:39:31Z",
+      "comments_status": "done",
+      "comments_mirrored": 6
+    },
+    {
+      "source_pr_number": 943,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/943",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1790,
+      "title": "[PR #943] feat(mini-chat): implement Models API",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:44:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 34
+    },
+    {
+      "source_pr_number": 940,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/940",
+      "source_state": "closed",
+      "source_author": "striped-zebra-dev",
+      "target_issue_number": 1791,
+      "title": "[PR #940] feat(mini-chat): enforce per-model max_output_tokens and atomic prefl…",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:44:06Z",
+      "comments_status": "done",
+      "comments_mirrored": 8
+    },
+    {
+      "source_pr_number": 939,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/939",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1792,
+      "title": "[PR #939] refactor(modkit-db): replace exec_custom_all with project_all method on SecureSelect",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:44:10Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 937,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/937",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1793,
+      "title": "[PR #937] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:44:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 935,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/935",
+      "source_state": "closed",
+      "source_author": "mattgarmon",
+      "target_issue_number": 1794,
+      "title": "[PR #935] feat(oagw): upstream alias enforcement",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:44:18Z",
+      "comments_status": "done",
+      "comments_mirrored": 8
+    },
+    {
+      "source_pr_number": 934,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/934",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1795,
+      "title": "[PR #934] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:44:22Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 932,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/932",
+      "source_state": "closed",
+      "source_author": "asmith987",
+      "target_issue_number": 1796,
+      "title": "[PR #932] fix(oagw): remove unused credentials config and fix static-credstore owner IDs",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:44:25Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 931,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/931",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1797,
+      "title": "[PR #931] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:44:29Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 928,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/928",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1798,
+      "title": "[PR #928] feat(credstore): validate owner_id exclusivity and add plugin README",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:44:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 927,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/927",
+      "source_state": "closed",
+      "source_author": "github-actions[bot]",
+      "target_issue_number": 1799,
+      "title": "[PR #927] chore: release",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:44:36Z",
+      "comments_status": "done",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 926,
+      "source_url": "https://github.com/cyberfabric/cyberware-rust/pull/926",
+      "source_state": "closed",
+      "source_author": "aviator5",
+      "target_issue_number": 1800,
+      "title": "[PR #926] feat(mini-chat): return attachment summaries in list messages response",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-28T07:44:38Z",
+      "comments_status": "done",
+      "comments_mirrored": 11
     }
   ],
   "stats": {

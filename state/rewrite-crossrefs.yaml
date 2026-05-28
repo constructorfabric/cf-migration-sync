@@ -5361,12 +5361,6 @@
     },
     {
       "repo": "cyberware-rust",
-      "target_number": 1414,
-      "status": "no_change",
-      "rewritten_at": "2026-05-27T11:12:31Z"
-    },
-    {
-      "repo": "cyberware-rust",
       "target_number": 1415,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T11:12:34Z"
