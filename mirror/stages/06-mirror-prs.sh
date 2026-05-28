@@ -213,6 +213,10 @@ _mirror_repo_prs() {
 
   state_init "$state_file" "06-mirror-prs"
 
+  local _body_tmp
+  _body_tmp="$(mktemp)"
+  trap 'rm -f "$_body_tmp"' RETURN
+
   # ---- Pre-fetch target data used by both open + closed PR loops ----------
   # Issues endpoint returns both issues and PRs — used for idempotency markers.
   log "  Pre-fetching existing target issues/PRs for $repo_name..."
@@ -353,9 +357,10 @@ ${marker}"
           '{"title":$title,"body":.}')"
 
         local no_branch_result
+        printf '%s' "$no_branch_payload" > "$_body_tmp"
         no_branch_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
           --method POST \
-          --input <(echo "$no_branch_payload") \
+          --input "$_body_tmp" \
           2>/dev/null)" || no_branch_result="FAILED"
 
         if [[ "$no_branch_result" == "FAILED" ]]; then
@@ -404,9 +409,10 @@ ${marker}"
         '{"title":$title,"body":.,"head":$head,"base":$base}')"
 
       local open_result open_err=""
+      printf '%s' "$open_payload" > "$_body_tmp"
       open_result="$(gh api "repos/$TARGET_ORG/$repo_name/pulls" \
         --method POST \
-        --input <(echo "$open_payload") \
+        --input "$_body_tmp" \
         2>/dev/null)" || {
         open_err="$(_gh_err_hint "$open_result")"; open_result="FAILED"
       }
@@ -621,9 +627,10 @@ ${marker}"
         '{"title":$title,"body":.,"head":$head,"base":$base}')"
 
       local pr_create_result pr_err=""
+      printf '%s' "$pr_payload" > "$_body_tmp"
       pr_create_result="$(gh api "repos/$TARGET_ORG/$repo_name/pulls" \
         --method POST \
-        --input <(echo "$pr_payload") \
+        --input "$_body_tmp" \
         2>/dev/null)" || {
         pr_err="$(_gh_err_hint "$pr_create_result")"
         if echo "$pr_err" | grep -qi "rate.limit\|secondary rate\|abuse"; then
@@ -661,9 +668,10 @@ ${marker}"
         '{"title":$title,"body":.}')"
 
       local create_result create_err=""
+      printf '%s' "$issue_payload" > "$_body_tmp"
       create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
         --method POST \
-        --input <(echo "$issue_payload") \
+        --input "$_body_tmp" \
         2>/dev/null)" || {
         create_err="$(_gh_err_hint "$create_result")"
         if echo "$create_err" | grep -qi "rate.limit\|secondary rate\|abuse"; then
@@ -793,16 +801,17 @@ _mirror_pr_comments() {
     || tgt_comment_bodies=''
 
   # Shared temp file for capturing POST error messages across all three comment loops.
-  local _post_err_tmp
+  local _post_err_tmp _body_tmp
   _post_err_tmp="$(mktemp)"
-  trap 'rm -f "$_post_err_tmp"' RETURN
+  _body_tmp="$(mktemp)"
+  trap 'rm -f "$_post_err_tmp" "$_body_tmp"' RETURN
 
   local mirrored=0
   local posted_since_commit=0
 
   # -- 1. Discussion comments -----------------------------------------------
   while IFS= read -r c; do
-    local c_id c_author c_created c_body c_marker c_full_body c_payload c_result
+    local c_id c_author c_created c_body c_marker c_full_body c_result
     c_id="$(echo      "$c" | jq -r '.id')"
     c_author="$(echo  "$c" | jq -r '.user.login // "unknown"')"
     c_created="$(echo "$c" | jq -r '.created_at // ""')"
@@ -824,9 +833,9 @@ ${c_body}
 ${c_marker}"
 
     # Use printf|jq pipe to avoid ARG_MAX on large comment bodies
-    c_payload="$(printf '%s' "$c_full_body" | jq -Rs '{"body":.}')"
+    printf '%s' "$c_full_body" | jq -Rs '{"body":.}' > "$_body_tmp"
     c_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments" \
-      --method POST --input <(echo "$c_payload") \
+      --method POST --input "$_body_tmp" \
       2>"$_post_err_tmp")" || c_result="FAILED"
     if [[ "$c_result" == "FAILED" ]]; then
       warn "  Failed to mirror discussion comment $c_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
@@ -843,7 +852,7 @@ ${c_marker}"
 
   # -- 2. Review-level bodies (Approved / Changes requested + message) ------
   while IFS= read -r rv; do
-    local rv_id rv_author rv_state rv_submitted rv_body rv_marker rv_full_body rv_payload rv_result
+    local rv_id rv_author rv_state rv_submitted rv_body rv_marker rv_full_body rv_result
     rv_id="$(echo        "$rv" | jq -r '.id')"
     rv_author="$(echo    "$rv" | jq -r '.user.login // "unknown"')"
     rv_state="$(echo     "$rv" | jq -r '.state // "COMMENTED"')"
@@ -865,9 +874,9 @@ ${rv_body}
 
 ${rv_marker}"
 
-    rv_payload="$(printf '%s' "$rv_full_body" | jq -Rs '{"body":.}')"
+    printf '%s' "$rv_full_body" | jq -Rs '{"body":.}' > "$_body_tmp"
     rv_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments" \
-      --method POST --input <(echo "$rv_payload") \
+      --method POST --input "$_body_tmp" \
       2>"$_post_err_tmp")" || rv_result="FAILED"
     if [[ "$rv_result" == "FAILED" ]]; then
       warn "  Failed to mirror review body $rv_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
@@ -884,7 +893,7 @@ ${rv_marker}"
 
   # -- 3. Inline review comments (with file + line context) -----------------
   while IFS= read -r rc; do
-    local rc_id rc_author rc_created rc_body rc_path rc_line rc_marker rc_full_body rc_payload rc_result
+    local rc_id rc_author rc_created rc_body rc_path rc_line rc_marker rc_full_body rc_result
     rc_id="$(echo      "$rc" | jq -r '.id')"
     rc_author="$(echo  "$rc" | jq -r '.user.login // "unknown"')"
     rc_created="$(echo "$rc" | jq -r '.created_at // ""')"
@@ -907,9 +916,9 @@ ${rc_body}
 
 ${rc_marker}"
 
-    rc_payload="$(printf '%s' "$rc_full_body" | jq -Rs '{"body":.}')"
+    printf '%s' "$rc_full_body" | jq -Rs '{"body":.}' > "$_body_tmp"
     rc_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments" \
-      --method POST --input <(echo "$rc_payload") \
+      --method POST --input "$_body_tmp" \
       2>"$_post_err_tmp")" || rc_result="FAILED"
     if [[ "$rc_result" == "FAILED" ]]; then
       warn "  Failed to mirror inline review comment $rc_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
@@ -1011,6 +1020,10 @@ _reconcile_pr() {
   local tgt_issue_number="$4"
   local state_file="$5"
 
+  local _body_tmp
+  _body_tmp="$(mktemp)"
+  trap 'rm -f "$_body_tmp"' RETURN
+
   local pr_state pr_title pr_body pr_author pr_created pr_merged pr_head_ref pr_base_ref
   pr_state="$(echo   "$pr_json" | jq -r '.state')"
   pr_title="$(echo   "$pr_json" | jq -r '.title')"
@@ -1084,9 +1097,10 @@ ${marker}"
   fi
 
   if [[ "$patch_payload" != "{}" ]]; then
+    printf '%s' "$patch_payload" > "$_body_tmp"
     gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number" \
       --method PATCH \
-      --input <(echo "$patch_payload") \
+      --input "$_body_tmp" \
       2>/dev/null || warn "  Failed to reconcile PR $repo_name#$pr_number → #$tgt_issue_number"
     log "  Reconciled PR #$pr_number → #$tgt_issue_number ($(echo "$patch_payload" | jq -r 'keys | join(", ")'))"
     pause 1.5
@@ -1143,6 +1157,9 @@ _reconcile_pr_comments() {
   # Sets $mirrored in the caller's scope (uses nameref-style side effect via echo).
   _sync_comment() {
     local c_marker="$1" c_full_body="$2"
+    local _body_tmp
+    _body_tmp="$(mktemp)"
+    trap 'rm -f "$_body_tmp"' RETURN
     local tgt_c_id
     tgt_c_id="$(echo "$tgt_comments" | jq -r \
       --arg m "$c_marker" \
@@ -1156,19 +1173,21 @@ _reconcile_pr_comments() {
       new_norm="$(echo "$c_full_body" | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
       tgt_norm="$(echo "$tgt_c_body"  | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
       if [[ "$new_norm" != "$tgt_norm" ]]; then
+        printf '%s' "$c_full_body" | jq -Rs '{"body":.}' > "$_body_tmp"
         gh api "repos/$TARGET_ORG/$repo_name/issues/comments/$tgt_c_id" \
           --method PATCH \
-          --input <(printf '%s' "$c_full_body" | jq -Rs '{"body":.}') \
+          --input "$_body_tmp" \
           2>/dev/null || warn "  Failed to update comment on PR #$src_pr_number"
         pause 1.5
       fi
       mirrored=$((mirrored + 1))
     else
       local c_result
+      printf '%s' "$c_full_body" | jq -Rs '{"body":.}' > "$_body_tmp"
       c_result="$(gh api \
         "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_number/comments" \
         --method POST \
-        --input <(printf '%s' "$c_full_body" | jq -Rs '{"body":.}') \
+        --input "$_body_tmp" \
         2>/dev/null)" || c_result="FAILED"
       [[ "$c_result" != "FAILED" ]] && mirrored=$((mirrored + 1)) || \
         warn "  Failed to create comment on PR #$src_pr_number"

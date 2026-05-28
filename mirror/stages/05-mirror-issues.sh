@@ -120,6 +120,9 @@ main() {
 _mirror_repo_issues() {
   local repo_name="$1"
   local state_file="$STATE_DIR/$repo_name.yaml"
+  local _body_tmp
+  _body_tmp="$(mktemp)"
+  trap 'rm -f "$_body_tmp"' RETURN
 
   state_init "$state_file" "05-mirror-issues"
 
@@ -330,9 +333,10 @@ ${marker}"
 
     # First attempt: with labels and milestone
     local create_result
+    printf '%s' "$payload" > "$_body_tmp"
     create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
       --method POST \
-      --input <(echo "$payload") \
+      --input "$_body_tmp" \
       2>/dev/null)" || create_result="FAILED"
 
     # Retry without labels only for Validation Failed (not for network/auth errors —
@@ -340,9 +344,10 @@ ${marker}"
     if echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
       warn "  Issue #$src_number: retry without labels..."
       payload="$(echo "$payload" | jq 'del(.labels)')"
+      printf '%s' "$payload" > "$_body_tmp"
       create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
         --method POST \
-        --input <(echo "$payload") \
+        --input "$_body_tmp" \
         2>/dev/null)" || create_result="FAILED"
     fi
 
@@ -350,9 +355,10 @@ ${marker}"
     if echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
       warn "  Issue #$src_number: retry without milestone..."
       payload="$(echo "$payload" | jq 'del(.milestone)')"
+      printf '%s' "$payload" > "$_body_tmp"
       create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
         --method POST \
-        --input <(echo "$payload") \
+        --input "$_body_tmp" \
         2>/dev/null)" || create_result="FAILED"
     fi
 
@@ -516,9 +522,10 @@ _mirror_issue_comments() {
     jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | .body // ""] | join("\n")')" \
     || tgt_comment_bodies=''
 
-  local _post_err_tmp
+  local _post_err_tmp _body_tmp
   _post_err_tmp="$(mktemp)"
-  trap 'rm -f "$_post_err_tmp"' RETURN
+  _body_tmp="$(mktemp)"
+  trap 'rm -f "$_post_err_tmp" "$_body_tmp"' RETURN
 
   local mirrored=0
   local posted_since_commit=0
@@ -550,13 +557,11 @@ ${c_body}
 
 ${c_marker}"
 
-    local c_payload
-    c_payload="$(printf '%s' "$c_full_body" | jq -Rs '{"body":.}')"
-
     local c_result
+    printf '%s' "$c_full_body" | jq -Rs '{"body":.}' > "$_body_tmp"
     c_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments" \
       --method POST \
-      --input <(echo "$c_payload") \
+      --input "$_body_tmp" \
       2>"$_post_err_tmp")" || c_result="FAILED"
 
     if [[ "$c_result" == "FAILED" ]]; then
@@ -609,6 +614,10 @@ _reconcile_issue() {
   local src_number="$3"
   local tgt_number="$4"
   local state_file="$5"
+
+  local _body_tmp
+  _body_tmp="$(mktemp)"
+  trap 'rm -f "$_body_tmp"' RETURN
 
   local src_state title body labels milestone_title src_author src_created src_id assignees
   src_state="$(echo "$issue_json"        | jq -r '.state')"
@@ -706,9 +715,10 @@ ${marker}"
 
   # ---- Apply PATCH if anything changed -------------------------------------
   if [[ "$patch_payload" != "{}" ]]; then
+    printf '%s' "$patch_payload" > "$_body_tmp"
     gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number" \
       --method PATCH \
-      --input <(echo "$patch_payload") \
+      --input "$_body_tmp" \
       2>/dev/null || warn "  Failed to reconcile issue $repo_name#$src_number → #$tgt_number"
     log "  Reconciled #$src_number → #$tgt_number ($(echo "$patch_payload" | jq -r 'keys | join(", ")'))"
     pause 1.5
@@ -740,6 +750,10 @@ _reconcile_issue_comments() {
   local src_number="$2"
   local tgt_number="$3"
   local state_file="$4"
+
+  local _body_tmp
+  _body_tmp="$(mktemp)"
+  trap 'rm -f "$_body_tmp"' RETURN
 
   local comments
   comments="$(ghsrc api \
@@ -797,9 +811,10 @@ ${c_marker}"
       new_norm="$(echo "$c_full_body" | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
       tgt_norm="$(echo "$tgt_c_body"  | sed "s|https://github\.com/${SOURCE_ORG}/|https://github.com/${TARGET_ORG}/|g")"
       if [[ "$new_norm" != "$tgt_norm" ]]; then
+        printf '%s' "$c_full_body" | jq -Rs '{"body":.}' > "$_body_tmp"
         gh api "repos/$TARGET_ORG/$repo_name/issues/comments/$tgt_c_id" \
           --method PATCH \
-          --input <(printf '%s' "$c_full_body" | jq -Rs '{"body":.}') \
+          --input "$_body_tmp" \
           2>/dev/null || warn "  Failed to update comment $c_id on #$src_number"
         pause 1.5
       fi
@@ -807,9 +822,10 @@ ${c_marker}"
     else
       # New comment — create it
       local c_result
+      printf '%s' "$c_full_body" | jq -Rs '{"body":.}' > "$_body_tmp"
       c_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments" \
         --method POST \
-        --input <(printf '%s' "$c_full_body" | jq -Rs '{"body":.}') \
+        --input "$_body_tmp" \
         2>/dev/null)" || c_result="FAILED"
       [[ "$c_result" != "FAILED" ]] && mirrored=$((mirrored + 1)) || \
         warn "  Failed to create comment $c_id on #$src_number"
