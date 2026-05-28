@@ -475,6 +475,8 @@ ${marker}"
     processed=$((processed + 1))
     if (( processed % 25 == 0 )); then
       log "  Progress: $processed/$total_prs PRs..."
+      [[ "$DRY_RUN" -eq 0 ]] && \
+        commit_state "mirror: checkpoint ${processed}/${total_prs} closed PRs in $repo_name [skip ci]"
     fi
 
     # ---- Fast-forward skip (--start-after-pr) --------------------------------
@@ -796,6 +798,7 @@ _mirror_pr_comments() {
   trap 'rm -f "$_post_err_tmp"' RETURN
 
   local mirrored=0
+  local posted_since_commit=0
 
   # -- 1. Discussion comments -----------------------------------------------
   while IFS= read -r c; do
@@ -829,6 +832,10 @@ ${c_marker}"
       warn "  Failed to mirror discussion comment $c_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
     else
       mirrored=$((mirrored + 1))
+      posted_since_commit=$((posted_since_commit + 1))
+      if (( posted_since_commit % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+        commit_state "mirror: checkpoint PR #$src_pr_number comments ($posted_since_commit posted) in $repo_name [skip ci]"
+      fi
     fi
     pause 1.5   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$issue_comments" | jq -c '.[]' 2>/dev/null || true)
@@ -865,6 +872,10 @@ ${rv_marker}"
       warn "  Failed to mirror review body $rv_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
     else
       mirrored=$((mirrored + 1))
+      posted_since_commit=$((posted_since_commit + 1))
+      if (( posted_since_commit % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+        commit_state "mirror: checkpoint PR #$src_pr_number comments ($posted_since_commit posted) in $repo_name [skip ci]"
+      fi
     fi
     pause 1.5   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$pr_reviews" | jq -c '.[]' 2>/dev/null || true)
@@ -902,6 +913,10 @@ ${rc_marker}"
       warn "  Failed to mirror inline review comment $rc_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
     else
       mirrored=$((mirrored + 1))
+      posted_since_commit=$((posted_since_commit + 1))
+      if (( posted_since_commit % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+        commit_state "mirror: checkpoint PR #$src_pr_number comments ($posted_since_commit posted) in $repo_name [skip ci]"
+      fi
     fi
     pause 1.5   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$review_comments" | jq -c '.[]' 2>/dev/null || true)

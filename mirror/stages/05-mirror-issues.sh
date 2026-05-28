@@ -194,6 +194,8 @@ _mirror_repo_issues() {
     processed=$((processed + 1))
     if (( processed % 25 == 0 )); then
       log "  Progress: $processed/$total_issues issues..."
+      [[ "$DRY_RUN" -eq 0 ]] && \
+        commit_state "mirror: checkpoint ${processed}/${total_issues} issues in $repo_name [skip ci]"
     fi
 
     # ---- Check idempotency via state file --------------------------------
@@ -519,6 +521,7 @@ _mirror_issue_comments() {
   trap 'rm -f "$_post_err_tmp"' RETURN
 
   local mirrored=0
+  local posted_since_commit=0
   while IFS= read -r comment; do
     local c_id c_author c_created c_body
     c_id="$(echo      "$comment" | jq -r '.id')"
@@ -560,6 +563,10 @@ ${c_marker}"
       warn "  Failed to mirror comment $c_id on issue #$src_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
     else
       mirrored=$((mirrored + 1))
+      posted_since_commit=$((posted_since_commit + 1))
+      if (( posted_since_commit % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+        commit_state "mirror: checkpoint issue #$src_number comments ($posted_since_commit posted) in $repo_name [skip ci]"
+      fi
     fi
     pause 1.5   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$comments" | jq -c '.[]')
