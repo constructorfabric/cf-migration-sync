@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-26T07:04:01Z",
-    "last_run_at": "2026-05-28T15:35:36Z"
+    "last_run_at": "2026-05-28T15:36:35Z"
   },
   "items": [
     {
@@ -4433,7 +4433,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:21:38Z",
       "comments_status": "done",
-      "comments_mirrored": 16
+      "comments_mirrored": 21
     },
     {
       "source_pr_number": 469,
@@ -4445,7 +4445,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:21:45Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 21
     },
     {
       "source_pr_number": 466,
@@ -4457,7 +4457,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:21:53Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 8
     },
     {
       "source_pr_number": 465,
@@ -4469,7 +4469,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:21:59Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 20
     },
     {
       "source_pr_number": 464,
@@ -4481,7 +4481,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:22:07Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 14
     },
     {
       "source_pr_number": 462,
@@ -4493,7 +4493,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:22:15Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 459,
@@ -4505,7 +4505,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:22:21Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 58
     },
     {
       "source_pr_number": 451,
@@ -4517,7 +4517,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:22:30Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 45
     },
     {
       "source_pr_number": 449,
@@ -4529,7 +4529,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:22:38Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 6
     },
     {
       "source_pr_number": 448,
@@ -4541,7 +4541,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:22:44Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 444,
@@ -4553,7 +4553,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:22:50Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 443,
@@ -4565,7 +4565,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:22:57Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 98
     },
     {
       "source_pr_number": 441,
@@ -4577,7 +4577,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:23:05Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 40
     },
     {
       "source_pr_number": 439,
@@ -4589,7 +4589,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:23:13Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 21
     },
     {
       "source_pr_number": 437,
@@ -4601,7 +4601,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:23:20Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 435,
@@ -4613,7 +4613,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:23:27Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 13
     },
     {
       "source_pr_number": 433,
@@ -4625,7 +4625,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T18:23:34Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 144
     },
     {
       "source_pr_number": 431,
