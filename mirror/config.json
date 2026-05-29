@@ -47,7 +47,7 @@
   "stage_06_mirror_prs": {
     "skip_open_prs": false,
 
-    "exclude_repos": ["cyberware-rust"],
+    "exclude_repos": ["cyberware-rust", "DNA", "cf-cli", "cf-template-rust", "cyber-constructor", "cyberware-frontx", "governance"],
 
     "_comment_resume_after_pr": [
       "Per-repo resume points for the closed-PR loop.",
