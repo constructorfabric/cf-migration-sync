@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-26T19:49:59Z",
-    "last_run_at": "2026-05-29T11:09:13Z"
+    "last_run_at": "2026-05-29T13:32:37Z"
   },
   "items": [
     {
@@ -24,36 +24,36 @@
       "source_url": "https://github.com/cyberfabric/cyber-insight/pull/553",
       "source_state": "open",
       "source_author": "dzarlax",
-      "target_issue_number": null,
+      "target_issue_number": 571,
       "title": "[PR #553] docs(ai-connectors): add Claude Team as 10th source in coverage matrix",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T13:33:34Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 546,
       "source_url": "https://github.com/cyberfabric/cyber-insight/pull/546",
       "source_state": "open",
       "source_author": "mitasovr",
-      "target_issue_number": null,
+      "target_issue_number": 572,
       "title": "[PR #546] feat(youtrack): silver + enrich pipeline (§2.5–§2.10)",
-      "status": "failed",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T13:33:45Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 544,
       "source_url": "https://github.com/cyberfabric/cyber-insight/pull/544",
       "source_state": "open",
       "source_author": "Gregory91G",
-      "target_issue_number": null,
+      "target_issue_number": 573,
       "title": "[PR #544] fix(identity): address independent review of #541 + #542",
-      "status": "failed",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T13:33:57Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 536,
@@ -72,34 +72,34 @@
       "source_url": "https://github.com/cyberfabric/cyber-insight/pull/489",
       "source_state": "open",
       "source_author": "cyberantonz",
-      "target_issue_number": null,
+      "target_issue_number": 574,
       "title": "[PR #489] docs(connector-manager): add PRD/DESIGN/ADRs for credential & connect…",
-      "status": "failed",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T13:34:09Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 298,
       "source_url": "https://github.com/cyberfabric/cyber-insight/pull/298",
       "source_state": "open",
       "source_author": "dzarlax",
-      "target_issue_number": null,
+      "target_issue_number": 575,
       "title": "[PR #298] docs(analytics-diagnosis): add PRD and identity/cohorts companion",
-      "status": "failed",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T13:34:21Z",
+      "comments_status": "done",
+      "comments_mirrored": 16
     },
     {
       "source_pr_number": 256,
       "source_url": "https://github.com/cyberfabric/cyber-insight/pull/256",
       "source_state": "open",
       "source_author": "dzarlax",
-      "target_issue_number": null,
+      "target_issue_number": 576,
       "title": "[PR #256] feat(ingestion): bronze freshness SLA + daily freshness CronWorkflow",
-      "status": "failed",
-      "mirrored_at": null,
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T13:35:36Z",
       "comments_status": "none",
       "comments_mirrored": 0
     },
@@ -3000,24 +3000,24 @@
       "source_url": "https://github.com/cyberfabric/cyber-insight/pull/580",
       "source_state": "open",
       "source_author": "Gregory91G",
-      "target_issue_number": null,
-      "title": "[PR #580] feat(identity): GET /v1/subchart forest + org_chart path-B (#579)",
-      "status": "failed",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "target_issue_number": 569,
+      "title": "[PR #580] feat(identity): GET /v1/subchart visible forest + extending org_chart with parent-less rows (#579)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T13:33:04Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 578,
       "source_url": "https://github.com/cyberfabric/cyber-insight/pull/578",
       "source_state": "open",
       "source_author": "cyberantonz",
-      "target_issue_number": null,
+      "target_issue_number": 570,
       "title": "[PR #578] Metrics catalog admin CRUD",
-      "status": "failed",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T13:33:16Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 581,
@@ -3256,6 +3256,30 @@
       "title": "[PR #559] chore(release): umbrella 0.1.20 (build 2026.05.26.19.56-9678418)",
       "status": "mirrored",
       "mirrored_at": "2026-05-29T11:18:19Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 584,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/584",
+      "source_state": "open",
+      "source_author": "mitasovr",
+      "target_issue_number": 567,
+      "title": "[PR #584] feat(ingestion): cross-connector silver contract parity gate (git commits)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T13:32:40Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 583,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/583",
+      "source_state": "open",
+      "source_author": "mozhaev-dev",
+      "target_issue_number": 568,
+      "title": "[PR #583] INSIGHT-459: feat(zendesk) — connector scaffold + docs (Phase 1 MVP)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T13:32:53Z",
       "comments_status": "done",
       "comments_mirrored": 1
     }
