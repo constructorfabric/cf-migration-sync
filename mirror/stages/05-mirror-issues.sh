@@ -529,10 +529,17 @@ _mirror_issue_comments() {
     jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | .body // ""] | join("\n")')" \
     || tgt_comment_bodies=''
 
+  # Save caller's RETURN trap before overwriting it — bash RETURN traps are shell-global.
+  # Without this, when _mirror_repo_issues returns its trap fires with $_post_err_tmp unbound.
+  local _prev_trap
+  _prev_trap="$(trap -p RETURN 2>/dev/null || true)"
   local _post_err_tmp _body_tmp
   _post_err_tmp="$(mktemp)"
   _body_tmp="$(mktemp)"
-  trap 'rm -f "$_post_err_tmp" "$_body_tmp"' RETURN
+  # SC2064: intentional — expand paths now so cleanup uses correct literal paths
+  # and restores caller's trap regardless of variable scope at fire-time.
+  # shellcheck disable=SC2064
+  trap "rm -f -- '${_post_err_tmp}' '${_body_tmp}'; ${_prev_trap:-trap - RETURN}" RETURN
 
   local mirrored=0
   local posted_since_commit=0
