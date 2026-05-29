@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-26T19:28:24Z",
-    "last_run_at": "2026-05-27T13:08:26Z"
+    "last_run_at": "2026-05-29T07:30:38Z"
   },
   "items": [
     {
@@ -12,12 +12,12 @@
       "source_url": "https://github.com/cyberfabric/DNA/pull/14",
       "source_state": "open",
       "source_author": "aviator5",
-      "target_issue_number": null,
+      "target_issue_number": 26,
       "title": "[PR #14] [DRAFT] Fix inconsistencies in REST guidelines",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:30:40Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 26,
@@ -29,7 +29,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:28:27Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 25,
@@ -41,7 +41,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:28:30Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 45
     },
     {
       "source_pr_number": 24,
@@ -65,7 +65,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:28:37Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 22,
@@ -89,7 +89,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:28:42Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 20,
@@ -197,7 +197,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:29:05Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 13
     },
     {
       "source_pr_number": 10,
@@ -281,7 +281,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:29:23Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 3,
@@ -293,7 +293,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:29:25Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 2,
@@ -322,7 +322,7 @@
   ],
   "stats": {
     "total": 26,
-    "synced": 25,
+    "synced": 26,
     "pending": 0,
     "failed": 0
   }

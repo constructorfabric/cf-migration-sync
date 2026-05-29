@@ -2481,12 +2481,6 @@
     },
     {
       "repo": "cyber-insight",
-      "target_number": 306,
-      "status": "rewritten",
-      "rewritten_at": "2026-05-27T11:02:41Z"
-    },
-    {
-      "repo": "cyber-insight",
       "target_number": 307,
       "status": "rewritten",
       "rewritten_at": "2026-05-27T11:02:43Z"

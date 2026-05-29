@@ -4,17 +4,17 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-26T19:46:56Z",
-    "last_run_at": "2026-05-27T13:08:39Z"
+    "last_run_at": "2026-05-29T10:46:31Z"
   },
   "items": [
     {
       "source_pr_number": 35,
       "source_url": "https://github.com/cyberfabric/cf-cli/pull/35",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "Bechma",
       "target_issue_number": null,
       "title": "[PR #35] Design document",
-      "status": "skipped_open",
+      "status": "failed",
       "mirrored_at": null,
       "comments_status": "none",
       "comments_mirrored": 0
@@ -22,11 +22,11 @@
     {
       "source_pr_number": 25,
       "source_url": "https://github.com/cyberfabric/cf-cli/pull/25",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "devjow",
       "target_issue_number": null,
       "title": "[PR #25] feat: docker template command resolves #17",
-      "status": "skipped_open",
+      "status": "failed",
       "mirrored_at": null,
       "comments_status": "none",
       "comments_mirrored": 0
@@ -348,6 +348,6 @@
     "total": 28,
     "synced": 26,
     "pending": 0,
-    "failed": 0
+    "failed": 2
   }
 }

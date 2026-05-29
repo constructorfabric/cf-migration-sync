@@ -4,20 +4,20 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-26T19:49:59Z",
-    "last_run_at": "2026-05-27T13:08:41Z"
+    "last_run_at": "2026-05-29T11:09:13Z"
   },
   "items": [
     {
       "source_pr_number": 555,
       "source_url": "https://github.com/cyberfabric/cyber-insight/pull/555",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "cyberantonz",
-      "target_issue_number": null,
+      "target_issue_number": 566,
       "title": "[PR #555] feat(analytics-api): metric-catalog schema-validator (Refs #521)",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:19:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 553,
@@ -38,7 +38,7 @@
       "source_author": "mitasovr",
       "target_issue_number": null,
       "title": "[PR #546] feat(youtrack): silver + enrich pipeline (§2.5–§2.10)",
-      "status": "skipped_open",
+      "status": "failed",
       "mirrored_at": null,
       "comments_status": "none",
       "comments_mirrored": 0
@@ -50,7 +50,7 @@
       "source_author": "Gregory91G",
       "target_issue_number": null,
       "title": "[PR #544] fix(identity): address independent review of #541 + #542",
-      "status": "skipped_open",
+      "status": "failed",
       "mirrored_at": null,
       "comments_status": "none",
       "comments_mirrored": 0
@@ -58,12 +58,12 @@
     {
       "source_pr_number": 536,
       "source_url": "https://github.com/cyberfabric/cyber-insight/pull/536",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "mozhaev-dev",
       "target_issue_number": 306,
       "title": "[PR #536] feat(claude-team): claude.ai Team connector + proxy — Phase 5 MVP (#458)",
       "status": "mirrored",
-      "mirrored_at": "2026-05-26T19:50:07Z",
+      "mirrored_at": "2026-05-29T11:21:08Z",
       "comments_status": "done",
       "comments_mirrored": 0
     },
@@ -74,7 +74,7 @@
       "source_author": "cyberantonz",
       "target_issue_number": null,
       "title": "[PR #489] docs(connector-manager): add PRD/DESIGN/ADRs for credential & connect…",
-      "status": "skipped_open",
+      "status": "failed",
       "mirrored_at": null,
       "comments_status": "none",
       "comments_mirrored": 0
@@ -86,7 +86,7 @@
       "source_author": "dzarlax",
       "target_issue_number": null,
       "title": "[PR #298] docs(analytics-diagnosis): add PRD and identity/cohorts companion",
-      "status": "skipped_open",
+      "status": "failed",
       "mirrored_at": null,
       "comments_status": "none",
       "comments_mirrored": 0
@@ -98,7 +98,7 @@
       "source_author": "dzarlax",
       "target_issue_number": null,
       "title": "[PR #256] feat(ingestion): bronze freshness SLA + daily freshness CronWorkflow",
-      "status": "skipped_open",
+      "status": "failed",
       "mirrored_at": null,
       "comments_status": "none",
       "comments_mirrored": 0
@@ -110,7 +110,7 @@
       "source_author": "dzarlax",
       "target_issue_number": null,
       "title": "[PR #248] Event-grain meeting silver + M365 calendar stream",
-      "status": "skipped_open",
+      "status": "failed",
       "mirrored_at": null,
       "comments_status": "none",
       "comments_mirrored": 0
@@ -122,7 +122,7 @@
       "source_author": "mitasovr",
       "target_issue_number": null,
       "title": "[PR #230] docs(plugins): PRD for unified plugin system",
-      "status": "skipped_open",
+      "status": "failed",
       "mirrored_at": null,
       "comments_status": "none",
       "comments_mirrored": 0
@@ -134,7 +134,7 @@
       "source_author": "dzarlax",
       "target_issue_number": null,
       "title": "[PR #226] docs(dashboard-configurator): PRD for role-aware dashboard composition",
-      "status": "skipped_open",
+      "status": "failed",
       "mirrored_at": null,
       "comments_status": "none",
       "comments_mirrored": 0
@@ -149,7 +149,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:50:17Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 556,
@@ -161,7 +161,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:50:22Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 551,
@@ -173,7 +173,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:50:28Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 550,
@@ -185,7 +185,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:50:34Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 549,
@@ -197,7 +197,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:50:40Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 548,
@@ -209,7 +209,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:50:45Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 547,
@@ -221,7 +221,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:50:51Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 545,
@@ -1589,7 +1589,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T20:04:09Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 9
     },
     {
       "source_pr_number": 216,
@@ -1601,7 +1601,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T20:04:17Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 215,
@@ -1613,7 +1613,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T20:04:24Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 214,
@@ -1624,8 +1624,8 @@
       "title": "[PR #214] feat(identity): MariaDB persons store + migration runner + identity_inputs rename",
       "status": "mirrored",
       "mirrored_at": "2026-05-26T20:04:33Z",
-      "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_status": "in_progress",
+      "comments_mirrored": 25
     },
     {
       "source_pr_number": 213,
@@ -2994,6 +2994,270 @@
       "mirrored_at": "2026-05-26T21:09:44Z",
       "comments_status": "done",
       "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 580,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/580",
+      "source_state": "open",
+      "source_author": "Gregory91G",
+      "target_issue_number": null,
+      "title": "[PR #580] feat(identity): GET /v1/subchart forest + org_chart path-B (#579)",
+      "status": "failed",
+      "mirrored_at": null,
+      "comments_status": "none",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 578,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/578",
+      "source_state": "open",
+      "source_author": "cyberantonz",
+      "target_issue_number": null,
+      "title": "[PR #578] Metrics catalog admin CRUD",
+      "status": "failed",
+      "mirrored_at": null,
+      "comments_status": "none",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 581,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/581",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": null,
+      "title": "[PR #581] chore(release): umbrella 0.1.28 (frontend image rebuild)",
+      "status": "failed",
+      "mirrored_at": null,
+      "comments_status": "none",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 577,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/577",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": null,
+      "title": "[PR #577] chore(release): umbrella 0.1.27 (identity + frontend image rebuild)",
+      "status": "failed",
+      "mirrored_at": null,
+      "comments_status": "none",
+      "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 576,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/576",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 548,
+      "title": "[PR #576] Revert \"feat(identity): return caller's accessible org forest from GET /v1/persons (#571)\"",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:12:12Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 575,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/575",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 549,
+      "title": "[PR #575] chore(release): umbrella 0.1.26 (per-connector dbt selector + toolbox/front rebuild)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:12:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 574,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/574",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 550,
+      "title": "[PR #574] fix(ingestion): scope transform-legacy dbt run per connector via tag selector",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:12:53Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 573,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/573",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 551,
+      "title": "[PR #573] fix(reconcile): align ClickHouse destination + connector CronWorkflow with Airbyte 2.x / Argo 3.5",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:13:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 572,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/572",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 552,
+      "title": "[PR #572] chore(release): umbrella 0.1.25 (identity accessible forest #571)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:13:33Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 571,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/571",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 553,
+      "title": "[PR #571] feat(identity): return caller's accessible org forest from GET /v1/persons",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:13:54Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 570,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/570",
+      "source_state": "closed",
+      "source_author": "aleksdotbar",
+      "target_issue_number": 554,
+      "title": "[PR #570] feat(analytics-api): peer-aggregate metric views + bare-FROM filter wrap",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:14:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 569,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/569",
+      "source_state": "closed",
+      "source_author": "cyberantonz",
+      "target_issue_number": 555,
+      "title": "[PR #569] feat(analytics-api): POST /catalog/get_metrics + MariaDB 11 fixes (Refs #524, #519, #523)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:14:34Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 568,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/568",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 556,
+      "title": "[PR #568] chore(release): umbrella 0.1.24 (frontend revert backend-OIDC #69)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:14:55Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 567,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/567",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 557,
+      "title": "[PR #567] chore(release): umbrella 0.1.23 (frontend backend-OIDC #68)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:15:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 566,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/566",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 558,
+      "title": "[PR #566] chore(release): umbrella 0.1.22 (toolbox with CH 25.3 dbt fix #565)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:15:35Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 565,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/565",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 559,
+      "title": "[PR #565] fix(dbt): FINAL must follow table alias (ClickHouse 25.3)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:15:54Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 564,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/564",
+      "source_state": "closed",
+      "source_author": "cyberantonz",
+      "target_issue_number": 560,
+      "title": "[PR #564] feat(analytics-api): seed metric_catalog from FE BULLET/IC defs ",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:16:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 2
+    },
+    {
+      "source_pr_number": 563,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/563",
+      "source_state": "closed",
+      "source_author": "Gregory91G",
+      "target_issue_number": 561,
+      "title": "[PR #563] feat(identity): POST /v1/persons-seed — admin-triggered re-seed from ClickHouse (#349)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:16:39Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
+    },
+    {
+      "source_pr_number": 562,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/562",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 562,
+      "title": "[PR #562] chore(release): umbrella 0.1.21 (analytics-api batch queries #556)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:17:17Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 561,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/561",
+      "source_state": "closed",
+      "source_author": "cyberantonz",
+      "target_issue_number": 563,
+      "title": "[PR #561] feat(analytics-api): single-tenant tenantDefaultId fallback (Refs #522)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:17:38Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 560,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/560",
+      "source_state": "closed",
+      "source_author": "mozhaev-dev",
+      "target_issue_number": 564,
+      "title": "[PR #560] feat(claude-team): declarative connector — proxy split out (#458)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:17:59Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
+    },
+    {
+      "source_pr_number": 559,
+      "source_url": "https://github.com/cyberfabric/cyber-insight/pull/559",
+      "source_state": "closed",
+      "source_author": "mitasovr",
+      "target_issue_number": 565,
+      "title": "[PR #559] chore(release): umbrella 0.1.20 (build 2026.05.26.19.56-9678418)",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T11:18:19Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     }
   ],
   "stats": {

@@ -4,7 +4,7 @@
     "source_org": "cyberfabric",
     "target_org": "constructorfabric",
     "first_run_at": "2026-05-26T19:15:34Z",
-    "last_run_at": "2026-05-27T13:08:28Z"
+    "last_run_at": "2026-05-29T07:37:58Z"
   },
   "items": [
     {
@@ -12,84 +12,84 @@
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/292",
       "source_state": "open",
       "source_author": "voidtopixel",
-      "target_issue_number": null,
+      "target_issue_number": 280,
       "title": "[PR #292] fix: remove \"use client\" directives from demo-mfe UI components",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:38:03Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 291,
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/291",
-      "source_state": "open",
+      "source_state": "closed",
       "source_author": "voidtopixel",
-      "target_issue_number": null,
+      "target_issue_number": 292,
       "title": "[PR #291] fix: update MFE manifest generation",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:56:08Z",
+      "comments_status": "done",
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 284,
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/284",
       "source_state": "open",
       "source_author": "gs-layer",
-      "target_issue_number": null,
+      "target_issue_number": 281,
       "title": "[PR #284] feat(cli): allow custom parent directory for new MFEs (--dir)",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:38:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 15
     },
     {
       "source_pr_number": 282,
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/282",
       "source_state": "open",
       "source_author": "tscbmstubp",
-      "target_issue_number": null,
+      "target_issue_number": 282,
       "title": "[PR #282] fix(docs): output path, logo, node version",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:39:23Z",
+      "comments_status": "done",
+      "comments_mirrored": 9
     },
     {
       "source_pr_number": 272,
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/272",
       "source_state": "open",
       "source_author": "billpliske",
-      "target_issue_number": null,
+      "target_issue_number": 283,
       "title": "[PR #272] fix(react): make MfeContextValue.extensionId optional (closes #255)",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:40:09Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 270,
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/270",
       "source_state": "open",
       "source_author": "billpliske",
-      "target_issue_number": null,
+      "target_issue_number": 284,
       "title": "[PR #270] docs: add PRD for FrontX Builder embedded AI idea generator",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:40:32Z",
+      "comments_status": "done",
+      "comments_mirrored": 50
     },
     {
       "source_pr_number": 268,
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/268",
       "source_state": "open",
       "source_author": "tbogdan",
-      "target_issue_number": null,
+      "target_issue_number": 285,
       "title": "[PR #268] feat: add @hai3/perf-telemetry — action-first performance telemetry",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:44:01Z",
+      "comments_status": "done",
+      "comments_mirrored": 99
     },
     {
       "source_pr_number": 264,
@@ -108,60 +108,60 @@
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/243",
       "source_state": "open",
       "source_author": "gs-layer",
-      "target_issue_number": null,
+      "target_issue_number": 286,
       "title": "[PR #243] fix(i18n): enforce en-only default locale policy for generated apps",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:50:57Z",
+      "comments_status": "done",
+      "comments_mirrored": 19
     },
     {
       "source_pr_number": 229,
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/229",
       "source_state": "open",
       "source_author": "dingoatemytokens",
-      "target_issue_number": null,
+      "target_issue_number": 287,
       "title": "[PR #229] docs: ADR-0017 peer dep version pinning via pnpm migration",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:52:22Z",
+      "comments_status": "done",
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 224,
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/224",
       "source_state": "open",
       "source_author": "billpliske",
-      "target_issue_number": null,
+      "target_issue_number": 288,
       "title": "[PR #224] fix: address PR #205 follow-up findings — event listener cleanup, mis…",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:52:45Z",
+      "comments_status": "done",
+      "comments_mirrored": 20
     },
     {
       "source_pr_number": 223,
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/223",
       "source_state": "open",
       "source_author": "billpliske",
-      "target_issue_number": null,
+      "target_issue_number": 289,
       "title": "[PR #223] feat: add no-hardcoded-strings ESLint rule to enforce i18n in JSX components",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:54:14Z",
+      "comments_status": "done",
+      "comments_mirrored": 9
     },
     {
       "source_pr_number": 221,
       "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/221",
       "source_state": "open",
       "source_author": "billpliske",
-      "target_issue_number": null,
+      "target_issue_number": 290,
       "title": "[PR #221] fix: remove broken logo reference and align node version in docs work…",
-      "status": "skipped_open",
-      "mirrored_at": null,
-      "comments_status": "none",
-      "comments_mirrored": 0
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:54:59Z",
+      "comments_status": "done",
+      "comments_mirrored": 7
     },
     {
       "source_pr_number": 61,
@@ -173,7 +173,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:15:48Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 60,
@@ -257,7 +257,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:16:41Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 53,
@@ -269,7 +269,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:16:48Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 52,
@@ -281,7 +281,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:16:56Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 51,
@@ -521,7 +521,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:19:18Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 31,
@@ -581,7 +581,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:19:53Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 24,
@@ -617,7 +617,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:20:12Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 20,
@@ -629,7 +629,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:20:19Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 19,
@@ -737,7 +737,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:21:23Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 10,
@@ -809,7 +809,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:22:05Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 4,
@@ -833,7 +833,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:22:18Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 11
     },
     {
       "source_pr_number": 2,
@@ -845,7 +845,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:22:26Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 1,
@@ -857,7 +857,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:22:32Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 33
     },
     {
       "source_pr_number": 290,
@@ -869,7 +869,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:29:43Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 287,
@@ -881,7 +881,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:29:46Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 286,
@@ -893,7 +893,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:29:49Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 23
     },
     {
       "source_pr_number": 285,
@@ -905,7 +905,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:29:51Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 4
     },
     {
       "source_pr_number": 280,
@@ -917,7 +917,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:29:54Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 12
     },
     {
       "source_pr_number": 279,
@@ -929,7 +929,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:29:57Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 8
     },
     {
       "source_pr_number": 276,
@@ -941,7 +941,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:30:00Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 114
     },
     {
       "source_pr_number": 275,
@@ -953,7 +953,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:30:07Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 9
     },
     {
       "source_pr_number": 273,
@@ -1385,7 +1385,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:31:59Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 178,
@@ -1397,7 +1397,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:02Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 13
     },
     {
       "source_pr_number": 176,
@@ -1409,7 +1409,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:05Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 9
     },
     {
       "source_pr_number": 175,
@@ -1421,7 +1421,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:08Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 174,
@@ -1433,7 +1433,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:10Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 173,
@@ -1445,7 +1445,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:14Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 8
     },
     {
       "source_pr_number": 171,
@@ -1457,7 +1457,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:17Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 169,
@@ -1469,7 +1469,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:20Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 168,
@@ -1481,7 +1481,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:24Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 9
     },
     {
       "source_pr_number": 167,
@@ -1493,7 +1493,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:27Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 166,
@@ -1517,7 +1517,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:32Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 164,
@@ -1553,7 +1553,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:40Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 160,
@@ -1577,7 +1577,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:32:45Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 156,
@@ -1649,7 +1649,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:33:04Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 147,
@@ -1661,7 +1661,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:33:07Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 146,
@@ -1769,7 +1769,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:33:32Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 7
     },
     {
       "source_pr_number": 130,
@@ -1901,7 +1901,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:34:04Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 119,
@@ -1925,7 +1925,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:34:10Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 5
     },
     {
       "source_pr_number": 117,
@@ -1961,7 +1961,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:34:18Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 3
     },
     {
       "source_pr_number": 114,
@@ -2177,7 +2177,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:35:08Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 93,
@@ -2309,7 +2309,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:35:41Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 1
     },
     {
       "source_pr_number": 71,
@@ -2321,7 +2321,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:35:44Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 70,
@@ -2405,7 +2405,7 @@
       "status": "mirrored",
       "mirrored_at": "2026-05-26T19:36:04Z",
       "comments_status": "done",
-      "comments_mirrored": 0
+      "comments_mirrored": 2
     },
     {
       "source_pr_number": 63,
@@ -2430,11 +2430,23 @@
       "mirrored_at": "2026-05-26T19:36:10Z",
       "comments_status": "done",
       "comments_mirrored": 0
+    },
+    {
+      "source_pr_number": 293,
+      "source_url": "https://github.com/cyberfabric/cyberware-frontx/pull/293",
+      "source_state": "closed",
+      "source_author": "cashmisa",
+      "target_issue_number": 291,
+      "title": "[PR #293] feat(screensets): make TypeSystemPlugin generic over TSchema",
+      "status": "mirrored",
+      "mirrored_at": "2026-05-29T07:55:48Z",
+      "comments_status": "done",
+      "comments_mirrored": 1
     }
   ],
   "stats": {
-    "total": 202,
-    "synced": 189,
+    "total": 203,
+    "synced": 202,
     "pending": 0,
     "failed": 0
   }
