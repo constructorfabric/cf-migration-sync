@@ -47,7 +47,7 @@
   "stage_06_mirror_prs": {
     "skip_open_prs": false,
 
-    "exclude_repos": ["cyberware-rust", "DNA", "cf-cli", "cf-template-rust", "cyber-constructor", "cyberware-frontx", "governance"],
+    "exclude_repos": [],
 
     "_comment_resume_after_pr": [
       "Per-repo resume points for the closed-PR loop.",
@@ -56,9 +56,7 @@
       "the command line but persistent across runs and scoped per repo.",
       "Remove the entry (or set it to 0) once the repo is fully mirrored."
     ],
-    "resume_after_pr": {
-      "cyber-insight": 215
-    }
+    "resume_after_pr": {}
   },
 
   "stage_07_rewrite_cross_references": {},
