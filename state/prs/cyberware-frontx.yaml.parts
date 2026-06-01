@@ -1,0 +1,5 @@
+{
+  "base": "cyberware-frontx.yaml",
+  "parts": 2,
+  "max_part_mb": 10
+}

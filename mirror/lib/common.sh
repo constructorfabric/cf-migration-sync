@@ -491,6 +491,216 @@ state_items() {
   jq -c '.items[]?' "$file" 2>/dev/null || true
 }
 
+# ===========================================================================
+# Large state-file splitting (GitHub 100 MB hard limit / 50 MB warning)
+# ===========================================================================
+# Some repos produce huge issue/PR state files (a busy repo's PR file with all
+# review diffs can be hundreds of MB). GitHub refuses files >100 MB, so we split
+# any oversized state file into parts that travel through git, then reassemble
+# them before any code reads the file.
+#
+# CONTRACT — merge-before-read, split-before-commit:
+#   * The canonical working file is always the WHOLE  <repo>.yaml.  All stage
+#     logic (05/06 import, 07 crossrefs, 08 assign, validation) operates on it.
+#   * Parts are named  <repo>.yaml.partNN  (NN = 01,02,...). They DELIBERATELY do
+#     not end in `.yaml`, so every existing  *.yaml  glob still sees exactly one
+#     file per repo and never mistakes a part for a separate repo.
+#   * When parts exist but the whole file does not (e.g. freshly pulled on the
+#     import machine), state_unsplit reassembles them first.
+#   * A manifest  <repo>.yaml.parts  records the part count + ordering so
+#     reassembly is unambiguous.
+#
+# Split strategy is size-aware bin-packing over .items[] (NOT "N items per file"),
+# because a single item can be large. The meta/stats envelope is replicated into
+# every part so each part is itself valid JSON and self-describing; on reassembly
+# the envelope is taken from part 01 and all items[] are concatenated in order.
+
+# Per-part size budget in MB. 10 MB keeps parts far under GitHub's limits and
+# leaves headroom for the replicated envelope. Override via env if needed.
+MAX_STATE_FILE_MB="${MAX_STATE_FILE_MB:-10}"
+
+# _state_part_files <whole_file> — print this file's part paths, one per line, in
+# correct NUMERIC order (part2 before part10). Matches any digit width (part1,
+# part01, part0001, part100, ...) so we never silently drop parts beyond 99 (the
+# old fixed [0-9][0-9] glob did exactly that, causing data loss for >99-part files).
+# Robust to repo names containing dots: we only look at the trailing ".partNNN".
+_state_part_files() {
+  local whole="$1"
+  local base
+  base="$(basename "$whole")"
+  local dir
+  dir="$(dirname "$whole")"
+  [[ -d "$dir" ]] || return 0
+  # List candidates, keep only "<base>.part<digits>", sort numerically by <digits>.
+  local f name num
+  for f in "$dir"/"$base".part*; do
+    [[ -e "$f" ]] || continue
+    name="$(basename "$f")"
+    num="${name##*.part}"
+    [[ "$num" =~ ^[0-9]+$ ]] || continue
+    printf '%020d\t%s\n' "$((10#$num))" "$f"
+  done | sort | cut -f2-
+}
+
+# state_repo_names <dir> — list distinct repo base names in <dir>, discovering
+# them from BOTH whole files (<repo>.yaml) and split manifests (<repo>.yaml.parts).
+# This lets enumerators find repos that exist only as parts (e.g. freshly pulled
+# on the import machine before reassembly). Prints one repo name per line, sorted.
+state_repo_names() {
+  local dir="$1"
+  [[ -d "$dir" ]] || return 0
+  {
+    shopt -s nullglob
+    local f
+    for f in "$dir"/*.yaml;       do [[ -e "$f" ]] && basename "$f" .yaml; done
+    for f in "$dir"/*.yaml.parts; do [[ -e "$f" ]] && basename "$f" .yaml.parts; done
+    shopt -u nullglob
+  } | sort -u
+}
+
+# _file_size_bytes <file> — portable file size in bytes (Linux + macOS).
+_file_size_bytes() {
+  local f="$1"
+  [[ -f "$f" ]] || { echo 0; return; }
+  stat -c%s "$f" 2>/dev/null || stat -f%z "$f" 2>/dev/null || echo 0
+}
+
+# state_unsplit <whole_file> — if part files exist for <whole_file>, reassemble
+# them into the whole file (overwriting / creating it) and remove the parts +
+# manifest. No-op if there are no parts. Safe to call before every read/write.
+state_unsplit() {
+  local whole="$1"
+  local manifest="${whole}.parts"
+  # Collect parts in correct numeric order (handles any digit width).
+  local parts=()
+  local p
+  while IFS= read -r p; do [[ -n "$p" ]] && parts+=( "$p" ); done < <(_state_part_files "$whole")
+  # Nothing to do if there are no parts.
+  [[ ${#parts[@]} -eq 0 ]] && return 0
+
+  # Defensive: if a manifest records a part count, verify it matches what we found
+  # so a truncated/partial part set (e.g. an interrupted git checkout) is caught
+  # rather than silently reassembled with missing items.
+  if [[ -f "$manifest" ]]; then
+    local expected
+    expected="$(jq -r '.parts // empty' "$manifest" 2>/dev/null || true)"
+    if [[ -n "$expected" && "$expected" =~ ^[0-9]+$ && "$expected" -ne "${#parts[@]}" ]]; then
+      err "  [split] $(basename "$whole"): manifest expects $expected part(s) but found ${#parts[@]} — refusing to reassemble (incomplete part set)"
+      return 1
+    fi
+  fi
+
+  log "  [split] Reassembling ${#parts[@]} part(s) → $(basename "$whole")"
+  local tmp
+  tmp="$(mktemp)"
+  # Envelope (meta+stats) from part 01; items[] = concatenation of every part's items.
+  # Use --slurp so all parts are read as an array of envelopes.
+  if jq -s '
+        (.[0] | {meta, stats}) as $env
+        | $env + { items: (map(.items[]?)) }
+      ' "${parts[@]}" > "$tmp" 2>/dev/null; then
+    mv "$tmp" "$whole"
+    rm -f "${parts[@]}" "$manifest"
+  else
+    rm -f "$tmp"
+    err "  [split] Failed to reassemble parts for $(basename "$whole") — leaving parts in place"
+    return 1
+  fi
+}
+
+# state_split_if_needed <whole_file> — if <whole_file> exceeds the size budget,
+# split it into <whole_file>.partNN files (size-aware bin-packing over items[])
+# and REMOVE the whole file, leaving only parts + a .parts manifest for git.
+# If it is within budget, ensure no stale parts/manifest linger. No-op if absent.
+state_split_if_needed() {
+  local whole="$1"
+  [[ -f "$whole" ]] || return 0
+  local manifest="${whole}.parts"
+  local budget=$(( MAX_STATE_FILE_MB * 1024 * 1024 ))
+  local size
+  size="$(_file_size_bytes "$whole")"
+
+  if (( size <= budget )); then
+    # Within budget: clean up any leftover parts from a previous larger run.
+    local stale=()
+    local p
+    while IFS= read -r p; do [[ -n "$p" ]] && stale+=( "$p" ); done < <(_state_part_files "$whole")
+    [[ ${#stale[@]} -gt 0 ]] && rm -f "${stale[@]}" "$manifest"
+    return 0
+  fi
+
+  log "  [split] $(basename "$whole") is $(( size / 1024 / 1024 ))MB > ${MAX_STATE_FILE_MB}MB — splitting into parts"
+
+  # Emit the envelope once, and each item with its serialized byte length, so the
+  # packer can bin-pack without re-measuring. Envelope is reused in every part.
+  local env_tmp items_tmp
+  env_tmp="$(mktemp)"; items_tmp="$(mktemp)"
+  jq -c '{meta, stats}' "$whole" > "$env_tmp" 2>/dev/null
+  # Each line: <bytelen>\t<compact-item-json>. The byte length drives bin-packing.
+  jq -cr '.items[]? | "\(. | @json | length)\t\(. | @json)"' "$whole" > "$items_tmp" 2>/dev/null || true
+
+  local part_idx=1
+  local cur_bytes=0
+  local env_bytes
+  env_bytes="$(_file_size_bytes "$env_tmp")"
+  local part_items_tmp
+  part_items_tmp="$(mktemp)"
+  : > "$part_items_tmp"
+
+  # Effective per-part budget: reserve the envelope size plus a 10% safety margin
+  # for JSON structural overhead (the "items":[...] wrapper, commas, the fact that
+  # compact item lengths are measured individually but concatenated with separators).
+  # This guarantees each emitted part stays comfortably under MAX_STATE_FILE_MB.
+  local eff_budget=$(( budget - env_bytes - budget / 10 ))
+  (( eff_budget < 1 )) && eff_budget=$(( budget / 2 ))
+
+  _flush_part() {
+    local idx_padded
+    idx_padded="$(printf '%02d' "$part_idx")"
+    local part_file="${whole}.part${idx_padded}"
+    # Build a valid JSON file: envelope + this part's items[].
+    # IMPORTANT: emit COMPACT JSON (-c). Pretty-printing would inflate the file
+    # 20-30% beyond the compact item lengths the packer budgeted for, pushing
+    # parts over MAX_STATE_FILE_MB. Compact output keeps file size ≈ sum(len).
+    # part_items_tmp holds one compact item JSON per line; slurp into an array.
+    jq -c -n --slurpfile env "$env_tmp" --slurpfile items "$part_items_tmp" \
+      '$env[0] + { items: $items }' > "$part_file"
+    : > "$part_items_tmp"
+    cur_bytes=0
+    part_idx=$(( part_idx + 1 ))
+  }
+
+  local len json
+  while IFS=$'\t' read -r len json; do
+    [[ -z "$len" ]] && continue
+    # Warn if a single item alone is too big for the budget or for GitHub.
+    if (( len > budget )); then
+      warn "  [split] a single item in $(basename "$whole") is $(( len / 1024 / 1024 ))MB (> ${MAX_STATE_FILE_MB}MB budget) — it will occupy its own part"
+      (( len > 100 * 1024 * 1024 )) && \
+        err "  [split] that item is >100MB and GitHub will REJECT its part — manual intervention required"
+    fi
+    # If adding this item would overflow the effective budget and the current
+    # part already has content, flush first.
+    if (( cur_bytes > 0 && cur_bytes + len > eff_budget )); then
+      _flush_part
+    fi
+    printf '%s\n' "$json" >> "$part_items_tmp"
+    cur_bytes=$(( cur_bytes + len ))
+  done < "$items_tmp"
+
+  # Flush the final part if it has any items.
+  if [[ -s "$part_items_tmp" ]]; then
+    _flush_part
+  fi
+
+  local total_parts=$(( part_idx - 1 ))
+  # Write the manifest and remove the whole file (parts replace it for git).
+  jq -n --argjson n "$total_parts" --arg base "$(basename "$whole")" \
+    '{base:$base, parts:$n, max_part_mb:'"$MAX_STATE_FILE_MB"'}' > "$manifest"
+  rm -f "$whole" "$env_tmp" "$items_tmp" "$part_items_tmp"
+  ok "  [split] $(basename "$whole") → $total_parts part(s)"
+}
+
 # state_update_stats — recompute stats from items array
 # Expects items to have a "status" field
 state_update_stats() {

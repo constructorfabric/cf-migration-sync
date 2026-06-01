@@ -1,0 +1,5 @@
+{
+  "base": "cyber-insight.yaml",
+  "parts": 6,
+  "max_part_mb": 10
+}

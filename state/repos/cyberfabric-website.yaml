@@ -1,0 +1,240 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T08:18:55Z",
+    "last_run_at": "2026-06-01T08:18:55Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_snapshot": {
+    "description": "CyberFabric website",
+    "repo": {
+      "id": 1232963554,
+      "node_id": "R_kgDOSX2H4g",
+      "name": "cyberfabric-website",
+      "full_name": "cyberfabric/cyberfabric-website",
+      "private": true,
+      "owner": {
+        "login": "cyberfabric",
+        "id": 249082402,
+        "node_id": "O_kgDODtiyIg",
+        "avatar_url": "https://avatars.githubusercontent.com/u/249082402?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/cyberfabric",
+        "html_url": "https://github.com/cyberfabric",
+        "followers_url": "https://api.github.com/users/cyberfabric/followers",
+        "following_url": "https://api.github.com/users/cyberfabric/following{/other_user}",
+        "gists_url": "https://api.github.com/users/cyberfabric/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/cyberfabric/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/cyberfabric/subscriptions",
+        "organizations_url": "https://api.github.com/users/cyberfabric/orgs",
+        "repos_url": "https://api.github.com/users/cyberfabric/repos",
+        "events_url": "https://api.github.com/users/cyberfabric/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/cyberfabric/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/cyberfabric/cyberfabric-website",
+      "description": "CyberFabric website",
+      "fork": false,
+      "url": "https://api.github.com/repos/cyberfabric/cyberfabric-website",
+      "forks_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/forks",
+      "keys_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/teams",
+      "hooks_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/hooks",
+      "issue_events_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/events",
+      "assignees_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/tags",
+      "blobs_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/languages",
+      "stargazers_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/stargazers",
+      "contributors_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/contributors",
+      "subscribers_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/subscribers",
+      "subscription_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/subscription",
+      "commits_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/merges",
+      "archive_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/downloads",
+      "issues_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/labels{/name}",
+      "releases_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/deployments",
+      "created_at": "2026-05-08T12:57:27Z",
+      "updated_at": "2026-05-08T12:57:32Z",
+      "pushed_at": "2026-05-08T12:57:28Z",
+      "git_url": "git://github.com/cyberfabric/cyberfabric-website.git",
+      "ssh_url": "git@github.com:cyberfabric/cyberfabric-website.git",
+      "clone_url": "https://github.com/cyberfabric/cyberfabric-website.git",
+      "svn_url": "https://github.com/cyberfabric/cyberfabric-website",
+      "homepage": null,
+      "size": 5,
+      "stargazers_count": 0,
+      "watchers_count": 0,
+      "language": null,
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": false,
+      "has_pages": false,
+      "has_discussions": false,
+      "forks_count": 0,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 0,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "allow_forking": true,
+      "is_template": false,
+      "web_commit_signoff_required": false,
+      "has_pull_requests": true,
+      "pull_request_creation_policy": "all",
+      "topics": [],
+      "visibility": "private",
+      "forks": 0,
+      "open_issues": 0,
+      "watchers": 0,
+      "default_branch": "main",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "security_and_analysis": {
+        "secret_scanning": {
+          "status": "disabled"
+        },
+        "secret_scanning_push_protection": {
+          "status": "disabled"
+        },
+        "dependabot_security_updates": {
+          "status": "disabled"
+        },
+        "secret_scanning_non_provider_patterns": {
+          "status": "disabled"
+        },
+        "secret_scanning_validity_checks": {
+          "status": "disabled"
+        }
+      },
+      "custom_properties": {}
+    },
+    "topics": [],
+    "labels": [
+      {
+        "id": 10897962680,
+        "node_id": "LA_kwDOSX2H4s8AAAACiZG2uA",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/labels/bug",
+        "name": "bug",
+        "color": "d73a4a",
+        "default": true,
+        "description": "Something isn't working"
+      },
+      {
+        "id": 10897962700,
+        "node_id": "LA_kwDOSX2H4s8AAAACiZG2zA",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/labels/documentation",
+        "name": "documentation",
+        "color": "0075ca",
+        "default": true,
+        "description": "Improvements or additions to documentation"
+      },
+      {
+        "id": 10897962723,
+        "node_id": "LA_kwDOSX2H4s8AAAACiZG24w",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/labels/duplicate",
+        "name": "duplicate",
+        "color": "cfd3d7",
+        "default": true,
+        "description": "This issue or pull request already exists"
+      },
+      {
+        "id": 10897962740,
+        "node_id": "LA_kwDOSX2H4s8AAAACiZG29A",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "default": true,
+        "description": "New feature or request"
+      },
+      {
+        "id": 10897962750,
+        "node_id": "LA_kwDOSX2H4s8AAAACiZG2_g",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/labels/good%20first%20issue",
+        "name": "good first issue",
+        "color": "7057ff",
+        "default": true,
+        "description": "Good for newcomers"
+      },
+      {
+        "id": 10897962763,
+        "node_id": "LA_kwDOSX2H4s8AAAACiZG3Cw",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/labels/help%20wanted",
+        "name": "help wanted",
+        "color": "008672",
+        "default": true,
+        "description": "Extra attention is needed"
+      },
+      {
+        "id": 10897962777,
+        "node_id": "LA_kwDOSX2H4s8AAAACiZG3GQ",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/labels/invalid",
+        "name": "invalid",
+        "color": "e4e669",
+        "default": true,
+        "description": "This doesn't seem right"
+      },
+      {
+        "id": 10897962792,
+        "node_id": "LA_kwDOSX2H4s8AAAACiZG3KA",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/labels/question",
+        "name": "question",
+        "color": "d876e3",
+        "default": true,
+        "description": "Further information is requested"
+      },
+      {
+        "id": 10897962806,
+        "node_id": "LA_kwDOSX2H4s8AAAACiZG3Ng",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-website/labels/wontfix",
+        "name": "wontfix",
+        "color": "ffffff",
+        "default": true,
+        "description": "This will not be worked on"
+      }
+    ],
+    "milestones": [],
+    "pages": null
+  },
+  "exported_at": "2026-06-01T08:18:58Z"
+}

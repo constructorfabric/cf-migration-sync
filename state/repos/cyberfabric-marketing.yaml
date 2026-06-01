@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T08:18:00Z",
+    "last_run_at": "2026-06-01T08:18:00Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_snapshot": {
+    "description": "Repository for marketing materials",
+    "repo": {
+      "id": 1168302563,
+      "node_id": "R_kgDORaLh4w",
+      "name": "cyberfabric-marketing",
+      "full_name": "cyberfabric/cyberfabric-marketing",
+      "private": true,
+      "owner": {
+        "login": "cyberfabric",
+        "id": 249082402,
+        "node_id": "O_kgDODtiyIg",
+        "avatar_url": "https://avatars.githubusercontent.com/u/249082402?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/cyberfabric",
+        "html_url": "https://github.com/cyberfabric",
+        "followers_url": "https://api.github.com/users/cyberfabric/followers",
+        "following_url": "https://api.github.com/users/cyberfabric/following{/other_user}",
+        "gists_url": "https://api.github.com/users/cyberfabric/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/cyberfabric/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/cyberfabric/subscriptions",
+        "organizations_url": "https://api.github.com/users/cyberfabric/orgs",
+        "repos_url": "https://api.github.com/users/cyberfabric/repos",
+        "events_url": "https://api.github.com/users/cyberfabric/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/cyberfabric/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/cyberfabric/cyberfabric-marketing",
+      "description": "Repository for marketing materials",
+      "fork": false,
+      "url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing",
+      "forks_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/forks",
+      "keys_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/teams",
+      "hooks_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/hooks",
+      "issue_events_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/events",
+      "assignees_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/tags",
+      "blobs_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/languages",
+      "stargazers_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/stargazers",
+      "contributors_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/contributors",
+      "subscribers_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/subscribers",
+      "subscription_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/subscription",
+      "commits_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/merges",
+      "archive_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/downloads",
+      "issues_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/labels{/name}",
+      "releases_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/deployments",
+      "created_at": "2026-02-27T08:27:45Z",
+      "updated_at": "2026-02-27T08:27:45Z",
+      "pushed_at": "2026-02-27T08:27:45Z",
+      "git_url": "git://github.com/cyberfabric/cyberfabric-marketing.git",
+      "ssh_url": "git@github.com:cyberfabric/cyberfabric-marketing.git",
+      "clone_url": "https://github.com/cyberfabric/cyberfabric-marketing.git",
+      "svn_url": "https://github.com/cyberfabric/cyberfabric-marketing",
+      "homepage": null,
+      "size": 0,
+      "stargazers_count": 0,
+      "watchers_count": 0,
+      "language": null,
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": false,
+      "has_pages": false,
+      "has_discussions": false,
+      "forks_count": 0,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 0,
+      "license": null,
+      "allow_forking": true,
+      "is_template": false,
+      "web_commit_signoff_required": false,
+      "has_pull_requests": true,
+      "pull_request_creation_policy": "all",
+      "topics": [],
+      "visibility": "private",
+      "forks": 0,
+      "open_issues": 0,
+      "watchers": 0,
+      "default_branch": "main",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "security_and_analysis": {
+        "secret_scanning": {
+          "status": "disabled"
+        },
+        "secret_scanning_push_protection": {
+          "status": "disabled"
+        },
+        "dependabot_security_updates": {
+          "status": "disabled"
+        },
+        "secret_scanning_non_provider_patterns": {
+          "status": "disabled"
+        },
+        "secret_scanning_validity_checks": {
+          "status": "disabled"
+        }
+      },
+      "custom_properties": {}
+    },
+    "topics": [],
+    "labels": [
+      {
+        "id": 10303990011,
+        "node_id": "LA_kwDORaLh488AAAACZipo-w",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/labels/bug",
+        "name": "bug",
+        "color": "d73a4a",
+        "default": true,
+        "description": "Something isn't working"
+      },
+      {
+        "id": 10303990033,
+        "node_id": "LA_kwDORaLh488AAAACZippEQ",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/labels/documentation",
+        "name": "documentation",
+        "color": "0075ca",
+        "default": true,
+        "description": "Improvements or additions to documentation"
+      },
+      {
+        "id": 10303990046,
+        "node_id": "LA_kwDORaLh488AAAACZippHg",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/labels/duplicate",
+        "name": "duplicate",
+        "color": "cfd3d7",
+        "default": true,
+        "description": "This issue or pull request already exists"
+      },
+      {
+        "id": 10303990056,
+        "node_id": "LA_kwDORaLh488AAAACZippKA",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "default": true,
+        "description": "New feature or request"
+      },
+      {
+        "id": 10303990064,
+        "node_id": "LA_kwDORaLh488AAAACZippMA",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/labels/good%20first%20issue",
+        "name": "good first issue",
+        "color": "7057ff",
+        "default": true,
+        "description": "Good for newcomers"
+      },
+      {
+        "id": 10303990073,
+        "node_id": "LA_kwDORaLh488AAAACZippOQ",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/labels/help%20wanted",
+        "name": "help wanted",
+        "color": "008672",
+        "default": true,
+        "description": "Extra attention is needed"
+      },
+      {
+        "id": 10303990083,
+        "node_id": "LA_kwDORaLh488AAAACZippQw",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/labels/invalid",
+        "name": "invalid",
+        "color": "e4e669",
+        "default": true,
+        "description": "This doesn't seem right"
+      },
+      {
+        "id": 10303990092,
+        "node_id": "LA_kwDORaLh488AAAACZippTA",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/labels/question",
+        "name": "question",
+        "color": "d876e3",
+        "default": true,
+        "description": "Further information is requested"
+      },
+      {
+        "id": 10303990102,
+        "node_id": "LA_kwDORaLh488AAAACZippVg",
+        "url": "https://api.github.com/repos/cyberfabric/cyberfabric-marketing/labels/wontfix",
+        "name": "wontfix",
+        "color": "ffffff",
+        "default": true,
+        "description": "This will not be worked on"
+      }
+    ],
+    "milestones": [],
+    "pages": null
+  },
+  "exported_at": "2026-06-01T08:18:04Z"
+}

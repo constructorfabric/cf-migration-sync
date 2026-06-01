@@ -1,0 +1,240 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T08:19:02Z",
+    "last_run_at": "2026-06-01T08:19:02Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_snapshot": {
+    "description": "TBD",
+    "repo": {
+      "id": 1235253518,
+      "node_id": "R_kgDOSaB5Dg",
+      "name": "Kitsoki",
+      "full_name": "cyberfabric/Kitsoki",
+      "private": true,
+      "owner": {
+        "login": "cyberfabric",
+        "id": 249082402,
+        "node_id": "O_kgDODtiyIg",
+        "avatar_url": "https://avatars.githubusercontent.com/u/249082402?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/cyberfabric",
+        "html_url": "https://github.com/cyberfabric",
+        "followers_url": "https://api.github.com/users/cyberfabric/followers",
+        "following_url": "https://api.github.com/users/cyberfabric/following{/other_user}",
+        "gists_url": "https://api.github.com/users/cyberfabric/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/cyberfabric/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/cyberfabric/subscriptions",
+        "organizations_url": "https://api.github.com/users/cyberfabric/orgs",
+        "repos_url": "https://api.github.com/users/cyberfabric/repos",
+        "events_url": "https://api.github.com/users/cyberfabric/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/cyberfabric/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/cyberfabric/Kitsoki",
+      "description": "TBD",
+      "fork": false,
+      "url": "https://api.github.com/repos/cyberfabric/Kitsoki",
+      "forks_url": "https://api.github.com/repos/cyberfabric/Kitsoki/forks",
+      "keys_url": "https://api.github.com/repos/cyberfabric/Kitsoki/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/cyberfabric/Kitsoki/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/cyberfabric/Kitsoki/teams",
+      "hooks_url": "https://api.github.com/repos/cyberfabric/Kitsoki/hooks",
+      "issue_events_url": "https://api.github.com/repos/cyberfabric/Kitsoki/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/cyberfabric/Kitsoki/events",
+      "assignees_url": "https://api.github.com/repos/cyberfabric/Kitsoki/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/cyberfabric/Kitsoki/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/cyberfabric/Kitsoki/tags",
+      "blobs_url": "https://api.github.com/repos/cyberfabric/Kitsoki/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/cyberfabric/Kitsoki/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/cyberfabric/Kitsoki/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/cyberfabric/Kitsoki/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/cyberfabric/Kitsoki/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/cyberfabric/Kitsoki/languages",
+      "stargazers_url": "https://api.github.com/repos/cyberfabric/Kitsoki/stargazers",
+      "contributors_url": "https://api.github.com/repos/cyberfabric/Kitsoki/contributors",
+      "subscribers_url": "https://api.github.com/repos/cyberfabric/Kitsoki/subscribers",
+      "subscription_url": "https://api.github.com/repos/cyberfabric/Kitsoki/subscription",
+      "commits_url": "https://api.github.com/repos/cyberfabric/Kitsoki/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/cyberfabric/Kitsoki/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/cyberfabric/Kitsoki/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/cyberfabric/Kitsoki/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/cyberfabric/Kitsoki/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/cyberfabric/Kitsoki/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/cyberfabric/Kitsoki/merges",
+      "archive_url": "https://api.github.com/repos/cyberfabric/Kitsoki/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/cyberfabric/Kitsoki/downloads",
+      "issues_url": "https://api.github.com/repos/cyberfabric/Kitsoki/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/cyberfabric/Kitsoki/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/cyberfabric/Kitsoki/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/cyberfabric/Kitsoki/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/cyberfabric/Kitsoki/labels{/name}",
+      "releases_url": "https://api.github.com/repos/cyberfabric/Kitsoki/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/cyberfabric/Kitsoki/deployments",
+      "created_at": "2026-05-11T06:38:19Z",
+      "updated_at": "2026-05-28T12:39:22Z",
+      "pushed_at": "2026-05-28T12:39:11Z",
+      "git_url": "git://github.com/cyberfabric/Kitsoki.git",
+      "ssh_url": "git@github.com:cyberfabric/Kitsoki.git",
+      "clone_url": "https://github.com/cyberfabric/Kitsoki.git",
+      "svn_url": "https://github.com/cyberfabric/Kitsoki",
+      "homepage": null,
+      "size": 2807,
+      "stargazers_count": 1,
+      "watchers_count": 1,
+      "language": "Go",
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": false,
+      "has_pages": false,
+      "has_discussions": false,
+      "forks_count": 1,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 0,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "allow_forking": true,
+      "is_template": false,
+      "web_commit_signoff_required": false,
+      "has_pull_requests": true,
+      "pull_request_creation_policy": "all",
+      "topics": [],
+      "visibility": "private",
+      "forks": 1,
+      "open_issues": 0,
+      "watchers": 1,
+      "default_branch": "main",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "security_and_analysis": {
+        "secret_scanning": {
+          "status": "disabled"
+        },
+        "secret_scanning_push_protection": {
+          "status": "disabled"
+        },
+        "dependabot_security_updates": {
+          "status": "disabled"
+        },
+        "secret_scanning_non_provider_patterns": {
+          "status": "disabled"
+        },
+        "secret_scanning_validity_checks": {
+          "status": "disabled"
+        }
+      },
+      "custom_properties": {}
+    },
+    "topics": [],
+    "labels": [
+      {
+        "id": 10918960349,
+        "node_id": "LA_kwDOSaB5Ds8AAAACitIc3Q",
+        "url": "https://api.github.com/repos/cyberfabric/Kitsoki/labels/bug",
+        "name": "bug",
+        "color": "d73a4a",
+        "default": true,
+        "description": "Something isn't working"
+      },
+      {
+        "id": 10918960381,
+        "node_id": "LA_kwDOSaB5Ds8AAAACitIc_Q",
+        "url": "https://api.github.com/repos/cyberfabric/Kitsoki/labels/documentation",
+        "name": "documentation",
+        "color": "0075ca",
+        "default": true,
+        "description": "Improvements or additions to documentation"
+      },
+      {
+        "id": 10918960409,
+        "node_id": "LA_kwDOSaB5Ds8AAAACitIdGQ",
+        "url": "https://api.github.com/repos/cyberfabric/Kitsoki/labels/duplicate",
+        "name": "duplicate",
+        "color": "cfd3d7",
+        "default": true,
+        "description": "This issue or pull request already exists"
+      },
+      {
+        "id": 10918960460,
+        "node_id": "LA_kwDOSaB5Ds8AAAACitIdTA",
+        "url": "https://api.github.com/repos/cyberfabric/Kitsoki/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "default": true,
+        "description": "New feature or request"
+      },
+      {
+        "id": 10918960489,
+        "node_id": "LA_kwDOSaB5Ds8AAAACitIdaQ",
+        "url": "https://api.github.com/repos/cyberfabric/Kitsoki/labels/good%20first%20issue",
+        "name": "good first issue",
+        "color": "7057ff",
+        "default": true,
+        "description": "Good for newcomers"
+      },
+      {
+        "id": 10918960515,
+        "node_id": "LA_kwDOSaB5Ds8AAAACitIdgw",
+        "url": "https://api.github.com/repos/cyberfabric/Kitsoki/labels/help%20wanted",
+        "name": "help wanted",
+        "color": "008672",
+        "default": true,
+        "description": "Extra attention is needed"
+      },
+      {
+        "id": 10918960539,
+        "node_id": "LA_kwDOSaB5Ds8AAAACitIdmw",
+        "url": "https://api.github.com/repos/cyberfabric/Kitsoki/labels/invalid",
+        "name": "invalid",
+        "color": "e4e669",
+        "default": true,
+        "description": "This doesn't seem right"
+      },
+      {
+        "id": 10918960566,
+        "node_id": "LA_kwDOSaB5Ds8AAAACitIdtg",
+        "url": "https://api.github.com/repos/cyberfabric/Kitsoki/labels/question",
+        "name": "question",
+        "color": "d876e3",
+        "default": true,
+        "description": "Further information is requested"
+      },
+      {
+        "id": 10918960594,
+        "node_id": "LA_kwDOSaB5Ds8AAAACitId0g",
+        "url": "https://api.github.com/repos/cyberfabric/Kitsoki/labels/wontfix",
+        "name": "wontfix",
+        "color": "ffffff",
+        "default": true,
+        "description": "This will not be worked on"
+      }
+    ],
+    "milestones": [],
+    "pages": null
+  },
+  "exported_at": "2026-06-01T08:19:05Z"
+}

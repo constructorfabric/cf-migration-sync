@@ -674,6 +674,101 @@ Prevention:
 
 ---
 
+### RC-17 — Fixed-width numeric glob silently drops items beyond the width
+
+```
+Bug:          state_unsplit reassembled large state files using the glob
+              "${whole}".part[0-9][0-9] — matching EXACTLY two digits. A file split
+              into >99 parts would have part100, part101, ... silently excluded from
+              reassembly, losing every item in those parts with no error.
+
+5 Whys:
+  Why 1:  The reassembly glob hard-coded two digit positions ([0-9][0-9]).
+  Why 2:  Parts are written with printf '%02d' (min-width 2), so the author's mental
+          model was "always 2 digits". %02d is a MINIMUM width, not a maximum — part
+          100 prints as "100" (3 digits) and no longer matches the 2-digit glob.
+  Why 3:  The glob and the printf format were written together and assumed to be
+          symmetric, but min-width formatting and fixed-width matching are NOT inverses.
+  Why 4:  Splitting was only ever tested on files producing ≤22 parts, so the >99 case
+          was never exercised — the data loss is invisible until a file is big enough.
+  Why 5:  There was no test for the boundary (a synthetic >99-part file), and the
+          reader/writer width contract was never written down.
+
+Root cause:   A producer using minimum-width formatting paired with a consumer using
+              fixed-width matching. The two silently disagree once values exceed the
+              fixed width, and the failure mode is silent data loss (missing items),
+              not an error.
+
+Fix applied:  Replaced all fixed-width part globs with _state_part_files(), which
+              matches <whole>.part<any-digits>, validates the suffix is numeric, and
+              sorts NUMERICALLY (10#$num) so part2 < part10 < part100. Used in
+              state_unsplit and the stale-part cleanup in state_split_if_needed.
+              Added a manifest-count guard: state_unsplit refuses to reassemble when
+              the number of parts found != the count recorded in <whole>.parts
+              (catches truncated/partial part sets from an interrupted checkout).
+
+Prevention:
+1. Never pair printf '%0Nd' (min-width) with a fixed-width glob ([0-9]{N}). If you
+   zero-pad for sorting, either (a) match variable width and sort numerically, or
+   (b) cap the count and assert it. Variable-width + numeric sort is the safe default.
+2. Any "split a collection into N artifacts then recombine" feature MUST have a test
+   that crosses the width boundary (>99 parts for 2-digit, >9 for 1-digit).
+3. Recombination from multiple files must verify completeness against a recorded count
+   (manifest), never trust "whatever the glob happened to match".
+```
+
+---
+
+### RC-18 — New storage format not retrofitted to ALL existing readers (only the obvious ones)
+
+```
+Bug:          When state-file splitting was added, the import paths (stages 05/06) were
+              updated to reassemble parts, but two OTHER readers were missed:
+              (a) stage 07 build_number_maps() globbed state/{issues,prs}/*.yaml directly,
+                  so a split repo contributed NO source→target number mappings and its
+                  cross-references were never rewritten;
+              (b) validation _check_assignees() globbed state/issues/*.yaml, so a split
+                  repo's pending assignees were silently uncounted (validation says "passed"
+                  while work remains).
+
+5 Whys:
+  Why 1:  build_number_maps and _check_assignees still used raw *.yaml globs.
+  Why 2:  The split rollout updated the files that obviously iterate repos (the import
+          loops), but these two helpers iterate the same dirs from a different call site
+          and were not on the author's mental list.
+  Why 3:  There was no enumeration of ALL consumers of state/issues + state/prs before
+          changing the storage format — the change was applied reader-by-reader from memory.
+  Why 4:  A storage-format change has a blast radius equal to "everything that reads that
+          path", but no grep-sweep was run to enumerate that set.
+  Why 5:  Same class as RC-9: a cross-cutting rule/format change is applied only to the
+          code in front of the author, never swept across the whole repo.
+
+Root cause:   A storage-layer format change (whole file → possibly-split file) was rolled
+              out per-consumer from memory instead of by enumerating every reader of the
+              affected paths first. Missed readers fail SILENTLY (a split repo just looks
+              empty to them) — the worst kind, because nothing errors.
+
+Fix applied:  Fixed build_number_maps (stage 07) and _check_assignees (validation) to use
+              state_repo_names + state_unsplit like every other consumer. Re-swept the
+              whole repo for raw globs over the issue/PR dirs; the only remaining *.yaml
+              globs are over NON-split dirs (repos, releases, branch-protections,
+              outside-collaborators — none call state_split_if_needed).
+
+Prevention:
+1. Before changing how ANY state path is stored, run a grep sweep for every reference to
+   that path across mirror/stages, mirror/lib, mirror/validate, mirror/tools — and fix
+   ALL of them in the same change. Storage-format changes are whole-codebase changes.
+2. The canonical iteration over a possibly-split state dir is ALWAYS:
+     while read repo; do sf="$dir/$repo.yaml"; state_unsplit "$sf"; [[ -f $sf ]] || continue; ...
+     done < <(state_repo_names "$dir")
+   A bare  for f in "$dir"/*.yaml  over state/issues or state/prs is a bug.
+3. Only state/issues and state/prs are split (only stages 05/06/08 call
+   state_split_if_needed). If a NEW stage starts splitting another dir, every reader of
+   that dir must be converted to the state_repo_names pattern in the same change.
+```
+
+---
+
 ## Write-throttle / abuse-protection contract (non-negotiable)
 
 A central write-throttle engine in `mirror/lib/common.sh` enforces the GitHub

@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "source_org": "cyberfabric",
+    "exported_at": "2026-06-01T08:11:10Z"
+  },
+  "repos": [
+    {
+      "name": "cyberware-rust",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "DNA",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyberware-frontx",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-constructor",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "governance",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cf-template-rust",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cf-cli",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-insight",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyberfabric-marketing",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "db-tools",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-pilot-kit-sdlc",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyberware-csharp",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-wiki",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cf-docs",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-wiki-front-old",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-insight-front",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "frontend-lounge",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyberware-obsidian",
+      "private": true,
+      "default_branch": "master"
+    },
+    {
+      "name": "cyber-arc",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-wiki-back",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-wiki-front",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "ai-courses",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-constructor-app",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-pilot",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-codegen",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyberfabric-website",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyber-constructor-kit-sdlc",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "Kitsoki",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyberfabric-tutorials",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": ".github",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "demo-repository",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": "cyberfabric-courses",
+      "private": true,
+      "default_branch": "main"
+    },
+    {
+      "name": ".github-private",
+      "private": true,
+      "default_branch": "main"
+    }
+  ]
+}

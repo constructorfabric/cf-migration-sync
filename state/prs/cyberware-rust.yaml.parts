@@ -1,0 +1,5 @@
+{
+  "base": "cyberware-rust.yaml",
+  "parts": 22,
+  "max_part_mb": 10
+}

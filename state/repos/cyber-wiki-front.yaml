@@ -1,0 +1,240 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T08:18:39Z",
+    "last_run_at": "2026-06-01T08:18:39Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_snapshot": {
+    "description": "CyberWiki frontend",
+    "repo": {
+      "id": 1207259176,
+      "node_id": "R_kgDOR_VQKA",
+      "name": "cyber-wiki-front",
+      "full_name": "cyberfabric/cyber-wiki-front",
+      "private": true,
+      "owner": {
+        "login": "cyberfabric",
+        "id": 249082402,
+        "node_id": "O_kgDODtiyIg",
+        "avatar_url": "https://avatars.githubusercontent.com/u/249082402?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/cyberfabric",
+        "html_url": "https://github.com/cyberfabric",
+        "followers_url": "https://api.github.com/users/cyberfabric/followers",
+        "following_url": "https://api.github.com/users/cyberfabric/following{/other_user}",
+        "gists_url": "https://api.github.com/users/cyberfabric/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/cyberfabric/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/cyberfabric/subscriptions",
+        "organizations_url": "https://api.github.com/users/cyberfabric/orgs",
+        "repos_url": "https://api.github.com/users/cyberfabric/repos",
+        "events_url": "https://api.github.com/users/cyberfabric/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/cyberfabric/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/cyberfabric/cyber-wiki-front",
+      "description": "CyberWiki frontend",
+      "fork": false,
+      "url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front",
+      "forks_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/forks",
+      "keys_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/teams",
+      "hooks_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/hooks",
+      "issue_events_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/events",
+      "assignees_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/tags",
+      "blobs_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/languages",
+      "stargazers_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/stargazers",
+      "contributors_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/contributors",
+      "subscribers_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/subscribers",
+      "subscription_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/subscription",
+      "commits_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/merges",
+      "archive_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/downloads",
+      "issues_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/labels{/name}",
+      "releases_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/deployments",
+      "created_at": "2026-04-10T18:43:50Z",
+      "updated_at": "2026-05-18T21:59:23Z",
+      "pushed_at": "2026-05-18T21:59:18Z",
+      "git_url": "git://github.com/cyberfabric/cyber-wiki-front.git",
+      "ssh_url": "git@github.com:cyberfabric/cyber-wiki-front.git",
+      "clone_url": "https://github.com/cyberfabric/cyber-wiki-front.git",
+      "svn_url": "https://github.com/cyberfabric/cyber-wiki-front",
+      "homepage": null,
+      "size": 696,
+      "stargazers_count": 0,
+      "watchers_count": 0,
+      "language": "TypeScript",
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": false,
+      "has_pages": false,
+      "has_discussions": false,
+      "forks_count": 2,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 1,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "allow_forking": true,
+      "is_template": false,
+      "web_commit_signoff_required": false,
+      "has_pull_requests": true,
+      "pull_request_creation_policy": "all",
+      "topics": [],
+      "visibility": "private",
+      "forks": 2,
+      "open_issues": 1,
+      "watchers": 0,
+      "default_branch": "main",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "security_and_analysis": {
+        "secret_scanning": {
+          "status": "disabled"
+        },
+        "secret_scanning_push_protection": {
+          "status": "disabled"
+        },
+        "dependabot_security_updates": {
+          "status": "disabled"
+        },
+        "secret_scanning_non_provider_patterns": {
+          "status": "disabled"
+        },
+        "secret_scanning_validity_checks": {
+          "status": "disabled"
+        }
+      },
+      "custom_properties": {}
+    },
+    "topics": [],
+    "labels": [
+      {
+        "id": 10661411779,
+        "node_id": "LA_kwDOR_VQKM8AAAACe3g7ww",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/labels/bug",
+        "name": "bug",
+        "color": "d73a4a",
+        "default": true,
+        "description": "Something isn't working"
+      },
+      {
+        "id": 10661411787,
+        "node_id": "LA_kwDOR_VQKM8AAAACe3g7yw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/labels/documentation",
+        "name": "documentation",
+        "color": "0075ca",
+        "default": true,
+        "description": "Improvements or additions to documentation"
+      },
+      {
+        "id": 10661411795,
+        "node_id": "LA_kwDOR_VQKM8AAAACe3g70w",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/labels/duplicate",
+        "name": "duplicate",
+        "color": "cfd3d7",
+        "default": true,
+        "description": "This issue or pull request already exists"
+      },
+      {
+        "id": 10661411803,
+        "node_id": "LA_kwDOR_VQKM8AAAACe3g72w",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "default": true,
+        "description": "New feature or request"
+      },
+      {
+        "id": 10661411811,
+        "node_id": "LA_kwDOR_VQKM8AAAACe3g74w",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/labels/good%20first%20issue",
+        "name": "good first issue",
+        "color": "7057ff",
+        "default": true,
+        "description": "Good for newcomers"
+      },
+      {
+        "id": 10661411820,
+        "node_id": "LA_kwDOR_VQKM8AAAACe3g77A",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/labels/help%20wanted",
+        "name": "help wanted",
+        "color": "008672",
+        "default": true,
+        "description": "Extra attention is needed"
+      },
+      {
+        "id": 10661411831,
+        "node_id": "LA_kwDOR_VQKM8AAAACe3g79w",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/labels/invalid",
+        "name": "invalid",
+        "color": "e4e669",
+        "default": true,
+        "description": "This doesn't seem right"
+      },
+      {
+        "id": 10661411839,
+        "node_id": "LA_kwDOR_VQKM8AAAACe3g7_w",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/labels/question",
+        "name": "question",
+        "color": "d876e3",
+        "default": true,
+        "description": "Further information is requested"
+      },
+      {
+        "id": 10661411850,
+        "node_id": "LA_kwDOR_VQKM8AAAACe3g8Cg",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-wiki-front/labels/wontfix",
+        "name": "wontfix",
+        "color": "ffffff",
+        "default": true,
+        "description": "This will not be worked on"
+      }
+    ],
+    "milestones": [],
+    "pages": null
+  },
+  "exported_at": "2026-06-01T08:18:42Z"
+}

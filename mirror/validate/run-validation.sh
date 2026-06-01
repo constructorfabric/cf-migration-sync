@@ -512,8 +512,9 @@ _check_issues() {
       2>/dev/null | jq -r '.total_count // 0')" || sc=0
     total_src=$((total_src + sc))
 
-    # Count from state file
+    # Count from state file (reassemble split parts first if present)
     local state_file="$state_issues_dir/$repo_name.yaml"
+    state_unsplit "$state_file"
     if [[ -f "$state_file" ]]; then
       local mirrored failed
       mirrored="$(jq '[.items[] | select(.status=="mirrored")] | length' "$state_file" 2>/dev/null || echo 0)"
@@ -565,6 +566,7 @@ _check_prs() {
     total_src=$((total_src + sc))
 
     local state_file="$state_prs_dir/$repo_name.yaml"
+    state_unsplit "$state_file"
     if [[ -f "$state_file" ]]; then
       local mirrored failed
       mirrored="$(jq '[.items[] | select(.status=="mirrored")] | length' "$state_file" 2>/dev/null || echo 0)"
@@ -600,13 +602,19 @@ _check_assignees() {
     return 0
   fi
 
-  for state_file in "$state_issues_dir"/*.yaml; do
+  # Discover repos from whole files AND split manifests; reassemble parts first
+  # so a split repo's pending assignees are not silently uncounted.
+  local repo_name
+  while IFS= read -r repo_name; do
+    [[ -z "$repo_name" ]] && continue
+    local state_file="$state_issues_dir/$repo_name.yaml"
+    state_unsplit "$state_file"
     [[ -f "$state_file" ]] || continue
     local pc
     pc="$(jq '[.items[] | select(.assignees_status=="pending" and (.assignees|length)>0)] | length' \
       "$state_file" 2>/dev/null || echo 0)"
     pending_count=$((pending_count + pc))
-  done
+  done < <(state_repo_names "$state_issues_dir")
 
   local status="passed"
   [[ "$pending_count" -gt 0 ]] && status="warning"

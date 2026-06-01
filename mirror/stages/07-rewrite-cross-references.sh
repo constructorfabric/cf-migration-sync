@@ -99,40 +99,41 @@ main() {
   log "  Maps ready for $repo_count repos"
   echo "$number_maps" > "$MAPS_FILE"
 
-  # ---- Process issues (from state/issues/*.yaml) --------------------------
-  local found_issues=0
-  for sf in "$REPO_ROOT/state/issues/"*.yaml; do
-    [[ -f "$sf" ]] || continue
-    found_issues=$((found_issues + 1))
-  done
+  # ---- Process issues (from state/issues/) --------------------------------
+  # Discover repos from whole files AND split manifests; reassemble parts first.
+  local issue_repos found_issues
+  issue_repos="$(state_repo_names "$REPO_ROOT/state/issues")"
+  found_issues="$(echo "$issue_repos" | grep -c . || true)"
 
   if [[ "$found_issues" -gt 0 ]]; then
     log "Processing issue bodies and comments ($found_issues repos)..."
-    for sf in "$REPO_ROOT/state/issues/"*.yaml; do
+    local repo_name
+    while IFS= read -r repo_name; do
+      [[ -z "$repo_name" ]] && continue
+      local sf="$REPO_ROOT/state/issues/$repo_name.yaml"
+      state_unsplit "$sf"
       [[ -f "$sf" ]] || continue
-      local repo_name
-      repo_name="$(basename "$sf" .yaml)"
       _rewrite_repo_items "$repo_name" "issues" "$sf"
-    done
+    done < <(echo "$issue_repos")
   else
     log "No issue state files found — skipping (run stage 05 first)"
   fi
 
-  # ---- Process PR-backed issues (from state/prs/*.yaml) -------------------
-  local found_prs=0
-  for sf in "$REPO_ROOT/state/prs/"*.yaml; do
-    [[ -f "$sf" ]] || continue
-    found_prs=$((found_prs + 1))
-  done
+  # ---- Process PR-backed issues (from state/prs/) -------------------------
+  local pr_repos found_prs
+  pr_repos="$(state_repo_names "$REPO_ROOT/state/prs")"
+  found_prs="$(echo "$pr_repos" | grep -c . || true)"
 
   if [[ "$found_prs" -gt 0 ]]; then
     log "Processing PR issue bodies and comments ($found_prs repos)..."
-    for sf in "$REPO_ROOT/state/prs/"*.yaml; do
+    local repo_name
+    while IFS= read -r repo_name; do
+      [[ -z "$repo_name" ]] && continue
+      local sf="$REPO_ROOT/state/prs/$repo_name.yaml"
+      state_unsplit "$sf"
       [[ -f "$sf" ]] || continue
-      local repo_name
-      repo_name="$(basename "$sf" .yaml)"
       _rewrite_repo_items "$repo_name" "prs" "$sf"
-    done
+    done < <(echo "$pr_repos")
   else
     log "No PR state files found — skipping (run stage 06 first)"
   fi
@@ -159,29 +160,35 @@ main() {
 build_number_maps() {
   local result="{}"
 
-  for sf in "$REPO_ROOT/state/issues/"*.yaml; do
+  # Discover repos from whole files AND split manifests, and reassemble any parts
+  # BEFORE reading — otherwise a split repo (whole .yaml absent) contributes no
+  # number mappings and cross-references to its issues/PRs are never rewritten.
+  local repo
+  while IFS= read -r repo; do
+    [[ -z "$repo" ]] && continue
+    local sf="$REPO_ROOT/state/issues/$repo.yaml"
+    state_unsplit "$sf"
     [[ -f "$sf" ]] || continue
-    local repo
-    repo="$(basename "$sf" .yaml)"
     local imap
     imap="$(jq '[.items[] |
         select(.status == "mirrored" and .target_number != null) |
         {key: (.source_number | tostring), value: .target_number}
       ] | from_entries' "$sf" 2>/dev/null || echo '{}')"
     result="$(echo "$result" | jq --arg r "$repo" --argjson m "$imap" '.[$r].issues = $m')"
-  done
+  done < <(state_repo_names "$REPO_ROOT/state/issues")
 
-  for sf in "$REPO_ROOT/state/prs/"*.yaml; do
+  while IFS= read -r repo; do
+    [[ -z "$repo" ]] && continue
+    local sf="$REPO_ROOT/state/prs/$repo.yaml"
+    state_unsplit "$sf"
     [[ -f "$sf" ]] || continue
-    local repo
-    repo="$(basename "$sf" .yaml)"
     local pmap
     pmap="$(jq '[.items[] |
         select(.status == "mirrored" and .target_issue_number != null) |
         {key: (.source_pr_number | tostring), value: .target_issue_number}
       ] | from_entries' "$sf" 2>/dev/null || echo '{}')"
     result="$(echo "$result" | jq --arg r "$repo" --argjson m "$pmap" '.[$r].prs = $m')"
-  done
+  done < <(state_repo_names "$REPO_ROOT/state/prs")
 
   echo "$result"
 }

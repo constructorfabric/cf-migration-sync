@@ -1,0 +1,240 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T08:18:33Z",
+    "last_run_at": "2026-06-01T08:18:33Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_snapshot": {
+    "description": "",
+    "repo": {
+      "id": 1205000504,
+      "node_id": "R_kgDOR9LZOA",
+      "name": "cyber-arc",
+      "full_name": "cyberfabric/cyber-arc",
+      "private": true,
+      "owner": {
+        "login": "cyberfabric",
+        "id": 249082402,
+        "node_id": "O_kgDODtiyIg",
+        "avatar_url": "https://avatars.githubusercontent.com/u/249082402?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/cyberfabric",
+        "html_url": "https://github.com/cyberfabric",
+        "followers_url": "https://api.github.com/users/cyberfabric/followers",
+        "following_url": "https://api.github.com/users/cyberfabric/following{/other_user}",
+        "gists_url": "https://api.github.com/users/cyberfabric/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/cyberfabric/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/cyberfabric/subscriptions",
+        "organizations_url": "https://api.github.com/users/cyberfabric/orgs",
+        "repos_url": "https://api.github.com/users/cyberfabric/repos",
+        "events_url": "https://api.github.com/users/cyberfabric/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/cyberfabric/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/cyberfabric/cyber-arc",
+      "description": null,
+      "fork": false,
+      "url": "https://api.github.com/repos/cyberfabric/cyber-arc",
+      "forks_url": "https://api.github.com/repos/cyberfabric/cyber-arc/forks",
+      "keys_url": "https://api.github.com/repos/cyberfabric/cyber-arc/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/cyberfabric/cyber-arc/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/cyberfabric/cyber-arc/teams",
+      "hooks_url": "https://api.github.com/repos/cyberfabric/cyber-arc/hooks",
+      "issue_events_url": "https://api.github.com/repos/cyberfabric/cyber-arc/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/cyberfabric/cyber-arc/events",
+      "assignees_url": "https://api.github.com/repos/cyberfabric/cyber-arc/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/cyberfabric/cyber-arc/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/cyberfabric/cyber-arc/tags",
+      "blobs_url": "https://api.github.com/repos/cyberfabric/cyber-arc/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/cyberfabric/cyber-arc/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/cyberfabric/cyber-arc/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/cyberfabric/cyber-arc/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/cyberfabric/cyber-arc/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/cyberfabric/cyber-arc/languages",
+      "stargazers_url": "https://api.github.com/repos/cyberfabric/cyber-arc/stargazers",
+      "contributors_url": "https://api.github.com/repos/cyberfabric/cyber-arc/contributors",
+      "subscribers_url": "https://api.github.com/repos/cyberfabric/cyber-arc/subscribers",
+      "subscription_url": "https://api.github.com/repos/cyberfabric/cyber-arc/subscription",
+      "commits_url": "https://api.github.com/repos/cyberfabric/cyber-arc/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/cyberfabric/cyber-arc/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/cyberfabric/cyber-arc/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/cyberfabric/cyber-arc/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/cyberfabric/cyber-arc/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/cyberfabric/cyber-arc/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/cyberfabric/cyber-arc/merges",
+      "archive_url": "https://api.github.com/repos/cyberfabric/cyber-arc/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/cyberfabric/cyber-arc/downloads",
+      "issues_url": "https://api.github.com/repos/cyberfabric/cyber-arc/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/cyberfabric/cyber-arc/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/cyberfabric/cyber-arc/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/cyberfabric/cyber-arc/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/cyberfabric/cyber-arc/labels{/name}",
+      "releases_url": "https://api.github.com/repos/cyberfabric/cyber-arc/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/cyberfabric/cyber-arc/deployments",
+      "created_at": "2026-04-08T14:36:45Z",
+      "updated_at": "2026-05-10T07:42:08Z",
+      "pushed_at": "2026-04-14T06:09:29Z",
+      "git_url": "git://github.com/cyberfabric/cyber-arc.git",
+      "ssh_url": "git@github.com:cyberfabric/cyber-arc.git",
+      "clone_url": "https://github.com/cyberfabric/cyber-arc.git",
+      "svn_url": "https://github.com/cyberfabric/cyber-arc",
+      "homepage": null,
+      "size": 13,
+      "stargazers_count": 0,
+      "watchers_count": 0,
+      "language": null,
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": false,
+      "has_pages": false,
+      "has_discussions": false,
+      "forks_count": 0,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 3,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "allow_forking": true,
+      "is_template": false,
+      "web_commit_signoff_required": false,
+      "has_pull_requests": true,
+      "pull_request_creation_policy": "all",
+      "topics": [],
+      "visibility": "private",
+      "forks": 0,
+      "open_issues": 3,
+      "watchers": 0,
+      "default_branch": "main",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "security_and_analysis": {
+        "secret_scanning": {
+          "status": "disabled"
+        },
+        "secret_scanning_push_protection": {
+          "status": "disabled"
+        },
+        "dependabot_security_updates": {
+          "status": "disabled"
+        },
+        "secret_scanning_non_provider_patterns": {
+          "status": "disabled"
+        },
+        "secret_scanning_validity_checks": {
+          "status": "disabled"
+        }
+      },
+      "custom_properties": {}
+    },
+    "topics": [],
+    "labels": [
+      {
+        "id": 10640646999,
+        "node_id": "LA_kwDOR9LZOM8AAAACejtjVw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-arc/labels/bug",
+        "name": "bug",
+        "color": "d73a4a",
+        "default": true,
+        "description": "Something isn't working"
+      },
+      {
+        "id": 10640647035,
+        "node_id": "LA_kwDOR9LZOM8AAAACejtjew",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-arc/labels/documentation",
+        "name": "documentation",
+        "color": "0075ca",
+        "default": true,
+        "description": "Improvements or additions to documentation"
+      },
+      {
+        "id": 10640647065,
+        "node_id": "LA_kwDOR9LZOM8AAAACejtjmQ",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-arc/labels/duplicate",
+        "name": "duplicate",
+        "color": "cfd3d7",
+        "default": true,
+        "description": "This issue or pull request already exists"
+      },
+      {
+        "id": 10640647109,
+        "node_id": "LA_kwDOR9LZOM8AAAACejtjxQ",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-arc/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "default": true,
+        "description": "New feature or request"
+      },
+      {
+        "id": 10640647167,
+        "node_id": "LA_kwDOR9LZOM8AAAACejtj_w",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-arc/labels/good%20first%20issue",
+        "name": "good first issue",
+        "color": "7057ff",
+        "default": true,
+        "description": "Good for newcomers"
+      },
+      {
+        "id": 10640647203,
+        "node_id": "LA_kwDOR9LZOM8AAAACejtkIw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-arc/labels/help%20wanted",
+        "name": "help wanted",
+        "color": "008672",
+        "default": true,
+        "description": "Extra attention is needed"
+      },
+      {
+        "id": 10640647230,
+        "node_id": "LA_kwDOR9LZOM8AAAACejtkPg",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-arc/labels/invalid",
+        "name": "invalid",
+        "color": "e4e669",
+        "default": true,
+        "description": "This doesn't seem right"
+      },
+      {
+        "id": 10640647241,
+        "node_id": "LA_kwDOR9LZOM8AAAACejtkSQ",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-arc/labels/question",
+        "name": "question",
+        "color": "d876e3",
+        "default": true,
+        "description": "Further information is requested"
+      },
+      {
+        "id": 10640647262,
+        "node_id": "LA_kwDOR9LZOM8AAAACejtkXg",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-arc/labels/wontfix",
+        "name": "wontfix",
+        "color": "ffffff",
+        "default": true,
+        "description": "This will not be worked on"
+      }
+    ],
+    "milestones": [],
+    "pages": null
+  },
+  "exported_at": "2026-06-01T08:18:36Z"
+}

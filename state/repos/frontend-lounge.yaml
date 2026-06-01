@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T08:18:26Z",
+    "last_run_at": "2026-06-01T08:18:26Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_snapshot": {
+    "description": "",
+    "repo": {
+      "id": 1200247616,
+      "node_id": "R_kgDOR4pTQA",
+      "name": "frontend-lounge",
+      "full_name": "cyberfabric/frontend-lounge",
+      "private": true,
+      "owner": {
+        "login": "cyberfabric",
+        "id": 249082402,
+        "node_id": "O_kgDODtiyIg",
+        "avatar_url": "https://avatars.githubusercontent.com/u/249082402?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/cyberfabric",
+        "html_url": "https://github.com/cyberfabric",
+        "followers_url": "https://api.github.com/users/cyberfabric/followers",
+        "following_url": "https://api.github.com/users/cyberfabric/following{/other_user}",
+        "gists_url": "https://api.github.com/users/cyberfabric/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/cyberfabric/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/cyberfabric/subscriptions",
+        "organizations_url": "https://api.github.com/users/cyberfabric/orgs",
+        "repos_url": "https://api.github.com/users/cyberfabric/repos",
+        "events_url": "https://api.github.com/users/cyberfabric/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/cyberfabric/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/cyberfabric/frontend-lounge",
+      "description": null,
+      "fork": false,
+      "url": "https://api.github.com/repos/cyberfabric/frontend-lounge",
+      "forks_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/forks",
+      "keys_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/teams",
+      "hooks_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/hooks",
+      "issue_events_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/events",
+      "assignees_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/tags",
+      "blobs_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/languages",
+      "stargazers_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/stargazers",
+      "contributors_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/contributors",
+      "subscribers_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/subscribers",
+      "subscription_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/subscription",
+      "commits_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/merges",
+      "archive_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/downloads",
+      "issues_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/labels{/name}",
+      "releases_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/cyberfabric/frontend-lounge/deployments",
+      "created_at": "2026-04-03T07:35:41Z",
+      "updated_at": "2026-04-03T07:35:45Z",
+      "pushed_at": "2026-04-03T07:35:42Z",
+      "git_url": "git://github.com/cyberfabric/frontend-lounge.git",
+      "ssh_url": "git@github.com:cyberfabric/frontend-lounge.git",
+      "clone_url": "https://github.com/cyberfabric/frontend-lounge.git",
+      "svn_url": "https://github.com/cyberfabric/frontend-lounge",
+      "homepage": null,
+      "size": 0,
+      "stargazers_count": 0,
+      "watchers_count": 0,
+      "language": null,
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": false,
+      "has_pages": false,
+      "has_discussions": false,
+      "forks_count": 0,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 0,
+      "license": null,
+      "allow_forking": true,
+      "is_template": false,
+      "web_commit_signoff_required": false,
+      "has_pull_requests": true,
+      "pull_request_creation_policy": "all",
+      "topics": [],
+      "visibility": "private",
+      "forks": 0,
+      "open_issues": 0,
+      "watchers": 0,
+      "default_branch": "main",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "security_and_analysis": {
+        "secret_scanning": {
+          "status": "disabled"
+        },
+        "secret_scanning_push_protection": {
+          "status": "disabled"
+        },
+        "dependabot_security_updates": {
+          "status": "disabled"
+        },
+        "secret_scanning_non_provider_patterns": {
+          "status": "disabled"
+        },
+        "secret_scanning_validity_checks": {
+          "status": "disabled"
+        }
+      },
+      "custom_properties": {}
+    },
+    "topics": [],
+    "labels": [
+      {
+        "id": 10597051332,
+        "node_id": "LA_kwDOR4pTQM8AAAACd6IrxA",
+        "url": "https://api.github.com/repos/cyberfabric/frontend-lounge/labels/bug",
+        "name": "bug",
+        "color": "d73a4a",
+        "default": true,
+        "description": "Something isn't working"
+      },
+      {
+        "id": 10597051340,
+        "node_id": "LA_kwDOR4pTQM8AAAACd6IrzA",
+        "url": "https://api.github.com/repos/cyberfabric/frontend-lounge/labels/documentation",
+        "name": "documentation",
+        "color": "0075ca",
+        "default": true,
+        "description": "Improvements or additions to documentation"
+      },
+      {
+        "id": 10597051347,
+        "node_id": "LA_kwDOR4pTQM8AAAACd6Ir0w",
+        "url": "https://api.github.com/repos/cyberfabric/frontend-lounge/labels/duplicate",
+        "name": "duplicate",
+        "color": "cfd3d7",
+        "default": true,
+        "description": "This issue or pull request already exists"
+      },
+      {
+        "id": 10597051359,
+        "node_id": "LA_kwDOR4pTQM8AAAACd6Ir3w",
+        "url": "https://api.github.com/repos/cyberfabric/frontend-lounge/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "default": true,
+        "description": "New feature or request"
+      },
+      {
+        "id": 10597051365,
+        "node_id": "LA_kwDOR4pTQM8AAAACd6Ir5Q",
+        "url": "https://api.github.com/repos/cyberfabric/frontend-lounge/labels/good%20first%20issue",
+        "name": "good first issue",
+        "color": "7057ff",
+        "default": true,
+        "description": "Good for newcomers"
+      },
+      {
+        "id": 10597051372,
+        "node_id": "LA_kwDOR4pTQM8AAAACd6Ir7A",
+        "url": "https://api.github.com/repos/cyberfabric/frontend-lounge/labels/help%20wanted",
+        "name": "help wanted",
+        "color": "008672",
+        "default": true,
+        "description": "Extra attention is needed"
+      },
+      {
+        "id": 10597051375,
+        "node_id": "LA_kwDOR4pTQM8AAAACd6Ir7w",
+        "url": "https://api.github.com/repos/cyberfabric/frontend-lounge/labels/invalid",
+        "name": "invalid",
+        "color": "e4e669",
+        "default": true,
+        "description": "This doesn't seem right"
+      },
+      {
+        "id": 10597051381,
+        "node_id": "LA_kwDOR4pTQM8AAAACd6Ir9Q",
+        "url": "https://api.github.com/repos/cyberfabric/frontend-lounge/labels/question",
+        "name": "question",
+        "color": "d876e3",
+        "default": true,
+        "description": "Further information is requested"
+      },
+      {
+        "id": 10597051386,
+        "node_id": "LA_kwDOR4pTQM8AAAACd6Ir-g",
+        "url": "https://api.github.com/repos/cyberfabric/frontend-lounge/labels/wontfix",
+        "name": "wontfix",
+        "color": "ffffff",
+        "default": true,
+        "description": "This will not be worked on"
+      }
+    ],
+    "milestones": [],
+    "pages": null
+  },
+  "exported_at": "2026-06-01T08:18:29Z"
+}

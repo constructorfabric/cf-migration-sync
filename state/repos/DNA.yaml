@@ -1,0 +1,240 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T08:17:36Z",
+    "last_run_at": "2026-06-01T08:17:36Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_snapshot": {
+    "description": "DNA - Development Norms & Architecture - a set of core principles, guidelines and instructions for multi-tenant SaaS platforms and apps development",
+    "repo": {
+      "id": 1073931114,
+      "node_id": "R_kgDOQALjag",
+      "name": "DNA",
+      "full_name": "cyberfabric/DNA",
+      "private": true,
+      "owner": {
+        "login": "cyberfabric",
+        "id": 249082402,
+        "node_id": "O_kgDODtiyIg",
+        "avatar_url": "https://avatars.githubusercontent.com/u/249082402?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/cyberfabric",
+        "html_url": "https://github.com/cyberfabric",
+        "followers_url": "https://api.github.com/users/cyberfabric/followers",
+        "following_url": "https://api.github.com/users/cyberfabric/following{/other_user}",
+        "gists_url": "https://api.github.com/users/cyberfabric/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/cyberfabric/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/cyberfabric/subscriptions",
+        "organizations_url": "https://api.github.com/users/cyberfabric/orgs",
+        "repos_url": "https://api.github.com/users/cyberfabric/repos",
+        "events_url": "https://api.github.com/users/cyberfabric/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/cyberfabric/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/cyberfabric/DNA",
+      "description": "DNA - Development Norms & Architecture - a set of core principles, guidelines and instructions for multi-tenant SaaS platforms and apps development",
+      "fork": false,
+      "url": "https://api.github.com/repos/cyberfabric/DNA",
+      "forks_url": "https://api.github.com/repos/cyberfabric/DNA/forks",
+      "keys_url": "https://api.github.com/repos/cyberfabric/DNA/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/cyberfabric/DNA/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/cyberfabric/DNA/teams",
+      "hooks_url": "https://api.github.com/repos/cyberfabric/DNA/hooks",
+      "issue_events_url": "https://api.github.com/repos/cyberfabric/DNA/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/cyberfabric/DNA/events",
+      "assignees_url": "https://api.github.com/repos/cyberfabric/DNA/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/cyberfabric/DNA/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/cyberfabric/DNA/tags",
+      "blobs_url": "https://api.github.com/repos/cyberfabric/DNA/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/cyberfabric/DNA/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/cyberfabric/DNA/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/cyberfabric/DNA/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/cyberfabric/DNA/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/cyberfabric/DNA/languages",
+      "stargazers_url": "https://api.github.com/repos/cyberfabric/DNA/stargazers",
+      "contributors_url": "https://api.github.com/repos/cyberfabric/DNA/contributors",
+      "subscribers_url": "https://api.github.com/repos/cyberfabric/DNA/subscribers",
+      "subscription_url": "https://api.github.com/repos/cyberfabric/DNA/subscription",
+      "commits_url": "https://api.github.com/repos/cyberfabric/DNA/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/cyberfabric/DNA/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/cyberfabric/DNA/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/cyberfabric/DNA/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/cyberfabric/DNA/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/cyberfabric/DNA/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/cyberfabric/DNA/merges",
+      "archive_url": "https://api.github.com/repos/cyberfabric/DNA/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/cyberfabric/DNA/downloads",
+      "issues_url": "https://api.github.com/repos/cyberfabric/DNA/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/cyberfabric/DNA/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/cyberfabric/DNA/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/cyberfabric/DNA/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/cyberfabric/DNA/labels{/name}",
+      "releases_url": "https://api.github.com/repos/cyberfabric/DNA/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/cyberfabric/DNA/deployments",
+      "created_at": "2025-10-10T21:07:15Z",
+      "updated_at": "2026-05-12T16:54:52Z",
+      "pushed_at": "2026-05-12T11:36:36Z",
+      "git_url": "git://github.com/cyberfabric/DNA.git",
+      "ssh_url": "git@github.com:cyberfabric/DNA.git",
+      "clone_url": "https://github.com/cyberfabric/DNA.git",
+      "svn_url": "https://github.com/cyberfabric/DNA",
+      "homepage": null,
+      "size": 113,
+      "stargazers_count": 5,
+      "watchers_count": 5,
+      "language": null,
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": false,
+      "has_pages": false,
+      "has_discussions": false,
+      "forks_count": 0,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 1,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "allow_forking": true,
+      "is_template": false,
+      "web_commit_signoff_required": false,
+      "has_pull_requests": true,
+      "pull_request_creation_policy": "all",
+      "topics": [],
+      "visibility": "private",
+      "forks": 0,
+      "open_issues": 1,
+      "watchers": 5,
+      "default_branch": "main",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "security_and_analysis": {
+        "secret_scanning": {
+          "status": "disabled"
+        },
+        "secret_scanning_push_protection": {
+          "status": "disabled"
+        },
+        "dependabot_security_updates": {
+          "status": "disabled"
+        },
+        "secret_scanning_non_provider_patterns": {
+          "status": "disabled"
+        },
+        "secret_scanning_validity_checks": {
+          "status": "disabled"
+        }
+      },
+      "custom_properties": {}
+    },
+    "topics": [],
+    "labels": [
+      {
+        "id": 9440011210,
+        "node_id": "LA_kwDOQALjas8AAAACMqsjyg",
+        "url": "https://api.github.com/repos/cyberfabric/DNA/labels/bug",
+        "name": "bug",
+        "color": "d73a4a",
+        "default": true,
+        "description": "Something isn't working"
+      },
+      {
+        "id": 9440011215,
+        "node_id": "LA_kwDOQALjas8AAAACMqsjzw",
+        "url": "https://api.github.com/repos/cyberfabric/DNA/labels/documentation",
+        "name": "documentation",
+        "color": "0075ca",
+        "default": true,
+        "description": "Improvements or additions to documentation"
+      },
+      {
+        "id": 9440011222,
+        "node_id": "LA_kwDOQALjas8AAAACMqsj1g",
+        "url": "https://api.github.com/repos/cyberfabric/DNA/labels/duplicate",
+        "name": "duplicate",
+        "color": "cfd3d7",
+        "default": true,
+        "description": "This issue or pull request already exists"
+      },
+      {
+        "id": 9440011227,
+        "node_id": "LA_kwDOQALjas8AAAACMqsj2w",
+        "url": "https://api.github.com/repos/cyberfabric/DNA/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "default": true,
+        "description": "New feature or request"
+      },
+      {
+        "id": 9440011232,
+        "node_id": "LA_kwDOQALjas8AAAACMqsj4A",
+        "url": "https://api.github.com/repos/cyberfabric/DNA/labels/good%20first%20issue",
+        "name": "good first issue",
+        "color": "7057ff",
+        "default": true,
+        "description": "Good for newcomers"
+      },
+      {
+        "id": 9440011236,
+        "node_id": "LA_kwDOQALjas8AAAACMqsj5A",
+        "url": "https://api.github.com/repos/cyberfabric/DNA/labels/help%20wanted",
+        "name": "help wanted",
+        "color": "008672",
+        "default": true,
+        "description": "Extra attention is needed"
+      },
+      {
+        "id": 9440011246,
+        "node_id": "LA_kwDOQALjas8AAAACMqsj7g",
+        "url": "https://api.github.com/repos/cyberfabric/DNA/labels/invalid",
+        "name": "invalid",
+        "color": "e4e669",
+        "default": true,
+        "description": "This doesn't seem right"
+      },
+      {
+        "id": 9440011252,
+        "node_id": "LA_kwDOQALjas8AAAACMqsj9A",
+        "url": "https://api.github.com/repos/cyberfabric/DNA/labels/question",
+        "name": "question",
+        "color": "d876e3",
+        "default": true,
+        "description": "Further information is requested"
+      },
+      {
+        "id": 9440011258,
+        "node_id": "LA_kwDOQALjas8AAAACMqsj-g",
+        "url": "https://api.github.com/repos/cyberfabric/DNA/labels/wontfix",
+        "name": "wontfix",
+        "color": "ffffff",
+        "default": true,
+        "description": "This will not be worked on"
+      }
+    ],
+    "milestones": [],
+    "pages": null
+  },
+  "exported_at": "2026-06-01T08:17:39Z"
+}

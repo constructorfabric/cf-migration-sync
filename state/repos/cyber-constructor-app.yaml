@@ -1,0 +1,240 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T08:18:46Z",
+    "last_run_at": "2026-06-01T08:18:46Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_snapshot": {
+    "description": "Cyber Constructor main repository",
+    "repo": {
+      "id": 1230588847,
+      "node_id": "R_kgDOSVlLrw",
+      "name": "cyber-constructor-app",
+      "full_name": "cyberfabric/cyber-constructor-app",
+      "private": true,
+      "owner": {
+        "login": "cyberfabric",
+        "id": 249082402,
+        "node_id": "O_kgDODtiyIg",
+        "avatar_url": "https://avatars.githubusercontent.com/u/249082402?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/cyberfabric",
+        "html_url": "https://github.com/cyberfabric",
+        "followers_url": "https://api.github.com/users/cyberfabric/followers",
+        "following_url": "https://api.github.com/users/cyberfabric/following{/other_user}",
+        "gists_url": "https://api.github.com/users/cyberfabric/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/cyberfabric/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/cyberfabric/subscriptions",
+        "organizations_url": "https://api.github.com/users/cyberfabric/orgs",
+        "repos_url": "https://api.github.com/users/cyberfabric/repos",
+        "events_url": "https://api.github.com/users/cyberfabric/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/cyberfabric/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/cyberfabric/cyber-constructor-app",
+      "description": "Cyber Constructor main repository",
+      "fork": false,
+      "url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app",
+      "forks_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/forks",
+      "keys_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/teams",
+      "hooks_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/hooks",
+      "issue_events_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/events",
+      "assignees_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/tags",
+      "blobs_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/languages",
+      "stargazers_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/stargazers",
+      "contributors_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/contributors",
+      "subscribers_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/subscribers",
+      "subscription_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/subscription",
+      "commits_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/merges",
+      "archive_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/downloads",
+      "issues_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/labels{/name}",
+      "releases_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/deployments",
+      "created_at": "2026-05-06T06:22:49Z",
+      "updated_at": "2026-05-12T16:54:09Z",
+      "pushed_at": "2026-05-06T06:22:50Z",
+      "git_url": "git://github.com/cyberfabric/cyber-constructor-app.git",
+      "ssh_url": "git@github.com:cyberfabric/cyber-constructor-app.git",
+      "clone_url": "https://github.com/cyberfabric/cyber-constructor-app.git",
+      "svn_url": "https://github.com/cyberfabric/cyber-constructor-app",
+      "homepage": null,
+      "size": 5,
+      "stargazers_count": 0,
+      "watchers_count": 0,
+      "language": null,
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": false,
+      "has_pages": false,
+      "has_discussions": false,
+      "forks_count": 0,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 0,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "allow_forking": true,
+      "is_template": false,
+      "web_commit_signoff_required": false,
+      "has_pull_requests": true,
+      "pull_request_creation_policy": "all",
+      "topics": [],
+      "visibility": "private",
+      "forks": 0,
+      "open_issues": 0,
+      "watchers": 0,
+      "default_branch": "main",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "security_and_analysis": {
+        "secret_scanning": {
+          "status": "disabled"
+        },
+        "secret_scanning_push_protection": {
+          "status": "disabled"
+        },
+        "dependabot_security_updates": {
+          "status": "disabled"
+        },
+        "secret_scanning_non_provider_patterns": {
+          "status": "disabled"
+        },
+        "secret_scanning_validity_checks": {
+          "status": "disabled"
+        }
+      },
+      "custom_properties": {}
+    },
+    "topics": [],
+    "labels": [
+      {
+        "id": 10876023864,
+        "node_id": "LA_kwDOSVlLr88AAAACiEL0OA",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/labels/bug",
+        "name": "bug",
+        "color": "d73a4a",
+        "default": true,
+        "description": "Something isn't working"
+      },
+      {
+        "id": 10876023871,
+        "node_id": "LA_kwDOSVlLr88AAAACiEL0Pw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/labels/documentation",
+        "name": "documentation",
+        "color": "0075ca",
+        "default": true,
+        "description": "Improvements or additions to documentation"
+      },
+      {
+        "id": 10876023880,
+        "node_id": "LA_kwDOSVlLr88AAAACiEL0SA",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/labels/duplicate",
+        "name": "duplicate",
+        "color": "cfd3d7",
+        "default": true,
+        "description": "This issue or pull request already exists"
+      },
+      {
+        "id": 10876023886,
+        "node_id": "LA_kwDOSVlLr88AAAACiEL0Tg",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "default": true,
+        "description": "New feature or request"
+      },
+      {
+        "id": 10876023899,
+        "node_id": "LA_kwDOSVlLr88AAAACiEL0Ww",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/labels/good%20first%20issue",
+        "name": "good first issue",
+        "color": "7057ff",
+        "default": true,
+        "description": "Good for newcomers"
+      },
+      {
+        "id": 10876023906,
+        "node_id": "LA_kwDOSVlLr88AAAACiEL0Yg",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/labels/help%20wanted",
+        "name": "help wanted",
+        "color": "008672",
+        "default": true,
+        "description": "Extra attention is needed"
+      },
+      {
+        "id": 10876023914,
+        "node_id": "LA_kwDOSVlLr88AAAACiEL0ag",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/labels/invalid",
+        "name": "invalid",
+        "color": "e4e669",
+        "default": true,
+        "description": "This doesn't seem right"
+      },
+      {
+        "id": 10876023923,
+        "node_id": "LA_kwDOSVlLr88AAAACiEL0cw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/labels/question",
+        "name": "question",
+        "color": "d876e3",
+        "default": true,
+        "description": "Further information is requested"
+      },
+      {
+        "id": 10876023933,
+        "node_id": "LA_kwDOSVlLr88AAAACiEL0fQ",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-constructor-app/labels/wontfix",
+        "name": "wontfix",
+        "color": "ffffff",
+        "default": true,
+        "description": "This will not be worked on"
+      }
+    ],
+    "milestones": [],
+    "pages": null
+  },
+  "exported_at": "2026-06-01T08:18:48Z"
+}

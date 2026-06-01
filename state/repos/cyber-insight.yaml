@@ -1,0 +1,517 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T08:17:57Z",
+    "last_run_at": "2026-06-01T08:17:57Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_snapshot": {
+    "description": "Cyber Insight defines roles and activities, connects to your systems through ready-to-use connectors (including AI tools), and measures productivity at individual, team, and organization levels. Drill from headline metrics down to source data.",
+    "repo": {
+      "id": 1159049202,
+      "node_id": "R_kgDORRWv8g",
+      "name": "cyber-insight",
+      "full_name": "cyberfabric/cyber-insight",
+      "private": true,
+      "owner": {
+        "login": "cyberfabric",
+        "id": 249082402,
+        "node_id": "O_kgDODtiyIg",
+        "avatar_url": "https://avatars.githubusercontent.com/u/249082402?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/cyberfabric",
+        "html_url": "https://github.com/cyberfabric",
+        "followers_url": "https://api.github.com/users/cyberfabric/followers",
+        "following_url": "https://api.github.com/users/cyberfabric/following{/other_user}",
+        "gists_url": "https://api.github.com/users/cyberfabric/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/cyberfabric/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/cyberfabric/subscriptions",
+        "organizations_url": "https://api.github.com/users/cyberfabric/orgs",
+        "repos_url": "https://api.github.com/users/cyberfabric/repos",
+        "events_url": "https://api.github.com/users/cyberfabric/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/cyberfabric/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/cyberfabric/cyber-insight",
+      "description": "Cyber Insight defines roles and activities, connects to your systems through ready-to-use connectors (including AI tools), and measures productivity at individual, team, and organization levels. Drill from headline metrics down to source data.",
+      "fork": false,
+      "url": "https://api.github.com/repos/cyberfabric/cyber-insight",
+      "forks_url": "https://api.github.com/repos/cyberfabric/cyber-insight/forks",
+      "keys_url": "https://api.github.com/repos/cyberfabric/cyber-insight/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/cyberfabric/cyber-insight/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/cyberfabric/cyber-insight/teams",
+      "hooks_url": "https://api.github.com/repos/cyberfabric/cyber-insight/hooks",
+      "issue_events_url": "https://api.github.com/repos/cyberfabric/cyber-insight/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/cyberfabric/cyber-insight/events",
+      "assignees_url": "https://api.github.com/repos/cyberfabric/cyber-insight/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/cyberfabric/cyber-insight/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/cyberfabric/cyber-insight/tags",
+      "blobs_url": "https://api.github.com/repos/cyberfabric/cyber-insight/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/cyberfabric/cyber-insight/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/cyberfabric/cyber-insight/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/cyberfabric/cyber-insight/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/cyberfabric/cyber-insight/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/cyberfabric/cyber-insight/languages",
+      "stargazers_url": "https://api.github.com/repos/cyberfabric/cyber-insight/stargazers",
+      "contributors_url": "https://api.github.com/repos/cyberfabric/cyber-insight/contributors",
+      "subscribers_url": "https://api.github.com/repos/cyberfabric/cyber-insight/subscribers",
+      "subscription_url": "https://api.github.com/repos/cyberfabric/cyber-insight/subscription",
+      "commits_url": "https://api.github.com/repos/cyberfabric/cyber-insight/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/cyberfabric/cyber-insight/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/cyberfabric/cyber-insight/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/cyberfabric/cyber-insight/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/cyberfabric/cyber-insight/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/cyberfabric/cyber-insight/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/cyberfabric/cyber-insight/merges",
+      "archive_url": "https://api.github.com/repos/cyberfabric/cyber-insight/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/cyberfabric/cyber-insight/downloads",
+      "issues_url": "https://api.github.com/repos/cyberfabric/cyber-insight/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/cyberfabric/cyber-insight/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/cyberfabric/cyber-insight/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/cyberfabric/cyber-insight/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels{/name}",
+      "releases_url": "https://api.github.com/repos/cyberfabric/cyber-insight/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/cyberfabric/cyber-insight/deployments",
+      "created_at": "2026-02-16T08:52:04Z",
+      "updated_at": "2026-05-30T20:15:22Z",
+      "pushed_at": "2026-05-30T20:15:18Z",
+      "git_url": "git://github.com/cyberfabric/cyber-insight.git",
+      "ssh_url": "git@github.com:cyberfabric/cyber-insight.git",
+      "clone_url": "https://github.com/cyberfabric/cyber-insight.git",
+      "svn_url": "https://github.com/cyberfabric/cyber-insight",
+      "homepage": "https://www.cyberfabric.org",
+      "size": 7454,
+      "stargazers_count": 15,
+      "watchers_count": 15,
+      "language": "Python",
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": false,
+      "has_pages": false,
+      "has_discussions": false,
+      "forks_count": 3,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 190,
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "allow_forking": true,
+      "is_template": false,
+      "web_commit_signoff_required": false,
+      "has_pull_requests": true,
+      "pull_request_creation_policy": "all",
+      "topics": [
+        "analytics",
+        "analytics-engineering",
+        "dashboards",
+        "dwh",
+        "git",
+        "insight",
+        "metrics"
+      ],
+      "visibility": "private",
+      "forks": 3,
+      "open_issues": 190,
+      "watchers": 15,
+      "default_branch": "main",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "security_and_analysis": {
+        "secret_scanning": {
+          "status": "disabled"
+        },
+        "secret_scanning_push_protection": {
+          "status": "disabled"
+        },
+        "dependabot_security_updates": {
+          "status": "disabled"
+        },
+        "secret_scanning_non_provider_patterns": {
+          "status": "disabled"
+        },
+        "secret_scanning_validity_checks": {
+          "status": "disabled"
+        }
+      },
+      "custom_properties": {}
+    },
+    "topics": [
+      "analytics",
+      "analytics-engineering",
+      "dashboards",
+      "dwh",
+      "git",
+      "insight",
+      "metrics"
+    ],
+    "labels": [
+      {
+        "id": 10219032263,
+        "node_id": "LA_kwDORRWv8s8AAAACYRoOxw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/bug",
+        "name": "bug",
+        "color": "d73a4a",
+        "default": true,
+        "description": "Something isn't working"
+      },
+      {
+        "id": 10647699926,
+        "node_id": "LA_kwDORRWv8s8AAAACeqcB1g",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/component:analytics-api",
+        "name": "component:analytics-api",
+        "color": "7B1FA2",
+        "default": false,
+        "description": "Analytics API"
+      },
+      {
+        "id": 10647699740,
+        "node_id": "LA_kwDORRWv8s8AAAACeqcBHA",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/component:authz-plugin",
+        "name": "component:authz-plugin",
+        "color": "7B1FA2",
+        "default": false,
+        "description": "Authz Plugin"
+      },
+      {
+        "id": 10647699459,
+        "node_id": "LA_kwDORRWv8s8AAAACeqcAAw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/component:clickhouse-client",
+        "name": "component:clickhouse-client",
+        "color": "7B1FA2",
+        "default": false,
+        "description": "Shared ClickHouse crate"
+      },
+      {
+        "id": 10647700415,
+        "node_id": "LA_kwDORRWv8s8AAAACeqcDvw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/component:frontend",
+        "name": "component:frontend",
+        "color": "7B1FA2",
+        "default": false,
+        "description": "UI app"
+      },
+      {
+        "id": 10647700244,
+        "node_id": "LA_kwDORRWv8s8AAAACeqcDFA",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/component:identity-resolution",
+        "name": "component:identity-resolution",
+        "color": "7B1FA2",
+        "default": false,
+        "description": "Identity Resolution"
+      },
+      {
+        "id": 10647699554,
+        "node_id": "LA_kwDORRWv8s8AAAACeqcAYg",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/component:identity-service",
+        "name": "component:identity-service",
+        "color": "7B1FA2",
+        "default": false,
+        "description": "Identity Service"
+      },
+      {
+        "id": 10647700326,
+        "node_id": "LA_kwDORRWv8s8AAAACeqcDZg",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/component:ingestion",
+        "name": "component:ingestion",
+        "color": "7B1FA2",
+        "default": false,
+        "description": "dbt / approved connector scope"
+      },
+      {
+        "id": 10647700107,
+        "node_id": "LA_kwDORRWv8s8AAAACeqcCiw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/component:release-installer",
+        "name": "component:release-installer",
+        "color": "7B1FA2",
+        "default": false,
+        "description": "Helm chart / release installer"
+      },
+      {
+        "id": 10649323740,
+        "node_id": "LA_kwDORRWv8s8AAAACer_I3A",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/Connector",
+        "name": "Connector",
+        "color": "00897B",
+        "default": false,
+        "description": "Individual connector"
+      },
+      {
+        "id": 10896008946,
+        "node_id": "LA_kwDORRWv8s8AAAACiXPm8g",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/deploy",
+        "name": "deploy",
+        "color": "1d76db",
+        "default": false,
+        "description": "Deployment subsystem: chart, gitops, install paths"
+      },
+      {
+        "id": 10219032278,
+        "node_id": "LA_kwDORRWv8s8AAAACYRoO1g",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/documentation",
+        "name": "documentation",
+        "color": "0075ca",
+        "default": true,
+        "description": "Improvements or additions to documentation"
+      },
+      {
+        "id": 10219032290,
+        "node_id": "LA_kwDORRWv8s8AAAACYRoO4g",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/duplicate",
+        "name": "duplicate",
+        "color": "cfd3d7",
+        "default": true,
+        "description": "This issue or pull request already exists"
+      },
+      {
+        "id": 10219032303,
+        "node_id": "LA_kwDORRWv8s8AAAACYRoO7w",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "default": true,
+        "description": "New feature or request"
+      },
+      {
+        "id": 10939811797,
+        "node_id": "LA_kwDORRWv8s8AAAACjBBH1Q",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/Epic",
+        "name": "Epic",
+        "color": "000000",
+        "default": false,
+        "description": ""
+      },
+      {
+        "id": 10219032317,
+        "node_id": "LA_kwDORRWv8s8AAAACYRoO_Q",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/good%20first%20issue",
+        "name": "good first issue",
+        "color": "7057ff",
+        "default": true,
+        "description": "Good for newcomers"
+      },
+      {
+        "id": 10887521434,
+        "node_id": "LA_kwDORRWv8s8AAAACiPJkmg",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/Groomed",
+        "name": "Groomed",
+        "color": "125a28",
+        "default": false,
+        "description": ""
+      },
+      {
+        "id": 10219032331,
+        "node_id": "LA_kwDORRWv8s8AAAACYRoPCw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/help%20wanted",
+        "name": "help wanted",
+        "color": "008672",
+        "default": true,
+        "description": "Extra attention is needed"
+      },
+      {
+        "id": 11005653463,
+        "node_id": "LA_kwDORRWv8s8AAAACj_zx1w",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/Insight%20V1",
+        "name": "Insight V1",
+        "color": "c62a67",
+        "default": false,
+        "description": ""
+      },
+      {
+        "id": 10219032343,
+        "node_id": "LA_kwDORRWv8s8AAAACYRoPFw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/invalid",
+        "name": "invalid",
+        "color": "e4e669",
+        "default": true,
+        "description": "This doesn't seem right"
+      },
+      {
+        "id": 10647699390,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb_vg",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/phase:0",
+        "name": "phase:0",
+        "color": "795548",
+        "default": false,
+        "description": "Scope and environment lock"
+      },
+      {
+        "id": 10647699398,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb_xg",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/phase:1",
+        "name": "phase:1",
+        "color": "795548",
+        "default": false,
+        "description": "MVP foundation"
+      },
+      {
+        "id": 10647699411,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb_0w",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/phase:2",
+        "name": "phase:2",
+        "color": "795548",
+        "default": false,
+        "description": "First installable demo release"
+      },
+      {
+        "id": 10647699419,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb_2w",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/phase:3",
+        "name": "phase:3",
+        "color": "795548",
+        "default": false,
+        "description": "P1 business scenarios"
+      },
+      {
+        "id": 10647699425,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb_4Q",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/phase:backlog",
+        "name": "phase:backlog",
+        "color": "795548",
+        "default": false,
+        "description": "Separate backlog"
+      },
+      {
+        "id": 10647699207,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb_Bw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/priority:P0",
+        "name": "priority:P0",
+        "color": "B60205",
+        "default": false,
+        "description": "Critical path — blocks first installable release"
+      },
+      {
+        "id": 10647699288,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb_WA",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/priority:P1",
+        "name": "priority:P1",
+        "color": "FBCA04",
+        "default": false,
+        "description": "Meaningful demo features"
+      },
+      {
+        "id": 10647699324,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb_fA",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/priority:P2",
+        "name": "priority:P2",
+        "color": "9E9E9E",
+        "default": false,
+        "description": "Second wave"
+      },
+      {
+        "id": 10647699372,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb_rA",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/priority:P3",
+        "name": "priority:P3",
+        "color": "EDEDED",
+        "default": false,
+        "description": "Hardening & advanced"
+      },
+      {
+        "id": 10219032360,
+        "node_id": "LA_kwDORRWv8s8AAAACYRoPKA",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/question",
+        "name": "question",
+        "color": "d876e3",
+        "default": true,
+        "description": "Further information is requested"
+      },
+      {
+        "id": 10857783647,
+        "node_id": "LA_kwDORRWv8s8AAAAChyyhXw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/Silver",
+        "name": "Silver",
+        "color": "C0C0C0",
+        "default": false,
+        "description": "Silver layer related changes"
+      },
+      {
+        "id": 10779017141,
+        "node_id": "LA_kwDORRWv8s8AAAACgnq_tQ",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/Specs",
+        "name": "Specs",
+        "color": "0b40a0",
+        "default": false,
+        "description": ""
+      },
+      {
+        "id": 10647698791,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb9Zw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/team:backend",
+        "name": "team:backend",
+        "color": "0052CC",
+        "default": false,
+        "description": "Backend Rust services"
+      },
+      {
+        "id": 10647698917,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb95Q",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/team:data",
+        "name": "team:data",
+        "color": "D93F0B",
+        "default": false,
+        "description": "Ingestion and dbt"
+      },
+      {
+        "id": 10647698866,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb9sg",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/team:frontend",
+        "name": "team:frontend",
+        "color": "2EA44F",
+        "default": false,
+        "description": "Frontend (frontx)"
+      },
+      {
+        "id": 10647699003,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb-Ow",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/team:platform",
+        "name": "team:platform",
+        "color": "009688",
+        "default": false,
+        "description": "Release packaging, Helm, environments"
+      },
+      {
+        "id": 10647699055,
+        "node_id": "LA_kwDORRWv8s8AAAACeqb-bw",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/team:qa",
+        "name": "team:qa",
+        "color": "E91E63",
+        "default": false,
+        "description": "Test installation and scenario validation"
+      },
+      {
+        "id": 10219032381,
+        "node_id": "LA_kwDORRWv8s8AAAACYRoPPQ",
+        "url": "https://api.github.com/repos/cyberfabric/cyber-insight/labels/wontfix",
+        "name": "wontfix",
+        "color": "ffffff",
+        "default": true,
+        "description": "This will not be worked on"
+      }
+    ],
+    "milestones": [],
+    "pages": null
+  },
+  "exported_at": "2026-06-01T08:18:00Z"
+}

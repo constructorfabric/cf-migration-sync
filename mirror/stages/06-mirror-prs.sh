@@ -1359,6 +1359,7 @@ _export_repo_prs() {
   local repo_name="$1"
   local skip_open_prs="${2:-0}"
   local state_file="$STATE_DIR/$repo_name.yaml"
+  state_unsplit "$state_file"   # reassemble parts from a prior run before reading/merging
   state_init "$state_file" "06-mirror-prs"
 
   local exported=0
@@ -1387,8 +1388,13 @@ _export_repo_prs() {
     _upsert_pr_export "$state_file" "$repo_name" "$pr" "$pr_state_label" \
       "$issue_comments" "$review_comments" "$pr_reviews"
     exported=$((exported + 1))
-    (( exported % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]] && \
+    if (( exported % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+      # Checkpoint: split before committing so a file already past the GitHub size
+      # limit mid-run can still be pushed, then reassemble to continue the loop.
+      state_split_if_needed "$state_file"
       commit_state "mirror: export checkpoint $exported PRs in $repo_name [skip ci]"
+      state_unsplit "$state_file"
+    fi
     pause 0.3
   }
 
@@ -1421,6 +1427,7 @@ _export_repo_prs() {
   done < <(echo "$closed_prs" | jq -c '.[]' 2>/dev/null || true)
 
   state_update_stats "$state_file"
+  state_split_if_needed "$state_file"   # split into parts if > MAX_STATE_FILE_MB
   ok "  [export] Serialized $exported PRs for $repo_name"
 }
 
@@ -1515,10 +1522,11 @@ _upsert_pr_export() {
 # ---------------------------------------------------------------------------
 _import_all_prs() {
   local only_repo="$1" skip_open_prs="${2:-0}"
-  shopt -s nullglob
-  local files=( "$STATE_DIR"/*.yaml )
-  shopt -u nullglob
-  if [[ ${#files[@]} -eq 0 ]]; then
+  # Discover repos from whole files AND split-part manifests (freshly-pulled
+  # repos may exist only as <repo>.yaml.partNN + manifest until reassembled).
+  local repo_names
+  repo_names="$(state_repo_names "$STATE_DIR")"
+  if [[ -z "$repo_names" ]]; then
     warn "No state files in $STATE_DIR — run MIRROR_MODE=export first"
     return 0
   fi
@@ -1527,29 +1535,32 @@ _import_all_prs() {
   # idempotency for future full-mode runs (marker mismatch → duplicate PR creation).
   # SOURCE_ORG is stored in .meta.source_org at export time; auto-derive if not set.
   if [[ -z "${SOURCE_ORG:-}" ]]; then
-    SOURCE_ORG="$(jq -r '.meta.source_org // empty' "${files[0]}" 2>/dev/null || true)"
+    local _first_repo
+    _first_repo="$(echo "$repo_names" | head -1)"
+    state_unsplit "$STATE_DIR/$_first_repo.yaml"   # ensure a whole file to read meta from
+    SOURCE_ORG="$(jq -r '.meta.source_org // empty' "$STATE_DIR/$_first_repo.yaml" 2>/dev/null || true)"
     [[ -n "$SOURCE_ORG" ]] && \
       log "  [import] Derived SOURCE_ORG='$SOURCE_ORG' from state meta"
     [[ -z "$SOURCE_ORG" ]] && \
       warn "  [import] SOURCE_ORG unset and not in state meta — cf-mirror markers will be empty, idempotency will break"
   fi
-  log "Importing PRs from ${#files[@]} state file(s)"
-  local f
-  for f in "${files[@]}"; do
-    local repo_name
-    repo_name="$(basename "$f" .yaml)"
+  log "Importing PRs from $(echo "$repo_names" | grep -c .) repo state file(s)"
+  local repo_name
+  while IFS= read -r repo_name; do
+    [[ -z "$repo_name" ]] && continue
     if [[ -n "$only_repo" && "$repo_name" != "$only_repo" ]]; then
       continue
     fi
     log "Importing PRs for $repo_name..."
     _import_repo_prs "$repo_name" "$skip_open_prs"
     pause 2.0
-  done
+  done < <(echo "$repo_names")
 }
 
 _import_repo_prs() {
   local repo_name="$1" skip_open_prs="${2:-0}"
   local state_file="$STATE_DIR/$repo_name.yaml"
+  state_unsplit "$state_file"   # reassemble parts (freshly pulled) into the whole file
   [[ -f "$state_file" ]] || { warn "  No state file for $repo_name"; return 0; }
 
   local _body_tmp

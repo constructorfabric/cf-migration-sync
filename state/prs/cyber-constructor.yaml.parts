@@ -1,0 +1,5 @@
+{
+  "base": "cyber-constructor.yaml",
+  "parts": 2,
+  "max_part_mb": 10
+}

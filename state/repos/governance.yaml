@@ -1,0 +1,273 @@
+{
+  "meta": {
+    "stage": "04-repo-metadata",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T08:17:47Z",
+    "last_run_at": "2026-06-01T08:17:47Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_snapshot": {
+    "description": "Governance and project management documents, global agreements, roadmap, decision records",
+    "repo": {
+      "id": 1140680600,
+      "node_id": "R_kgDOQ_1nmA",
+      "name": "governance",
+      "full_name": "cyberfabric/governance",
+      "private": true,
+      "owner": {
+        "login": "cyberfabric",
+        "id": 249082402,
+        "node_id": "O_kgDODtiyIg",
+        "avatar_url": "https://avatars.githubusercontent.com/u/249082402?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/cyberfabric",
+        "html_url": "https://github.com/cyberfabric",
+        "followers_url": "https://api.github.com/users/cyberfabric/followers",
+        "following_url": "https://api.github.com/users/cyberfabric/following{/other_user}",
+        "gists_url": "https://api.github.com/users/cyberfabric/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/cyberfabric/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/cyberfabric/subscriptions",
+        "organizations_url": "https://api.github.com/users/cyberfabric/orgs",
+        "repos_url": "https://api.github.com/users/cyberfabric/repos",
+        "events_url": "https://api.github.com/users/cyberfabric/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/cyberfabric/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/cyberfabric/governance",
+      "description": "Governance and project management documents, global agreements, roadmap, decision records",
+      "fork": false,
+      "url": "https://api.github.com/repos/cyberfabric/governance",
+      "forks_url": "https://api.github.com/repos/cyberfabric/governance/forks",
+      "keys_url": "https://api.github.com/repos/cyberfabric/governance/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/cyberfabric/governance/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/cyberfabric/governance/teams",
+      "hooks_url": "https://api.github.com/repos/cyberfabric/governance/hooks",
+      "issue_events_url": "https://api.github.com/repos/cyberfabric/governance/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/cyberfabric/governance/events",
+      "assignees_url": "https://api.github.com/repos/cyberfabric/governance/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/cyberfabric/governance/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/cyberfabric/governance/tags",
+      "blobs_url": "https://api.github.com/repos/cyberfabric/governance/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/cyberfabric/governance/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/cyberfabric/governance/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/cyberfabric/governance/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/cyberfabric/governance/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/cyberfabric/governance/languages",
+      "stargazers_url": "https://api.github.com/repos/cyberfabric/governance/stargazers",
+      "contributors_url": "https://api.github.com/repos/cyberfabric/governance/contributors",
+      "subscribers_url": "https://api.github.com/repos/cyberfabric/governance/subscribers",
+      "subscription_url": "https://api.github.com/repos/cyberfabric/governance/subscription",
+      "commits_url": "https://api.github.com/repos/cyberfabric/governance/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/cyberfabric/governance/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/cyberfabric/governance/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/cyberfabric/governance/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/cyberfabric/governance/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/cyberfabric/governance/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/cyberfabric/governance/merges",
+      "archive_url": "https://api.github.com/repos/cyberfabric/governance/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/cyberfabric/governance/downloads",
+      "issues_url": "https://api.github.com/repos/cyberfabric/governance/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/cyberfabric/governance/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/cyberfabric/governance/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/cyberfabric/governance/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/cyberfabric/governance/labels{/name}",
+      "releases_url": "https://api.github.com/repos/cyberfabric/governance/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/cyberfabric/governance/deployments",
+      "created_at": "2026-01-23T16:01:51Z",
+      "updated_at": "2026-04-22T11:09:27Z",
+      "pushed_at": "2026-05-01T11:26:09Z",
+      "git_url": "git://github.com/cyberfabric/governance.git",
+      "ssh_url": "git@github.com:cyberfabric/governance.git",
+      "clone_url": "https://github.com/cyberfabric/governance.git",
+      "svn_url": "https://github.com/cyberfabric/governance",
+      "homepage": null,
+      "size": 219,
+      "stargazers_count": 0,
+      "watchers_count": 0,
+      "language": "Python",
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": false,
+      "has_pages": false,
+      "has_discussions": false,
+      "forks_count": 0,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 4,
+      "license": null,
+      "allow_forking": true,
+      "is_template": false,
+      "web_commit_signoff_required": false,
+      "has_pull_requests": true,
+      "pull_request_creation_policy": "all",
+      "topics": [],
+      "visibility": "private",
+      "forks": 0,
+      "open_issues": 4,
+      "watchers": 0,
+      "default_branch": "main",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      },
+      "security_and_analysis": {
+        "secret_scanning": {
+          "status": "disabled"
+        },
+        "secret_scanning_push_protection": {
+          "status": "disabled"
+        },
+        "dependabot_security_updates": {
+          "status": "disabled"
+        },
+        "secret_scanning_non_provider_patterns": {
+          "status": "disabled"
+        },
+        "secret_scanning_validity_checks": {
+          "status": "disabled"
+        }
+      },
+      "custom_properties": {}
+    },
+    "topics": [],
+    "labels": [
+      {
+        "id": 10051274552,
+        "node_id": "LA_kwDOQ_1nmM8AAAACVxpHOA",
+        "url": "https://api.github.com/repos/cyberfabric/governance/labels/bug",
+        "name": "bug",
+        "color": "d73a4a",
+        "default": true,
+        "description": "Something isn't working"
+      },
+      {
+        "id": 10051274563,
+        "node_id": "LA_kwDOQ_1nmM8AAAACVxpHQw",
+        "url": "https://api.github.com/repos/cyberfabric/governance/labels/documentation",
+        "name": "documentation",
+        "color": "0075ca",
+        "default": true,
+        "description": "Improvements or additions to documentation"
+      },
+      {
+        "id": 10051274573,
+        "node_id": "LA_kwDOQ_1nmM8AAAACVxpHTQ",
+        "url": "https://api.github.com/repos/cyberfabric/governance/labels/duplicate",
+        "name": "duplicate",
+        "color": "cfd3d7",
+        "default": true,
+        "description": "This issue or pull request already exists"
+      },
+      {
+        "id": 10051274582,
+        "node_id": "LA_kwDOQ_1nmM8AAAACVxpHVg",
+        "url": "https://api.github.com/repos/cyberfabric/governance/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "default": true,
+        "description": "New feature or request"
+      },
+      {
+        "id": 10051274591,
+        "node_id": "LA_kwDOQ_1nmM8AAAACVxpHXw",
+        "url": "https://api.github.com/repos/cyberfabric/governance/labels/good%20first%20issue",
+        "name": "good first issue",
+        "color": "7057ff",
+        "default": true,
+        "description": "Good for newcomers"
+      },
+      {
+        "id": 10051274603,
+        "node_id": "LA_kwDOQ_1nmM8AAAACVxpHaw",
+        "url": "https://api.github.com/repos/cyberfabric/governance/labels/help%20wanted",
+        "name": "help wanted",
+        "color": "008672",
+        "default": true,
+        "description": "Extra attention is needed"
+      },
+      {
+        "id": 10051274620,
+        "node_id": "LA_kwDOQ_1nmM8AAAACVxpHfA",
+        "url": "https://api.github.com/repos/cyberfabric/governance/labels/invalid",
+        "name": "invalid",
+        "color": "e4e669",
+        "default": true,
+        "description": "This doesn't seem right"
+      },
+      {
+        "id": 10051274626,
+        "node_id": "LA_kwDOQ_1nmM8AAAACVxpHgg",
+        "url": "https://api.github.com/repos/cyberfabric/governance/labels/question",
+        "name": "question",
+        "color": "d876e3",
+        "default": true,
+        "description": "Further information is requested"
+      },
+      {
+        "id": 10051274634,
+        "node_id": "LA_kwDOQ_1nmM8AAAACVxpHig",
+        "url": "https://api.github.com/repos/cyberfabric/governance/labels/wontfix",
+        "name": "wontfix",
+        "color": "ffffff",
+        "default": true,
+        "description": "This will not be worked on"
+      }
+    ],
+    "milestones": [
+      {
+        "url": "https://api.github.com/repos/cyberfabric/governance/milestones/1",
+        "html_url": "https://github.com/cyberfabric/governance/milestone/1",
+        "labels_url": "https://api.github.com/repos/cyberfabric/governance/milestones/1/labels",
+        "id": 15103379,
+        "node_id": "MI_kwDOQ_1nmM4A5nWT",
+        "number": 1,
+        "title": "2026-04-24",
+        "description": null,
+        "creator": {
+          "login": "Artifizer",
+          "id": 192502778,
+          "node_id": "U_kgDOC3lb-g",
+          "avatar_url": "https://avatars.githubusercontent.com/u/192502778?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/Artifizer",
+          "html_url": "https://github.com/Artifizer",
+          "followers_url": "https://api.github.com/users/Artifizer/followers",
+          "following_url": "https://api.github.com/users/Artifizer/following{/other_user}",
+          "gists_url": "https://api.github.com/users/Artifizer/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/Artifizer/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/Artifizer/subscriptions",
+          "organizations_url": "https://api.github.com/users/Artifizer/orgs",
+          "repos_url": "https://api.github.com/users/Artifizer/repos",
+          "events_url": "https://api.github.com/users/Artifizer/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/Artifizer/received_events",
+          "type": "User",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "open_issues": 1,
+        "closed_issues": 0,
+        "state": "open",
+        "created_at": "2026-03-11T14:12:25Z",
+        "updated_at": "2026-03-11T14:12:28Z",
+        "due_on": null,
+        "closed_at": null
+      }
+    ],
+    "pages": null
+  },
+  "exported_at": "2026-06-01T08:17:50Z"
+}

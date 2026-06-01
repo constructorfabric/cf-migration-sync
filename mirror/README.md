@@ -85,6 +85,48 @@ export GH_TOKEN_SOURCE=ghp_...      # source org token
 ./mirror/stages/04-repo-metadata.sh
 ```
 
+## Large state files (auto-split for GitHub's 100 MB limit)
+
+GitHub rejects any file >100 MB (and warns >50 MB). A busy repo's PR state file
+(with all review diffs serialized) can be hundreds of MB, so the pipeline
+automatically splits oversized state files into parts that travel through git.
+
+How it works (transparent — you normally do nothing):
+- Any `state/issues/<repo>.yaml` or `state/prs/<repo>.yaml` exceeding
+  `MAX_STATE_FILE_MB` (default **10 MB**) is split into
+  `<repo>.yaml.part01`, `<repo>.yaml.part02`, … plus a `<repo>.yaml.parts` manifest,
+  and the whole `.yaml` is removed. Parts are **size-aware bin-packed** (an item is
+  never cut in half) and each part is itself valid JSON.
+- Part files deliberately do **not** end in `.yaml`, so every `*.yaml` glob in the
+  pipeline still sees exactly one file per repo.
+- **Merge-before-read, split-before-commit**: every stage that touches these files
+  (05/06 import, 07 crossrefs, 08 assign, validation) reassembles parts into the whole
+  file before reading, and re-splits after writing. On the import machine, a freshly
+  pulled repo that exists only as parts is reassembled automatically.
+- Round-trip is lossless (verified): merge then re-split reproduces the identical item set.
+
+Manual control — `mirror/tools/split-state-files.sh`:
+```bash
+# Report which state files are over the limit:
+./mirror/tools/split-state-files.sh status
+
+# Split every oversized file under state/issues and state/prs:
+./mirror/tools/split-state-files.sh split
+
+# Split one specific file:
+./mirror/tools/split-state-files.sh split state/prs/cyberware-rust.yaml
+
+# Merge parts back into whole files (e.g. to inspect locally):
+./mirror/tools/split-state-files.sh merge            # all
+./mirror/tools/split-state-files.sh merge state/prs/cyber-insight.yaml
+```
+Override the threshold with `MAX_STATE_FILE_MB=<n>` (e.g. `MAX_STATE_FILE_MB=40`).
+
+If a *single* issue/PR item is itself larger than the limit (e.g. one PR with a
+multi-MB diff), it gets its own part and a warning is logged; if that single item
+exceeds 100 MB an error is logged because GitHub will reject it (rare; needs manual
+handling).
+
 ## Write-throttle / abuse-protection policy
 
 Every mutating GitHub API request (issue/PR/comment creation, edits, label and

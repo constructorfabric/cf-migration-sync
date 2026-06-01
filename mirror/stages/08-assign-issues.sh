@@ -70,12 +70,14 @@ main() {
   local total_skipped=0
   local total_failed=0
 
-  # Iterate over all repo state files
-  for state_file in "$STATE_DIR"/*.yaml; do
+  # Iterate over all repo state files (discover repos from whole files AND split
+  # part manifests; reassemble any parts before reading).
+  local repo_name
+  while IFS= read -r repo_name; do
+    [[ -z "$repo_name" ]] && continue
+    local state_file="$STATE_DIR/$repo_name.yaml"
+    state_unsplit "$state_file"
     [[ -f "$state_file" ]] || continue
-
-    local repo_name
-    repo_name="$(basename "$state_file" .yaml)"
 
     log "Processing assignees for $repo_name..."
 
@@ -225,7 +227,8 @@ main() {
     done < <(echo "$pending_items" | jq -c '.[]')
 
     log "  Completed $repo_name: applied=$processed"
-  done
+    state_split_if_needed "$state_file"   # re-split if 08's writes kept it oversized
+  done < <(state_repo_names "$STATE_DIR")
 
   log "Stage 08 complete — applied=$total_applied skipped=$total_skipped failed=$total_failed"
 
