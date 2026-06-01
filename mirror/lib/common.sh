@@ -439,16 +439,26 @@ state_init() {
   # Create parent directory if needed
   mkdir -p "$(dirname "$file")"
 
+  # target_org is recorded ONLY when this mode actually writes to a target
+  # (full or import). In export mode the target is unknown and irrelevant — the
+  # snapshot is chosen for a target at IMPORT time — so we record null instead of
+  # the hardcoded TARGET_ORG fallback, which would otherwise bake a misleading
+  # (and possibly wrong) target org into a pure source snapshot.
+  local tgt_value="${TARGET_ORG}"
+  if in_export; then
+    tgt_value=""
+  fi
+
   jq -n \
     --arg stage   "$stage" \
     --arg src     "${SOURCE_ORG}" \
-    --arg tgt     "${TARGET_ORG}" \
+    --arg tgt     "$tgt_value" \
     --arg ts      "$ts" \
     '{
       meta: {
         stage:        $stage,
         source_org:   $src,
-        target_org:   $tgt,
+        target_org:   (if $tgt == "" then null else $tgt end),
         first_run_at: $ts,
         last_run_at:  $ts
       },

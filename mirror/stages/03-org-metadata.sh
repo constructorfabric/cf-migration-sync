@@ -34,7 +34,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 source "$SCRIPT_DIR/../lib/common.sh"
 
-TARGET_ORG="${TARGET_ORG:-constructorfabric}"
+TARGET_ORG="${TARGET_ORG:-}"   # required; validated in preflight (no hardcoded default)
 STATE_FILE="$REPO_ROOT/state/org-metadata.yaml"
 
 # ---------------------------------------------------------------------------

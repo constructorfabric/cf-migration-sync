@@ -24,7 +24,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 source "$SCRIPT_DIR/../lib/common.sh"
 
-TARGET_ORG="${TARGET_ORG:-constructorfabric}"
+TARGET_ORG="${TARGET_ORG:-}"   # required; validated in preflight (no hardcoded default)
 
 # Populated from config in main() — do not edit here; edit mirror/config.json instead.
 EXCLUDE_LOGINS=()
