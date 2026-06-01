@@ -85,6 +85,41 @@ export GH_TOKEN_SOURCE=ghp_...      # source org token
 ./mirror/stages/04-repo-metadata.sh
 ```
 
+## Write-throttle / abuse-protection policy
+
+Every mutating GitHub API request (issue/PR/comment creation, edits, label and
+assignee changes, closes, webhook/ruleset/release writes, etc.) is automatically
+throttled by a central engine in `mirror/lib/common.sh`. You do not need to add
+sleeps in stage code — the `gh()` wrapper intercepts all target writes.
+
+What the engine enforces:
+
+| Policy | Default | Env override |
+|--------|---------|--------------|
+| Delay after every write | 10 s | `WRITE_DELAY_SECONDS` |
+| Sustained write cap | 350 / hour (sleeps until window resets) | `MAX_WRITES_PER_HOUR` |
+| Pause after every N writes | 100 writes → 300 s | `BATCH_SIZE_WRITES`, `BATCH_PAUSE_SECONDS` |
+| On HTTP 403 / 429 | **hard stop**: wait `Retry-After`+60 s (or 900 s) then **degraded mode** | `RATE_LIMIT_FALLBACK_PAUSE_SECONDS` |
+| Degraded mode | 20 s/write, pause every 50 writes | `DEGRADED_WRITE_DELAY_SECONDS`, `DEGRADED_BATCH_SIZE_WRITES`, `DEGRADED_BATCH_PAUSE_SECONDS` |
+
+Key properties:
+- **Single writer.** The pipeline is strictly serial — never run stages concurrently
+  or background a write. The engine assumes one writer and its counters are not lock-safe.
+- **Subshell-safe.** Throttle state lives in `state/.write-throttle.json` (gitignored),
+  not shell variables, because writes run inside `result="$(gh api ...)"` subshells.
+- **Reads are not throttled** (only `--method POST|PATCH|PUT|DELETE` and `gh release upload`
+  count as writes); `ghsrc` source reads are never throttled.
+- **403/429 is a hard stop, not a per-item retry.** After a rate-limit signal the engine
+  pauses for the full fallback window and then runs the rest of the migration in degraded
+  mode — continuing to hammer the API after a 403 is what escalates to stronger abuse limits.
+- Failed items are still recorded in state and retried on the next run (idempotent via the
+  `<!-- cf-mirror: ... -->` markers), so a hard stop never loses data.
+
+Tuning for a comment-heavy migration: the policy recommends 300–350 writes/hour. The default
+`MAX_WRITES_PER_HOUR=350` already reflects this; lower it if you see secondary-limit warnings.
+
+---
+
 ### 5. Schedule via GitHub Actions
 
 Push to the mirror repo. The workflow at `.github/workflows/mirror.yml` runs
@@ -93,6 +128,53 @@ every 6 hours. To trigger on demand:
 1. Go to **Actions → Mirror**
 2. Click **Run workflow**
 3. Enter comma-separated stage numbers (e.g. `3,4,5`) or leave blank for all
+4. Choose a **mode** (full / export / import — see below)
+
+---
+
+## Run modes (`MIRROR_MODE`)
+
+Every stage supports three modes, selected by the `MIRROR_MODE` env var
+(default `full`) or the workflow's **mode** input:
+
+| Mode | Reads | Writes | Tokens needed |
+|------|-------|--------|---------------|
+| `full` (default) | source | target | `GH_TOKEN`, `GH_TOKEN_SOURCE`, `SOURCE_ORG`, `TARGET_ORG` |
+| `export` | source only | local `state/` + `mirror-clones/` | `GH_TOKEN_SOURCE`, `SOURCE_ORG` |
+| `import` | local `state/` + `mirror-clones/` | target only | `GH_TOKEN`, `TARGET_ORG` |
+
+`full` is the original one-pass behaviour and is unchanged. `export` and
+`import` split the migration in two so you can snapshot the source on one
+machine and replay it onto the target on another:
+
+- **`export`** reads the source org and serializes everything into the
+  committed `state/` JSON files. Stage 02 (repo contents) and stage 11
+  (release assets) are binary, so they are stored on disk under the gitignored
+  `mirror-clones/` folder instead of JSON. Export **never** contacts the target;
+  a stray `gh` (target) call hard-fails by design.
+- **`import`** reads only `state/` (and `mirror-clones/`) and writes to the
+  target. It **never** contacts the source; a stray `ghsrc` call hard-fails.
+  Import is resumable: items already carrying a target number in the local
+  state are skipped, so re-running after an interruption never duplicates.
+
+```bash
+# Machine A — source access only:
+MIRROR_MODE=export SOURCE_ORG=your-source GH_TOKEN_SOURCE=ghp_... \
+  ./mirror/stages/05-mirror-issues.sh
+# ... repeat for each stage; commit state/ and copy mirror-clones/ to machine B
+
+# Machine B — target access only (after pulling state/ + copying mirror-clones/):
+MIRROR_MODE=import TARGET_ORG=your-target GH_TOKEN=ghp_... \
+  ./mirror/stages/05-mirror-issues.sh
+```
+
+Notes:
+- Stage 07 (rewrite cross-references) and stage 08 (assign issues) are
+  target-side post-processing; they are **no-ops in export mode** and run
+  normally in import mode.
+- `mirror-clones/` is gitignored — for a two-machine export/import you must
+  copy it across yourself (it holds bare git clones and release-asset blobs).
+- `CONTINUOUS=true` reconciliation applies to `full` mode.
 
 ---
 

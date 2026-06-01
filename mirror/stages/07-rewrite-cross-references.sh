@@ -42,9 +42,17 @@
 # State file: state/rewrite-crossrefs.yaml
 # Tracks per-item status: rewritten | no_change | failed
 #
+# Modes (MIRROR_MODE):
+#   full   — rewrite cross-references in the target (default).
+#   export — NO-OP. This stage is a target-side post-processing step; there is
+#            nothing to read from the source, so export does nothing.
+#   import — run normally (rewrites cross-references in the target using the
+#            number maps from the imported 05/06 state files).
+#
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
+#   MIRROR_MODE=full|export|import \
 #   ./mirror/stages/07-rewrite-cross-references.sh [--dry-run]
 
 set -euo pipefail
@@ -65,7 +73,15 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 07 — rewrite-cross-references starting"
+  log "Stage 07 — rewrite-cross-references starting (mode=$MIRROR_MODE)"
+
+  # Export is the source-snapshot phase; cross-reference rewriting is a
+  # target-side operation, so there is nothing to export here.
+  if in_export; then
+    log "Stage 07 is target-side only — nothing to export. Skipping."
+    return 0
+  fi
+
   state_init "$STATE_FILE" "07-rewrite-cross-references"
 
   # ---- Write Python rewrite helper to temp file ---------------------------
@@ -242,11 +258,14 @@ _rewrite_repo_items() {
         body_status="rewritten"
         rewritten_count=$((rewritten_count + 1))
       else
-        local patch_result
+        local patch_result _body_tmp
+        _body_tmp="$(mktemp)"
+        printf '%s' "$new_body" | jq -Rs '{"body":.}' > "$_body_tmp"
         patch_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_num" \
           --method PATCH \
-          --input <(printf '%s' "$new_body" | jq -Rs '{"body":.}') \
+          --input "$_body_tmp" \
           2>/dev/null)" || patch_result="FAILED"
+        rm -f "$_body_tmp"
         if [[ "$patch_result" == "FAILED" ]]; then
           warn "    Failed to patch body of $TARGET_ORG/$repo_name#$tgt_num"
           _upsert_rewrite_record "$repo_name" "$tgt_num" "failed"
@@ -315,12 +334,15 @@ _rewrite_item_comments() {
       continue
     fi
 
-    local patch_result
+    local patch_result _c_body_tmp
+    _c_body_tmp="$(mktemp)"
+    printf '%s' "$new_body" | jq -Rs '{"body":.}' > "$_c_body_tmp"
     patch_result="$(gh api \
       "repos/$TARGET_ORG/$repo_name/issues/comments/$c_id" \
       --method PATCH \
-      --input <(printf '%s' "$new_body" | jq -Rs '{"body":.}') \
+      --input "$_c_body_tmp" \
       2>/dev/null)" || patch_result="FAILED"
+    rm -f "$_c_body_tmp"
 
     if [[ "$patch_result" == "FAILED" ]]; then
       warn "    Failed to patch comment $c_id on #$tgt_issue_num"

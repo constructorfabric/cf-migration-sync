@@ -9,8 +9,17 @@ on:
         description: 'Stages to run (all, or comma-separated: 1,2,5,10)'
         required: false
         default: 'all'
+      mode:
+        description: 'Data-flow mode: full (read source + write target in one pass), export (read source → serialize into state/ + mirror-clones/, no target writes), import (replay state/ → target, no source reads).'
+        type: choice
+        options:
+          - full
+          - export
+          - import
+        required: false
+        default: full
       continuous:
-        description: 'Continuous reconciliation — re-sync open/closed status and pick up new comments on ALL already-mirrored issues and PRs (stages 05 and 06). Safe to run repeatedly; no duplicates are created.'
+        description: 'Continuous reconciliation — re-sync open/closed status and pick up new comments on ALL already-mirrored issues and PRs (stages 05 and 06). Safe to run repeatedly; no duplicates are created. (full mode only)'
         type: boolean
         required: false
         default: false
@@ -30,6 +39,8 @@ env:
   SOURCE_ORG:       ${{ vars.SOURCE_ORG }}
   TARGET_ORG:       constructorfabric
   CONTINUOUS:       ${{ github.event.inputs.continuous }}
+  # full (default) | export | import — see lib/common.sh for the contract.
+  MIRROR_MODE:      ${{ github.event.inputs.mode || 'full' }}
 
 jobs:
   mirror:

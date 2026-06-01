@@ -26,9 +26,15 @@
 #
 # State file: state/actions-variables.yaml
 #
+# Modes (MIRROR_MODE):
+#   full   — fetch source variables (org + repo) and apply to target (default).
+#   export — fetch source variables into state (.source_snapshot). NEVER target.
+#   import — read serialized variables from state and apply to target. NEVER source.
+#
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
+#   MIRROR_MODE=full|export|import \
 #   ./mirror/stages/13-mirror-actions-variables.sh [--dry-run]
 
 set -euo pipefail
@@ -45,7 +51,7 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 13 — mirror-actions-variables starting"
+  log "Stage 13 — mirror-actions-variables starting (mode=$MIRROR_MODE)"
 
   state_init "$STATE_FILE" "13-mirror-actions-variables"
 
@@ -53,19 +59,64 @@ main() {
   excluded_repos="$(jq -r '.stage_13_mirror_actions_variables.exclude_repos[] // empty' \
     "$MIRROR_CONFIG" 2>/dev/null || true)"
 
-  # ---- 1. Org-level Actions variables ------------------------------------
-  log "Fetching org Actions variables from $SOURCE_ORG..."
-  # BUG-01 fix: jq -s 'add // {} | .variables' does object-merge (last page wins).
-  # Use map()+add to concatenate .variables arrays from all pages.
-  local org_vars
-  org_vars="$(ghsrc api "orgs/$SOURCE_ORG/actions/variables?per_page=100" \
-    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object")]')" || org_vars='[]'
+  # ---- Acquire snapshot: { org_vars:[...], repo_vars:{ "<repo>":[...] } } --
+  # full/export → fetch from source. import → load from state.
+  local org_vars repo_vars_map
+  if in_import; then
+    log "Loading variables snapshot from $STATE_FILE..."
+    local snap
+    snap="$(jq -c '.source_snapshot // empty' "$STATE_FILE" 2>/dev/null || true)"
+    if [[ -z "$snap" ]]; then
+      err "No source_snapshot in $STATE_FILE — run MIRROR_MODE=export first"; exit 1
+    fi
+    org_vars="$(echo "$snap" | jq -c '.org_vars // []')"
+    repo_vars_map="$(echo "$snap" | jq -c '.repo_vars // {}')"
+  else
+    log "Fetching org Actions variables from $SOURCE_ORG..."
+    org_vars="$(ghsrc api "orgs/$SOURCE_ORG/actions/variables?per_page=100" \
+      --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object")]')" || org_vars='[]'
 
+    log "Fetching source repos from $SOURCE_ORG..."
+    local repos
+    repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos")"
+    repo_vars_map="{}"
+    while IFS= read -r repo; do
+      local repo_name repo_vars rv_count
+      repo_name="$(echo "$repo" | jq -r '.name')"
+      if [[ -n "$excluded_repos" ]] && echo "$excluded_repos" | grep -qx "$repo_name" 2>/dev/null; then
+        continue
+      fi
+      repo_vars="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/actions/variables?per_page=100" \
+        --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object")]')" || repo_vars='[]'
+      rv_count="$(echo "$repo_vars" | jq 'length' 2>/dev/null || echo 0)"
+      [[ "$rv_count" -eq 0 ]] && continue
+      repo_vars_map="$(echo "$repo_vars_map" | jq --arg r "$repo_name" --argjson v "$repo_vars" '.[$r] = $v')"
+    done < <(echo "$repos" | jq -c '.[]')
+  fi
+
+  # ---- Export mode: persist snapshot and stop (no target writes) ----------
+  if in_export; then
+    local oc rc_total
+    oc="$(echo "$org_vars" | jq 'length')"
+    rc_total="$(echo "$repo_vars_map" | jq '[.[] | length] | add // 0')"
+    local _ov_tmp _rv_tmp _tmp
+    _ov_tmp="$(mktemp)"; printf '%s' "$org_vars" > "$_ov_tmp"
+    _rv_tmp="$(mktemp)"; printf '%s' "$repo_vars_map" > "$_rv_tmp"
+    _tmp="$(mktemp)"
+    jq --slurpfile ov "$_ov_tmp" --slurpfile rv "$_rv_tmp" --arg ts "$(now)" \
+      '.source_snapshot = {org_vars:$ov[0], repo_vars:$rv[0]} | .exported_at = $ts' \
+      "$STATE_FILE" > "$_tmp" && mv "$_tmp" "$STATE_FILE"
+    rm -f "$_ov_tmp" "$_rv_tmp"
+    ok "Stage 13 complete (export) — serialized org=$oc repo=$rc_total variables"
+    [[ "$DRY_RUN" -eq 0 ]] && commit_state "mirror: export stage 13 (actions-variables) [skip ci]"
+    return 0
+  fi
+
+  # ---- Apply (full + import) ----------------------------------------------
   local org_var_count
   org_var_count="$(echo "$org_vars" | jq 'length' 2>/dev/null || echo 0)"
-  log "Found $org_var_count org-level variables"
+  log "Applying $org_var_count org-level variables..."
 
-  # Pre-fetch existing target org vars for upsert
   local tgt_org_vars
   tgt_org_vars="$(gh api "orgs/$TARGET_ORG/actions/variables?per_page=100" \
     --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object") | .name]')" || tgt_org_vars='[]'
@@ -75,51 +126,26 @@ main() {
     vname="$(echo  "$var" | jq -r '.name')"
     vvalue="$(echo "$var" | jq -r '.value')"
     vvis="$(echo   "$var" | jq -r '.visibility // "all"')"
-
-    # visibility=selected means per-repo list — IDs don't map to target; widen to all
     if [[ "$vvis" == "selected" ]]; then
       warn "  Org variable '$vname': visibility=selected — setting visibility=all in target (repo list cannot be mapped; restrict manually if needed)"
       vvis="all"
     fi
-
     _upsert_org_variable "$vname" "$vvalue" "$vvis" "$tgt_org_vars"
     pause 0.2
   done < <(echo "$org_vars" | jq -c '.[]' 2>/dev/null || true)
 
-  # ---- 2. Repo-level Actions variables -----------------------------------
-  log "Fetching source repos from $SOURCE_ORG..."
-  local repos
-  repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos")"
-  local total_repos
-  total_repos="$(echo "$repos" | jq 'length')"
-  log "Found $total_repos repos — syncing Actions variables..."
-
-  local repo_idx=0
-
-  while IFS= read -r repo; do
-    local repo_name
-    repo_name="$(echo "$repo" | jq -r '.name')"
-    repo_idx=$((repo_idx + 1))
-
+  log "Applying repo-level variables..."
+  while IFS= read -r repo_name; do
+    [[ -z "$repo_name" ]] && continue
     if [[ -n "$excluded_repos" ]] && echo "$excluded_repos" | grep -qx "$repo_name" 2>/dev/null; then
-      log "[$repo_idx/$total_repos] Skipping excluded repo: $repo_name"
-      continue
+      log "  Skipping excluded repo: $repo_name"; continue
     fi
-
-    local repo_vars
-    repo_vars="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/actions/variables?per_page=100" \
-      --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object")]')" || repo_vars='[]'
-
-    local rv_count
+    local repo_vars rv_count
+    repo_vars="$(echo "$repo_vars_map" | jq -c --arg r "$repo_name" '.[$r] // []')"
     rv_count="$(echo "$repo_vars" | jq 'length' 2>/dev/null || echo 0)"
+    [[ "$rv_count" -eq 0 ]] && continue
+    log "  $repo_name: $rv_count variables"
 
-    if [[ "$rv_count" -eq 0 ]]; then
-      continue
-    fi
-
-    log "[$repo_idx/$total_repos] $repo_name: $rv_count variables"
-
-    # Pre-fetch existing target repo vars
     local tgt_repo_vars
     tgt_repo_vars="$(gh api "repos/$TARGET_ORG/$repo_name/actions/variables?per_page=100" \
       --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object") | .name]')" || tgt_repo_vars='[]'
@@ -128,13 +154,11 @@ main() {
       local vname vvalue
       vname="$(echo  "$var" | jq -r '.name')"
       vvalue="$(echo "$var" | jq -r '.value')"
-
       _upsert_repo_variable "$repo_name" "$vname" "$vvalue" "$tgt_repo_vars"
       pause 0.2
     done < <(echo "$repo_vars" | jq -c '.[]' 2>/dev/null || true)
-
     pause 0.3
-  done < <(echo "$repos" | jq -c '.[]')
+  done < <(echo "$repo_vars_map" | jq -r 'keys[]' 2>/dev/null || true)
 
   state_update_stats "$STATE_FILE"
 

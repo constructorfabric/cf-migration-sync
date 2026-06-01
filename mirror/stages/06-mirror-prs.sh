@@ -29,9 +29,20 @@
 #
 # State file: state/prs/<repo-name>.yaml
 #
+# Modes (MIRROR_MODE):
+#   full   — fetch source PRs and create them in target in one pass (default).
+#   export — fetch raw source PRs (open+closed) + discussion/review/inline comments
+#            and serialize them into state files. NEVER contacts the target org.
+#   import — read serialized PRs from state and create them in the target (real PR
+#            when the head branch/sha is present in target, else issue fallback),
+#            building attribution + markers at import time. NEVER contacts source.
+#            Resumable via local state only (items with target_issue_number set are
+#            skipped). --skip-open-prs and --repo apply in import mode too.
+#
 # Usage:
 #   SOURCE_ORG=... TARGET_ORG=... GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
-#   ./mirror/stages/06-mirror-prs.sh [--dry-run] [--repo REPO] [--start-after-pr N]
+#   MIRROR_MODE=full|export|import \
+#   ./mirror/stages/06-mirror-prs.sh [--dry-run] [--repo REPO] [--start-after-pr N] [--skip-open-prs]
 #
 # --repo REPO           Process only this repository (skip all others).
 # --start-after-pr N   In the closed-PR loop, fast-forward past all PRs with
@@ -131,11 +142,20 @@ main() {
     [[ "$_cfg_skip" == "true" ]] && skip_open_prs=1
   fi
 
-  log "Stage 06 — mirror-prs starting"
+  log "Stage 06 — mirror-prs starting (mode=$MIRROR_MODE)"
   [[ -n "$only_repo"       ]] && log "  Single-repo mode: $only_repo"
   [[ -n "$start_after_pr"  ]] && log "  Resume point: skipping closed PRs with number > $start_after_pr"
   [[ "$skip_open_prs" -eq 1 ]] && log "  skip-open-prs: open PR loop will be skipped"
   mkdir -p "$STATE_DIR"
+
+  # ---- Import mode: replay serialized state into the target, no source access -
+  if in_import; then
+    _import_all_prs "$only_repo" "$skip_open_prs"
+    log "Stage 06 complete (import)"
+    [[ "$DRY_RUN" -eq 0 ]] && \
+      commit_state "mirror: import stage 06 (mirror-prs) [skip ci]"
+    return 0
+  fi
 
   log "Fetching source repos from $SOURCE_ORG..."
   local repos
@@ -186,7 +206,11 @@ main() {
     fi
 
     log "[$repo_idx/$total_repos] Processing PRs for $repo_name${effective_resume:+ (resume after PR #$effective_resume)}..."
-    _mirror_repo_prs "$repo_name" "$effective_resume" "$skip_open_prs"
+    if in_export; then
+      _export_repo_prs "$repo_name" "$skip_open_prs"
+    else
+      _mirror_repo_prs "$repo_name" "$effective_resume" "$skip_open_prs"
+    fi
     pause 2.0
 
   done < <(echo "$repos" | jq -c '.[]')
@@ -653,11 +677,10 @@ ${marker}"
         --method POST \
         --input "$_body_tmp" \
         2>/dev/null)" || {
+        # Rate-limit handling (403/429 hard-stop + degraded mode) is owned by the
+        # gh() write-throttle engine in common.sh, which already paused before this
+        # failure was returned. Here we only record the item as failed.
         pr_err="$(_gh_err_hint "$pr_create_result")"
-        if echo "$pr_err" | grep -qi "rate.limit\|secondary rate\|abuse"; then
-          warn "  Rate limit hit on PR creation — pausing 60s"
-          sleep 60
-        fi
         pr_create_result="FAILED"
       }
 
@@ -694,11 +717,8 @@ ${marker}"
         --method POST \
         --input "$_body_tmp" \
         2>/dev/null)" || {
+        # Rate-limit handling owned by the gh() throttle engine (see above).
         create_err="$(_gh_err_hint "$create_result")"
-        if echo "$create_err" | grep -qi "rate.limit\|secondary rate\|abuse"; then
-          warn "  Rate limit hit on issue creation — pausing 60s"
-          sleep 60
-        fi
         create_result="FAILED"
       }
 
@@ -1286,6 +1306,554 @@ ${rc_marker}"
 
   _update_pr_comments_status "$state_file" "$src_pr_number" "done" "$mirrored"
   ok "  Reconciled $mirrored comments for PR #$src_pr_number"
+}
+
+# ===========================================================================
+# Export / Import helpers (MIRROR_MODE = export | import)
+# ===========================================================================
+
+# _build_pr_body <repo> <pr_number> <pr_url> <author> <created> <status_str>
+#                <note_line> <raw_body>
+# Emits the full target PR/issue body (attribution header + note + encoded body
+# + marker). Byte-for-byte identical to the three full-mode body builders; the
+# only thing that varies between them is <status_str> and <note_line>.
+_build_pr_body() {
+  local repo_name="$1" pr_number="$2" pr_url="$3" author="$4" created="$5"
+  local status_str="$6" note_line="$7" body="$8"
+  local marker="<!-- cf-mirror-pr: $SOURCE_ORG/$repo_name#$pr_number -->"
+  local encoded
+  encoded="$(echo "$body" | _encode_at_mentions)"
+  printf '> 🔗 **Mirrored PR** [%s/%s#%s](%s) | **Author:** %s | **Opened:** %s | **Status:** %s\n%s\n\n---\n\n%s\n\n---\n%s' \
+    "$SOURCE_ORG" "$repo_name" "$pr_number" "$pr_url" "$author" "$created" "$status_str" \
+    "$note_line" "$encoded" "$marker"
+}
+
+# Standard attribution note line used by real open + closed PR bodies.
+_PR_ATTR_NOTE='> *GitHub API does not allow setting PR author or timestamps — attribution preserved here.*'
+
+# _build_pr_comment_body <type> <repo> <pr_number> <id> <author> <ts> <body> [state] [path] [line]
+# type ∈ discussion | review | inline. Matches the three full-mode comment formats.
+_build_pr_comment_body() {
+  local ctype="$1" repo_name="$2" pr_number="$3" cid="$4" author="$5" ts="$6" body="$7"
+  local state="${8:-}" path="${9:-}" line="${10:-}"
+  local encoded marker
+  encoded="$(echo "$body" | _encode_at_mentions)"
+  case "$ctype" in
+    discussion)
+      marker="<!-- cf-mirror-pr-comment: $SOURCE_ORG/$repo_name#$pr_number/$cid -->"
+      printf '**%s** commented on %s:\n\n---\n\n%s\n\n%s' "$author" "$ts" "$encoded" "$marker" ;;
+    review)
+      marker="<!-- cf-mirror-pr-review: $SOURCE_ORG/$repo_name#$pr_number/$cid -->"
+      printf '**%s** submitted review **%s** on %s:\n\n---\n\n%s\n\n%s' "$author" "$state" "$ts" "$encoded" "$marker" ;;
+    inline)
+      marker="<!-- cf-mirror-pr-review-inline: $SOURCE_ORG/$repo_name#$pr_number/$cid -->"
+      printf '**%s** reviewed `%s` line %s on %s:\n\n---\n\n%s\n\n%s' "$author" "$path" "$line" "$ts" "$encoded" "$marker" ;;
+  esac
+}
+
+# ---------------------------------------------------------------------------
+# Export: fetch raw source PRs + all comment types, serialize into state.
+# NEVER contacts the target org. Respects --skip-open-prs.
+# ---------------------------------------------------------------------------
+_export_repo_prs() {
+  local repo_name="$1"
+  local skip_open_prs="${2:-0}"
+  local state_file="$STATE_DIR/$repo_name.yaml"
+  state_init "$state_file" "06-mirror-prs"
+
+  local exported=0
+
+  # Helper closure: fetch the three comment arrays for a PR and upsert the item.
+  _export_one_pr() {
+    local pr="$1" pr_state_label="$2"
+    local pr_number
+    pr_number="$(echo "$pr" | jq -r '.number')"
+
+    local issue_comments review_comments pr_reviews
+    issue_comments="$(ghsrc api \
+      "repos/$SOURCE_ORG/$repo_name/issues/$pr_number/comments?per_page=100" \
+      --paginate 2>/dev/null | \
+      jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || issue_comments='[]'
+    review_comments="$(ghsrc api \
+      "repos/$SOURCE_ORG/$repo_name/pulls/$pr_number/comments?per_page=100" \
+      --paginate 2>/dev/null | \
+      jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || review_comments='[]'
+    pr_reviews="$(ghsrc api \
+      "repos/$SOURCE_ORG/$repo_name/pulls/$pr_number/reviews?per_page=100" \
+      --paginate 2>/dev/null | \
+      jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | select(.body != null and .body != "")]')" \
+      || pr_reviews='[]'
+
+    _upsert_pr_export "$state_file" "$repo_name" "$pr" "$pr_state_label" \
+      "$issue_comments" "$review_comments" "$pr_reviews"
+    exported=$((exported + 1))
+    (( exported % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]] && \
+      commit_state "mirror: export checkpoint $exported PRs in $repo_name [skip ci]"
+    pause 0.3
+  }
+
+  if [[ "$skip_open_prs" -eq 1 ]]; then
+    log "  [export] Skipping open PRs (skip_open_prs=true)"
+  else
+    log "  [export] Fetching open PRs from $SOURCE_ORG/$repo_name..."
+    local open_prs open_count
+    open_prs="$(ghsrc api \
+      "repos/$SOURCE_ORG/$repo_name/pulls?state=open&per_page=100" \
+      --paginate 2>/dev/null | \
+      jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || open_prs='[]'
+    open_count="$(echo "$open_prs" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
+    log "  [export] Found $open_count open PRs in $repo_name"
+    while IFS= read -r pr; do
+      _export_one_pr "$pr" "open"
+    done < <(echo "$open_prs" | jq -c '.[]' 2>/dev/null || true)
+  fi
+
+  log "  [export] Fetching closed PRs from $SOURCE_ORG/$repo_name..."
+  local closed_prs closed_count
+  closed_prs="$(ghsrc api \
+    "repos/$SOURCE_ORG/$repo_name/pulls?state=closed&per_page=100" \
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || closed_prs='[]'
+  closed_count="$(echo "$closed_prs" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
+  log "  [export] Found $closed_count closed PRs in $repo_name"
+  while IFS= read -r pr; do
+    _export_one_pr "$pr" "closed"
+  done < <(echo "$closed_prs" | jq -c '.[]' 2>/dev/null || true)
+
+  state_update_stats "$state_file"
+  ok "  [export] Serialized $exported PRs for $repo_name"
+}
+
+# _upsert_pr_export <state_file> <repo_name> <raw_pr> <state_label> <ic> <rc> <rv>
+# Stores raw PR + three raw comment arrays + index fields. ARG_MAX-safe: all
+# large JSON goes to jq via --slurpfile (file), never as an OS arg (RC-6).
+# B2 FIX: repo_name is now an explicit parameter rather than relying on bash
+# dynamic scoping from the calling function — safer if call chain ever changes.
+_upsert_pr_export() {
+  local state_file="$1" repo_name="$2" pr="$3" state_label="$4" ic="$5" rc="$6" rv="$7"
+  local pr_number title pr_author pr_from_fork pr_head_owner pr_head_ref pr_head_sha pr_base_ref
+  pr_number="$(echo "$pr" | jq -r '.number')"
+  title="$(echo "$pr" | jq -r '.title')"
+  pr_author="$(echo "$pr" | jq -r '.user.login // "unknown"')"
+  pr_head_ref="$(echo "$pr" | jq -r '.head.ref // ""')"
+  pr_head_sha="$(echo "$pr" | jq -r '.head.sha // ""')"
+  pr_base_ref="$(echo "$pr" | jq -r '.base.ref // "main"')"
+  pr_head_owner="$(echo "$pr" | jq -r '(.head.repo.owner.login) // (.head.label | split(":")[0]) // ""')"
+  pr_from_fork=0
+  [[ -n "$pr_head_owner" && "$pr_head_owner" != "$SOURCE_ORG" ]] && pr_from_fork=1
+
+  local _pr_t _ic_t _rc_t _rv_t _rec_t _st_t
+  _pr_t="$(mktemp)"; _ic_t="$(mktemp)"; _rc_t="$(mktemp)"
+  _rv_t="$(mktemp)"; _rec_t="$(mktemp)"; _st_t="$(mktemp)"
+  printf '%s' "$pr" > "$_pr_t"
+  printf '%s' "$ic" > "$_ic_t"
+  printf '%s' "$rc" > "$_rc_t"
+  printf '%s' "$rv" > "$_rv_t"
+
+  jq -n \
+    --slurpfile pr_arr "$_pr_t" \
+    --slurpfile ic_arr "$_ic_t" \
+    --slurpfile rc_arr "$_rc_t" \
+    --slurpfile rv_arr "$_rv_t" \
+    --argjson pr_num "$pr_number" \
+    --arg title "$title" \
+    --arg author "$pr_author" \
+    --arg state_label "$state_label" \
+    --arg src_org "$SOURCE_ORG" \
+    --arg repo "$repo_name" \
+    --arg head_ref "$pr_head_ref" \
+    --arg head_sha "$pr_head_sha" \
+    --arg base_ref "$pr_base_ref" \
+    --arg head_owner "$pr_head_owner" \
+    --argjson from_fork "$pr_from_fork" \
+    '{
+      source_pr_number:    $pr_num,
+      source_url:          ("https://github.com/\($src_org)/\($repo)/pull/\($pr_num)"),
+      source_state:        $state_label,
+      source_author:       $author,
+      target_issue_number: null,
+      title:               ("[PR #\($pr_num)] " + $title),
+      status:              "exported",
+      mirrored_at:         null,
+      comments_status:     "none",
+      comments_mirrored:   0,
+      pr_head_ref:         $head_ref,
+      pr_head_sha:         $head_sha,
+      pr_base_ref:         $base_ref,
+      pr_head_owner:       $head_owner,
+      pr_from_fork:        $from_fork,
+      source_data:            $pr_arr[0],
+      source_issue_comments:  $ic_arr[0],
+      source_review_comments: $rc_arr[0],
+      source_reviews:         $rv_arr[0]
+    }' > "$_rec_t"
+
+  jq \
+    --argjson pn "$pr_number" --slurpfile recarr "$_rec_t" \
+    'def rec: $recarr[0];
+     if (.items | map(select(.source_pr_number == $pn)) | length) > 0
+     then .items = [.items[] | if .source_pr_number == $pn then
+       . as $old | rec
+       | .target_issue_number = ($old.target_issue_number)
+       | .status = (if ($old.target_issue_number != null) then $old.status else "exported" end)
+       | .mirrored_at = ($old.mirrored_at)
+       | .comments_status = ($old.comments_status // "none")
+       | .comments_mirrored = ($old.comments_mirrored // 0)
+     else . end]
+     else .items += [rec]
+     end' \
+    "$state_file" > "$_st_t" && mv "$_st_t" "$state_file"
+
+  rm -f "$_pr_t" "$_ic_t" "$_rc_t" "$_rv_t" "$_rec_t" "$_st_t"
+}
+
+# ---------------------------------------------------------------------------
+# Import: read serialized PRs from state and create them in the target.
+# NEVER contacts the source org. Reads target branches (allowed) to decide real
+# PR vs issue fallback, but does NOT read target issues for idempotency — items
+# already carrying target_issue_number in local state are skipped (resumable).
+# ---------------------------------------------------------------------------
+_import_all_prs() {
+  local only_repo="$1" skip_open_prs="${2:-0}"
+  shopt -s nullglob
+  local files=( "$STATE_DIR"/*.yaml )
+  shopt -u nullglob
+  if [[ ${#files[@]} -eq 0 ]]; then
+    warn "No state files in $STATE_DIR — run MIRROR_MODE=export first"
+    return 0
+  fi
+  # B1 FIX: SOURCE_ORG is needed in import mode to construct correct cf-mirror-pr markers
+  # and attribution headers. A wrong or empty SOURCE_ORG produces broken markers that break
+  # idempotency for future full-mode runs (marker mismatch → duplicate PR creation).
+  # SOURCE_ORG is stored in .meta.source_org at export time; auto-derive if not set.
+  if [[ -z "${SOURCE_ORG:-}" ]]; then
+    SOURCE_ORG="$(jq -r '.meta.source_org // empty' "${files[0]}" 2>/dev/null || true)"
+    [[ -n "$SOURCE_ORG" ]] && \
+      log "  [import] Derived SOURCE_ORG='$SOURCE_ORG' from state meta"
+    [[ -z "$SOURCE_ORG" ]] && \
+      warn "  [import] SOURCE_ORG unset and not in state meta — cf-mirror markers will be empty, idempotency will break"
+  fi
+  log "Importing PRs from ${#files[@]} state file(s)"
+  local f
+  for f in "${files[@]}"; do
+    local repo_name
+    repo_name="$(basename "$f" .yaml)"
+    if [[ -n "$only_repo" && "$repo_name" != "$only_repo" ]]; then
+      continue
+    fi
+    log "Importing PRs for $repo_name..."
+    _import_repo_prs "$repo_name" "$skip_open_prs"
+    pause 2.0
+  done
+}
+
+_import_repo_prs() {
+  local repo_name="$1" skip_open_prs="${2:-0}"
+  local state_file="$STATE_DIR/$repo_name.yaml"
+  [[ -f "$state_file" ]] || { warn "  No state file for $repo_name"; return 0; }
+
+  local _body_tmp
+  _body_tmp="$(mktemp)"
+  trap 'rm -f "$_body_tmp"' RETURN
+
+  # Pre-fetch target branches (with tip SHAs) once — reused for every PR's
+  # real-PR-vs-issue decision. Reading the TARGET is allowed in import mode.
+  local tgt_branches
+  tgt_branches="$(gh api \
+    "repos/$TARGET_ORG/$repo_name/branches?per_page=100" \
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | {name: .name, sha: .commit.sha}]')" || tgt_branches='[]'
+
+  local imported=0 skipped=0 failed=0 wrote=0
+  while IFS= read -r item; do
+    local pr_number status tgt_existing source_state comments_status
+    pr_number="$(echo "$item" | jq -r '.source_pr_number')"
+    status="$(echo "$item" | jq -r '.status // empty')"
+    tgt_existing="$(echo "$item" | jq -r '.target_issue_number // empty')"
+    source_state="$(echo "$item" | jq -r '.source_state // "closed"')"
+    comments_status="$(echo "$item" | jq -r '.comments_status // "none"')"
+
+    if [[ "$skip_open_prs" -eq 1 && "$source_state" == "open" ]]; then
+      skipped=$((skipped + 1)); continue
+    fi
+
+    # Already imported — finish comment sync only; never recreate.
+    if [[ -n "$tgt_existing" && "$tgt_existing" != "null" ]]; then
+      if [[ "$comments_status" != "done" ]]; then
+        _import_pr_comments "$repo_name" "$item" "$tgt_existing" "$state_file"
+      fi
+      skipped=$((skipped + 1)); continue
+    fi
+
+    if [[ "$status" != "exported" ]]; then
+      skipped=$((skipped + 1)); continue
+    fi
+
+    if dry_run_skip "import PR #$pr_number into $TARGET_ORG/$repo_name"; then
+      imported=$((imported + 1)); continue
+    fi
+
+    local pr title pr_author pr_created pr_merged pr_url pr_body
+    local pr_head_ref pr_head_sha pr_base_ref pr_from_fork pr_head_owner
+    pr="$(echo "$item" | jq -c '.source_data')"
+    title="$(echo "$pr" | jq -r '.title')"
+    pr_author="$(echo "$item" | jq -r '.source_author // "unknown"')"
+    pr_created="$(echo "$pr" | jq -r '.created_at // ""')"
+    pr_merged="$(echo "$pr" | jq -r '.merged_at // ""')"
+    pr_body="$(echo "$pr" | jq -r '.body // ""')"
+    pr_url="$(echo "$item" | jq -r '.source_url')"
+    pr_head_ref="$(echo "$item" | jq -r '.pr_head_ref // ""')"
+    pr_head_sha="$(echo "$item" | jq -r '.pr_head_sha // ""')"
+    pr_base_ref="$(echo "$item" | jq -r '.pr_base_ref // "main"')"
+    pr_from_fork="$(echo "$item" | jq -r '.pr_from_fork // 0')"
+    pr_head_owner="$(echo "$item" | jq -r '.pr_head_owner // ""')"
+
+    local tgt_number="" used_pr_api=0
+
+    if [[ "$source_state" == "open" ]]; then
+      # ---- Open PR: real PR if head branch present (by ref), else placeholder issue.
+      local branch_in_target=0
+      if [[ -n "$pr_head_ref" ]] && \
+         echo "$tgt_branches" | jq -e --arg ref "$pr_head_ref" \
+           'map(select(.name == $ref)) | length > 0' &>/dev/null 2>&1; then
+        branch_in_target=1
+      fi
+
+      if [[ $branch_in_target -eq 1 ]]; then
+        local body payload result
+        body="$(_build_pr_body "$repo_name" "$pr_number" "$pr_url" "$pr_author" "$pr_created" "open" "$_PR_ATTR_NOTE" "$pr_body")"
+        payload="$(printf '%s' "$body" | jq -Rs \
+          --arg title "$title" --arg head "$pr_head_ref" --arg base "$pr_base_ref" \
+          '{"title":$title,"body":.,"head":$head,"base":$base}')"
+        printf '%s' "$payload" > "$_body_tmp"
+        result="$(gh api "repos/$TARGET_ORG/$repo_name/pulls" \
+          --method POST --input "$_body_tmp" 2>/dev/null)" || result="FAILED"
+        if [[ "$result" != "FAILED" ]]; then
+          tgt_number="$(echo "$result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
+          [[ -n "$tgt_number" && "$tgt_number" != "null" ]] && used_pr_api=1 || tgt_number=""
+        fi
+      fi
+
+      if [[ -z "$tgt_number" ]]; then
+        # Placeholder issue fallback (fork or unsynced branch).
+        local note
+        if [[ "$pr_from_fork" == "1" ]]; then
+          note="> *Head branch \`$pr_head_owner:$pr_head_ref\` is in a personal fork and cannot be recreated in the target org. Base branch: \`$pr_base_ref\`.*"
+        else
+          note="> *Head branch \`$pr_head_ref\` has not been synced to the target yet — this is a placeholder. Re-run stage 02 then stage 06 to create a real PR once the branch is available. Base branch: \`$pr_base_ref\`.*"
+        fi
+        local body payload result
+        body="$(_build_pr_body "$repo_name" "$pr_number" "$pr_url" "$pr_author" "$pr_created" "open" "$note" "$pr_body")"
+        payload="$(printf '%s' "$body" | jq -Rs --arg title "[PR #$pr_number] $title" '{"title":$title,"body":.}')"
+        printf '%s' "$payload" > "$_body_tmp"
+        result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
+          --method POST --input "$_body_tmp" 2>/dev/null)" || result="FAILED"
+        if [[ "$result" == "FAILED" ]]; then
+          warn "  Failed to import open PR #$pr_number into $TARGET_ORG/$repo_name"
+          failed=$((failed + 1)); pause 2.0; continue
+        fi
+        tgt_number="$(echo "$result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
+      fi
+
+      if [[ -z "$tgt_number" || "$tgt_number" == "null" ]]; then
+        warn "  Open PR #$pr_number: no target number returned — marking failed"
+        failed=$((failed + 1)); pause 2.0; continue
+      fi
+      pause 4.0
+      ok "  Imported open PR #$pr_number -> #$tgt_number in $TARGET_ORG/$repo_name"
+
+    else
+      # ---- Closed PR: real PR (branch tip==sha, else temp branch at sha) else issue.
+      local head_for_pr="" created_temp_branch=0
+      if [[ -n "$pr_head_sha" ]]; then
+        if echo "$tgt_branches" | jq -e --arg ref "$pr_head_ref" --arg sha "$pr_head_sha" \
+             'map(select(.name == $ref and .sha == $sha)) | length > 0' &>/dev/null 2>&1; then
+          head_for_pr="$pr_head_ref"
+        else
+          local temp_branch="cf-mirror-pr-$pr_number"
+          if _create_or_update_branch "$repo_name" "$temp_branch" "$pr_head_sha"; then
+            head_for_pr="$temp_branch"; created_temp_branch=1
+          else
+            warn "  PR #$pr_number: could not create temp branch at $pr_head_sha — issue fallback"
+          fi
+        fi
+      fi
+
+      local pr_status_str="closed (not merged)"
+      [[ -n "$pr_merged" && "$pr_merged" != "null" ]] && pr_status_str="merged on $pr_merged"
+      local body
+      body="$(_build_pr_body "$repo_name" "$pr_number" "$pr_url" "$pr_author" "$pr_created" "$pr_status_str" "$_PR_ATTR_NOTE" "$pr_body")"
+
+      if [[ -n "$head_for_pr" ]]; then
+        local payload result
+        payload="$(printf '%s' "$body" | jq -Rs \
+          --arg title "[PR #$pr_number] $title" --arg head "$head_for_pr" --arg base "$pr_base_ref" \
+          '{"title":$title,"body":.,"head":$head,"base":$base}')"
+        printf '%s' "$payload" > "$_body_tmp"
+        result="$(gh api "repos/$TARGET_ORG/$repo_name/pulls" \
+          --method POST --input "$_body_tmp" 2>/dev/null)" || result="FAILED"
+        if [[ "$result" != "FAILED" ]]; then
+          tgt_number="$(echo "$result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
+          [[ -n "$tgt_number" && "$tgt_number" != "null" ]] && used_pr_api=1 || tgt_number=""
+        fi
+        if [[ $created_temp_branch -eq 1 ]]; then
+          gh api "repos/$TARGET_ORG/$repo_name/git/refs/heads/$head_for_pr" \
+            --method DELETE 2>/dev/null || true
+        fi
+      fi
+
+      if [[ $used_pr_api -eq 0 ]]; then
+        local payload result
+        payload="$(printf '%s' "$body" | jq -Rs --arg title "[PR #$pr_number] $title" '{"title":$title,"body":.}')"
+        printf '%s' "$payload" > "$_body_tmp"
+        result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
+          --method POST --input "$_body_tmp" 2>/dev/null)" || result="FAILED"
+        if [[ "$result" == "FAILED" ]]; then
+          warn "  Failed to import closed PR #$pr_number into $TARGET_ORG/$repo_name"
+          failed=$((failed + 1)); pause 2.0; continue
+        fi
+        tgt_number="$(echo "$result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
+      fi
+
+      if [[ -z "$tgt_number" || "$tgt_number" == "null" ]]; then
+        warn "  Closed PR #$pr_number: no target number returned — marking failed"
+        failed=$((failed + 1)); pause 2.0; continue
+      fi
+      pause 4.0
+
+      # Close the target (source PR is closed/merged).
+      if [[ $used_pr_api -eq 1 ]]; then
+        gh api "repos/$TARGET_ORG/$repo_name/pulls/$tgt_number" \
+          --method PATCH -f state="closed" 2>/dev/null || \
+          warn "  Failed to close PR #$tgt_number in $TARGET_ORG/$repo_name"
+        ok "  Imported PR #$pr_number -> PR #$tgt_number in $TARGET_ORG/$repo_name"
+      else
+        gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number" \
+          --method PATCH -f state="closed" 2>/dev/null || \
+          warn "  Failed to close issue #$tgt_number in $TARGET_ORG/$repo_name"
+        ok "  Imported PR #$pr_number -> issue #$tgt_number in $TARGET_ORG/$repo_name"
+      fi
+      pause 3.0
+    fi
+
+    _mark_pr_imported "$state_file" "$pr_number" "$tgt_number"
+
+    local updated_item
+    updated_item="$(jq -c --argjson n "$pr_number" \
+      '.items[] | select(.source_pr_number == $n)' "$state_file" 2>/dev/null | head -1)"
+    _import_pr_comments "$repo_name" "$updated_item" "$tgt_number" "$state_file"
+
+    imported=$((imported + 1)); wrote=$((wrote + 1))
+    if (( wrote % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+      commit_state "mirror: import checkpoint $wrote PRs in $repo_name [skip ci]"
+    fi
+    pause 3.0
+  done < <(state_items "$state_file")
+
+  state_update_stats "$state_file"
+  ok "  [import] $repo_name: imported=$imported skipped=$skipped failed=$failed"
+}
+
+_mark_pr_imported() {
+  local state_file="$1" pr_number="$2" tgt_number="$3"
+  state_update "$state_file" \
+    '.items = [.items[] | if .source_pr_number == $pn then
+       .target_issue_number = $tn | .status = "mirrored" | .mirrored_at = $mat
+     else . end]' \
+    --argjson pn "$pr_number" --argjson tn "$tgt_number" --arg mat "$(now)"
+}
+
+# _import_pr_comments — post the three serialized comment types to the target,
+# in the same order as full mode (discussion, review-bodies, inline). Resumable
+# without reading the target: comments_mirrored counts across the combined
+# sequence, and a re-run skips that many from the front.
+_import_pr_comments() {
+  local repo_name="$1" item="$2" tgt_number="$3" state_file="$4"
+  local pr_number ic rc rv total already
+  pr_number="$(echo "$item" | jq -r '.source_pr_number')"
+  ic="$(echo "$item" | jq -c '.source_issue_comments // []')"
+  rc="$(echo "$item" | jq -c '.source_review_comments // []')"
+  rv="$(echo "$item" | jq -c '.source_reviews // []')"
+  already="$(echo "$item" | jq -r '.comments_mirrored // 0')"
+  local ic_n rc_n rv_n
+  ic_n="$(echo "$ic" | jq 'length')"
+  rc_n="$(echo "$rc" | jq 'length')"
+  rv_n="$(echo "$rv" | jq 'length')"
+  total=$(( ic_n + rv_n + rc_n ))
+
+  if [[ "$total" -eq 0 ]]; then
+    _update_pr_comments_status "$state_file" "$pr_number" "done" 0
+    return 0
+  fi
+
+  log "  [import] Posting comments for PR #$pr_number -> #$tgt_number ($already/$total already done)..."
+
+  local _body_tmp _post_err_tmp _prev_trap
+  _prev_trap="$(trap -p RETURN 2>/dev/null || true)"
+  _body_tmp="$(mktemp)"; _post_err_tmp="$(mktemp)"
+  # shellcheck disable=SC2064
+  trap "rm -f -- '${_body_tmp}' '${_post_err_tmp}'; ${_prev_trap:-trap - RETURN}" RETURN
+
+  local idx=0 posted="$already"
+
+  _post_one() {
+    local full_body="$1" what="$2"
+    idx=$((idx + 1))
+    (( idx <= already )) && return 0    # resume: skip already-posted prefix
+    local r
+    printf '%s' "$full_body" | jq -Rs '{"body":.}' > "$_body_tmp"
+    r="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments" \
+      --method POST --input "$_body_tmp" 2>"$_post_err_tmp")" || r="FAILED"
+    if [[ "$r" == "FAILED" ]]; then
+      warn "  Failed to import $what on PR #$pr_number — $(head -1 "$_post_err_tmp" 2>/dev/null || true)"
+    else
+      posted=$((posted + 1))
+      if (( posted % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+        _update_pr_comments_status "$state_file" "$pr_number" "in_progress" "$posted"
+        commit_state "mirror: import checkpoint PR #$pr_number comments ($posted) in $repo_name [skip ci]"
+      fi
+    fi
+    pause 3.0
+  }
+
+  # 1. Discussion comments
+  while IFS= read -r c; do
+    local cid author ts body fb
+    cid="$(echo "$c" | jq -r '.id')"
+    author="$(echo "$c" | jq -r '.user.login // "unknown"')"
+    ts="$(echo "$c" | jq -r '.created_at // ""')"
+    body="$(echo "$c" | jq -r '.body // ""')"
+    fb="$(_build_pr_comment_body discussion "$repo_name" "$pr_number" "$cid" "$author" "$ts" "$body")"
+    _post_one "$fb" "discussion comment $cid"
+  done < <(echo "$ic" | jq -c '.[]' 2>/dev/null || true)
+
+  # 2. Review-level bodies
+  while IFS= read -r rvw; do
+    local rid author state ts body fb
+    rid="$(echo "$rvw" | jq -r '.id')"
+    author="$(echo "$rvw" | jq -r '.user.login // "unknown"')"
+    state="$(echo "$rvw" | jq -r '.state // "COMMENTED"')"
+    ts="$(echo "$rvw" | jq -r '.submitted_at // ""')"
+    body="$(echo "$rvw" | jq -r '.body // ""')"
+    fb="$(_build_pr_comment_body review "$repo_name" "$pr_number" "$rid" "$author" "$ts" "$body" "$state")"
+    _post_one "$fb" "review body $rid"
+  done < <(echo "$rv" | jq -c '.[]' 2>/dev/null || true)
+
+  # 3. Inline review comments
+  while IFS= read -r inl; do
+    local cid author ts body path line fb
+    cid="$(echo "$inl" | jq -r '.id')"
+    author="$(echo "$inl" | jq -r '.user.login // "unknown"')"
+    ts="$(echo "$inl" | jq -r '.created_at // ""')"
+    body="$(echo "$inl" | jq -r '.body // ""')"
+    path="$(echo "$inl" | jq -r '.path // "(unknown file)"')"
+    line="$(echo "$inl" | jq -r '(.line // .original_line) | tostring' 2>/dev/null || echo '?')"
+    fb="$(_build_pr_comment_body inline "$repo_name" "$pr_number" "$cid" "$author" "$ts" "$body" "" "$path" "$line")"
+    _post_one "$fb" "inline review comment $cid"
+  done < <(echo "$rc" | jq -c '.[]' 2>/dev/null || true)
+
+  _update_pr_comments_status "$state_file" "$pr_number" "done" "$posted"
+  ok "  [import] Posted comments for PR #$pr_number ($posted/$total)"
 }
 
 main "$@"

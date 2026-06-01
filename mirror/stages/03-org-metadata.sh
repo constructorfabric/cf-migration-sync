@@ -15,9 +15,17 @@
 # To lock a setting to a specific value regardless of source, add it under
 # stage_03_org_metadata.locked_settings in mirror/config.json.
 #
+# Modes (MIRROR_MODE):
+#   full   — fetch source org settings and apply to target (default).
+#   export — fetch source org settings and serialize into state (source_org_data).
+#            NEVER contacts the target org.
+#   import — read serialized settings from state and apply to target.
+#            NEVER contacts the source org.
+#
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
+#   MIRROR_MODE=full|export|import \
 #   ./mirror/stages/03-org-metadata.sh [--dry-run]
 
 set -euo pipefail
@@ -64,16 +72,33 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 03 — org-metadata starting"
+  log "Stage 03 — org-metadata starting (mode=$MIRROR_MODE)"
 
   state_init "$STATE_FILE" "03-org-metadata"
 
-  # ---- 1. Fetch source org settings ----------------------------------------
-  log "Fetching source org settings from $SOURCE_ORG..."
+  # ---- 1. Acquire source org settings --------------------------------------
+  # full/export → fetch live from source. import → load from state.
   local src_org
-  src_org="$(ghsrc api "orgs/$SOURCE_ORG" 2>/dev/null)" || src_org='{}'
-  # RC-3: guard against extra runner output appended to stdout
-  src_org="$(echo "$src_org" | jq -rs '.[0] // {}' 2>/dev/null || echo '{}')"
+  if in_import; then
+    log "Loading serialized org settings from $STATE_FILE..."
+    src_org="$(jq -c '.source_org_data // {}' "$STATE_FILE" 2>/dev/null || echo '{}')"
+  else
+    log "Fetching source org settings from $SOURCE_ORG..."
+    src_org="$(ghsrc api "orgs/$SOURCE_ORG" 2>/dev/null)" || src_org='{}'
+    # RC-3: guard against extra runner output appended to stdout
+    src_org="$(echo "$src_org" | jq -rs '.[0] // {}' 2>/dev/null || echo '{}')"
+  fi
+
+  # ---- Export mode: persist source settings and stop (no target writes) ----
+  if in_export; then
+    local _tmp
+    _tmp="$(mktemp)"
+    jq --argjson src "$src_org" --arg ts "$(now)" \
+      '.source_org_data = $src | .exported_at = $ts' "$STATE_FILE" > "$_tmp" && mv "$_tmp" "$STATE_FILE"
+    log "Stage 03 complete (export) — serialized $(echo "$src_org" | jq 'keys | length') source fields"
+    [[ "$DRY_RUN" -eq 0 ]] && commit_state "mirror: export stage 03 (org-metadata) [skip ci]"
+    return 0
+  fi
 
   # ---- 2. Load policy locks from config ------------------------------------
   # RC-4: use has() — NOT // — so that false values are correctly detected.

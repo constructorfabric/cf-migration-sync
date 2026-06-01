@@ -578,6 +578,140 @@ done
 
 ---
 
+### RC-15 — Import-mode identifier derived from source org not restored from state
+
+```
+Bug:          cf-mirror markers and attribution headers contained an empty SOURCE_ORG
+              in import mode, producing markers like "<!-- cf-mirror: /repo#7 -->" instead
+              of "<!-- cf-mirror: cyberfabric/repo#7 -->". Future full-mode runs could not
+              match these malformed markers, creating duplicate issues/PRs.
+
+5 Whys:
+  Why 1:  _build_issue_body / _build_pr_body embed $SOURCE_ORG directly into the
+          cf-mirror marker string. With an empty var the marker is structurally broken.
+  Why 2:  preflight() only requires SOURCE_ORG when reads_source() is true (i.e., full
+          or export modes). Import mode deliberately skips the SOURCE_ORG check because
+          it contacts no source API.
+  Why 3:  SOURCE_ORG is not purely a credential — it is also an identifier embedded in
+          every cf-mirror marker, and markers must be stable across modes.  The
+          credential/identifier dual use was not recognized when writing preflight.
+  Why 4:  When MIRROR_MODE was designed (export=snapshot, import=replay), the assumption
+          was "import needs only target creds". The need to reproduce the EXACT same
+          marker string — which encodes the SOURCE_ORG — was not enumerated as a
+          constraint of the import path.
+  Why 5:  No contract exists stating "these values must be identical across export and
+          import runs", so no verification was done that they would be.
+
+Root cause:   The export/import split was designed around credential requirements only,
+              not around ALL values needed at import time. SOURCE_ORG is a value the
+              import path needs not for authentication but for marker consistency — this
+              dual-purpose role was undocumented and therefore unguarded.
+
+Fix applied:  In _import_all_issues (stage 05) and _import_all_prs (stage 06), if
+              SOURCE_ORG is unset, derive it automatically from .meta.source_org stored
+              in the first state file (written by state_init at export time). A warning
+              is emitted if it cannot be derived.
+
+Prevention:
+1. When splitting a pipeline into export/import phases, enumerate ALL values the import
+   phase needs — not only tokens/creds, but also string identifiers embedded in produced
+   artifacts (markers, URLs, state keys). Each such value must be either: (a) provided
+   via env at import time, or (b) stored in state at export time and auto-derived at import.
+2. Every body/marker builder that embeds a "source" identifier must be audited against
+   the import path. If the builder is called at import time, the source identifier must
+   be verifiably available.
+3. The canonical storage for cross-mode identifiers is .meta.source_org / .meta.target_org
+   in the state file (written by state_init at export time). Import-mode entry points that
+   need SOURCE_ORG should read it from state via:
+     SOURCE_ORG="$(jq -r '.meta.source_org // empty' "$state_file")"
+```
+
+---
+
+### RC-16 — Implicit dynamic-scope variable access in top-level functions
+
+```
+Bug:          _upsert_pr_export (stage 06) used $repo_name without declaring it as a
+              parameter, relying on bash dynamic scoping to inherit it from the calling
+              function's local variable. If _upsert_pr_export were ever called from
+              outside _export_repo_prs's call chain, $repo_name would be empty and a
+              wrong source_url would be stored in state.
+
+5 Whys:
+  Why 1:  _upsert_pr_export uses --arg repo "$repo_name" in its jq call but does not
+          declare repo_name as a local or accept it as a function parameter.
+  Why 2:  The function was written alongside its only caller (_export_one_pr, nested
+          inside _export_repo_prs). The author relied on bash dynamic scoping — the
+          local $repo_name from _export_repo_prs was accessible transitively.
+  Why 3:  Bash dynamic scoping makes any local variable visible to all callees
+          in the call stack. This works as long as the call chain is maintained, but
+          it is invisible to future maintainers and IDE tooling.
+  Why 4:  No code review rule or convention exists in this codebase mandating that
+          top-level functions declare all inputs as explicit parameters.
+  Why 5:  The function was treated as a "private helper" without formalizing that
+          contract in its signature.
+
+Root cause:   Top-level bash functions that rely on ambient dynamic-scope variables have
+              an undeclared implicit contract with their callers. The contract is
+              invisible in the function signature, invisible to bash -n syntax checking,
+              and silently broken (empty string substitution) when the call chain changes.
+
+Fix applied:  Added repo_name as the second explicit parameter to _upsert_pr_export.
+              Updated the single call site (_export_one_pr) to pass "$repo_name".
+
+Prevention:
+1. Every top-level bash function must declare ALL values it reads as either:
+   (a) function parameters  $1, $2, ... (positional)
+   (b) well-known globals explicitly documented in common.sh (SOURCE_ORG, TARGET_ORG,
+       DRY_RUN, MIRROR_MODE, INVITE_MEMBERS, MIRROR_CONFIG, REPO_ROOT)
+   Any other value accessed without being declared in one of these two ways is a bug.
+2. "Private" helpers that are defined inside another function body (bash nested functions)
+   are acceptable as closures over their parent's locals. Top-level functions are NOT
+   closures and must not access parent locals implicitly.
+3. grep for the pattern: functions that reference $[a-z_]* where those vars are not in $@
+   and not in the approved globals list. Run this check after writing new helper functions.
+```
+
+---
+
+## Write-throttle / abuse-protection contract (non-negotiable)
+
+A central write-throttle engine in `mirror/lib/common.sh` enforces the GitHub
+abuse-protection policy. Defaults: 10s after every write, ≤350 writes/hour, a
+300s pause every 100 writes, and on 403/429 a hard stop (Retry-After+60s or 900s)
+followed by degraded mode (20s/write, pause every 50). All knobs are env-overridable.
+
+**Rules any future code MUST follow:**
+
+1. **Single writer, always.** Never run stages concurrently, never background a
+   write, never add a second worker. The engine's counters are file-based but NOT
+   lock-safe; two writers corrupt the state and defeat the rate cap.
+2. **All target writes go through `gh()`.** Never call `command gh` directly for a
+   target write — that bypasses the throttle. `ghsrc` (source reads) is exempt and
+   correctly uses `command gh`.
+3. **Write detection lives in `_is_write_args`** (matches `--method POST|PATCH|PUT|DELETE`
+   and `gh release upload|delete|create|edit`). If you introduce a new mutating gh
+   invocation form (e.g. a write without `--method`, or a new `gh` subcommand that
+   writes), you MUST extend `_is_write_args` or it will silently go un-throttled.
+4. **Throttle state is subshell-safe by being file-based** (`state/.write-throttle.json`).
+   Do NOT refactor it into shell variables — nearly every write runs inside
+   `result="$(gh api ...)"`, a subshell, where variable mutations are lost.
+5. **403/429 is a HARD STOP, not a per-item retry.** Never add a short `sleep N` +
+   continue on a rate-limit error — that escalates to stronger secondary limits. The
+   engine already paused before returning the failure; stage code only records the
+   item as failed (idempotent markers let the next run resume).
+6. **Per-call `pause N` in stages is additive and harmless** (more conservative than
+   the engine), but the engine — not the inline pauses — is the source of truth for
+   the rate cap. Do not rely on inline pauses for abuse protection.
+
+Why a wrapper and not per-stage sleeps (RCA summary): scattering the policy across
+14 files guarantees drift — one missed site silently violates the rate cap, and the
+violation is invisible until GitHub issues a 403. Centralizing in the single chokepoint
+(`gh()`) that every write already passes through makes coverage total and auditable
+(`grep -c 'command gh'` must only match `ghsrc` and the wrapper itself).
+
+---
+
 ## Token hygiene (non-negotiable)
 - `GH_TOKEN` — writes to TARGET org only
 - `GH_TOKEN_SOURCE` — reads from SOURCE org only, via `ghsrc` wrapper

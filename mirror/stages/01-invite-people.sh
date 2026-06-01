@@ -3,9 +3,19 @@
 # Invite all source org members to the target org.
 # State file: state/people.yaml (JSON stored as .yaml)
 #
+# Modes (MIRROR_MODE):
+#   full   — fetch source members and invite them to target in one pass (default).
+#   export — fetch source members and serialize them into state/people.yaml
+#            (source_data, status=exported). NEVER contacts the target org.
+#   import — read serialized members from state and run the invitation flow.
+#            Reads target members/invitations (allowed) for idempotency; never
+#            contacts source. exclude_logins + the dfc-Acronis circuit-breaker
+#            still apply in import mode.
+#
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
+#   MIRROR_MODE=full|export|import \
 #   ./mirror/stages/01-invite-people.sh [--dry-run]
 
 set -euo pipefail
@@ -26,10 +36,20 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 01 — invite-people starting"
-  log "Source org: $SOURCE_ORG | Target org: $TARGET_ORG"
+  log "Stage 01 — invite-people starting (mode=$MIRROR_MODE)"
+  log "Source org: ${SOURCE_ORG:-<none>} | Target org: ${TARGET_ORG:-<none>}"
 
-  # ---- Guard: backup mode -------------------------------------------------
+  state_init "$STATE_FILE" "01-invite-people"
+
+  # ---- Export mode: serialize source members, never touch target ----------
+  if in_export; then
+    _export_people
+    log "Stage 01 complete (export)"
+    [[ "$DRY_RUN" -eq 0 ]] && commit_state "mirror: export stage 01 (invite-people) [skip ci]"
+    return 0
+  fi
+
+  # ---- Guard: backup mode (full + import) ---------------------------------
   # invite_members=false means this is a read-only mirror (backup/DR standby).
   # No invitations are sent.  All other stages run normally.
   # To switch to active DR mode: set invite_members=true in mirror/config.json
@@ -46,15 +66,20 @@ main() {
   done < <(jq -r '.stage_01_invite_people.exclude_logins[]' "$MIRROR_CONFIG" 2>/dev/null || true)
   log "Exclude list (${#EXCLUDE_LOGINS[@]} logins): ${EXCLUDE_LOGINS[*]:-none}"
 
-  state_init "$STATE_FILE" "01-invite-people"
-
-  # ---- 1. Fetch all source org members -----------------------------------
-  log "Fetching source org members..."
-  local members
-  members="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/members")"
-  local total_members
+  # ---- 1. Acquire the member list -----------------------------------------
+  # full  → fetch live from source.
+  # import → reconstruct from the serialized state file (no source access).
+  local members total_members
+  if in_import; then
+    log "Loading serialized members from $STATE_FILE..."
+    members="$(jq -c '[.items[] | (.source_data // {login:.login, id:(.source_id)})]' \
+      "$STATE_FILE" 2>/dev/null || echo '[]')"
+  else
+    log "Fetching source org members..."
+    members="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/members")"
+  fi
   total_members="$(echo "$members" | jq 'length')"
-  log "Found $total_members members in $SOURCE_ORG"
+  log "Found $total_members members to process"
 
   # ---- 2. Pre-fetch current target org members --------------------------------
   # Single paginated call replaces N per-user HTTP checks and enables
@@ -244,6 +269,52 @@ main() {
   if [[ "$DRY_RUN" -eq 0 ]]; then
     commit_state "mirror: state after stage 01 (invite-people) [skip ci]"
   fi
+}
+
+# ---------------------------------------------------------------------------
+# _export_people — fetch all source org members and serialize them into the
+# state file with status="exported". NEVER contacts the target org. The raw
+# member object is stored under source_data so import can reconstruct the list.
+_export_people() {
+  log "Fetching source org members..."
+  local members total
+  members="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/members")"
+  total="$(echo "$members" | jq 'length')"
+  log "Found $total members in $SOURCE_ORG"
+
+  local exported=0
+  while IFS= read -r member; do
+    local login source_id
+    login="$(echo "$member" | jq -r '.login')"
+    source_id="$(echo "$member" | jq -r '.id | tostring')"
+    [[ -z "$login" || "$login" == "null" ]] && continue
+
+    local _m_tmp _state_tmp
+    _m_tmp="$(mktemp)"; _state_tmp="$(mktemp)"
+    printf '%s' "$member" > "$_m_tmp"
+    # Preserve any existing invite status (don't clobber accepted/invited on re-export).
+    jq --arg login "$login" --argjson sid "${source_id:-null}" \
+       --slurpfile marr "$_m_tmp" \
+      'def rec: {login:$login, source_id:$sid, role:"member",
+                 status:"exported", invited_at:null, accepted_at:null,
+                 source_data:$marr[0]};
+       if (.items | map(.login) | index($login)) != null
+       then .items = [.items[] | if .login == $login then
+              . as $old | rec
+              | .status      = (if ($old.status // "") == "" then "exported" else $old.status end)
+              | .invited_at  = ($old.invited_at)
+              | .accepted_at = ($old.accepted_at)
+            else . end]
+       else .items += [rec]
+       end' \
+      "$STATE_FILE" > "$_state_tmp" && mv "$_state_tmp" "$STATE_FILE"
+    rm -f "$_m_tmp" "$_state_tmp"
+    exported=$((exported + 1))
+    (( exported % 25 == 0 )) && log "  [export] Serialized $exported/$total members..."
+  done < <(echo "$members" | jq -c '.[]')
+
+  state_update_stats "$STATE_FILE"
+  ok "  [export] Serialized $exported members"
 }
 
 # ---------------------------------------------------------------------------

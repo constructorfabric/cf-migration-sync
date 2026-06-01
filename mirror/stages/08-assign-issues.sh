@@ -7,9 +7,16 @@
 # Note: GitHub REST API has no "suppress notification" flag.
 # Assignees will receive normal GitHub notifications when assigned.
 #
+# Modes (MIRROR_MODE):
+#   full   — apply assignees to mirrored target issues (default).
+#   export — NO-OP. Assignee data is already serialized by stage 05 into the
+#            issue state files; there is nothing extra to read from the source.
+#   import — run normally (apply assignees to the target from state).
+#
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
+#   MIRROR_MODE=full|export|import \
 #   ./mirror/stages/08-assign-issues.sh [--dry-run]
 
 set -euo pipefail
@@ -26,7 +33,14 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 08 — assign-issues starting"
+  log "Stage 08 — assign-issues starting (mode=$MIRROR_MODE)"
+
+  # Export is the source-snapshot phase; assignee data is already captured by
+  # stage 05 into the issue state files, so there is nothing to export here.
+  if in_export; then
+    log "Stage 08 is target-side only — nothing to export. Skipping."
+    return 0
+  fi
 
   # Load excluded logins (same list as stage 01 and stage 10)
   local excluded_logins
@@ -141,11 +155,14 @@ main() {
       local payload
       payload="$(jq -n --argjson a "$filtered_assignees" '{"assignees":$a}')"
 
-      local result
+      local result _asgn_tmp
+      _asgn_tmp="$(mktemp)"
+      printf '%s' "$payload" > "$_asgn_tmp"
       result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/assignees" \
         --method POST \
-        --input <(echo "$payload") \
+        --input "$_asgn_tmp" \
         2>/dev/null)" || result='FAILED'
+      rm -f "$_asgn_tmp"
 
       if [[ "$result" == "FAILED" ]]; then
         warn "  Failed to assign all assignees to $TARGET_ORG/$repo_name#$tgt_number, trying one by one..."
@@ -170,11 +187,14 @@ main() {
           local single_payload
           single_payload="$(jq -n --arg l "$login" '{"assignees":[$l]}')"
 
-          local single_result
+          local single_result _single_tmp
+          _single_tmp="$(mktemp)"
+          printf '%s' "$single_payload" > "$_single_tmp"
           single_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/assignees" \
             --method POST \
-            --input <(echo "$single_payload") \
+            --input "$_single_tmp" \
             2>/dev/null)" || single_result='FAILED'
+          rm -f "$_single_tmp"
 
           if [[ "$single_result" != "FAILED" ]]; then
             applied_any=1

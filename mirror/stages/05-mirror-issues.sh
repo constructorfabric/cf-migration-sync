@@ -6,9 +6,19 @@
 # - Adds cf-mirror marker in body for idempotency
 # State file: state/issues/<repo-name>.yaml
 #
+# Modes (MIRROR_MODE):
+#   full   — fetch source issues and create them in target in one pass (default).
+#   export — fetch raw source issues + comments and serialize them into the state
+#            file (source_data / source_comments). NEVER contacts the target org.
+#   import — read serialized issues from state files and create them in the target,
+#            building attribution + markers at import time. NEVER contacts source.
+#            Resumable: items with target_number already set are skipped; comment
+#            posting resumes from comments_mirrored without re-reading the target.
+#
 # Usage:
 #   SOURCE_ORG=cyberfabric TARGET_ORG=constructorfabric \
 #   GH_TOKEN=xxx GH_TOKEN_SOURCE=xxx \
+#   MIRROR_MODE=full|export|import \
 #   ./mirror/stages/05-mirror-issues.sh [--dry-run]
 
 set -euo pipefail
@@ -62,10 +72,19 @@ main() {
   check_dry_run "$@"
   preflight
 
-  log "Stage 05 — mirror-issues starting"
+  log "Stage 05 — mirror-issues starting (mode=$MIRROR_MODE)"
   mkdir -p "$STATE_DIR"
 
-  # Fetch all source repos
+  # ---- Import mode: replay serialized state into the target, no source access -
+  if in_import; then
+    _import_all_issues
+    log "Stage 05 complete (import)"
+    [[ "$DRY_RUN" -eq 0 ]] && \
+      commit_state "mirror: import stage 05 (mirror-issues) [skip ci]"
+    return 0
+  fi
+
+  # ---- full / export: enumerate source repos --------------------------------
   log "Fetching source repos from $SOURCE_ORG..."
   local repos
   repos="$(gh_paginate ghsrc "orgs/$SOURCE_ORG/repos")"
@@ -104,7 +123,11 @@ main() {
       continue
     fi
 
-    _mirror_repo_issues "$repo_name"
+    if in_export; then
+      _export_repo_issues "$repo_name"
+    else
+      _mirror_repo_issues "$repo_name"
+    fi
     pause 2.0
 
   done < <(echo "$repos" | jq -c '.[]')
@@ -849,6 +872,399 @@ ${c_marker}"
 
   _update_comments_status "$state_file" "$src_number" "done" "$mirrored"
   ok "  Reconciled $mirrored/$total_comments comments for issue #$src_number"
+}
+
+# ===========================================================================
+# Export / Import helpers (MIRROR_MODE = export | import)
+# ===========================================================================
+
+# _build_issue_body <repo> <src_number> <src_author> <src_created> <raw_body>
+# Emits the full target issue body (attribution + encoded body + marker) on
+# stdout. Byte-for-byte identical to the full-mode create path so re-runs and
+# stage 07 cross-reference rewrites behave the same regardless of mode.
+_build_issue_body() {
+  local repo_name="$1" src_number="$2" src_author="$3" src_created="$4" body="$5"
+  local src_url="https://github.com/$SOURCE_ORG/$repo_name/issues/$src_number"
+  local marker="<!-- cf-mirror: $SOURCE_ORG/$repo_name#$src_number -->"
+  local attribution="> 🔗 **Mirrored from** [$SOURCE_ORG/$repo_name#$src_number]($src_url)
+> Originally opened by **${src_author}** on ${src_created}"
+  local encoded_body
+  encoded_body="$(echo "$body" | _encode_at_mentions)"
+  if [[ -n "$body" ]]; then
+    printf '%s\n\n---\n\n%s\n\n---\n%s' "$attribution" "$encoded_body" "$marker"
+  else
+    printf '%s\n\n---\n%s' "$attribution" "$marker"
+  fi
+}
+
+# _build_comment_body <repo> <src_number> <c_id> <c_author> <c_created> <c_body>
+# Emits the full target comment body (attribution header + encoded body +
+# marker). Matches the full-mode comment format exactly.
+_build_comment_body() {
+  local repo_name="$1" src_number="$2" c_id="$3" c_author="$4" c_created="$5" c_body="$6"
+  local c_marker="<!-- cf-mirror-comment: $SOURCE_ORG/$repo_name#$src_number/$c_id -->"
+  local encoded
+  encoded="$(echo "$c_body" | _encode_at_mentions)"
+  printf '**%s** commented on %s:\n\n---\n\n%s\n\n%s' \
+    "$c_author" "$c_created" "$encoded" "$c_marker"
+}
+
+# ---------------------------------------------------------------------------
+# Export: fetch raw source issues + comments, serialize into the state file.
+# NEVER contacts the target org.
+# ---------------------------------------------------------------------------
+_export_repo_issues() {
+  local repo_name="$1"
+  local state_file="$STATE_DIR/$repo_name.yaml"
+  state_init "$state_file" "05-mirror-issues"
+
+  log "  [export] Fetching issues from $SOURCE_ORG/$repo_name..."
+  local issues_open issues_closed all_issues
+  issues_open="$(ghsrc api \
+    "repos/$SOURCE_ORG/$repo_name/issues?state=open&per_page=100" \
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || issues_open='[]'
+  issues_closed="$(ghsrc api \
+    "repos/$SOURCE_ORG/$repo_name/issues?state=closed&per_page=100" \
+    --paginate 2>/dev/null | \
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || issues_closed='[]'
+  all_issues="$(printf '%s\n' "$issues_open" "$issues_closed" | \
+    jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | select(.pull_request == null)] | unique_by(.id)')"
+
+  local total_issues
+  total_issues="$(echo "$all_issues" | jq -r 'if type=="array" then length else 0 end' 2>/dev/null || echo 0)"
+  log "  [export] Found $total_issues issues in $repo_name"
+  if [[ "$total_issues" -eq 0 ]]; then
+    state_update_stats "$state_file"
+    return 0
+  fi
+
+  local exported=0
+  while IFS= read -r issue; do
+    local src_number
+    src_number="$(echo "$issue" | jq -r '.number')"
+
+    local comments
+    comments="$(ghsrc api \
+      "repos/$SOURCE_ORG/$repo_name/issues/$src_number/comments?per_page=100" \
+      --paginate 2>/dev/null | \
+      jq -rs '[.[] | select(type=="array") | .[] | select(type=="object")]')" || comments='[]'
+
+    _upsert_issue_export "$state_file" "$issue" "$comments"
+    exported=$((exported + 1))
+    (( exported % 25 == 0 )) && log "  [export] Serialized $exported/$total_issues issues..."
+    if (( exported % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+      commit_state "mirror: export checkpoint $exported issues in $repo_name [skip ci]"
+    fi
+    pause 0.3
+  done < <(echo "$all_issues" | jq -c '.[]')
+
+  state_update_stats "$state_file"
+  ok "  [export] Serialized $exported issues for $repo_name"
+}
+
+# _upsert_issue_export <state_file> <raw_issue_json> <raw_comments_json>
+# Stores the raw issue + comments plus index fields. Large JSON is passed to jq
+# via --slurpfile (file input), never as an OS argument, to stay ARG_MAX-safe
+# (RC-6). Import progress fields are preserved if the item already exists.
+_upsert_issue_export() {
+  local state_file="$1" issue="$2" comments="$3"
+  local src_number src_id src_state title assignees
+  src_number="$(echo "$issue" | jq -r '.number')"
+  src_id="$(echo "$issue" | jq -r '.id')"
+  src_state="$(echo "$issue" | jq -r '.state')"
+  title="$(echo "$issue" | jq -r '.title')"
+  assignees="$(echo "$issue" | jq -c '[.assignees[].login]')"
+  local assignees_status="none"
+  [[ "$(echo "$assignees" | jq 'length')" -gt 0 ]] && assignees_status="pending"
+
+  local _issue_tmp _comments_tmp _rec_tmp _state_tmp
+  _issue_tmp="$(mktemp)"; _comments_tmp="$(mktemp)"
+  _rec_tmp="$(mktemp)";  _state_tmp="$(mktemp)"
+  printf '%s' "$issue"    > "$_issue_tmp"
+  printf '%s' "$comments" > "$_comments_tmp"
+
+  jq -n \
+    --slurpfile issue_arr    "$_issue_tmp" \
+    --slurpfile comments_arr "$_comments_tmp" \
+    --argjson src_num "$src_number" \
+    --argjson src_id  "$src_id" \
+    --arg     src_st  "$src_state" \
+    --arg     title   "$title" \
+    --argjson assignees "$assignees" \
+    --arg     ast     "$assignees_status" \
+    '{
+      source_number:        $src_num,
+      source_id:            $src_id,
+      source_state:         $src_st,
+      target_number:        null,
+      target_node_id:       null,
+      title:                $title,
+      assignees:            $assignees,
+      status:               "exported",
+      mirrored_at:          null,
+      assignees_status:     $ast,
+      assignees_applied_at: null,
+      comments_status:      "none",
+      comments_mirrored:    0,
+      source_data:          $issue_arr[0],
+      source_comments:      $comments_arr[0]
+    }' > "$_rec_tmp"
+
+  jq --argjson sn "$src_number" --slurpfile recarr "$_rec_tmp" \
+    'def rec: $recarr[0];
+     if (.items | map(select(.source_number == $sn)) | length) > 0
+     then .items = [.items[] | if .source_number == $sn then
+       . as $old | rec
+       | .target_number     = ($old.target_number)
+       | .target_node_id    = ($old.target_node_id)
+       | .status            = (if ($old.target_number != null) then $old.status else "exported" end)
+       | .mirrored_at       = ($old.mirrored_at)
+       | .comments_status   = ($old.comments_status   // "none")
+       | .comments_mirrored = ($old.comments_mirrored // 0)
+     else . end]
+     else .items += [rec]
+     end' \
+    "$state_file" > "$_state_tmp" && mv "$_state_tmp" "$state_file"
+
+  rm -f "$_issue_tmp" "$_comments_tmp" "$_rec_tmp" "$_state_tmp"
+}
+
+# ---------------------------------------------------------------------------
+# Import: read serialized state files and create issues in the target.
+# NEVER contacts the source org. Resumable via local state only (no target reads).
+# ---------------------------------------------------------------------------
+_import_all_issues() {
+  shopt -s nullglob
+  local files=( "$STATE_DIR"/*.yaml )
+  shopt -u nullglob
+  if [[ ${#files[@]} -eq 0 ]]; then
+    warn "No state files in $STATE_DIR — run MIRROR_MODE=export first"
+    return 0
+  fi
+  # B1 FIX: SOURCE_ORG is needed in import mode to construct correct cf-mirror markers
+  # and attribution headers (e.g. <!-- cf-mirror: SOURCE_ORG/repo#N -->).  A wrong or
+  # empty SOURCE_ORG produces broken markers that break idempotency for future full-mode
+  # runs (the marker won't match, causing duplicate issue creation). SOURCE_ORG is stored
+  # in .meta.source_org at export time; auto-derive from the first state file if not set.
+  if [[ -z "${SOURCE_ORG:-}" ]]; then
+    SOURCE_ORG="$(jq -r '.meta.source_org // empty' "${files[0]}" 2>/dev/null || true)"
+    [[ -n "$SOURCE_ORG" ]] && \
+      log "  [import] Derived SOURCE_ORG='$SOURCE_ORG' from state meta"
+    [[ -z "$SOURCE_ORG" ]] && \
+      warn "  [import] SOURCE_ORG unset and not in state meta — cf-mirror markers will be empty, idempotency will break"
+  fi
+  log "Importing issues from ${#files[@]} state file(s)"
+  local f
+  for f in "${files[@]}"; do
+    local repo_name
+    repo_name="$(basename "$f" .yaml)"
+    log "Importing issues for $repo_name..."
+    _import_repo_issues "$repo_name"
+    pause 2.0
+  done
+}
+
+_import_repo_issues() {
+  local repo_name="$1"
+  local state_file="$STATE_DIR/$repo_name.yaml"
+  [[ -f "$state_file" ]] || { warn "  No state file for $repo_name"; return 0; }
+
+  local _body_tmp
+  _body_tmp="$(mktemp)"
+  trap 'rm -f "$_body_tmp"' RETURN
+
+  local imported=0 skipped=0 failed=0 wrote=0
+  while IFS= read -r item; do
+    local src_number status tgt_existing comments_status
+    src_number="$(echo "$item" | jq -r '.source_number')"
+    status="$(echo "$item" | jq -r '.status // empty')"
+    tgt_existing="$(echo "$item" | jq -r '.target_number // empty')"
+    comments_status="$(echo "$item" | jq -r '.comments_status // "none"')"
+
+    # Already imported — finish comment sync only; never recreate the issue.
+    if [[ -n "$tgt_existing" && "$tgt_existing" != "null" ]]; then
+      if [[ "$comments_status" != "done" ]]; then
+        _import_issue_comments "$repo_name" "$item" "$tgt_existing" "$state_file"
+      fi
+      skipped=$((skipped + 1))
+      continue
+    fi
+
+    # Nothing importable (e.g. item failed during export).
+    if [[ "$status" != "exported" ]]; then
+      skipped=$((skipped + 1))
+      continue
+    fi
+
+    if dry_run_skip "import issue #$src_number into $TARGET_ORG/$repo_name"; then
+      imported=$((imported + 1)); continue
+    fi
+
+    local issue src_state title body assignees labels milestone_title src_author src_created tgt_node_id
+    issue="$(echo "$item" | jq -c '.source_data')"
+    src_state="$(echo "$issue" | jq -r '.state')"
+    title="$(echo "$issue" | jq -r '.title')"
+    body="$(echo "$issue" | jq -r '.body // ""')"
+    assignees="$(echo "$issue" | jq -c '[.assignees[].login]')"
+    labels="$(echo "$issue" | jq -c '[.labels[].name]')"
+    milestone_title="$(echo "$issue" | jq -r '.milestone.title // ""')"
+    src_author="$(echo "$issue" | jq -r '.user.login // "unknown"')"
+    src_created="$(echo "$issue" | jq -r '.created_at // ""')"
+
+    local full_body
+    full_body="$(_build_issue_body "$repo_name" "$src_number" "$src_author" "$src_created" "$body")"
+
+    # Resolve target milestone number from the stored milestone title.
+    local milestone_number=""
+    if [[ -n "$milestone_title" ]]; then
+      milestone_number="$(gh api \
+        "repos/$TARGET_ORG/$repo_name/milestones?per_page=100" 2>/dev/null | \
+        jq -r --arg t "$milestone_title" '.[] | select(.title == $t) | .number' \
+        | head -1 || true)"
+    fi
+
+    local payload
+    payload="$(printf '%s' "$full_body" | jq -Rs \
+      --arg title "$title" --argjson labels "$labels" \
+      '{"title":$title,"body":.,"labels":$labels}')"
+    if [[ -n "$milestone_number" && "$milestone_number" != "null" ]]; then
+      payload="$(echo "$payload" | jq --argjson ms "$milestone_number" '.milestone = $ms')"
+    fi
+
+    local create_result
+    printf '%s' "$payload" > "$_body_tmp"
+    create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
+      --method POST --input "$_body_tmp" 2>/dev/null)" || create_result="FAILED"
+
+    if echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
+      warn "  Issue #$src_number: retry without labels..."
+      payload="$(echo "$payload" | jq 'del(.labels)')"
+      printf '%s' "$payload" > "$_body_tmp"
+      create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
+        --method POST --input "$_body_tmp" 2>/dev/null)" || create_result="FAILED"
+    fi
+    if echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
+      warn "  Issue #$src_number: retry without milestone..."
+      payload="$(echo "$payload" | jq 'del(.milestone)')"
+      printf '%s' "$payload" > "$_body_tmp"
+      create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
+        --method POST --input "$_body_tmp" 2>/dev/null)" || create_result="FAILED"
+    fi
+
+    if [[ "$create_result" == "FAILED" ]]; then
+      warn "  Failed to import issue #$src_number ('$title') into $TARGET_ORG/$repo_name"
+      failed=$((failed + 1)); pause 2.0; continue
+    fi
+
+    local tgt_number
+    tgt_number="$(echo "$create_result" | jq -rs '.[0].number // empty' 2>/dev/null || true)"
+    tgt_node_id="$(echo "$create_result" | jq -rs '.[0].node_id // empty' 2>/dev/null || true)"
+    if [[ -z "$tgt_number" || "$tgt_number" == "null" ]]; then
+      warn "  Issue #$src_number: import did not return a valid number — marking failed"
+      failed=$((failed + 1)); pause 2.0; continue
+    fi
+    pause 4.0
+
+    if [[ "$src_state" == "closed" ]]; then
+      gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number" \
+        --method PATCH -f state="closed" 2>/dev/null || \
+        warn "  Failed to close issue #$tgt_number in $TARGET_ORG/$repo_name"
+      pause 3.0
+    fi
+    ok "  Imported issue #$src_number -> #$tgt_number in $TARGET_ORG/$repo_name"
+
+    local assignees_status="none"
+    [[ "$(echo "$assignees" | jq 'length')" -gt 0 ]] && assignees_status="pending"
+    _mark_issue_imported "$state_file" "$src_number" "$tgt_number" "$tgt_node_id" "$assignees_status"
+
+    # Re-read the freshly-updated item so the comments fn sees comments_mirrored.
+    local updated_item
+    updated_item="$(jq -c --argjson n "$src_number" \
+      '.items[] | select(.source_number == $n)' "$state_file" 2>/dev/null | head -1)"
+    _import_issue_comments "$repo_name" "$updated_item" "$tgt_number" "$state_file"
+
+    imported=$((imported + 1)); wrote=$((wrote + 1))
+    if (( wrote % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+      commit_state "mirror: import checkpoint $wrote issues in $repo_name [skip ci]"
+    fi
+    pause 3.0
+  done < <(state_items "$state_file")
+
+  state_update_stats "$state_file"
+  ok "  [import] $repo_name: imported=$imported skipped=$skipped failed=$failed"
+}
+
+# _mark_issue_imported — patch an existing item in place after a successful
+# target create, preserving the serialized source_data / source_comments.
+_mark_issue_imported() {
+  local state_file="$1" src_number="$2" tgt_number="$3" tgt_node_id="$4" assignees_status="$5"
+  state_update "$state_file" \
+    '.items = [.items[] | if .source_number == $sn then
+       .target_number = $tn
+       | .target_node_id = (if $nid == "" then null else $nid end)
+       | .status = "mirrored"
+       | .mirrored_at = $mat
+       | .assignees_status = $ast
+     else . end]' \
+    --argjson sn "$src_number" --argjson tn "$tgt_number" \
+    --arg nid "$tgt_node_id" --arg mat "$(now)" --arg ast "$assignees_status"
+}
+
+# _import_issue_comments <repo> <item_json> <tgt_number> <state_file>
+# Posts serialized source comments to the target. Resumable WITHOUT reading the
+# target: comments_mirrored records how many were posted, and a re-run skips that
+# many from the front. Index-resume can never duplicate (worst case it under-posts
+# after a mid-stream failure, which is logged).
+_import_issue_comments() {
+  local repo_name="$1" item="$2" tgt_number="$3" state_file="$4"
+  local src_number comments total already
+  src_number="$(echo "$item" | jq -r '.source_number')"
+  comments="$(echo "$item" | jq -c '.source_comments // []')"
+  total="$(echo "$comments" | jq 'length')"
+  already="$(echo "$item" | jq -r '.comments_mirrored // 0')"
+
+  if [[ "$total" -eq 0 ]]; then
+    _update_comments_status "$state_file" "$src_number" "done" 0
+    return 0
+  fi
+
+  log "  [import] Posting comments for issue #$src_number -> #$tgt_number ($already/$total already done)..."
+
+  local _body_tmp _post_err_tmp _prev_trap
+  _prev_trap="$(trap -p RETURN 2>/dev/null || true)"
+  _body_tmp="$(mktemp)"; _post_err_tmp="$(mktemp)"
+  # shellcheck disable=SC2064
+  trap "rm -f -- '${_body_tmp}' '${_post_err_tmp}'; ${_prev_trap:-trap - RETURN}" RETURN
+
+  local idx=0 posted="$already"
+  while IFS= read -r c; do
+    idx=$((idx + 1))
+    (( idx <= already )) && continue   # resume: skip comments posted in a prior run
+    local c_id c_author c_created c_body c_full_body c_result
+    c_id="$(echo "$c" | jq -r '.id')"
+    c_author="$(echo "$c" | jq -r '.user.login // "unknown"')"
+    c_created="$(echo "$c" | jq -r '.created_at // ""')"
+    c_body="$(echo "$c" | jq -r '.body // ""')"
+    c_full_body="$(_build_comment_body "$repo_name" "$src_number" "$c_id" "$c_author" "$c_created" "$c_body")"
+
+    printf '%s' "$c_full_body" | jq -Rs '{"body":.}' > "$_body_tmp"
+    c_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments" \
+      --method POST --input "$_body_tmp" 2>"$_post_err_tmp")" || c_result="FAILED"
+    if [[ "$c_result" == "FAILED" ]]; then
+      warn "  Failed to import comment $c_id on issue #$src_number — $(head -1 "$_post_err_tmp" 2>/dev/null || true)"
+    else
+      posted=$((posted + 1))
+      if (( posted % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
+        _update_comments_status "$state_file" "$src_number" "in_progress" "$posted"
+        commit_state "mirror: import checkpoint issue #$src_number comments ($posted) in $repo_name [skip ci]"
+      fi
+    fi
+    pause 3.0
+  done < <(echo "$comments" | jq -c '.[]')
+
+  _update_comments_status "$state_file" "$src_number" "done" "$posted"
+  ok "  [import] Posted comments for issue #$src_number ($posted/$total)"
 }
 
 main "$@"
