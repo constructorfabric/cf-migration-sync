@@ -1,0 +1,916 @@
+{
+  "meta": {
+    "stage": "10-mirror-teams",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T16:38:21Z",
+    "last_run_at": "2026-06-01T16:38:21Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_snapshot": {
+    "teams": [
+      {
+        "name": "Backend Architects",
+        "id": 15948363,
+        "node_id": "T_kwDODtiyIs4A81pL",
+        "slug": "backend-architects",
+        "description": "Cyber Fabric backend architects",
+        "privacy": "secret",
+        "notification_setting": "notifications_enabled",
+        "url": "https://api.github.com/organizations/249082402/team/15948363",
+        "html_url": "https://github.com/orgs/cyberfabric/teams/backend-architects",
+        "members_url": "https://api.github.com/organizations/249082402/team/15948363/members{/member}",
+        "repositories_url": "https://api.github.com/organizations/249082402/team/15948363/repos",
+        "type": "organization",
+        "organization_id": 249082402,
+        "permission": "pull",
+        "parent": null
+      },
+      {
+        "name": "Contributors",
+        "id": 16154529,
+        "node_id": "T_kwDODtiyIs4A9n-h",
+        "slug": "contributors",
+        "description": "",
+        "privacy": "secret",
+        "notification_setting": "notifications_disabled",
+        "url": "https://api.github.com/organizations/249082402/team/16154529",
+        "html_url": "https://github.com/orgs/cyberfabric/teams/contributors",
+        "members_url": "https://api.github.com/organizations/249082402/team/16154529/members{/member}",
+        "repositories_url": "https://api.github.com/organizations/249082402/team/16154529/repos",
+        "type": "organization",
+        "organization_id": 249082402,
+        "permission": "pull",
+        "parent": null
+      },
+      {
+        "name": "Frontend Architects",
+        "id": 15948377,
+        "node_id": "T_kwDODtiyIs4A81pZ",
+        "slug": "frontend-architects",
+        "description": "Cyber Fabric frontend architects",
+        "privacy": "secret",
+        "notification_setting": "notifications_enabled",
+        "url": "https://api.github.com/organizations/249082402/team/15948377",
+        "html_url": "https://github.com/orgs/cyberfabric/teams/frontend-architects",
+        "members_url": "https://api.github.com/organizations/249082402/team/15948377/members{/member}",
+        "repositories_url": "https://api.github.com/organizations/249082402/team/15948377/repos",
+        "type": "organization",
+        "organization_id": 249082402,
+        "permission": "pull",
+        "parent": null
+      },
+      {
+        "name": "Governance",
+        "id": 15936754,
+        "node_id": "T_kwDODtiyIs4A8yzy",
+        "slug": "governance",
+        "description": "Cyber Fabric governance team",
+        "privacy": "secret",
+        "notification_setting": "notifications_enabled",
+        "url": "https://api.github.com/organizations/249082402/team/15936754",
+        "html_url": "https://github.com/orgs/cyberfabric/teams/governance",
+        "members_url": "https://api.github.com/organizations/249082402/team/15936754/members{/member}",
+        "repositories_url": "https://api.github.com/organizations/249082402/team/15936754/repos",
+        "type": "organization",
+        "organization_id": 249082402,
+        "permission": "pull",
+        "parent": null
+      },
+      {
+        "name": "insight-app-maintainers",
+        "id": 16007776,
+        "node_id": "T_kwDODtiyIs4A9EJg",
+        "slug": "insight-app-maintainers",
+        "description": "Maintainers of Insight App",
+        "privacy": "secret",
+        "notification_setting": "notifications_disabled",
+        "url": "https://api.github.com/organizations/249082402/team/16007776",
+        "html_url": "https://github.com/orgs/cyberfabric/teams/insight-app-maintainers",
+        "members_url": "https://api.github.com/organizations/249082402/team/16007776/members{/member}",
+        "repositories_url": "https://api.github.com/organizations/249082402/team/16007776/repos",
+        "type": "organization",
+        "organization_id": 249082402,
+        "permission": "pull",
+        "parent": null
+      },
+      {
+        "name": "security",
+        "id": 16976497,
+        "node_id": "T_kwDODtiyIs4BAwpx",
+        "slug": "security",
+        "description": "User permissions, roles, policies, rules etc.",
+        "privacy": "secret",
+        "notification_setting": "notifications_disabled",
+        "url": "https://api.github.com/organizations/249082402/team/16976497",
+        "html_url": "https://github.com/orgs/cyberfabric/teams/security",
+        "members_url": "https://api.github.com/organizations/249082402/team/16976497/members{/member}",
+        "repositories_url": "https://api.github.com/organizations/249082402/team/16976497/repos",
+        "type": "organization",
+        "organization_id": 249082402,
+        "permission": "pull",
+        "parent": null
+      }
+    ],
+    "members": {
+      "backend-architects": [
+        {
+          "login": "binarycode",
+          "role": "member"
+        },
+        {
+          "login": "ffedoroff",
+          "role": "member"
+        },
+        {
+          "login": "pr0tey",
+          "role": "member"
+        },
+        {
+          "login": "MikeFalcon77",
+          "role": "member"
+        },
+        {
+          "login": "nonameffh",
+          "role": "member"
+        },
+        {
+          "login": "Artifizer",
+          "role": "maintainer"
+        },
+        {
+          "login": "striped-zebra-dev",
+          "role": "member"
+        },
+        {
+          "login": "entropyshift",
+          "role": "member"
+        },
+        {
+          "login": "aviator5",
+          "role": "member"
+        },
+        {
+          "login": "capybutler",
+          "role": "member"
+        }
+      ],
+      "contributors": [
+        {
+          "login": "i02sopop",
+          "role": "member"
+        },
+        {
+          "login": "mitasovr",
+          "role": "member"
+        },
+        {
+          "login": "binarycode",
+          "role": "member"
+        },
+        {
+          "login": "getahead",
+          "role": "member"
+        },
+        {
+          "login": "ffedoroff",
+          "role": "member"
+        },
+        {
+          "login": "dzarlax",
+          "role": "member"
+        },
+        {
+          "login": "pr0tey",
+          "role": "member"
+        },
+        {
+          "login": "Viperwow",
+          "role": "member"
+        },
+        {
+          "login": "dimonb",
+          "role": "member"
+        },
+        {
+          "login": "sudheerj",
+          "role": "member"
+        },
+        {
+          "login": "MikeFalcon77",
+          "role": "member"
+        },
+        {
+          "login": "Mitriyweb",
+          "role": "member"
+        },
+        {
+          "login": "nonameffh",
+          "role": "member"
+        },
+        {
+          "login": "lansfy",
+          "role": "member"
+        },
+        {
+          "login": "GuilleX7",
+          "role": "member"
+        },
+        {
+          "login": "necobaka",
+          "role": "member"
+        },
+        {
+          "login": "dobrovols",
+          "role": "member"
+        },
+        {
+          "login": "akshatjhalani",
+          "role": "member"
+        },
+        {
+          "login": "frontgeeks",
+          "role": "member"
+        },
+        {
+          "login": "Ritmix3300",
+          "role": "member"
+        },
+        {
+          "login": "bukem",
+          "role": "member"
+        },
+        {
+          "login": "pavel-kalmykov",
+          "role": "member"
+        },
+        {
+          "login": "geoolekom",
+          "role": "member"
+        },
+        {
+          "login": "maurolacy",
+          "role": "member"
+        },
+        {
+          "login": "sulasen",
+          "role": "member"
+        },
+        {
+          "login": "nanoandrew4",
+          "role": "member"
+        },
+        {
+          "login": "KvizadSaderah",
+          "role": "member"
+        },
+        {
+          "login": "serg-sab",
+          "role": "member"
+        },
+        {
+          "login": "denislituev",
+          "role": "member"
+        },
+        {
+          "login": "hitengajjar",
+          "role": "member"
+        },
+        {
+          "login": "Gregory91G",
+          "role": "member"
+        },
+        {
+          "login": "Bechma",
+          "role": "member"
+        },
+        {
+          "login": "yoskini",
+          "role": "member"
+        },
+        {
+          "login": "lobster40",
+          "role": "member"
+        },
+        {
+          "login": "mattgarmon",
+          "role": "member"
+        },
+        {
+          "login": "tranHieuDev23",
+          "role": "member"
+        },
+        {
+          "login": "borjafm14",
+          "role": "member"
+        },
+        {
+          "login": "albinpla",
+          "role": "member"
+        },
+        {
+          "login": "cashmisa",
+          "role": "member"
+        },
+        {
+          "login": "tor-m6",
+          "role": "member"
+        },
+        {
+          "login": "ziqwerty",
+          "role": "member"
+        },
+        {
+          "login": "dsrosenblum",
+          "role": "member"
+        },
+        {
+          "login": "eddeisling",
+          "role": "member"
+        },
+        {
+          "login": "itechmeat",
+          "role": "member"
+        },
+        {
+          "login": "twh09",
+          "role": "member"
+        },
+        {
+          "login": "joseph-cx",
+          "role": "member"
+        },
+        {
+          "login": "alexpitsikoulis",
+          "role": "member"
+        },
+        {
+          "login": "aleksdotbar",
+          "role": "member"
+        },
+        {
+          "login": "lizreu",
+          "role": "member"
+        },
+        {
+          "login": "mozhaev-dev",
+          "role": "member"
+        },
+        {
+          "login": "AdrienLaaboudi",
+          "role": "member"
+        },
+        {
+          "login": "fluiderson",
+          "role": "member"
+        },
+        {
+          "login": "AntonBraer",
+          "role": "member"
+        },
+        {
+          "login": "MightyDuckNew",
+          "role": "member"
+        },
+        {
+          "login": "enjiruuuu",
+          "role": "member"
+        },
+        {
+          "login": "Avi2777",
+          "role": "member"
+        },
+        {
+          "login": "netjerikhet",
+          "role": "member"
+        },
+        {
+          "login": "constructor-tech",
+          "role": "member"
+        },
+        {
+          "login": "vgprod",
+          "role": "member"
+        },
+        {
+          "login": "teslanika",
+          "role": "member"
+        },
+        {
+          "login": "m231-a",
+          "role": "member"
+        },
+        {
+          "login": "mjollneer",
+          "role": "member"
+        },
+        {
+          "login": "bsacrobatix",
+          "role": "member"
+        },
+        {
+          "login": "Berrok",
+          "role": "member"
+        },
+        {
+          "login": "orivaris",
+          "role": "member"
+        },
+        {
+          "login": "maxcherey",
+          "role": "member"
+        },
+        {
+          "login": "xiboliaren",
+          "role": "member"
+        },
+        {
+          "login": "Artifizer",
+          "role": "maintainer"
+        },
+        {
+          "login": "ast2074",
+          "role": "member"
+        },
+        {
+          "login": "FinnJost",
+          "role": "member"
+        },
+        {
+          "login": "claudedigon",
+          "role": "member"
+        },
+        {
+          "login": "dominic1988-lgtm",
+          "role": "member"
+        },
+        {
+          "login": "Dynaval81",
+          "role": "member"
+        },
+        {
+          "login": "7er9GX",
+          "role": "member"
+        },
+        {
+          "login": "modcrafter77",
+          "role": "member"
+        },
+        {
+          "login": "tscbmstubp",
+          "role": "member"
+        },
+        {
+          "login": "striped-zebra-dev",
+          "role": "member"
+        },
+        {
+          "login": "nikbackdev",
+          "role": "member"
+        },
+        {
+          "login": "enridis",
+          "role": "member"
+        },
+        {
+          "login": "Vibetosh",
+          "role": "member"
+        },
+        {
+          "login": "devjow",
+          "role": "member"
+        },
+        {
+          "login": "entropyshift",
+          "role": "member"
+        },
+        {
+          "login": "ainetx",
+          "role": "member"
+        },
+        {
+          "login": "aviator5",
+          "role": "member"
+        },
+        {
+          "login": "GeraBart",
+          "role": "member"
+        },
+        {
+          "login": "alizid10",
+          "role": "member"
+        },
+        {
+          "login": "hyphen-2025",
+          "role": "member"
+        },
+        {
+          "login": "voidtopixel",
+          "role": "member"
+        },
+        {
+          "login": "bit8shift",
+          "role": "member"
+        },
+        {
+          "login": "Last-Christmas",
+          "role": "member"
+        },
+        {
+          "login": "Qilin101",
+          "role": "member"
+        },
+        {
+          "login": "lavacitalola",
+          "role": "member"
+        },
+        {
+          "login": "vzhuman",
+          "role": "maintainer"
+        },
+        {
+          "login": "abyssal-potato",
+          "role": "member"
+        },
+        {
+          "login": "pm-pltfrm",
+          "role": "member"
+        },
+        {
+          "login": "asmith987",
+          "role": "member"
+        },
+        {
+          "login": "jalankulkija",
+          "role": "member"
+        },
+        {
+          "login": "capybutler",
+          "role": "member"
+        },
+        {
+          "login": "refur-nfn",
+          "role": "member"
+        },
+        {
+          "login": "genericaccount-de",
+          "role": "member"
+        },
+        {
+          "login": "gs-layer",
+          "role": "member"
+        },
+        {
+          "login": "javiers451",
+          "role": "member"
+        },
+        {
+          "login": "max0xf",
+          "role": "member"
+        },
+        {
+          "login": "cyberantonz",
+          "role": "member"
+        },
+        {
+          "login": "diffora",
+          "role": "member"
+        },
+        {
+          "login": "MetricWarper",
+          "role": "member"
+        },
+        {
+          "login": "il10241024",
+          "role": "member"
+        },
+        {
+          "login": "Corw1n-of-Amber",
+          "role": "member"
+        },
+        {
+          "login": "zengmlx",
+          "role": "member"
+        },
+        {
+          "login": "jz-sim2",
+          "role": "member"
+        },
+        {
+          "login": "awsapt",
+          "role": "member"
+        }
+      ],
+      "frontend-architects": [
+        {
+          "login": "getahead",
+          "role": "member"
+        },
+        {
+          "login": "necobaka",
+          "role": "member"
+        },
+        {
+          "login": "eddeisling",
+          "role": "member"
+        },
+        {
+          "login": "m231-a",
+          "role": "member"
+        },
+        {
+          "login": "Artifizer",
+          "role": "maintainer"
+        },
+        {
+          "login": "GeraBart",
+          "role": "member"
+        },
+        {
+          "login": "voidtopixel",
+          "role": "member"
+        },
+        {
+          "login": "Last-Christmas",
+          "role": "member"
+        },
+        {
+          "login": "abyssal-potato",
+          "role": "member"
+        }
+      ],
+      "governance": [
+        {
+          "login": "gaidar",
+          "role": "member"
+        },
+        {
+          "login": "pr0tey",
+          "role": "member"
+        },
+        {
+          "login": "nonameffh",
+          "role": "member"
+        },
+        {
+          "login": "dobrovols",
+          "role": "member"
+        },
+        {
+          "login": "frontgeeks",
+          "role": "member"
+        },
+        {
+          "login": "lobster40",
+          "role": "member"
+        },
+        {
+          "login": "netjerikhet",
+          "role": "member"
+        },
+        {
+          "login": "dfc-Acronis",
+          "role": "member"
+        },
+        {
+          "login": "Artifizer",
+          "role": "maintainer"
+        },
+        {
+          "login": "enridis",
+          "role": "member"
+        },
+        {
+          "login": "entropyshift",
+          "role": "member"
+        },
+        {
+          "login": "lavacitalola",
+          "role": "member"
+        },
+        {
+          "login": "vzhuman",
+          "role": "maintainer"
+        },
+        {
+          "login": "pm-pltfrm",
+          "role": "member"
+        },
+        {
+          "login": "capybutler",
+          "role": "member"
+        }
+      ],
+      "insight-app-maintainers": [
+        {
+          "login": "mitasovr",
+          "role": "member"
+        },
+        {
+          "login": "dzarlax",
+          "role": "member"
+        },
+        {
+          "login": "bukem",
+          "role": "member"
+        },
+        {
+          "login": "Gregory91G",
+          "role": "member"
+        },
+        {
+          "login": "cyberdima",
+          "role": "member"
+        },
+        {
+          "login": "aleksdotbar",
+          "role": "member"
+        },
+        {
+          "login": "mozhaev-dev",
+          "role": "member"
+        },
+        {
+          "login": "Artifizer",
+          "role": "maintainer"
+        },
+        {
+          "login": "vzhuman",
+          "role": "maintainer"
+        },
+        {
+          "login": "cyberantonz",
+          "role": "member"
+        }
+      ],
+      "security": [
+        {
+          "login": "dobrovols",
+          "role": "member"
+        },
+        {
+          "login": "netjerikhet",
+          "role": "member"
+        },
+        {
+          "login": "dfc-Acronis",
+          "role": "member"
+        },
+        {
+          "login": "orivaris",
+          "role": "member"
+        },
+        {
+          "login": "Artifizer",
+          "role": "maintainer"
+        },
+        {
+          "login": "vzhuman",
+          "role": "maintainer"
+        }
+      ]
+    },
+    "repos": {
+      "backend-architects": [],
+      "contributors": [
+        {
+          "name": "ai-courses",
+          "permission": "read"
+        },
+        {
+          "name": "cf-cli",
+          "permission": "read"
+        },
+        {
+          "name": "cf-docs",
+          "permission": "read"
+        },
+        {
+          "name": "cf-template-rust",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-arc",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-codegen",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-constructor",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-constructor-app",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-constructor-kit-sdlc",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-insight",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-insight-front",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-pilot",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-pilot-kit-sdlc",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-wiki",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-wiki-back",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-wiki-front",
+          "permission": "read"
+        },
+        {
+          "name": "cyber-wiki-front-old",
+          "permission": "read"
+        },
+        {
+          "name": "cyberfabric-courses",
+          "permission": "read"
+        },
+        {
+          "name": "cyberfabric-tutorials",
+          "permission": "read"
+        },
+        {
+          "name": "cyberware-csharp",
+          "permission": "read"
+        },
+        {
+          "name": "cyberware-frontx",
+          "permission": "read"
+        },
+        {
+          "name": "cyberware-obsidian",
+          "permission": "read"
+        },
+        {
+          "name": "cyberware-rust",
+          "permission": "read"
+        },
+        {
+          "name": "db-tools",
+          "permission": "read"
+        },
+        {
+          "name": "demo-repository",
+          "permission": "read"
+        },
+        {
+          "name": "DNA",
+          "permission": "read"
+        },
+        {
+          "name": "frontend-lounge",
+          "permission": "read"
+        },
+        {
+          "name": "Kitsoki",
+          "permission": "read"
+        }
+      ],
+      "frontend-architects": [],
+      "governance": [
+        {
+          "name": "governance",
+          "permission": "read"
+        }
+      ],
+      "insight-app-maintainers": [
+        {
+          "name": "cyber-insight",
+          "permission": "write"
+        },
+        {
+          "name": "cyber-insight-front",
+          "permission": "write"
+        }
+      ],
+      "security": []
+    }
+  },
+  "exported_at": "2026-06-01T16:39:41Z"
+}

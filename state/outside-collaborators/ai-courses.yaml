@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "stage": "14-mirror-outside-collaborators",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T17:11:33Z",
+    "last_run_at": "2026-06-01T17:11:33Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "source_collaborators": [
+    {
+      "login": "mitevsyavor",
+      "id": 229304118,
+      "node_id": "U_kgDODarnNg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/229304118?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/mitevsyavor",
+      "html_url": "https://github.com/mitevsyavor",
+      "followers_url": "https://api.github.com/users/mitevsyavor/followers",
+      "following_url": "https://api.github.com/users/mitevsyavor/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mitevsyavor/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/mitevsyavor/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mitevsyavor/subscriptions",
+      "organizations_url": "https://api.github.com/users/mitevsyavor/orgs",
+      "repos_url": "https://api.github.com/users/mitevsyavor/repos",
+      "events_url": "https://api.github.com/users/mitevsyavor/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/mitevsyavor/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false,
+      "permissions": {
+        "admin": false,
+        "maintain": false,
+        "push": false,
+        "triage": true,
+        "pull": true
+      },
+      "role_name": "triage"
+    }
+  ],
+  "exported_at": "2026-06-01T17:11:33Z"
+}

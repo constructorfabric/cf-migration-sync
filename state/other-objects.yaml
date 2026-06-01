@@ -1,0 +1,673 @@
+{
+  "meta": {
+    "stage": "09-other-objects",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T16:28:28Z",
+    "last_run_at": "2026-06-01T16:28:28Z"
+  },
+  "items": [
+    {
+      "type": "github_project_v2",
+      "name": "Mini-Chat",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/15",
+      "source_number": 15,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "Automation and Documentation",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/14",
+      "source_number": 14,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "Insights",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/12",
+      "source_number": 12,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "@dzarlax's untitled project",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/11",
+      "source_number": 11,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "@dzarlax's untitled template",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/10",
+      "source_number": 10,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "CYBER WARE BACK",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/9",
+      "source_number": 9,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "PULL REQUESTS",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/7",
+      "source_number": 7,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "@frontgeeks's untitled project",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/6",
+      "source_number": 6,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "PROCESSES ROADMAP",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/5",
+      "source_number": 5,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "FRONTEND ROADMAP",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/4",
+      "source_number": 4,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "CYBER PILOT",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/3",
+      "source_number": 3,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "BACKEND ROADMAP",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/2",
+      "source_number": 2,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_project_v2",
+      "name": "@ainetx's untitled project",
+      "source_url": "https://github.com/orgs/cyberfabric/projects/1",
+      "source_number": 1,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub Projects cannot be created via API on free plan",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "qodo-code-review",
+      "source_installation_id": 108270533,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "graphite-app",
+      "source_installation_id": 108780308,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "coderabbitai",
+      "source_installation_id": 108781997,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "aikido-security",
+      "source_installation_id": 108784266,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "aikido-pr-checks",
+      "source_installation_id": 108786702,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "aikido-autofix",
+      "source_installation_id": 108786887,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "claude",
+      "source_installation_id": 108830749,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "dco-2",
+      "source_installation_id": 108859914,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "sonarqubecloud",
+      "source_installation_id": 108860230,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "augmentcode",
+      "source_installation_id": 108861583,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "codecov",
+      "source_installation_id": 112747237,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "codacy-production",
+      "source_installation_id": 124411555,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "github_app",
+      "name": "claude-design-import",
+      "source_installation_id": 125800047,
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "GitHub App installations must be authorized by the app owner",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyberware-rust",
+      "source_id": 591964091,
+      "config_url": "https://api.snyk.io/webhook/github/1ed4aac6-f481-4cd4-82a0-63936a272316",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "issue_comment",
+        "pull_request",
+        "pull_request_review_comment",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyberware-rust",
+      "source_id": 606552451,
+      "config_url": "https://app.codacy.com/events/gh/43fa056491a042d99b4a3b2434741015",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "pull_request",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyberware-frontx",
+      "source_id": 591964096,
+      "config_url": "https://api.snyk.io/webhook/github/31d5f4c0-4ce1-421f-ac12-32319f664900",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "issue_comment",
+        "pull_request",
+        "pull_request_review_comment",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyberware-frontx",
+      "source_id": 606552454,
+      "config_url": "https://app.codacy.com/events/gh/64e2f026b0cb46258ecf79306d578f0e",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "pull_request",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyber-constructor",
+      "source_id": 595296182,
+      "config_url": "https://api.snyk.io/webhook/github/8353aaf9-f101-4759-829c-3ad7ef0bad83",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "issue_comment",
+        "pull_request",
+        "pull_request_review_comment",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyber-insight",
+      "source_id": 602410435,
+      "config_url": "https://api.snyk.io/webhook/github/6328bf4a-aca1-45ba-8b4b-2f5fd2185efb",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "issue_comment",
+        "pull_request",
+        "pull_request_review_comment",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyber-insight",
+      "source_id": 606552473,
+      "config_url": "https://app.codacy.com/events/gh/0e879cc173dc4e80891f1277adfc483d",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "pull_request",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyberfabric-marketing",
+      "source_id": 602891632,
+      "config_url": "https://connector-github.keypup.io/webhooks/provider/projects/2eeb4654-2b33-47f3-9f2c-0c56f3e383f5",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "check_run",
+        "check_suite",
+        "issues",
+        "issue_comment",
+        "label",
+        "milestone",
+        "pull_request",
+        "pull_request_review",
+        "pull_request_review_comment",
+        "status"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "db-tools",
+      "source_id": 602891635,
+      "config_url": "https://connector-github.keypup.io/webhooks/provider/projects/4888457f-1ff0-409d-8dbf-53386925508a",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "check_run",
+        "check_suite",
+        "issues",
+        "issue_comment",
+        "label",
+        "milestone",
+        "pull_request",
+        "pull_request_review",
+        "pull_request_review_comment",
+        "status"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyber-pilot-kit-sdlc",
+      "source_id": 602410424,
+      "config_url": "https://api.snyk.io/webhook/github/6c37ad48-0f86-4b9d-a51e-dbb89466b3b4",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "issue_comment",
+        "pull_request",
+        "pull_request_review_comment",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyber-pilot-kit-sdlc",
+      "source_id": 602892372,
+      "config_url": "https://connector-github.keypup.io/webhooks/provider/projects/783da04f-0c10-4aa6-8470-ff91a31b7c33",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "check_run",
+        "check_suite",
+        "issues",
+        "issue_comment",
+        "label",
+        "milestone",
+        "pull_request",
+        "pull_request_review",
+        "pull_request_review_comment",
+        "status"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyberware-csharp",
+      "source_id": 602410415,
+      "config_url": "https://api.snyk.io/webhook/github/852261a7-d07a-488e-a9fa-3ea0b091b031",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "issue_comment",
+        "pull_request",
+        "pull_request_review_comment",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyber-wiki",
+      "source_id": 603006616,
+      "config_url": "https://api.snyk.io/webhook/github/57eed71b-c133-4c5f-812f-75132aa8d33b",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "issue_comment",
+        "pull_request",
+        "pull_request_review_comment",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cf-docs",
+      "source_id": 602891638,
+      "config_url": "https://connector-github.keypup.io/webhooks/provider/projects/0edd479f-81ef-40d7-9ad3-0f6de3965e77",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "check_run",
+        "check_suite",
+        "issues",
+        "issue_comment",
+        "label",
+        "milestone",
+        "pull_request",
+        "pull_request_review",
+        "pull_request_review_comment",
+        "status"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cf-docs",
+      "source_id": 603731340,
+      "config_url": "https://api.snyk.io/webhook/github/b7a060aa-694c-46cc-95b7-cb2a25e7b469",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "issue_comment",
+        "pull_request",
+        "pull_request_review_comment",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyber-wiki-front-old",
+      "source_id": 603006581,
+      "config_url": "https://api.snyk.io/webhook/github/1a3781ca-15d2-4e71-bb79-48dcb7c67d30",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "issue_comment",
+        "pull_request",
+        "pull_request_review_comment",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "repo_webhook",
+      "repo": "cyber-insight-front",
+      "source_id": 606552484,
+      "config_url": "https://app.codacy.com/events/gh/e96ef10bd52046bd9cc648e9f815d29c",
+      "config_content_type": "json",
+      "config_insecure_ssl": "0",
+      "config_active": true,
+      "config_events": [
+        "pull_request",
+        "push"
+      ],
+      "status": "exported",
+      "manual_action_required": true,
+      "reason": "Webhook secret is write-only and must be set manually in target repo",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "actions_secret",
+      "scope": "repo",
+      "repo": "cyberware-rust",
+      "name": "CODECOV_TOKEN",
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "Secret values are write-only; must be recreated from external vault",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "actions_secret",
+      "scope": "repo",
+      "repo": "cyberware-rust",
+      "name": "CRATES_IO_TOKEN",
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "Secret values are write-only; must be recreated from external vault",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "actions_secret",
+      "scope": "repo",
+      "repo": "cyberware-rust",
+      "name": "PR_DASHBOARD_PROJECTS_TOKEN",
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "Secret values are write-only; must be recreated from external vault",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "actions_secret",
+      "scope": "repo",
+      "repo": "cyberware-rust",
+      "name": "TELEGRAM_BOT_TOKEN",
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "Secret values are write-only; must be recreated from external vault",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "actions_secret",
+      "scope": "repo",
+      "repo": "cyberware-rust",
+      "name": "TELEGRAM_CHAT_ID",
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "Secret values are write-only; must be recreated from external vault",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "actions_secret",
+      "scope": "repo",
+      "repo": "cyberware-frontx",
+      "name": "NPM_TOKEN",
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "Secret values are write-only; must be recreated from external vault",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    },
+    {
+      "type": "actions_secret",
+      "scope": "repo",
+      "repo": "cyber-constructor",
+      "name": "SONAR_TOKEN",
+      "status": "inventory",
+      "manual_action_required": true,
+      "reason": "Secret values are write-only; must be recreated from external vault",
+      "inventoried_at": "2026-06-01T16:28:28Z"
+    }
+  ],
+  "stats": {
+    "total": 50,
+    "synced": 0,
+    "pending": 50,
+    "failed": 0
+  }
+}

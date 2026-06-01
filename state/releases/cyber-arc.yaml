@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "stage": "11-mirror-releases",
+    "source_org": "cyberfabric",
+    "target_org": null,
+    "first_run_at": "2026-06-01T17:02:44Z",
+    "last_run_at": "2026-06-01T17:02:44Z"
+  },
+  "items": [],
+  "stats": {
+    "total": 0,
+    "synced": 0,
+    "pending": 0,
+    "failed": 0
+  }
+}

@@ -80,11 +80,14 @@ jobs:
         run: |
           INPUT="${{ github.event.inputs.stages }}"
           if [[ -z "$INPUT" || "$INPUT" == "all" ]]; then
+            # Stage 15 (export-projects) is export-only and NOT part of the default
+            # full-mode pipeline; it must be requested explicitly via the stages input.
             for stage in 1 2 3 4 5 6 7 8 9 10 11 12 13 14; do
               echo "run_${stage}=true" >> "$GITHUB_OUTPUT"
             done
+            echo "run_15=false" >> "$GITHUB_OUTPUT"
           else
-            for stage in 1 2 3 4 5 6 7 8 9 10 11 12 13 14; do
+            for stage in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
               if echo "$INPUT" | grep -qE "(^|,)${stage}(,|$)"; then
                 echo "run_${stage}=true" >> "$GITHUB_OUTPUT"
               else
@@ -358,4 +361,24 @@ jobs:
             git push
           else
             echo "No state changes to commit after stage 14"
+          fi
+
+      # ================================================================== #
+      # Stage 15 — Export Projects V2 (export-only; opt-in via stages input)
+      # Not run by default; request with the "stages" input (e.g. "15").
+      # ================================================================== #
+      - name: Stage 15 — export-projects
+        if: steps.stages.outputs.run_15 == 'true'
+        run: mirror/stages/15-export-projects.sh
+
+      - name: Commit state after stage 15
+        if: steps.stages.outputs.run_15 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 15 (export-projects) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 15"
           fi

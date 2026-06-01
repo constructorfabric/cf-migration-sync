@@ -444,7 +444,9 @@ state_init() {
   # snapshot is chosen for a target at IMPORT time — so we record null instead of
   # the hardcoded TARGET_ORG fallback, which would otherwise bake a misleading
   # (and possibly wrong) target org into a pure source snapshot.
-  local tgt_value="${TARGET_ORG}"
+  # Use :- so a source-only stage that never declares TARGET_ORG (e.g. the
+  # projects export) does not trip `set -u` here.
+  local tgt_value="${TARGET_ORG:-}"
   if in_export; then
     tgt_value=""
   fi
