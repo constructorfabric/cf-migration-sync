@@ -180,11 +180,22 @@ _apply_collaborators() {
         else "read"
         end)' 2>/dev/null || echo 'read')"
 
-    local already_status
+    local already_status already_perm
     already_status="$(jq -r --arg l "$login" \
       '.items[] | select(.login == $l) | .status // empty' \
       "$state_file" 2>/dev/null | head -1 || true)"
-    [[ "$already_status" == "synced" ]] && continue
+    already_perm="$(jq -r --arg l "$login" \
+      '.items[] | select(.login == $l) | .permission // empty' \
+      "$state_file" 2>/dev/null | head -1 || true)"
+    # Skip if already synced — UNLESS CONTINUOUS mode and the source permission
+    # changed since last run (then re-PUT the new permission; PUT is idempotent).
+    if [[ "$already_status" == "synced" ]]; then
+      if [[ "${CONTINUOUS:-false}" == "true" && "$already_perm" != "$permission" ]]; then
+        log "  [continuous] $login permission changed ($already_perm → $permission) — re-applying"
+      else
+        continue
+      fi
+    fi
 
     if dry_run_skip "add collaborator $login ($permission) to $TARGET_ORG/$repo_name"; then
       _upsert_collaborator "$state_file" "$repo_name" "$login" "$permission" "synced"

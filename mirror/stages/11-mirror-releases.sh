@@ -134,9 +134,23 @@ _create_target_release() {
     '.items[] | select(.tag == $tag) | .status // empty' \
     "$state_file" 2>/dev/null | head -1 || true)"
   if [[ "$already_status" == "mirrored" ]]; then
-    # Still attempt asset upload (idempotent) in case a prior run was interrupted.
     local known_tgt_id
     known_tgt_id="$(jq -r --arg tag "$rel_tag" '.items[] | select(.tag == $tag) | .target_id // empty' "$state_file" 2>/dev/null | head -1 || true)"
+    # CONTINUOUS mode: re-sync the release name + body from source (it may have been
+    # edited after the initial mirror). Without CONTINUOUS we only re-attempt assets.
+    if [[ "${CONTINUOUS:-false}" == "true" && -n "$known_tgt_id" && "$known_tgt_id" != "null" \
+          && "$DRY_RUN" -eq 0 ]]; then
+      local _full_body _ptmp
+      _full_body="$(_build_release_body "$rel_tag" "$rel_name" "$rel_body" "$rel_author" "$rel_url" "$rel_created" "$rel_published")"
+      _ptmp="$(mktemp)"
+      printf '%s' "$_full_body" | jq -Rs --arg name "$rel_name" '{"name":$name,"body":.}' > "$_ptmp"
+      gh api "repos/$TARGET_ORG/$repo_name/releases/$known_tgt_id" \
+        --method PATCH --input "$_ptmp" 2>/dev/null \
+        && log "  [continuous] Reconciled release '$rel_tag' name/body" \
+        || warn "  [continuous] Failed to reconcile release '$rel_tag'"
+      rm -f "$_ptmp"
+    fi
+    # Always re-attempt asset upload (idempotent) in case a prior run was interrupted.
     if [[ -n "$known_tgt_id" && "$known_tgt_id" != "null" ]]; then
       _upload_release_assets "$repo_name" "$release" "$known_tgt_id" "$assets_mode"
     fi

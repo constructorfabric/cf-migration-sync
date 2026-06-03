@@ -1619,9 +1619,17 @@ _import_repo_prs() {
     # Advance the cross-repo progress/ETA counter once per processed item.
     progress_tick 1 "$repo_name"
 
-    # Already imported — finish comment sync only; never recreate.
+    # Already imported — reconcile (CONTINUOUS) or finish comment sync only.
     if [[ -n "$tgt_existing" && "$tgt_existing" != "null" ]]; then
-      if [[ "$comments_status" != "done" ]]; then
+      if [[ "${CONTINUOUS:-false}" == "true" ]]; then
+        # CONTINUOUS mode: reconcile title/body/labels/state from the stored
+        # source_data so already-migrated PRs pick up source edits + new comments.
+        local _pr_src
+        _pr_src="$(echo "$item" | jq -c '.source_data // {}')"
+        if [[ -n "$_pr_src" && "$_pr_src" != "{}" ]]; then
+          _reconcile_pr "$repo_name" "$_pr_src" "$pr_number" "$tgt_existing" "$state_file"
+        fi
+      elif [[ "$comments_status" != "done" ]]; then
         _import_pr_comments "$repo_name" "$item" "$tgt_existing" "$state_file"
       fi
       skipped=$((skipped + 1)); continue
