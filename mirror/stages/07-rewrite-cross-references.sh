@@ -249,9 +249,18 @@ _rewrite_repo_items() {
     fi
 
     # ---- Fetch and rewrite issue body --------------------------------------
-    local current_body
-    current_body="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_num" \
-      2>/dev/null | jq -rs '.[0].body // ""' 2>/dev/null || echo '')"
+    # M7 FIX (RC-5 corollary): fetch OUT-OF-BAND so a failed GET (404 deleted issue,
+    # 403, rate-limit) is distinguishable from an issue that genuinely has an empty
+    # body. Previously the gh→jq pipe hid the failure → current_body="" → the
+    # rewrite produced "" → "no_change" → the missing issue was recorded as
+    # "successfully rewritten" and never retried (data loss masked as success).
+    local _cur_raw current_body
+    if ! _cur_raw="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_num" 2>/dev/null)"; then
+      warn "    Cannot fetch $TARGET_ORG/$repo_name#$tgt_num (deleted/locked/rate-limited?) — skipping, NOT recording as done (will retry next run)"
+      failed_count=$((failed_count + 1))
+      continue
+    fi
+    current_body="$(printf '%s' "$_cur_raw" | jq -rs '.[0].body // ""' 2>/dev/null || echo '')"
 
     local new_body
     new_body="$(echo "$current_body" | \

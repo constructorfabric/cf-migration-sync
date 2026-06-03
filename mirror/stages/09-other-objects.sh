@@ -49,10 +49,16 @@ STATE_FILE="$REPO_ROOT/state/other-objects.yaml"
 # Echoes the resulting status (created_no_secret | failed). TARGET writes only.
 _create_org_webhook() {
   local name="$1" url="$2" ct="$3" ssl="$4" active="$5" events="$6"
-  local tgt_urls
-  tgt_urls="$(gh api "orgs/$TARGET_ORG/hooks?per_page=100" \
-    2>/dev/null | jq -rs '.[0] // [] | [.[].config.url // ""] | map(select(. != ""))' \
-    2>/dev/null)" || tgt_urls='[]'
+  # M4 FIX: fetch existing hooks OUT-OF-BAND (RC-5: pipe-through-jq hides gh's
+  # exit code; a 404/scope error body parsed as [] → dedup misses → duplicate
+  # webhook). Also add --paginate so orgs with >100 hooks don't create dups for
+  # hooks on page 2+. If the fetch fails, skip creation rather than risk a dup.
+  local _hooks_raw tgt_urls
+  if ! _hooks_raw="$(gh api "orgs/$TARGET_ORG/hooks?per_page=100" --paginate 2>/dev/null)"; then
+    warn "  Could not list existing org webhooks in $TARGET_ORG — skipping '$url' to avoid a duplicate"
+    echo "failed"; return 0
+  fi
+  tgt_urls="$(printf '%s' "$_hooks_raw" | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | .config.url // ""] | map(select(. != ""))' 2>/dev/null || echo '[]')"
   if [[ -n "$(echo "$tgt_urls" | jq -r --arg u "$url" '.[] | select(. == $u)' 2>/dev/null || true)" ]]; then
     log "  Org webhook $url already exists in target — skipping"
     echo "created_no_secret"; return 0
@@ -74,10 +80,13 @@ _create_org_webhook() {
 # _create_repo_webhook <repo> <url> <ct> <ssl> <active_json> <events_json>
 _create_repo_webhook() {
   local repo_name="$1" url="$2" ct="$3" ssl="$4" active="$5" events="$6"
-  local tgt_urls
-  tgt_urls="$(gh api "repos/$TARGET_ORG/$repo_name/hooks?per_page=100" \
-    2>/dev/null | jq -rs '.[0] // [] | [.[].config.url // ""] | map(select(. != ""))' \
-    2>/dev/null)" || tgt_urls='[]'
+  # M4 FIX: out-of-band fetch + --paginate (see _create_org_webhook).
+  local _hooks_raw tgt_urls
+  if ! _hooks_raw="$(gh api "repos/$TARGET_ORG/$repo_name/hooks?per_page=100" --paginate 2>/dev/null)"; then
+    warn "  Could not list existing webhooks in $TARGET_ORG/$repo_name — skipping '$url' to avoid a duplicate"
+    echo "failed"; return 0
+  fi
+  tgt_urls="$(printf '%s' "$_hooks_raw" | jq -rs '[.[] | select(type=="array") | .[] | select(type=="object") | .config.url // ""] | map(select(. != ""))' 2>/dev/null || echo '[]')"
   if [[ -n "$(echo "$tgt_urls" | jq -r --arg u "$url" '.[] | select(. == $u)' 2>/dev/null || true)" ]]; then
     log "  Repo webhook $url already exists in $TARGET_ORG/$repo_name — skipping"
     echo "created_no_secret"; return 0
@@ -288,8 +297,8 @@ main() {
   # ---- 6. Actions secret NAMES (org + repo + dependabot) — inventory -----
   log "Inventorying Actions secret names from $SOURCE_ORG..."
   local org_secrets
-  org_secrets="$(ghsrc api "orgs/$SOURCE_ORG/actions/secrets?per_page=100" \
-    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("secrets")) | .secrets[] | select(type == "object")]')" || org_secrets='[]'
+  # C2 FIX: gh_flatten_wrapper warns instead of silently dropping error pages.
+  org_secrets="$(gh_flatten_wrapper ghsrc "orgs/$SOURCE_ORG/actions/secrets" secrets)"
   while IFS= read -r secret; do
     local sname svis
     sname="$(echo "$secret" | jq -r '.name')"
@@ -307,8 +316,7 @@ main() {
     local repo_name
     repo_name="$(echo "$repo" | jq -r '.name')"
     local repo_secrets
-    repo_secrets="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/actions/secrets?per_page=100" \
-      --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("secrets")) | .secrets[] | select(type == "object")]')" || repo_secrets='[]'
+    repo_secrets="$(gh_flatten_wrapper ghsrc "repos/$SOURCE_ORG/$repo_name/actions/secrets" secrets)"
     while IFS= read -r secret; do
       local sname
       sname="$(echo "$secret" | jq -r '.name')"
@@ -324,8 +332,7 @@ main() {
   done < <(echo "$repos" | jq -c '.[]' 2>/dev/null || true)
 
   local dep_secrets
-  dep_secrets="$(ghsrc api "orgs/$SOURCE_ORG/dependabot/secrets?per_page=100" \
-    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("secrets")) | .secrets[] | select(type == "object")]')" || dep_secrets='[]'
+  dep_secrets="$(gh_flatten_wrapper ghsrc "orgs/$SOURCE_ORG/dependabot/secrets" secrets)"
   while IFS= read -r secret; do
     local sname svis
     sname="$(echo "$secret" | jq -r '.name')"

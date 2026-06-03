@@ -127,6 +127,117 @@ multi-MB diff), it gets its own part and a warning is logged; if that single ite
 exceeds 100 MB an error is logged because GitHub will reject it (rare; needs manual
 handling).
 
+## API-rate visibility (rolling 60 minutes)
+
+To confirm the run is staying well within GitHub's limits, every `gh` invocation
+is recorded and a rolling **last-60-minutes** summary is printed periodically
+(every `APIRATE_REPORT_EVERY` calls, default 50) and at the end of each import stage:
+
+```
+API rate (last 60m): 412 calls — source-read 31, target-read 47, target-write 334/350 cap (reads count invocations; --paginate may be >1 HTTP each)
+```
+
+Counts are split by GitHub's *independent* rate-limit buckets:
+- **source-read** — reads from the SOURCE org (`ghsrc`).
+- **target-read** — reads from the TARGET org.
+- **target-write** — mutating calls to the TARGET org (POST/PATCH/PUT/DELETE,
+  release upload, or a GraphQL mutation). Shown against `MAX_WRITES_PER_HOUR` —
+  this is the abuse-sensitive number the write-throttle enforces.
+
+Fidelity: counts are per `gh` **invocation**. Writes are always a single HTTP
+request, so **target-write is exact**. Reads may use `--paginate` (N HTTP requests
+per invocation), so source/target-read are a lower bound — the line says so.
+
+`APIRATE_REPORT_EVERY=0` disables the periodic line (the end-of-stage line still
+prints). State lives in the gitignored `state/.api-rate.log`, pruned to the
+60-minute window as it goes.
+
+### AUTORATELIMIT — adaptive backoff from GitHub's rate-limit headers
+
+The fixed delays above are conservative by design. To instead let the run go as
+fast as GitHub's *actual* primary rate limit allows, set `AUTORATELIMIT` to a
+fraction of the limit you don't want to exceed:
+
+```bash
+AUTORATELIMIT=0.8 ./mirror/stages/06-mirror-prs.sh   # back off at 80% of limit
+```
+
+- `AUTORATELIMIT=0` (default) — OFF; only the fixed delays + hourly cap + 403
+  hard-stop apply.
+- `AUTORATELIMIT=<0..1>` — every `AUTORATELIMIT_PROBE_EVERY` writes (default 25) a
+  cheap `gh api rate_limit` probe refreshes the **core (REST)** and **graphql**
+  bucket usage. When any bucket's `used/limit` reaches the fraction, the engine
+  **sleeps until that bucket's reset epoch** (+`AUTORATELIMIT_RESET_BUFFER`, default
+  15s) — precise, never overshoots, never blows the limit. If a reset epoch isn't
+  available it falls back to a bounded exponential sleep
+  (`AUTORATELIMIT_FALLBACK_BASE`^n, capped at `AUTORATELIMIT_FALLBACK_MAX`).
+
+This complements (does not replace) the 403/429 hard-stop: GitHub's **secondary
+(abuse) limit is not exposed by any header or `rate_limit`** — it only appears as a
+403 + Retry-After, which the existing hard-stop + degraded-mode handler covers.
+
+Tip: AUTORATELIMIT and the fixed `WRITE_DELAY_SECONDS` compose — keep a modest
+`WRITE_DELAY_SECONDS` (e.g. 4–6) for smooth pacing and let AUTORATELIMIT be the
+safety ceiling that reacts to the real headers.
+
+**Rate-limit visibility.** Each probe prints a line and writes `state/.rate-limit`:
+
+```
+rate-limit [gh]: core 1234/5000 (24%, reset in 30m 49s), graphql 77/5000 (1%, reset in 30m 49s)
+```
+
+This line is also embedded in `state/.progress` (so `cat state/.progress` shows
+progress + API-rate + rate-limit together). The probe runs automatically when
+`AUTORATELIMIT>0`. To see this dashboard **without** enabling adaptive throttling,
+set `RATELIMIT_SHOW=1` — it runs the same quota-free `rate_limit` probe every
+`AUTORATELIMIT_PROBE_EVERY` writes purely for display and changes no throttle behaviour:
+
+```bash
+RATELIMIT_SHOW=1 ./mirror/stages/06-mirror-prs.sh   # show rate-limit status, no adaptive throttle
+```
+
+## Progress & ETA (issue / PR import)
+
+Importing issues and PRs can take a long time (each write is throttled to ~10s).
+Because export already serialized everything, the total work is known up front, so
+stages 05 and 06 print a periodic progress line during import:
+
+```
+Progress: 39% (600/1535 issues) — 428.5/min — ETA 3m 40s — repo cyber-insight
+```
+
+- **%, done/total** — across ALL repositories combined (not per-repo).
+- **rate** — items/minute, measured from observed wall-clock (so it already reflects
+  the write-throttle, batch pauses, and any 403 hard-stops).
+- **ETA** — recomputed each line from the live rate.
+- **repo** — the repository currently being processed.
+
+The total for PR import respects `--skip-open-prs` (open PRs are excluded from the
+count) and `--repo` (single-repo runs count only that repo). Tuning knobs:
+`PROGRESS_EVERY` (log every N items, default 10) and `PROGRESS_MIN_INTERVAL`
+(minimum seconds between lines, default 15) — these throttle only the STDERR line.
+
+**Easiest way to watch progress:** the stage rewrites a plain-text status file
+`state/.progress` on EVERY item (not throttled), so it is always current even when
+the console is busy. It carries the progress/ETA line plus the latest API-rate
+summary:
+
+```bash
+cat state/.progress
+# or follow it live:
+watch -n 5 cat state/.progress
+```
+
+Example contents:
+```
+Progress: 39% (600/1535 issues) — 6.0/min — ETA 3h 45m — repo cyber-insight
+API rate (last 60m): 412 calls — source-read 31, target-read 47, target-write 334/350 cap
+updated: 2026-06-02T09:12:10Z
+```
+
+Runtime state files (`state/.progress`, `state/.progress.json`,
+`state/.api-rate.log`, `state/.api-rate.summary`) are gitignored.
+
 ## Write-throttle / abuse-protection policy
 
 Every mutating GitHub API request (issue/PR/comment creation, edits, label and
@@ -302,13 +413,43 @@ org is never read with elevated privileges.
 
 ---
 
+## GitHub Projects v2 (stage 15)
+
+Stage 15 handles organization Projects V2 (tables/boards/roadmaps), including
+**draft issues** (org-level issues not tied to a repo). Projects V2 is GraphQL-only.
+
+```bash
+# Export a full snapshot from the source org (needs read:project scope):
+SOURCE_ORG=cyberfabric GH_TOKEN_SOURCE=xxx MIRROR_MODE=export \
+  ./mirror/stages/15-export-projects.sh
+# → state/projects.yaml (auto-split if large)
+
+# Import into the target org (needs project scope on GH_TOKEN):
+TARGET_ORG=constructorfabric GH_TOKEN=xxx MIRROR_MODE=import \
+  ./mirror/stages/15-export-projects.sh
+# → recreates what the API allows + writes state/projects-manual-import.md
+```
+
+**Imported automatically** (GraphQL mutations): the project, supported custom
+fields (text / number / date / single-select with options), and draft issues
+(title + body). Idempotent — re-running skips projects already recorded as imported.
+
+**Manual (no GitHub write API)** — written as a per-project checklist to
+`state/projects-manual-import.md`: views/dashboards (layout + filters), iteration
+fields, project README, re-linking repo issue/PR items (their target numbers
+differ), insights, and built-in workflows. The report includes the source values
+to copy for each step.
+
+Not run on the 6-hour schedule; trigger via the workflow `stages` input (`15`)
+or run locally.
+
 ## Items requiring manual action
 
-Stage 08 catalogs objects that cannot be mirrored via API:
+Stage 09 catalogs other objects that cannot be mirrored via API:
 
-- **GitHub Projects v2** — no API for creating them; recreate manually
 - **GitHub App installations** — must be authorized by the app owner
 - **Org webhooks** — secrets are unreadable via API; reconfigure them manually
 - **Wikis** — clone separately with `git clone <repo>.wiki.git` if needed
 
-See `state/other-objects.yaml` for the full inventory.
+See `state/other-objects.yaml` for that inventory, and `state/projects-manual-import.md`
+for Projects V2 manual steps.

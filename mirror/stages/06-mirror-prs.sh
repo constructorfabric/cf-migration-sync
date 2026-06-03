@@ -84,7 +84,12 @@ def encode_line(line):
         if p.startswith("`"):
             out.append(p)
         else:
-            out.append(re.sub(r"@([a-zA-Z0-9][-a-zA-Z0-9]*)", r"&#64;\1", p))
+            # L1 FIX: also match an optional "/team-name" suffix so TEAM mentions
+            # (@org/team) are encoded too — previously the "/" ended the match,
+            # leaving @org intact and STILL firing team notifications, defeating
+            # the whole purpose of this function. The captured group keeps the
+            # "user" or "org/team" text; only the leading @ is replaced.
+            out.append(re.sub(r"@([a-zA-Z0-9][-a-zA-Z0-9]*(?:/[a-zA-Z0-9][-a-zA-Z0-9_]*)?)", r"&#64;\1", p))
     return "".join(out)
 
 lines = sys.stdin.read().split("\n")
@@ -425,7 +430,7 @@ ${marker}"
         _upsert_pr "$state_file" "$pr_number" "$pr_url" \
           "$no_branch_tgt_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "open"
         _mirror_pr_comments "$repo_name" "$pr_number" "$no_branch_tgt_number" "$state_file"
-        pause 4.0
+        pause 0.5
         continue
       fi
 
@@ -476,12 +481,12 @@ ${marker}"
         continue
       fi
 
-      pause 4.0   # rate-limit cooldown after POST /pulls
+      pause 0.5   # rate-limit cooldown after POST /pulls
       ok "  Mirrored open PR #$pr_number -> PR #$tgt_open_pr_number in $TARGET_ORG/$repo_name"
       _upsert_pr "$state_file" "$pr_number" "$pr_url" \
         "$tgt_open_pr_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "open"
       _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_open_pr_number" "$state_file"
-      pause 3.0   # rate-limit buffer between PRs
+      pause 0.5   # rate-limit buffer between PRs
 
     done < <(echo "$open_prs" | jq -c '.[]' 2>/dev/null || true)
   fi
@@ -564,7 +569,7 @@ ${marker}"
         else
           gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_issue_in_state" \
             --method PATCH -f state="closed" 2>/dev/null || true
-          pause 3.0
+          pause 0.5
           _mirror_pr_comments "$repo_name" "$pr_number" "$tgt_issue_in_state" "$state_file"
         fi
         skip_count=$((skip_count + 1))
@@ -744,7 +749,7 @@ ${marker}"
       continue
     fi
 
-    pause 4.0   # rate-limit cooldown after POST /pulls or POST /issues
+    pause 0.5   # rate-limit cooldown after POST /pulls or POST /issues
 
     # ---- Close the target (historical PR — closed or merged in source) ------
     if [[ $used_pr_api -eq 1 ]]; then
@@ -760,7 +765,7 @@ ${marker}"
         2>/dev/null || warn "  Failed to close issue #$tgt_issue_number in $TARGET_ORG/$repo_name"
       ok "  Mirrored PR #$pr_number -> issue #$tgt_issue_number in $TARGET_ORG/$repo_name"
     fi
-    pause 3.0   # rate-limit cooldown after PATCH close
+    pause 0.5   # rate-limit cooldown after PATCH close
 
     _upsert_pr "$state_file" "$pr_number" "$pr_url" \
       "$tgt_issue_number" "$pr_title" "mirrored" "$(now)" "$pr_author" "$pr_state"
@@ -772,7 +777,7 @@ ${marker}"
     if (( wrote_count % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
       commit_state "mirror: checkpoint $wrote_count PR writes in $repo_name [skip ci]"
     fi
-    pause 3.0   # rate-limit buffer between PRs
+    pause 0.5   # rate-limit buffer between PRs
 
   done < <(echo "$prs" | jq -c '.[]' 2>/dev/null || true)
 
@@ -899,7 +904,7 @@ ${c_marker}"
         commit_state "mirror: checkpoint PR #$src_pr_number comments ($posted_since_commit posted) in $repo_name [skip ci]"
       fi
     fi
-    pause 3.0   # rate-limit cooldown after POST /issues/{n}/comments
+    pause 0.5   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$issue_comments" | jq -c '.[]' 2>/dev/null || true)
 
   # -- 2. Review-level bodies (Approved / Changes requested + message) ------
@@ -940,7 +945,7 @@ ${rv_marker}"
         commit_state "mirror: checkpoint PR #$src_pr_number comments ($posted_since_commit posted) in $repo_name [skip ci]"
       fi
     fi
-    pause 3.0   # rate-limit cooldown after POST /issues/{n}/comments
+    pause 0.5   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$pr_reviews" | jq -c '.[]' 2>/dev/null || true)
 
   # -- 3. Inline review comments (with file + line context) -----------------
@@ -982,7 +987,7 @@ ${rc_marker}"
         commit_state "mirror: checkpoint PR #$src_pr_number comments ($posted_since_commit posted) in $repo_name [skip ci]"
       fi
     fi
-    pause 3.0   # rate-limit cooldown after POST /issues/{n}/comments
+    pause 0.5   # rate-limit cooldown after POST /issues/{n}/comments
   done < <(echo "$review_comments" | jq -c '.[]' 2>/dev/null || true)
 
   _update_pr_comments_status "$state_file" "$src_pr_number" "done" "$mirrored"
@@ -1155,7 +1160,7 @@ ${marker}"
       --input "$_body_tmp" \
       2>/dev/null || warn "  Failed to reconcile PR $repo_name#$pr_number → #$tgt_issue_number"
     log "  Reconciled PR #$pr_number → #$tgt_issue_number ($(echo "$patch_payload" | jq -r 'keys | join(", ")'))"
-    pause 3.0
+    pause 0.5
     [[ "$body_changed" -eq 1 ]] && _clear_crossref_record "$repo_name" "$tgt_issue_number"
   fi
 
@@ -1230,7 +1235,7 @@ _reconcile_pr_comments() {
           --method PATCH \
           --input "$_body_tmp" \
           2>/dev/null || warn "  Failed to update comment on PR #$src_pr_number"
-        pause 3.0
+        pause 0.5
       fi
       mirrored=$((mirrored + 1))
     else
@@ -1243,7 +1248,7 @@ _reconcile_pr_comments() {
         2>/dev/null)" || c_result="FAILED"
       [[ "$c_result" != "FAILED" ]] && mirrored=$((mirrored + 1)) || \
         warn "  Failed to create comment on PR #$src_pr_number"
-      pause 3.0
+      pause 0.5
     fi
   }
 
@@ -1545,6 +1550,25 @@ _import_all_prs() {
       warn "  [import] SOURCE_ORG unset and not in state meta — cf-mirror markers will be empty, idempotency will break"
   fi
   log "Importing PRs from $(echo "$repo_names" | grep -c .) repo state file(s)"
+
+  # ---- Precompute total items for the progress/ETA engine ----
+  # Respect the same filters the work loop uses: --repo (only_repo) and
+  # --skip-open-prs (exclude source_state == "open"), so % and ETA match reality.
+  local _total_prs=0 _rn
+  while IFS= read -r _rn; do
+    [[ -z "$_rn" ]] && continue
+    [[ -n "$only_repo" && "$_rn" != "$only_repo" ]] && continue
+    state_unsplit "$STATE_DIR/$_rn.yaml"
+    local _c
+    if [[ "$skip_open_prs" -eq 1 ]]; then
+      _c="$(jq '[.items[] | select((.source_state // "closed") != "open")] | length' "$STATE_DIR/$_rn.yaml" 2>/dev/null || echo 0)"
+    else
+      _c="$(jq '.items | length' "$STATE_DIR/$_rn.yaml" 2>/dev/null || echo 0)"
+    fi
+    _total_prs=$(( _total_prs + _c ))
+  done < <(echo "$repo_names")
+  progress_begin "$_total_prs" "PRs"
+
   local repo_name
   while IFS= read -r repo_name; do
     [[ -z "$repo_name" ]] && continue
@@ -1555,6 +1579,9 @@ _import_all_prs() {
     _import_repo_prs "$repo_name" "$skip_open_prs"
     pause 2.0
   done < <(echo "$repo_names")
+
+  progress_end
+  apirate_report   # final rolling-60m API call summary by category
 }
 
 _import_repo_prs() {
@@ -1585,8 +1612,12 @@ _import_repo_prs() {
     comments_status="$(echo "$item" | jq -r '.comments_status // "none"')"
 
     if [[ "$skip_open_prs" -eq 1 && "$source_state" == "open" ]]; then
+      # NOT counted in the progress total above, so do not tick for these.
       skipped=$((skipped + 1)); continue
     fi
+
+    # Advance the cross-repo progress/ETA counter once per processed item.
+    progress_tick 1 "$repo_name"
 
     # Already imported — finish comment sync only; never recreate.
     if [[ -n "$tgt_existing" && "$tgt_existing" != "null" ]]; then
@@ -1670,7 +1701,7 @@ _import_repo_prs() {
         warn "  Open PR #$pr_number: no target number returned — marking failed"
         failed=$((failed + 1)); pause 2.0; continue
       fi
-      pause 4.0
+      pause 0.5
       ok "  Imported open PR #$pr_number -> #$tgt_number in $TARGET_ORG/$repo_name"
 
     else
@@ -1730,7 +1761,7 @@ _import_repo_prs() {
         warn "  Closed PR #$pr_number: no target number returned — marking failed"
         failed=$((failed + 1)); pause 2.0; continue
       fi
-      pause 4.0
+      pause 0.5
 
       # Close the target (source PR is closed/merged).
       if [[ $used_pr_api -eq 1 ]]; then
@@ -1744,7 +1775,7 @@ _import_repo_prs() {
           warn "  Failed to close issue #$tgt_number in $TARGET_ORG/$repo_name"
         ok "  Imported PR #$pr_number -> issue #$tgt_number in $TARGET_ORG/$repo_name"
       fi
-      pause 3.0
+      pause 0.5
     fi
 
     _mark_pr_imported "$state_file" "$pr_number" "$tgt_number"
@@ -1758,7 +1789,7 @@ _import_repo_prs() {
     if (( wrote % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
       commit_state "mirror: import checkpoint $wrote PRs in $repo_name [skip ci]"
     fi
-    pause 3.0
+    pause 0.5
   done < <(state_items "$state_file")
 
   state_update_stats "$state_file"
@@ -1805,7 +1836,7 @@ _import_pr_comments() {
   # shellcheck disable=SC2064
   trap "rm -f -- '${_body_tmp}' '${_post_err_tmp}'; ${_prev_trap:-trap - RETURN}" RETURN
 
-  local idx=0 posted="$already"
+  local idx=0 posted="$already" failed=0
 
   _post_one() {
     local full_body="$1" what="$2"
@@ -1816,15 +1847,21 @@ _import_pr_comments() {
     r="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments" \
       --method POST --input "$_body_tmp" 2>"$_post_err_tmp")" || r="FAILED"
     if [[ "$r" == "FAILED" ]]; then
+      # M1 FIX: record the failure. Resume is index-based (posted = count of the
+      # contiguous successful prefix). A failure mid-sequence means we must NOT
+      # advance `posted` past it AND must NOT mark this PR's comments "done", so a
+      # re-run retries from the first failure instead of silently skipping it.
+      failed=$((failed + 1))
       warn "  Failed to import $what on PR #$pr_number — $(head -1 "$_post_err_tmp" 2>/dev/null || true)"
-    else
+    elif (( failed == 0 )); then
+      # Only advance the resumable counter while the prefix is still unbroken.
       posted=$((posted + 1))
       if (( posted % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
         _update_pr_comments_status "$state_file" "$pr_number" "in_progress" "$posted"
         commit_state "mirror: import checkpoint PR #$pr_number comments ($posted) in $repo_name [skip ci]"
       fi
     fi
-    pause 3.0
+    pause 0.5
   }
 
   # 1. Discussion comments
@@ -1863,8 +1900,15 @@ _import_pr_comments() {
     _post_one "$fb" "inline review comment $cid"
   done < <(echo "$rc" | jq -c '.[]' 2>/dev/null || true)
 
-  _update_pr_comments_status "$state_file" "$pr_number" "done" "$posted"
-  ok "  [import] Posted comments for PR #$pr_number ($posted/$total)"
+  # M1 FIX: only mark "done" if every comment posted. Otherwise keep
+  # "in_progress" so the next run retries (resumes from the successful prefix).
+  if (( failed == 0 )); then
+    _update_pr_comments_status "$state_file" "$pr_number" "done" "$posted"
+    ok "  [import] Posted comments for PR #$pr_number ($posted/$total)"
+  else
+    _update_pr_comments_status "$state_file" "$pr_number" "in_progress" "$posted"
+    warn "  [import] PR #$pr_number comments INCOMPLETE: $posted/$total posted, $failed failed — left in_progress, re-run to retry"
+  fi
 }
 
 main "$@"

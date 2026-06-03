@@ -49,6 +49,181 @@ pause() {
 }
 
 # ===========================================================================
+# Progress / ETA engine
+# ===========================================================================
+# Shows "% complete + ETA + current repo" periodically during long imports.
+# Because export already serialized everything, the TOTAL unit count is known
+# up front, so progress and ETA are accurate. ETA is computed from the observed
+# wall-clock rate (units actually completed / elapsed seconds) — this naturally
+# absorbs the write-throttle delays, batch pauses, and any 403 hard-stops,
+# rather than assuming a fixed per-unit cost.
+#
+# A "unit" is whatever the caller counts (an issue, a PR, a project). The caller
+# decides granularity; this engine just tracks done/total over time.
+#
+# Subshell-safe: state lives in a FILE ($PROGRESS_STATE), because import work
+# runs inside  result="$(gh ...)"  subshells where shell-variable mutation is lost.
+#
+# Usage:
+#   progress_begin <total_units> "<label>"        # once, before the work loop
+#   progress_tick  [n] [current-repo]             # after each unit (n defaults 1)
+#   progress_end                                  # once, after the loop
+# progress_tick logs a line only every PROGRESS_EVERY units (default 10) and at
+# least PROGRESS_MIN_INTERVAL seconds apart, so it never spams the log.
+
+PROGRESS_EVERY="${PROGRESS_EVERY:-10}"            # log at most every N ticks
+PROGRESS_MIN_INTERVAL="${PROGRESS_MIN_INTERVAL:-15}"  # ...and >= this many seconds apart
+PROGRESS_STATE="${PROGRESS_STATE:-}"
+
+# Human-readable status file. Unlike the stderr log line (which is throttled and
+# easily lost in console noise), this file is OVERWRITTEN on every tick so it is
+# always current — `cat state/.progress` or `watch -n5 cat state/.progress` to
+# follow a long run. It carries the progress/ETA snapshot AND the latest API-rate
+# summary. Gitignored.
+PROGRESS_FILE="${PROGRESS_FILE:-}"
+
+# _progress_state_path — lazily resolve the internal JSON state file path.
+_progress_state_path() {
+  if [[ -z "${PROGRESS_STATE:-}" ]]; then
+    PROGRESS_STATE="${REPO_ROOT:-.}/state/.progress.json"
+  fi
+  echo "$PROGRESS_STATE"
+}
+
+# _progress_file_path — lazily resolve the human-readable status file path.
+_progress_file_path() {
+  if [[ -z "${PROGRESS_FILE:-}" ]]; then
+    PROGRESS_FILE="${REPO_ROOT:-.}/state/.progress"
+  fi
+  echo "$PROGRESS_FILE"
+}
+
+# _status_write_file <progress_line> — (re)write the human status file with the
+# given progress line plus the most-recent cached API-rate summary line. Called
+# on every tick so the file is always current; cheap (no jq, no awk).
+_status_write_file() {
+  local progress_line="$1"
+  local sf; sf="$(_progress_file_path)"
+  local rate_line=""
+  local rs; rs="$(_apirate_summary_path)"
+  [[ -f "$rs" ]] && rate_line="$(cat "$rs" 2>/dev/null || true)"
+  # Latest AUTORATELIMIT probe summary (first line only; it has its own 'updated:').
+  local rl_line=""
+  local rlf; rlf="$(_ratelimit_summary_path)"
+  [[ -f "$rlf" ]] && rl_line="$(head -1 "$rlf" 2>/dev/null || true)"
+  {
+    echo "$progress_line"
+    [[ -n "$rate_line" ]] && echo "$rate_line"
+    [[ -n "$rl_line"   ]] && echo "$rl_line"
+    echo "updated: $(now)"
+  } > "$sf" 2>/dev/null || true
+}
+
+# _hms <seconds> — format an integer second count as compact "1h 02m 03s".
+_hms() {
+  local s="${1:-0}"
+  (( s < 0 )) && s=0
+  local h=$(( s / 3600 )) m=$(( (s % 3600) / 60 )) sec=$(( s % 60 ))
+  if (( h > 0 )); then printf '%dh %02dm %02ds' "$h" "$m" "$sec"
+  elif (( m > 0 )); then printf '%dm %02ds' "$m" "$sec"
+  else printf '%ds' "$sec"; fi
+}
+
+# progress_begin <total> <label>
+progress_begin() {
+  local total="${1:-0}" label="${2:-work}"
+  local pf; pf="$(_progress_state_path)"
+  mkdir -p "$(dirname "$pf")" 2>/dev/null || true
+  jq -n --argjson total "$total" --arg label "$label" --argjson now "$(date +%s)" \
+    '{label:$label, total:$total, done:0, start:$now, last_log:0, last_repo:""}' \
+    > "$pf" 2>/dev/null || \
+    printf '{"label":"%s","total":%s,"done":0,"start":%s,"last_log":0,"last_repo":""}' \
+      "$label" "$total" "$(date +%s)" > "$pf"
+  if [[ "$total" -gt 0 ]]; then
+    log "Progress: starting $label — $total item(s) to process"
+    _status_write_file "Progress: 0% (0/${total} ${label}) — ETA — — starting"
+  fi
+}
+
+# progress_tick [n] [current_repo] — advance the counter by n (default 1) and,
+# when due, log "% — done/total — ETA — repo".
+progress_tick() {
+  local n="${1:-1}" repo="${2:-}"
+  local pf; pf="$(_progress_state_path)"
+  [[ -f "$pf" ]] || return 0
+
+  # Advance done (and remember the current repo) atomically.
+  local tmp; tmp="$(mktemp)"
+  jq --argjson n "$n" --arg repo "$repo" \
+    '.done += $n | (if $repo != "" then .last_repo = $repo else . end)' \
+    "$pf" > "$tmp" 2>/dev/null && mv "$tmp" "$pf" || { rm -f "$tmp"; return 0; }
+
+  local total done start last_log label last_repo now
+  total="$(jq -r '.total'    "$pf" 2>/dev/null || echo 0)"
+  done="$(jq -r '.done'      "$pf" 2>/dev/null || echo 0)"
+  start="$(jq -r '.start'    "$pf" 2>/dev/null || echo 0)"
+  last_log="$(jq -r '.last_log' "$pf" 2>/dev/null || echo 0)"
+  label="$(jq -r '.label'    "$pf" 2>/dev/null || echo work)"
+  last_repo="$(jq -r '.last_repo' "$pf" 2>/dev/null || echo '')"
+  now="$(date +%s)"
+
+  [[ "$total" -le 0 ]] && return 0   # unknown total → nothing to show
+
+  # Build the snapshot line (always, on every tick — it's cheap).
+  local elapsed=$(( now - start ))
+  (( elapsed < 1 )) && elapsed=1
+  local pct=$(( done * 100 / total ))
+  local eta_str="—"
+  if (( done > 0 && done < total )); then
+    local remaining=$(( total - done ))
+    local eta=$(( elapsed * remaining / done ))
+    eta_str="$(_hms "$eta")"
+  elif (( done >= total )); then
+    eta_str="done"
+  fi
+  local rate_str=""
+  if (( elapsed > 0 )); then
+    local ipm10=$(( done * 600 / elapsed ))   # items/min, fixed-point 1 decimal
+    rate_str=" — $(( ipm10 / 10 )).$(( ipm10 % 10 ))/min"
+  fi
+  local line="Progress: ${pct}% (${done}/${total} ${label})${rate_str} — ETA ${eta_str}${last_repo:+ — repo ${last_repo}}"
+
+  # ALWAYS overwrite the human status file (the reliable, easy-to-watch source).
+  _status_write_file "$line"
+
+  # Throttle only the STDERR log line: every PROGRESS_EVERY units AND >= MIN_INTERVAL
+  # secs apart, but always allow the final (done >= total) line through.
+  local due=0
+  (( done >= total )) && due=1
+  (( done % PROGRESS_EVERY == 0 )) && (( now - last_log >= PROGRESS_MIN_INTERVAL )) && due=1
+  [[ "$due" -eq 0 ]] && return 0
+
+  # Record that we logged now.
+  tmp="$(mktemp)"
+  jq --argjson t "$now" '.last_log = $t' "$pf" > "$tmp" 2>/dev/null && mv "$tmp" "$pf" || rm -f "$tmp"
+
+  log "$line"
+}
+
+# progress_end — final 100% line + total elapsed, then clear the state file.
+progress_end() {
+  local pf; pf="$(_progress_state_path)"
+  [[ -f "$pf" ]] || return 0
+  local total done start label now
+  total="$(jq -r '.total' "$pf" 2>/dev/null || echo 0)"
+  done="$(jq -r '.done'   "$pf" 2>/dev/null || echo 0)"
+  start="$(jq -r '.start' "$pf" 2>/dev/null || echo 0)"
+  label="$(jq -r '.label' "$pf" 2>/dev/null || echo work)"
+  now="$(date +%s)"
+  if [[ "$total" -gt 0 ]]; then
+    local final="Progress: complete — ${done}/${total} ${label} in $(_hms $(( now - start )))"
+    log "$final"
+    _status_write_file "$final"
+  fi
+  rm -f "$pf"
+}
+
+# ===========================================================================
 # Write-throttle engine (GitHub abuse-protection policy)
 # ===========================================================================
 # Implements the conservative write-throttling policy for issue/PR migration:
@@ -82,6 +257,41 @@ MAX_RETRIES="${MAX_RETRIES:-3}"
 # Low-watermark for x-ratelimit-remaining: pause until reset when at/below this.
 RATELIMIT_MIN_REMAINING="${RATELIMIT_MIN_REMAINING:-50}"
 
+# ---------------------------------------------------------------------------
+# AUTORATELIMIT — adaptive throttling driven by GitHub's PRIMARY rate-limit
+# headers (x-ratelimit-limit / -remaining / -reset / -resource).
+#
+#   AUTORATELIMIT=0          → OFF (default). Only the fixed delays + hourly cap
+#                              + 403/429 hard-stop apply (unchanged behaviour).
+#   AUTORATELIMIT=<0..1>     → ON. When a bucket's usage (used/limit) reaches or
+#                              exceeds this fraction (e.g. 0.8 = 80%), the engine
+#                              SLEEPS until that bucket's reset time (+ buffer),
+#                              so usage falls back under the threshold before
+#                              continuing. This is precise (the reset epoch is
+#                              authoritative) — no overshoot, never blows the cap.
+#
+# How the snapshot is obtained: a cheap PROBE (`gh api -i rate_limit`) every
+# AUTORATELIMIT_PROBE_EVERY writes refreshes a cached snapshot of the core (REST)
+# and graphql buckets into the throttle state. The per-write gate reads the
+# cached snapshot, so we do NOT double every API call or touch caller stdout.
+#
+# NOTE ON LIMITS: x-ratelimit-* and `rate_limit` report only the PRIMARY limits.
+# The SECONDARY (abuse) limit is NOT exposed by any header or endpoint — it only
+# manifests as a 403 with Retry-After, which the existing _throttle_on_rate_limit
+# hard-stop already handles. AUTORATELIMIT therefore complements, not replaces, it.
+AUTORATELIMIT="${AUTORATELIMIT:-0}"
+AUTORATELIMIT_PROBE_EVERY="${AUTORATELIMIT_PROBE_EVERY:-25}"
+# RATELIMIT_SHOW=1 → run the (quota-free) rate_limit probe purely for VISIBILITY
+# (console line + state/.rate-limit + .progress) even when AUTORATELIMIT=0. It
+# does NOT change throttle behaviour — it only displays how close we are to the
+# primary limits. When AUTORATELIMIT>0 the gate already probes, so this avoids a
+# redundant second probe.
+RATELIMIT_SHOW="${RATELIMIT_SHOW:-0}"
+AUTORATELIMIT_RESET_BUFFER="${AUTORATELIMIT_RESET_BUFFER:-15}"   # secs added to reset
+# Bounded exponential fallback (only used if a reset epoch is unavailable):
+AUTORATELIMIT_FALLBACK_BASE="${AUTORATELIMIT_FALLBACK_BASE:-4}"  # 4,16,64,256...
+AUTORATELIMIT_FALLBACK_MAX="${AUTORATELIMIT_FALLBACK_MAX:-300}"  # cap a single sleep
+
 # Throttle state file (JSON). Lives under state/ so it survives across stages in
 # a run but is reset per fresh checkout. Path is set lazily in _throttle_init.
 THROTTLE_STATE="${THROTTLE_STATE:-}"
@@ -95,9 +305,138 @@ _throttle_init() {
   if [[ ! -f "$THROTTLE_STATE" ]]; then
     jq -n --argjson now "$(date +%s)" \
       '{writes_total:0, writes_in_batch:0, hour_window_start:$now,
-        writes_in_hour:0, degraded:false}' > "$THROTTLE_STATE" 2>/dev/null || \
-      printf '{"writes_total":0,"writes_in_batch":0,"hour_window_start":%s,"writes_in_hour":0,"degraded":false}' \
+        writes_in_hour:0, degraded:false,
+        arl_probe_at:0, arl_fallback_step:0}' > "$THROTTLE_STATE" 2>/dev/null || \
+      printf '{"writes_total":0,"writes_in_batch":0,"hour_window_start":%s,"writes_in_hour":0,"degraded":false,"arl_probe_at":0,"arl_fallback_step":0}' \
         "$(date +%s)" > "$THROTTLE_STATE"
+  fi
+}
+
+# _arl_probe — refresh the cached primary-rate snapshot via `gh api -i rate_limit`.
+# Parses the core (REST) and graphql buckets and stores their used/limit/reset.
+# Cheap (one extra call) and only invoked every AUTORATELIMIT_PROBE_EVERY writes.
+# Uses `command gh` directly to avoid recursion through the throttled gh() wrapper.
+# Honours token hygiene: the caller passes which token context to probe.
+#   _arl_probe <gh|ghsrc>
+_arl_probe() {
+  local who="${1:-gh}"
+  local resp
+  if [[ "$who" == "ghsrc" ]]; then
+    resp="$(GH_TOKEN="${GH_TOKEN_SOURCE:-}" command gh api rate_limit 2>/dev/null)" || resp=""
+  else
+    resp="$(command gh api rate_limit 2>/dev/null)" || resp=""
+  fi
+  [[ -z "$resp" ]] && return 1
+  # Extract core + graphql buckets. resources.core / resources.graphql each carry
+  # {limit, used, remaining, reset}. (rate_limit itself does NOT consume quota.)
+  local core_lim core_used core_reset gql_lim gql_used gql_reset
+  core_lim="$(printf '%s' "$resp"  | jq -r '.resources.core.limit    // 0' 2>/dev/null || echo 0)"
+  core_used="$(printf '%s' "$resp" | jq -r '.resources.core.used     // 0' 2>/dev/null || echo 0)"
+  core_reset="$(printf '%s' "$resp"| jq -r '.resources.core.reset    // 0' 2>/dev/null || echo 0)"
+  gql_lim="$(printf '%s' "$resp"   | jq -r '.resources.graphql.limit // 0' 2>/dev/null || echo 0)"
+  gql_used="$(printf '%s' "$resp"  | jq -r '.resources.graphql.used  // 0' 2>/dev/null || echo 0)"
+  gql_reset="$(printf '%s' "$resp" | jq -r '.resources.graphql.reset // 0' 2>/dev/null || echo 0)"
+  # NOTE: _throttle_set takes the FILTER as $1, then jq args.
+  _throttle_set \
+    '.arl_core_limit=$cl | .arl_core_used=$cu | .arl_core_reset=$cr |
+     .arl_gql_limit=$gl  | .arl_gql_used=$gu  | .arl_gql_reset=$gr  |
+     .arl_probe_at=$now' \
+    --argjson cl "$core_lim" --argjson cu "$core_used" --argjson cr "$core_reset" \
+    --argjson gl "$gql_lim" --argjson gu "$gql_used" --argjson gr "$gql_reset" \
+    --argjson now "$(date +%s)"
+
+  # ---- Publish the probe result: console line + cached summary file ---------
+  # core_pct / gql_pct = used/limit as integer percent (guard divide-by-zero).
+  local core_pct=0 gql_pct=0 now_s
+  now_s="$(date +%s)"
+  (( core_lim > 0 )) && core_pct=$(( core_used * 100 / core_lim ))
+  (( gql_lim  > 0 )) && gql_pct=$(( gql_used  * 100 / gql_lim  ))
+  local core_in=0 gql_in=0
+  (( core_reset > now_s )) && core_in=$(( core_reset - now_s ))
+  (( gql_reset  > now_s )) && gql_in=$(( gql_reset  - now_s ))
+  local rl_line
+  rl_line="rate-limit [$who]: core ${core_used}/${core_lim} (${core_pct}%, reset in $(_hms "$core_in")), graphql ${gql_used}/${gql_lim} (${gql_pct}%, reset in $(_hms "$gql_in"))"
+  log "$rl_line"
+  # Cache to a file the human status (.progress) and operators can read/watch.
+  printf '%s\nupdated: %s\n' "$rl_line" "$(now)" > "$(_ratelimit_summary_path)" 2>/dev/null || true
+  return 0
+}
+
+# _ratelimit_summary_path — file holding the latest rate-limit probe summary,
+# shown in console at probe time and embedded in state/.progress.
+_ratelimit_summary_path() {
+  echo "${REPO_ROOT:-.}/state/.rate-limit"
+}
+
+# _arl_gate <gh|ghsrc> — AUTORATELIMIT enforcement, called from _throttle_pre_write.
+# No-op when AUTORATELIMIT=0. Otherwise: refresh the snapshot every N writes, then
+# if any relevant bucket's used/limit >= AUTORATELIMIT, sleep until that bucket's
+# reset (+buffer). Falls back to a bounded exponential sleep if reset is unknown.
+_arl_gate() {
+  local who="${1:-gh}"
+  # AUTORATELIMIT is a float in (0,1]; "0" / empty disables.
+  awk -v n="${AUTORATELIMIT:-0}" 'BEGIN{exit !(n+0>0)}' || return 0
+
+  _throttle_init
+  local now probe_at
+  now="$(date +%s)"
+  probe_at="$(_throttle_get arl_probe_at)"
+  [[ "$probe_at" =~ ^[0-9]+$ ]] || probe_at=0
+
+  # Refresh snapshot every AUTORATELIMIT_PROBE_EVERY writes (writes_total advances
+  # in _throttle_post_write), OR if we have never probed.
+  local wt
+  wt="$(_throttle_get writes_total)"; [[ "$wt" =~ ^[0-9]+$ ]] || wt=0
+  if (( probe_at == 0 )) || (( wt % AUTORATELIMIT_PROBE_EVERY == 0 )); then
+    _arl_probe "$who" || true
+  fi
+
+  # Evaluate both core and graphql buckets; sleep for the WORST (latest) reset
+  # among any bucket that is at/over the threshold.
+  local lim used reset frac_num
+  local need_sleep_until=0 over_desc=""
+  local b
+  for b in core gql; do
+    lim="$(_throttle_get "arl_${b}_limit")";  [[ "$lim"  =~ ^[0-9]+$ ]] || lim=0
+    used="$(_throttle_get "arl_${b}_used")";   [[ "$used" =~ ^[0-9]+$ ]] || used=0
+    reset="$(_throttle_get "arl_${b}_reset")"; [[ "$reset" =~ ^[0-9]+$ ]] || reset=0
+    (( lim <= 0 )) && continue
+    # over-threshold?  used/lim >= AUTORATELIMIT   (float compare via awk)
+    if awk -v u="$used" -v l="$lim" -v n="$AUTORATELIMIT" 'BEGIN{exit !((u/l) >= n)}'; then
+      # Mark this bucket as over-threshold regardless of reset usability — this
+      # drives BOTH the precise sleep-to-reset path (when reset is a usable future
+      # epoch) AND the bounded-exponential fallback (when it is not).
+      over_desc="$b ${used}/${lim}"
+      if (( reset > now && reset > need_sleep_until )); then
+        need_sleep_until="$reset"
+      fi
+    fi
+  done
+
+  if (( need_sleep_until > now )); then
+    local wait=$(( need_sleep_until - now + AUTORATELIMIT_RESET_BUFFER ))
+    warn "[autoratelimit] ${over_desc} ≥ ${AUTORATELIMIT} of limit — sleeping ${wait}s until reset"
+    sleep "$wait"
+    _throttle_set '.arl_fallback_step = 0'
+    _arl_probe "$who" || true
+    return 0
+  fi
+
+  # If we are over threshold but have NO usable reset epoch, use the bounded
+  # exponential fallback (base^step, capped), escalating each consecutive hit.
+  if [[ -n "$over_desc" ]]; then
+    local step
+    step="$(_throttle_get arl_fallback_step)"; [[ "$step" =~ ^[0-9]+$ ]] || step=0
+    step=$(( step + 1 ))
+    local wait=1 i
+    for (( i=0; i<step; i++ )); do wait=$(( wait * AUTORATELIMIT_FALLBACK_BASE )); done
+    (( wait > AUTORATELIMIT_FALLBACK_MAX )) && wait="$AUTORATELIMIT_FALLBACK_MAX"
+    warn "[autoratelimit] ${over_desc} ≥ ${AUTORATELIMIT} of limit, reset unknown — fallback sleep ${wait}s (step $step)"
+    sleep "$wait"
+    _throttle_set '.arl_fallback_step = $s' --argjson s "$step"
+  else
+    # Under threshold — reset the fallback escalation.
+    _throttle_set '.arl_fallback_step = 0'
   fi
 }
 
@@ -126,13 +465,29 @@ _throttle_enter_degraded() {
 }
 
 # _is_write_args — return 0 if the gh argv represents a mutating request.
-# Recognizes: api ... --method POST|PATCH|PUT|DELETE, and `release upload`.
-# Everything else (api GET, api graphql reads, release view, etc.) is a read.
+# Recognizes:
+#   - api ... --method POST|PATCH|PUT|DELETE
+#   - gh release upload|delete|create|edit|delete-asset
+#   - api graphql with a query/-f query value that begins with "mutation"
+#     (GraphQL mutations carry no --method, so without this they would silently
+#      bypass the write-throttle — see CLAUDE.md write-throttle rule #3).
+# Everything else (api GET, api graphql QUERIES, release view, etc.) is a read.
 _is_write_args() {
   local prev="" a
+  local saw_graphql=0
   for a in "$@"; do
     if [[ "$prev" == "--method" ]]; then
       case "$a" in POST|PATCH|PUT|DELETE|post|patch|put|delete) return 0 ;; esac
+    fi
+    [[ "$a" == "graphql" ]] && saw_graphql=1
+    # Detect a GraphQL mutation: a query argument whose (leading-whitespace-
+    # stripped) text starts with the keyword "mutation". Matches both
+    # 'query=mutation...' (from -f query=...) and a bare 'mutation ...' value.
+    if [[ "$saw_graphql" -eq 1 ]]; then
+      local v="$a"
+      v="${v#query=}"                 # strip a leading "query=" if present
+      v="${v#"${v%%[![:space:]]*}"}"  # strip leading whitespace
+      [[ "$v" == mutation* ]] && return 0
     fi
     prev="$a"
   done
@@ -148,6 +503,10 @@ _is_write_args() {
 _throttle_pre_write() {
   _throttle_init
 
+  # ---- AUTORATELIMIT: header-driven adaptive backoff (no-op when =0) -------
+  # Writes hit the TARGET org's primary limit (the `gh` token context).
+  _arl_gate gh
+
   # ---- Hourly cap: roll the window, sleep if the cap is hit ----------------
   local now win_start in_hour
   now="$(date +%s)"
@@ -158,14 +517,14 @@ _throttle_pre_write() {
 
   local elapsed=$(( now - win_start ))
   if (( elapsed >= 3600 )); then
-    # Window expired — reset.
-    _throttle_set --argjson now "$now" '.hour_window_start = $now | .writes_in_hour = 0'
+    # Window expired — reset. (filter FIRST, then jq args — see _throttle_set.)
+    _throttle_set '.hour_window_start = $now | .writes_in_hour = 0' --argjson now "$now"
   elif (( in_hour >= MAX_WRITES_PER_HOUR )); then
     local wait=$(( 3600 - elapsed + 60 ))
     warn "[throttle] hourly write cap reached ($in_hour/$MAX_WRITES_PER_HOUR) — sleeping ${wait}s until window reset"
     sleep "$wait"
     now="$(date +%s)"
-    _throttle_set --argjson now "$now" '.hour_window_start = $now | .writes_in_hour = 0'
+    _throttle_set '.hour_window_start = $now | .writes_in_hour = 0' --argjson now "$now"
   fi
 }
 
@@ -189,6 +548,17 @@ _throttle_post_write() {
   _throttle_set '.writes_total += 1 | .writes_in_batch += 1 | .writes_in_hour += 1'
 
   in_batch="$(_throttle_get writes_in_batch)"
+
+  # Rate-limit VISIBILITY probe (RATELIMIT_SHOW=1) when AUTORATELIMIT is OFF — the
+  # gate already probes when AUTORATELIMIT>0, so only probe here to avoid a double.
+  if [[ "${RATELIMIT_SHOW:-0}" == "1" ]] && \
+     awk -v n="${AUTORATELIMIT:-0}" 'BEGIN{exit !(n+0==0)}'; then
+    local _wt
+    _wt="$(_throttle_get writes_total)"; [[ "$_wt" =~ ^[0-9]+$ ]] || _wt=0
+    if (( _wt % AUTORATELIMIT_PROBE_EVERY == 0 )); then
+      _arl_probe gh || true
+    fi
+  fi
 
   # Per-write delay (policy default 10s; 20s degraded).
   sleep "$delay"
@@ -278,6 +648,109 @@ writes_target() { [[ "$MIRROR_MODE" == "full" || "$MIRROR_MODE" == "import" ]]; 
 # (full or export). Stages gate all source reads behind this.
 reads_source()  { [[ "$MIRROR_MODE" == "full" || "$MIRROR_MODE" == "export" ]]; }
 
+# ===========================================================================
+# API-rate visibility — rolling 60-minute request counters
+# ===========================================================================
+# Separately from the write-throttle (which ENFORCES the cap), this records every
+# gh invocation so we can SHOW how many requests went out in the last 60 minutes,
+# broken down by category. Source and target have independent GitHub rate limits
+# (different tokens/orgs), so they are counted separately:
+#
+#   source-read   — a read against the SOURCE org (ghsrc ...)
+#   target-read   — a read against the TARGET org (gh, non-mutating)
+#   target-write  — a mutating call against the TARGET org (gh, POST/PATCH/PUT/
+#                   DELETE, release upload, or a GraphQL mutation)
+#
+# Fidelity note: a count is per `gh` INVOCATION, not per HTTP request. Writes are
+# always a single HTTP request (never --paginate), so target-write is EXACT — and
+# that is the abuse-sensitive number. Reads may use --paginate (N HTTP requests
+# per invocation), so source-read/target-read are a LOWER BOUND on HTTP calls;
+# this is called out in the report so the number is never misread.
+#
+# Implementation: an append-only log of "<epoch> <category>" lines. Counting a
+# rolling window = select lines with epoch >= now-3600. The log is pruned to the
+# window opportunistically so it stays small. File-based → subshell-safe (the
+# wrappers run inside command-substitution subshells).
+
+APIRATE_LOG="${APIRATE_LOG:-}"
+# How often (in recorded events) to auto-print the rolling summary. 0 disables
+# the periodic line (the end-of-stage summary still prints).
+APIRATE_REPORT_EVERY="${APIRATE_REPORT_EVERY:-50}"
+
+_apirate_log_path() {
+  # Use :- so an unset (not just empty) APIRATE_LOG can't trip `set -u`.
+  if [[ -z "${APIRATE_LOG:-}" ]]; then
+    APIRATE_LOG="${REPO_ROOT:-.}/state/.api-rate.log"
+  fi
+  echo "$APIRATE_LOG"
+}
+
+# _apirate_summary_path — cache file holding the LAST computed API-rate summary
+# line, so the human status file (.progress) can display it without recomputing.
+_apirate_summary_path() {
+  echo "${REPO_ROOT:-.}/state/.api-rate.summary"
+}
+
+# _apirate_record <category> — append one event and, every APIRATE_REPORT_EVERY
+# events, emit the rolling-60m summary. Best-effort: never fails the caller.
+_apirate_record() {
+  local cat="$1"
+  local lf; lf="$(_apirate_log_path)"
+  mkdir -p "$(dirname "$lf")" 2>/dev/null || true
+  local now; now="$(date +%s)"
+  printf '%s %s\n' "$now" "$cat" >> "$lf" 2>/dev/null || return 0
+
+  [[ "$APIRATE_REPORT_EVERY" -le 0 ]] && return 0
+  # Cheap line-count gate; only do the (heavier) windowed count/prune when due.
+  local n
+  n="$(wc -l < "$lf" 2>/dev/null || echo 0)"
+  n="${n//[[:space:]]/}"
+  [[ -z "$n" ]] && return 0
+  if (( n % APIRATE_REPORT_EVERY == 0 )); then
+    apirate_report
+  fi
+}
+
+# apirate_report — print counts of API calls in the last 60 minutes, by category,
+# and prune the log to the window. Safe to call any time (e.g. end of a stage).
+apirate_report() {
+  local lf; lf="$(_apirate_log_path)"
+  [[ -f "$lf" ]] || return 0
+  local now cutoff
+  now="$(date +%s)"
+  cutoff=$(( now - 3600 ))
+
+  # Single awk pass: count per category within the window, and rewrite the file
+  # to only the in-window lines (prune). Totals are emitted on the COUNT line.
+  local tmp; tmp="$(mktemp)"
+  awk -v cutoff="$cutoff" -v out="$tmp" '
+    # Only consider well-formed lines: a purely-numeric epoch in $1. This avoids
+    # awk string-vs-number coercion counting a malformed line (total != category
+    # sum), and drops any garbage during the prune.
+    ($1 ~ /^[0-9]+$/) && ($1 + 0 >= cutoff) {
+      print > out                       # keep (prune to window)
+      c[$2]++; total++
+    }
+    END {
+      printf "%d %d %d %d\n", \
+        (c["source-read"]+0), (c["target-read"]+0), (c["target-write"]+0), (total+0)
+    }
+  ' "$lf" > "$tmp.counts" 2>/dev/null || { rm -f "$tmp" "$tmp.counts"; return 0; }
+  mv "$tmp" "$lf" 2>/dev/null || rm -f "$tmp"
+
+  local sr tr tw tot
+  read -r sr tr tw tot < "$tmp.counts" 2>/dev/null || { rm -f "$tmp.counts"; return 0; }
+  rm -f "$tmp.counts"
+  : "${sr:=0}" "${tr:=0}" "${tw:=0}" "${tot:=0}"
+
+  # Also surface the write cap so the number has context (the abuse-sensitive one).
+  local cap="${MAX_WRITES_PER_HOUR:-350}"
+  local rate_line="API rate (last 60m): ${tot} calls — source-read ${sr}, target-read ${tr}, target-write ${tw}/${cap} cap (reads count invocations; --paginate may be >1 HTTP each)"
+  log "$rate_line"
+  # Cache the summary so the human status file (.progress) can show it inline.
+  printf '%s\n' "$rate_line" > "$(_apirate_summary_path)" 2>/dev/null || true
+}
+
 # ---------------------------------------------------------------------------
 # GitHub API helpers
 # ---------------------------------------------------------------------------
@@ -307,6 +780,7 @@ gh() {
 
   # Reads: no throttle, straight through (preserves stdout/stderr/exit exactly).
   if ! _is_write_args "$@"; then
+    _apirate_record "target-read"
     command gh "$@"
     return $?
   fi
@@ -327,6 +801,7 @@ gh() {
 
   if [[ "$_rc" -eq 0 ]]; then
     rm -f "$_gh_err"
+    _apirate_record "target-write"
     _throttle_post_write
     return 0
   fi
@@ -355,6 +830,7 @@ ghsrc() {
     err "  args: $*"
     exit 1
   fi
+  _apirate_record "source-read"
   GH_TOKEN="${GH_TOKEN_SOURCE}" command gh "$@"
 }
 
@@ -602,7 +1078,13 @@ state_unsplit() {
         | $env + { items: (map(.items[]?)) }
       ' "${parts[@]}" > "$tmp" 2>/dev/null; then
     mv "$tmp" "$whole"
-    rm -f "${parts[@]}" "$manifest"
+    # Dry-run must NOT mutate the on-disk split layout: produce the whole file so
+    # readers work, but KEEP the parts + manifest. A real run consumes them.
+    # (RC-23: a dry-run / test that reassembled parts permanently merged the
+    #  operator's split state.)
+    if [[ "${DRY_RUN:-0}" -eq 0 ]]; then
+      rm -f "${parts[@]}" "$manifest"
+    fi
   else
     rm -f "$tmp"
     err "  [split] Failed to reassemble parts for $(basename "$whole") — leaving parts in place"
@@ -813,6 +1295,47 @@ dry_run_skip() {
     return 0
   fi
   return 1
+}
+
+# ---------------------------------------------------------------------------
+# gh_flatten_wrapper <ghsrc|gh> <endpoint> <inner_key>
+# Flatten a paginated endpoint that returns a WRAPPER OBJECT per page, e.g.
+# Actions/Dependabot secrets+variables: each --paginate page is
+#   {"total_count":N, "<inner_key>":[...]}.  Prints a JSON array of the inner items.
+#
+# C2 FIX (RC-8 for wrapper-object endpoints): the naive
+#   jq -rs '[.[] | select(has("<key>")) | .<key>[]]'
+# silently DROPS any page that is an error object (e.g. a transient 502
+# {"message":"Server Error"}) because has("<key>") is false — truncating the
+# inventory with no signal. Here we explicitly detect error/unexpected pages
+# (an object lacking <inner_key>) and emit a WARNING, so silent truncation
+# becomes a visible, actionable event. Output items are unchanged on the happy path.
+gh_flatten_wrapper() {
+  local cmd="$1" endpoint="$2" key="$3"
+  local raw
+  if [[ "$cmd" == "ghsrc" ]]; then
+    raw="$(ghsrc api "${endpoint}?per_page=100" --paginate 2>/dev/null)" || raw=""
+  else
+    raw="$(gh api "${endpoint}?per_page=100" --paginate 2>/dev/null)" || raw=""
+  fi
+  if [[ -z "$raw" ]]; then
+    warn "  [paginate] no/failed response from ${endpoint} — treating as empty (inventory may be incomplete)"
+    echo '[]'
+    return 0
+  fi
+  # Count pages that are objects but DON'T carry the expected key (error/garbage).
+  local bad
+  bad="$(printf '%s' "$raw" | jq -rs --arg k "$key" \
+    '[.[] | select(type=="object") | select(has($k) | not)] | length' 2>/dev/null || echo 0)"
+  if [[ "${bad:-0}" =~ ^[0-9]+$ ]] && (( bad > 0 )); then
+    local firstmsg
+    firstmsg="$(printf '%s' "$raw" | jq -rs --arg k "$key" \
+      '[.[] | select(type=="object") | select(has($k) | not) | .message // "unexpected page"][0] // "unexpected page"' 2>/dev/null || true)"
+    warn "  [paginate] ${endpoint}: ${bad} page(s) lacked '${key}' (e.g. \"${firstmsg}\") — inventory may be INCOMPLETE (transient error or scope?)"
+  fi
+  printf '%s' "$raw" | jq -rs --arg k "$key" \
+    '[.[] | select(type=="object") | select(has($k)) | .[$k][] | select(type=="object")]' \
+    2>/dev/null || echo '[]'
 }
 
 # ---------------------------------------------------------------------------

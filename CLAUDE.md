@@ -769,6 +769,522 @@ Prevention:
 
 ---
 
+### RC-19 — `--argjson` fed a value that can be empty aborts jq and corrupts idempotency
+
+```
+Bug:          In stage 15 (projects import), after creating a project in the target the
+              code recorded the idempotency marker via:
+                state_update ... --argjson tn "$pnum"
+              where $pnum is the project NUMBER parsed from the create response. When the
+              GraphQL response omitted the number (or it was null), $pnum="" and jq aborted
+              with "invalid JSON text passed to --argjson". Under `set -e` this killed the
+              stage AFTER the project was already created in the target but BEFORE the
+              marker was persisted — so the next run created the project AGAIN (duplicate),
+              because projects (unlike issues/PRs) have no body marker to dedup against.
+
+5 Whys:
+  Why 1:  --argjson requires syntactically valid JSON; an empty string is not valid JSON,
+          so jq exits non-zero and `set -e` aborts the stage.
+  Why 2:  $pnum was assumed to always be a number, but it is parsed from an API response
+          with `// empty`, which yields "" when the field is absent/null.
+  Why 3:  The idempotency marker was keyed on the project NUMBER (a secondary, optional
+          field) instead of the project node ID (the authoritative field that always
+          exists on a successful create).
+  Why 4:  The marker was persisted only at the END of per-project work (after fields +
+          drafts), so any failure before that point — including the --argjson crash —
+          left the target mutated but the state unmarked → guaranteed duplicate on re-run.
+  Why 5:  There was no contract that (a) idempotency markers must be written immediately
+          after the irreversible create, and (b) values passed to --argjson must be
+          proven non-empty/valid-JSON at the call site.
+
+Root cause:   Two compounding design gaps: (1) an optional/derived field (number) was used
+              as the idempotency key instead of the always-present authoritative one (node
+              id); (2) the marker was persisted late (after more fallible work) rather than
+              immediately after the irreversible target mutation. The --argjson crash was
+              just the trigger that exposed both.
+
+Fix applied:  - _gql_create_project defaults an absent number to 0 (never empty).
+              - Store target_id (node ID) as the authoritative marker; persist it
+                IMMEDIATELY after create, before fields/drafts.
+              - Idempotency skip keys on target_id, not target_number.
+              - _mark_project_imported passes all values via --arg (string) with in-jq
+                `tonumber? // 0`, so an unexpected empty value can never abort jq.
+              - Export merge preserves target_id across re-export.
+
+Prevention:
+1. Idempotency markers must key on the resource's STABLE, ALWAYS-PRESENT identifier
+   (node id / immutable id), never on an optional or human-facing field (number, slug).
+2. Persist the idempotency marker IMMEDIATELY after the irreversible create that produces
+   it — never after additional fallible steps. An interrupted run must never be able to
+   re-create an already-created resource.
+3. Never pass a possibly-empty / possibly-non-JSON value to `jq --argjson`. Either prove
+   it is valid JSON at the call site, or pass it as `--arg` (string) and convert inside
+   the filter with `tonumber? // <default>`. This applies to every --argjson in the repo.
+4. Resources with NO content-embedded marker (projects, and anything created via an API
+   that doesn't let you store a cf-mirror comment) rely ENTIRELY on the local state marker
+   for dedup — so rules 1–2 are mandatory, not best-effort, for them.
+```
+
+---
+
+### RC-20 — New mutating gh form (GraphQL mutation) would have bypassed the write-throttle
+
+```
+Bug:          Stage 15 import issues GraphQL MUTATIONS (createProjectV2, etc.) via
+              `gh api graphql -f query='mutation{...}'`. These carry no --method flag, so
+              the throttle engine's _is_write_args returned false and every project/field/
+              draft mutation would have run UN-throttled — exactly the silent rate-cap
+              violation the write-throttle contract (rule #3) warns about.
+
+5 Whys:
+  Why 1:  _is_write_args detected writes only by `--method POST|PATCH|PUT|DELETE` and
+          `gh release` subcommands. GraphQL mutations match neither.
+  Why 2:  When the throttle engine was written, the only writes in the codebase were REST
+          (--method) and release uploads; no GraphQL mutation existed yet.
+  Why 3:  Adding the first GraphQL mutation (stage 15 import) introduced a new mutating
+          invocation FORM that the detector had never been taught about.
+  Why 4:  CLAUDE.md write-throttle rule #3 explicitly says any new mutating gh form MUST
+          extend _is_write_args — but that rule is only honored if the author recalls it
+          while adding the new form.
+  Why 5:  There is no automated check that every target-write path is throttle-detected;
+          coverage depends on memory.
+
+Root cause:   Write-detection is an allowlist of known mutating forms. Any newly introduced
+              form is invisible to it until explicitly added, and the failure is silent
+              (un-throttled writes succeed until GitHub issues a 403).
+
+Fix applied:  Extended _is_write_args to classify `gh api graphql` calls whose query value
+              begins with "mutation" (after stripping a leading "query=" and whitespace)
+              as writes. Verified: graphql queries → read, graphql mutations → WRITE.
+
+Prevention:
+1. (Reaffirms write-throttle rule #3.) Any new mutating `gh` invocation form — a write
+   without --method, a new subcommand, a GraphQL mutation — MUST be added to
+   _is_write_args in the same change, with a unit check that it classifies as a write.
+2. Prefer routing all GraphQL mutations through helper functions named `_gql_*` so a
+   grep for mutation call sites is easy to audit against _is_write_args coverage.
+3. When adding the FIRST instance of a new write transport (GraphQL, git push via gh,
+   etc.), add an explicit _is_write_args test case for it alongside the existing ones.
+```
+
+---
+
+### RC-21 — `set -u` crash from a helper that reads a global which can be unset (not just empty)
+
+```
+Bug:          _apirate_log_path (API-rate visibility) tested `[[ -z "$APIRATE_LOG" ]]`.
+              The var is given a default at source time via "${APIRATE_LOG:-}", so it is
+              normally defined — but if any code path UNSETS it, the bare $APIRATE_LOG
+              reference aborts under `set -u` with "APIRATE_LOG: unbound variable".
+
+5 Whys:
+  Why 1:  The function dereferenced $APIRATE_LOG without the :- fallback.
+  Why 2:  A source-time default assignment was assumed to guarantee the var is always set,
+          so the function "didn't need" its own guard.
+  Why 3:  Source-time defaults only hold until something unsets the var; a robust function
+          must not depend on global initialization state it doesn't control.
+  Why 4:  `set -u` turns "read of an unset var" into a hard crash, so any unguarded global
+          read is a latent abort, not a silent empty string.
+  Why 5:  There is no convention that every global read inside a reusable helper uses
+          "${VAR:-}" regardless of whether a default was set elsewhere.
+
+Root cause:   A reusable helper depended on ambient global-initialization state instead of
+              defending its own reads. Under `set -u` that is a latent crash triggered by
+              any caller that unsets (or fails to set) the global.
+
+Fix applied:  `[[ -z "${APIRATE_LOG:-}" ]]` — the same :- guard already used elsewhere in
+              common.sh for optional globals. (Mirrors RC-21-adjacent fix in state_init for
+              TARGET_ORG.)
+
+Prevention:
+1. Inside any reusable function, read an optional/overridable global as "${VAR:-}" (or
+   "${VAR:-default}"), NEVER bare "$VAR" — independent of any source-time default. This
+   is mandatory while `set -u` is active (it always is here).
+2. After adding a new overridable global + its helper, test the helper with the global
+   UNSET (`unset VAR; (set -u; helper)`) — not just empty.
+```
+
+---
+
+### RC-22 — awk numeric filter trusted untrusted field as a number (count/total mismatch)
+
+```
+Bug:          apirate_report counted events in the rolling 60m window with awk
+              `$1 >= cutoff`. A malformed log line (non-numeric $1, e.g. "garbage")
+              passed this test due to awk's string-vs-number coercion, so it was counted
+              in `total` but matched no category — producing a report where total did not
+              equal the sum of the categories, and keeping garbage during the prune.
+
+5 Whys:
+  Why 1:  `$1 >= cutoff` in awk compares as STRINGS when $1 is non-numeric, and a string
+          like "garbage" compares as >= a numeric cutoff, so the line was accepted.
+  Why 2:  The filter assumed every line's $1 is a valid epoch, with no validation.
+  Why 3:  The log is append-only and could in principle contain a partial/garbled line
+          (interrupted write, manual edit, concurrent process), but the reader treated it
+          as always-well-formed.
+  Why 4:  Counting and pruning shared the same predicate, so a too-loose predicate both
+          miscounted AND failed to clean up the bad line.
+  Why 5:  No test fed the reporter a malformed line, so the coercion behavior was unseen.
+
+Root cause:   A numeric comparison was applied to a field that was never validated as
+              numeric, relying on awk's permissive coercion. Derived totals then diverged
+              from their components, and bad data persisted.
+
+Fix applied:  Predicate is now `($1 ~ /^[0-9]+$/) && ($1 + 0 >= cutoff)` — validate the
+              epoch is purely numeric first, then compare as a number. Malformed lines are
+              excluded from counts AND dropped during the prune.
+
+Prevention:
+1. Before a numeric comparison on a field parsed from a file, validate it is numeric
+   (`/^[0-9]+$/`) and force numeric context (`+ 0`). Never rely on awk/shell coercion to
+   "do the right thing" with untrusted input.
+2. When a reported TOTAL is derived alongside per-category counts, add a test that asserts
+   total == sum(categories), including a malformed-input case.
+```
+
+---
+
+### RC-23 — A read-path reassembly mutated the operator's on-disk split layout (incl. in dry-run)
+
+```
+Bug:          state_unsplit reassembles a split state file's parts into the whole file
+              AND deletes the parts + manifest. The import paths (stages 05/06) call it on
+              every repo before reading. Running an import — even MIRROR_MODE=import
+              --dry-run for TESTING — therefore permanently merged the operator's
+              deliberately-split state/prs/*.yaml.partNN files back into single large files
+              (one of them 203 MB), undoing the split and re-introducing the >100 MB
+              GitHub-unpushable file the split existed to prevent.
+
+5 Whys:
+  Why 1:  state_unsplit's success path unconditionally did `rm -f "${parts[@]}" "$manifest"`.
+  Why 2:  Reassembly was modeled as "merge then consume parts" — correct for a REAL import,
+          but state_unsplit is also invoked on read-only / dry-run / testing paths.
+  Why 3:  The function had a single destructive behavior regardless of whether the caller
+          was actually going to consume the data or just read it transiently.
+  Why 4:  dry-run's "no disk mutation" contract was never applied to state_unsplit (same
+          class as RC-19/BUG-G: a helper mutated disk in dry-run).
+  Why 5:  The on-disk split layout is operator-managed state (it represents a deliberate,
+          committed choice), but no code treated it as something that must survive a
+          read/dry-run untouched.
+
+Root cause:   A helper used on BOTH "just read it" and "consume and finalize it" paths had
+              only the destructive (consume) behavior, and ignored DRY_RUN. Any read-only
+              or test invocation silently rewrote operator-managed on-disk layout.
+
+Fix applied:  state_unsplit still produces the whole file (so readers work), but the
+              `rm -f parts + manifest` is now guarded by `[[ "${DRY_RUN:-0}" -eq 0 ]]`. In
+              dry-run the parts + manifest SURVIVE; a real run consumes them as before.
+              Verified: dry-run keeps 2/2 parts; real run consumes them and reassembles.
+              (Operator's 4 split repos were re-split immediately via the manual tool.)
+
+Prevention:
+1. Any helper that both READS and CONSUMES/FINALIZES a resource must not destroy the
+   source form on a read-only or dry-run path. Gate destructive cleanup behind
+   `[[ "${DRY_RUN:-0}" -eq 0 ]]`.
+2. On-disk split layout (parts + manifest) is OPERATOR-MANAGED, COMMITTED state. Treat it
+   like the working tree: a dry-run / test must leave it byte-for-byte unchanged.
+3. NEVER run an import (even --dry-run) against the real state/ tree purely to "test" a
+   change. Test against a COPY (REPO_ROOT=/tmp/...) or with stubbed inputs. Validation
+   runs must not mutate committed state.
+
+   CAVEAT discovered later: stage scripts hard-set `REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"`
+   at the top, so passing `REPO_ROOT=/tmp/...` on the command line is IGNORED — the script
+   reads the real `state/` tree regardless. To truly isolate a test you must copy the WHOLE
+   repo elsewhere and run the copy's script, or stub `gh`/`ghsrc`. (A dry-run against the
+   real tree still mutates `meta.last_run_at` and can trigger `state_unsplit`.)
+```
+
+---
+
+### RC-24 — "completed" status set regardless of per-item POST failures (silent loss masked as done)
+
+```
+Bug:          _import_pr_comments / _import_issue_comments posted N serialized
+              comments, incrementing `posted` only on success, but then called
+              _update_(pr_)comments_status "...done" "$posted" UNCONDITIONALLY after
+              the loop. If some POSTs failed (token expired mid-run, transient 5xx),
+              the item was marked comments_status=done with posted<total. The outer
+              import loop skips any item whose comments_status==done, so the missing
+              comments were NEVER retried — silent data loss recorded as success.
+
+5 Whys:
+  Why 1:  The terminal status write was outside any "did everything succeed?" guard.
+  Why 2:  `posted` (success count) and the done-marker were decoupled — the marker
+          did not depend on posted == total.
+  Why 3:  Failures only produced a warn line; they did not feed back into the
+          completion decision (no failure counter).
+  Why 4:  The resumable design ("skip the first `posted` items on re-run") was built
+          for clean interruption (process killed) but not for partial failure WITHIN
+          a completed run — those are different: a clean kill never writes done.
+  Why 5:  No invariant was written stating "a TERMINAL/done status may only be set
+          when zero sub-operations failed" (parallels RC-7: every exit path must
+          enforce all invariants).
+
+Root cause:   A terminal/idempotency-skip status (comments_status=done) was treated as
+              "the loop finished" rather than "the loop finished AND every item
+              succeeded". Done is an invariant claim (all comments present); setting it
+              after partial failure is a false claim that suppresses all future retries.
+
+Fix applied:  Added a `failed` counter in both _import_pr_comments and
+              _import_issue_comments. On any failure: increment `failed`, stop advancing
+              the resumable `posted` prefix. After the loop: mark "done" ONLY when
+              failed==0; otherwise mark "in_progress" + a loud WARN, so the next run
+              retries from the successful prefix.
+
+Prevention:
+1. A "done"/terminal/"skip on re-run" status may be written ONLY on a path that has
+   proven every sub-operation succeeded (a zero-failure guard). If anything failed,
+   write a non-terminal status so a re-run retries.
+2. Any loop that POSTs N items and records aggregate completion MUST track failures and
+   gate the terminal status on failures==0 — never set it unconditionally after the loop.
+3. KNOWN REMAINING (same class, NOT in the reported scope, lower impact): the FULL-mode
+   _mirror_issue_comments / _mirror_pr_comments and the reconcile-mode comment functions
+   set comments_status=done after warn-only failures too. They are partly protected
+   because they re-check per-comment cf-mirror markers before posting (so a re-run that
+   reaches them re-posts the missing ones) — but the outer loop's done-skip can still
+   short-circuit them. Apply the failed-counter guard there too when next touching them.
+```
+
+---
+
+### RC-25 — `gh api ... | jq` (pipe-through-jq) recurred in newly-added code despite RC-5
+
+```
+Bug:          New code added after RC-5 reintroduced the exact RC-5-corollary defect in
+              several places: stage 15 GraphQL mutation helpers (_gql_create_field,
+              _gql_add_draft, _gql_target_org_id, _gql_create_project), stage 13 target
+              variable existence checks, stage 07 target issue body fetch, and stage 09
+              webhook existence checks. In every case `gh api ... 2>/dev/null | jq ...`
+              let gh's non-zero exit and its error-body-on-stdout be swallowed by jq,
+              so a 403/404/scope/GraphQL-error was indistinguishable from "empty result".
+              Concrete harms: duplicate variable/webhook creation, silent half-imported
+              projects, and a deleted target issue recorded as "successfully rewritten".
+
+5 Whys:
+  Why 1:  The convenient one-liner `gh api ... | jq` was used for reads/mutations whose
+          result feeds an existence/dedup/extract decision.
+  Why 2:  RC-5's corollary ("piping through jq is unsafe for exit-code detection") was
+          documented for REST fetches but not internalized for (a) GraphQL mutations and
+          (b) every new existence-check site — it was treated as a stage-05/06-era issue.
+  Why 3:  GraphQL adds a second failure channel RC-5 didn't call out: HTTP 200 + a
+          top-level {"errors":[...]} body. Neither the exit code NOR an empty .data
+          field alone distinguishes "permission denied" from "nothing there".
+  Why 4:  No grep-gate ran for the RC-5 pattern when stages 13/15 and the new checks
+          were written (same class as RC-9/RC-11: rules applied only to code in front of
+          the author, not swept across new code).
+  Why 5:  There was no shared helper, so each site re-implemented the unsafe pattern.
+
+Root cause:   RC-5 was a rule without an enforcement mechanism for NEW code or for the
+              GraphQL transport. The unsafe idiom is shorter than the safe one, so it
+              keeps reappearing wherever a new existence/extract check is written.
+
+Fix applied:  - All four stage-15 GraphQL helpers now capture the response out-of-band and
+                call a new _gql_warn_errors() that surfaces .errors[0].message (so a
+                permission/scope failure is loud, not silent-empty).
+              - Stage 13 target-var checks fetch out-of-band and SKIP apply on fetch
+                failure (rather than treating [] as "none exist" → duplicates).
+              - Stage 07 body fetch is out-of-band; a failed GET → skip + retry-next-run
+                (not "no_change" → done).
+              - Stage 09 webhook checks fetch out-of-band, ADD --paginate, skip on error.
+              - New shared helper gh_flatten_wrapper() for wrapper-object paginated
+                endpoints (secrets/variables) that WARNS on error/short pages (RC-8 + RC-5
+                combined) instead of silently truncating.
+
+Prevention:
+1. NEVER write `gh api ... | jq ...` (or `ghsrc api ... | jq`) when the result drives an
+   existence check, dedup, extract-then-decide, or any mutation result. Capture
+   out-of-band: `raw="$(gh api ... 2>/dev/null)" || { handle failure }; echo "$raw" | jq ...`.
+2. For GraphQL specifically: a 200 response can carry {"errors":[...]} with null .data.
+   Always check .errors before trusting an extracted field. Route mutations through a
+   helper that warns on .errors (e.g. _gql_warn_errors).
+3. On a failed existence/list fetch that feeds dedup, DO NOT proceed as if the list were
+   empty (that creates duplicates) — skip the write and warn.
+4. Grep gate to run after adding ANY new gh/ghsrc call:
+     grep -rn 'gh api .*| *jq\|ghsrc api .*| *jq' mirror/stages/ mirror/lib/ mirror/validate/
+   Each hit must be justified (pure logging that tolerates loss) or converted.
+```
+
+---
+
+### RC-26 — Long-running progress/status only on stderr → invisible in a busy console
+
+```
+Bug:          Progress/ETA and API-rate summaries were emitted only via the stderr log,
+              throttled (every 10 items / 15s). During a multi-hour import the console is
+              flooded with per-item ok/warn lines, so the operator could not find or
+              follow the one line that matters (overall % + ETA + rate).
+
+5 Whys:
+  Why 1:  The only sink for progress was the same stderr stream as all other logging.
+  Why 2:  The line was additionally throttled, so it appeared rarely amid the noise.
+  Why 3:  There was no dedicated, always-current artifact an operator could poll.
+  Why 4:  "Show progress" was implemented as "log progress", conflating a STATUS signal
+          (latest snapshot, overwrite) with an EVENT stream (append-only log).
+  Why 5:  Status and log are different concerns; only the log concern was built.
+
+Root cause:   A status signal (current %/ETA/rate) was delivered through an append-only,
+              throttled, noise-sharing event channel instead of a separate
+              always-overwritten file the operator can cat/watch.
+
+Fix applied:  progress_tick now OVERWRITES a plain-text state/.progress on EVERY tick
+              (cheap, no throttle) with the current progress line plus the latest cached
+              API-rate summary. The throttled stderr line is kept as a convenience.
+              apirate_report caches its summary to state/.api-rate.summary for inclusion.
+              All four runtime files (.progress, .progress.json, .api-rate.log,
+              .api-rate.summary) are gitignored. `cat state/.progress` / `watch` to follow.
+
+Prevention:
+1. A STATUS value (latest snapshot) belongs in a dedicated file that is OVERWRITTEN each
+   update — never only in the append-only/throttled log shared with all other output.
+2. Status files are transient runtime scratch: gitignore them and resolve their path via
+   "${REPO_ROOT:-.}" with a ":-" guard (RC-21).
+```
+
+---
+
+### RC-27 — Helper called with args in the wrong order silently no-op'd (jq options before filter)
+
+```
+Bug:          _throttle_set's signature is `_throttle_set <jq-filter> [jq-args...]`
+              (it does `local filter="$1"; shift; jq "$@" "$filter" ...`). Two callers
+              in the hourly-cap reset path were written as
+                _throttle_set --argjson now "$now" '.hour_window_start=$now | ...'
+              i.e. jq OPTIONS before the filter. So $1 (filter) became "--argjson",
+              the real filter landed in "$@", and the jq invocation was malformed →
+              it failed → guarded by `2>/dev/null` and an `else rm -f tmp` → SILENT
+              no-op. Net effect: the hourly-window reset NEVER persisted, so
+              writes_in_hour grew without bound (observed: 5568) and the hourly cap
+              effectively never engaged. The same mistake was about to ship in the new
+              AUTORATELIMIT probe.
+
+5 Whys:
+  Why 1:  Caller passed jq options before the filter; helper treats $1 as the filter.
+  Why 2:  The helper's arg contract (filter-first) wasn't visible at the call site and
+          wasn't asserted.
+  Why 3:  jq itself ACCEPTS options-before-filter, so the pattern "looks" right to
+          someone thinking about jq, not about the wrapper's shift.
+  Why 4:  The wrapper swallowed jq's stderr and discarded the temp on failure, so a
+          malformed call produced NO error — only a missing state update.
+  Why 5:  No test asserted that _throttle_set actually changed the file; the hourly
+          cap's correctness was never exercised in a unit test.
+
+Root cause:   A thin wrapper with a positional contract (filter must be $1) silently
+              accepted-and-discarded calls that violated it, because it both reordered
+              args AND suppressed jq errors. Wrong-order calls became invisible no-ops.
+
+Fix applied:  Reordered all callers to filter-first:
+                _throttle_set '<filter>' --argjson now "$now"
+              Fixed both pre-existing hourly-cap calls and the new AUTORATELIMIT calls.
+              (AUTORATELIMIT's hourly + window logic now actually persists.)
+
+Prevention:
+1. A wrapper that takes "<required positional> [pass-through args...]" should put the
+   positional FIRST and document it at the definition AND at non-obvious call sites.
+   Prefer wrappers whose pass-through args can't be confused with the positional.
+2. NEVER suppress the inner tool's stderr in a state-mutating wrapper without also
+   surfacing failure some other way. `jq ... 2>/dev/null; else rm tmp` turns a
+   malformed call into a silent no-op. At minimum `warn` on the failure branch.
+3. After writing/altering a state-mutating helper, add a one-line test that asserts
+   the file actually changed (jq read-back), including an args-bearing call.
+4. grep gate: `grep -n '_throttle_set --' mirror/lib/common.sh` must return nothing
+   (every call is filter-first).
+```
+
+---
+
+### RC-28 — AUTORATELIMIT: header-driven adaptive throttling (design note, not a bug)
+
+```
+Context:      Operator wanted to push import speed closer to GitHub's real limits
+              safely, using the x-ratelimit-* headers / `gh api rate_limit`.
+
+Design decisions (for future maintainers):
+1. PRECISION over guessing: when usage crosses AUTORATELIMIT (fraction of limit),
+   sleep until the bucket's RESET epoch (+buffer), not a blind exponential ladder.
+   The reset epoch is authoritative — no overshoot, never exceeds the cap. The
+   exponential ladder survives ONLY as a fallback when reset is unavailable.
+2. PRIMARY vs SECONDARY: x-ratelimit-* and `rate_limit` expose only PRIMARY limits
+   (core/graphql buckets). The SECONDARY (abuse) limit is NOT in any header or
+   endpoint — it surfaces only as 403 + Retry-After. So AUTORATELIMIT handles
+   primary; the existing _throttle_on_rate_limit hard-stop handles secondary. Do
+   not claim `rate_limit` can detect secondary limits — it cannot.
+3. COST control: refresh the snapshot via a PROBE every N writes (default 25), not
+   on every call (which would itself consume ~2x quota). `rate_limit` does not
+   count against quota, so the probe is free. Probe uses `command gh` to avoid
+   recursing through the throttled gh() wrapper.
+4. TOKEN hygiene: probe with the same token context as the calls it governs
+   (gh = target, ghsrc = source) — they have independent limits.
+5. OFF by default (AUTORATELIMIT=0): adaptive throttling must be opt-in; the fixed
+   conservative delays remain the baseline.
+```
+
+---
+
+### RC-29 — New GitHub API fields (type, sub-issues, issue_field_values) never included in issue migration
+
+```
+Bug:          Target issues were missing: issue Type (Bug/Feature/Task), parent/child
+              (sub-issue) relationships, and Priority (issue_field_values). These were
+              visible in the source org but absent from every created target issue.
+
+5 Whys:
+  Why 1:  The issue creation payload in both _mirror_repo_issues (full) and
+          _import_repo_issues (import) only sent: title, body, labels, milestone.
+          No other fields were included in the POST to /repos/.../issues.
+  Why 2:  The stage was written when these fields did not exist in GitHub's API:
+            - issue type  — added to REST API in 2024
+            - sub-issues  — added to REST API in 2024
+            - issue_field_values — repo-level custom fields, added ~2024
+  Why 3:  When GitHub added these fields to the API responses (so they appeared in
+          exported source_data), the import code was never updated to send them back.
+          There was no review of "what new fields does the export now contain that
+          import should be sending."
+  Why 4:  The mapping of "fields in source_data" → "fields sent in create payload"
+          was implicit (only the original fields were coded); new fields silently
+          appeared in the exported data but were never wired to the create call.
+  Why 5:  No test compared the source issue with the created target issue field-by-field
+          to detect gaps; the only validation was "was an issue created" not "does the
+          created issue have the same fields as the source."
+
+Root cause:   The issue-creation payload was a FIXED enumeration of known fields written
+              at the time of initial development. GitHub continuously adds new issue
+              fields to both the API response and the API request. The code had no
+              mechanism to detect new fields in source_data and no process to review
+              the export-vs-import field coverage when the GitHub API evolves.
+
+Fix applied:  1. type: extracted from source_data.type.name and included in the POST
+                 payload for both full-mode and import-mode. Retry-without-type added
+                 (type name may not exist in target org) — same pattern as labels/milestone.
+                 Affects 444 issues across 8 repos in this org.
+              2. parent/child (sub-issues): cannot be set during issue creation because
+                 the parent must already exist. New tool mirror/tools/set-sub-issues.sh
+                 restores all parent/child relationships in a post-import pass using the
+                 source→target number mapping in state files. Affects 199 issues.
+              3. issue_field_values (Priority custom field): not fixed — only 4 issues
+                 affected; target repo needs matching custom field definitions with
+                 compatible IDs (org-specific). Documented as manual-action required.
+              4. Project membership: issues appear in Projects V2 via separate stage 15
+                 (projects export/import), not via the Issues API. Not a bug in stage 05.
+
+Prevention:
+1. When the GitHub API is updated (new fields in issue/PR responses), IMMEDIATELY audit
+   stage 05 and 06 to determine if the new field: (a) can be set at create time via the
+   Issues API, (b) requires a separate API call after creation, or (c) is read-only.
+   Update the create payload and/or add a post-processing step accordingly.
+2. After any import run, spot-check at least one target issue against its source by
+   comparing all non-null fields in source_data with the created target issue. Any
+   field present in source_data but absent in target is a gap to investigate.
+3. The field enumeration pattern ("only send these known fields") should be replaced
+   with an explicit EXCLUSION list ("send all source_data fields EXCEPT these known
+   read-only/server-managed ones"). This is more resilient to API additions.
+4. issue_field_values: If new custom issue fields are added at the org level, stage 05
+   export must be re-run to capture them, and a post-import tool must be written to
+   apply them using the target org's field IDs. Add a warning in the import log when
+   issue_field_values is non-empty in source_data but not applied.
+```
+
+---
+
 ## Write-throttle / abuse-protection contract (non-negotiable)
 
 A central write-throttle engine in `mirror/lib/common.sh` enforces the GitHub

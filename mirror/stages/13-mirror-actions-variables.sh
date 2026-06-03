@@ -73,8 +73,8 @@ main() {
     repo_vars_map="$(echo "$snap" | jq -c '.repo_vars // {}')"
   else
     log "Fetching org Actions variables from $SOURCE_ORG..."
-    org_vars="$(ghsrc api "orgs/$SOURCE_ORG/actions/variables?per_page=100" \
-      --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object")]')" || org_vars='[]'
+    # C2 FIX: gh_flatten_wrapper warns instead of silently dropping error pages.
+    org_vars="$(gh_flatten_wrapper ghsrc "orgs/$SOURCE_ORG/actions/variables" variables)"
 
     log "Fetching source repos from $SOURCE_ORG..."
     local repos
@@ -86,8 +86,7 @@ main() {
       if [[ -n "$excluded_repos" ]] && echo "$excluded_repos" | grep -qx "$repo_name" 2>/dev/null; then
         continue
       fi
-      repo_vars="$(ghsrc api "repos/$SOURCE_ORG/$repo_name/actions/variables?per_page=100" \
-        --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object")]')" || repo_vars='[]'
+      repo_vars="$(gh_flatten_wrapper ghsrc "repos/$SOURCE_ORG/$repo_name/actions/variables" variables)"
       rv_count="$(echo "$repo_vars" | jq 'length' 2>/dev/null || echo 0)"
       [[ "$rv_count" -eq 0 ]] && continue
       repo_vars_map="$(echo "$repo_vars_map" | jq --arg r "$repo_name" --argjson v "$repo_vars" '.[$r] = $v')"
@@ -117,22 +116,32 @@ main() {
   org_var_count="$(echo "$org_vars" | jq 'length' 2>/dev/null || echo 0)"
   log "Applying $org_var_count org-level variables..."
 
-  local tgt_org_vars
-  tgt_org_vars="$(gh api "orgs/$TARGET_ORG/actions/variables?per_page=100" \
-    --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object") | .name]')" || tgt_org_vars='[]'
+  # H6 FIX (RC-5 corollary): fetch the existing target vars OUT-OF-BAND. Piping
+  # gh→jq hides gh's exit code and lets a 404/scope-error body parse to [] — which
+  # would make the dedup think "no vars exist" and create DUPLICATES of every var.
+  # If the fetch fails, skip org-var application this run rather than risk dups.
+  local _tgt_raw tgt_org_vars
+  if _tgt_raw="$(gh api "orgs/$TARGET_ORG/actions/variables?per_page=100" --paginate 2>/dev/null)"; then
+    tgt_org_vars="$(printf '%s' "$_tgt_raw" | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object") | .name]' 2>/dev/null || echo '[]')"
+  else
+    warn "  Could not list existing org variables in $TARGET_ORG (404/scope?) — skipping org-variable apply to avoid creating duplicates"
+    tgt_org_vars=""
+  fi
 
-  while IFS= read -r var; do
-    local vname vvalue vvis
-    vname="$(echo  "$var" | jq -r '.name')"
-    vvalue="$(echo "$var" | jq -r '.value')"
-    vvis="$(echo   "$var" | jq -r '.visibility // "all"')"
-    if [[ "$vvis" == "selected" ]]; then
-      warn "  Org variable '$vname': visibility=selected — setting visibility=all in target (repo list cannot be mapped; restrict manually if needed)"
-      vvis="all"
-    fi
-    _upsert_org_variable "$vname" "$vvalue" "$vvis" "$tgt_org_vars"
-    pause 0.2
-  done < <(echo "$org_vars" | jq -c '.[]' 2>/dev/null || true)
+  if [[ -n "$tgt_org_vars" ]]; then
+    while IFS= read -r var; do
+      local vname vvalue vvis
+      vname="$(echo  "$var" | jq -r '.name')"
+      vvalue="$(echo "$var" | jq -r '.value')"
+      vvis="$(echo   "$var" | jq -r '.visibility // "all"')"
+      if [[ "$vvis" == "selected" ]]; then
+        warn "  Org variable '$vname': visibility=selected — setting visibility=all in target (repo list cannot be mapped; restrict manually if needed)"
+        vvis="all"
+      fi
+      _upsert_org_variable "$vname" "$vvalue" "$vvis" "$tgt_org_vars"
+      pause 0.2
+    done < <(echo "$org_vars" | jq -c '.[]' 2>/dev/null || true)
+  fi
 
   log "Applying repo-level variables..."
   while IFS= read -r repo_name; do
@@ -146,17 +155,24 @@ main() {
     [[ "$rv_count" -eq 0 ]] && continue
     log "  $repo_name: $rv_count variables"
 
-    local tgt_repo_vars
-    tgt_repo_vars="$(gh api "repos/$TARGET_ORG/$repo_name/actions/variables?per_page=100" \
-      --paginate 2>/dev/null | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object") | .name]')" || tgt_repo_vars='[]'
+    # H6 FIX: same out-of-band fetch + skip-on-error as the org path above.
+    local _tgt_repo_raw tgt_repo_vars
+    if _tgt_repo_raw="$(gh api "repos/$TARGET_ORG/$repo_name/actions/variables?per_page=100" --paginate 2>/dev/null)"; then
+      tgt_repo_vars="$(printf '%s' "$_tgt_repo_raw" | jq -rs '[.[] | select(type == "object") | select(has("variables")) | .variables[] | select(type == "object") | .name]' 2>/dev/null || echo '[]')"
+    else
+      warn "  Could not list existing variables in $TARGET_ORG/$repo_name (404/scope?) — skipping to avoid duplicates"
+      tgt_repo_vars=""
+    fi
 
-    while IFS= read -r var; do
-      local vname vvalue
-      vname="$(echo  "$var" | jq -r '.name')"
-      vvalue="$(echo "$var" | jq -r '.value')"
-      _upsert_repo_variable "$repo_name" "$vname" "$vvalue" "$tgt_repo_vars"
-      pause 0.2
-    done < <(echo "$repo_vars" | jq -c '.[]' 2>/dev/null || true)
+    if [[ -n "$tgt_repo_vars" ]]; then
+      while IFS= read -r var; do
+        local vname vvalue
+        vname="$(echo  "$var" | jq -r '.name')"
+        vvalue="$(echo "$var" | jq -r '.value')"
+        _upsert_repo_variable "$repo_name" "$vname" "$vvalue" "$tgt_repo_vars"
+        pause 0.2
+      done < <(echo "$repo_vars" | jq -c '.[]' 2>/dev/null || true)
+    fi
     pause 0.3
   done < <(echo "$repo_vars_map" | jq -r 'keys[]' 2>/dev/null || true)
 

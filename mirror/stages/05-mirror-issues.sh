@@ -47,7 +47,12 @@ def encode_line(line):
         if p.startswith("`"):
             out.append(p)
         else:
-            out.append(re.sub(r"@([a-zA-Z0-9][-a-zA-Z0-9]*)", r"&#64;\1", p))
+            # L1 FIX: also match an optional "/team-name" suffix so TEAM mentions
+            # (@org/team) are encoded too — previously the "/" ended the match,
+            # leaving @org intact and STILL firing team notifications, defeating
+            # the whole purpose of this function. The captured group keeps the
+            # "user" or "org/team" text; only the leading @ is replaced.
+            out.append(re.sub(r"@([a-zA-Z0-9][-a-zA-Z0-9]*(?:/[a-zA-Z0-9][-a-zA-Z0-9_]*)?)", r"&#64;\1", p))
     return "".join(out)
 
 lines = sys.stdin.read().split("\n")
@@ -217,6 +222,8 @@ _mirror_repo_issues() {
     local src_author src_created
     src_author="$(echo "$issue" | jq -r '.user.login // "unknown"')"
     src_created="$(echo "$issue" | jq -r '.created_at // ""')"
+    local issue_type_name
+    issue_type_name="$(echo "$issue" | jq -r '.type.name // ""')"
 
     processed=$((processed + 1))
     if (( processed % 25 == 0 )); then
@@ -356,8 +363,12 @@ ${marker}"
     if [[ -n "$milestone_number" && "$milestone_number" != "null" ]]; then
       payload="$(echo "$payload" | jq --argjson ms "$milestone_number" '.milestone = $ms')"
     fi
+    # Include issue type (Bug/Feature/Task) — GitHub REST API supports this since 2024.
+    if [[ -n "$issue_type_name" ]]; then
+      payload="$(echo "$payload" | jq --arg t "$issue_type_name" '.type = $t')"
+    fi
 
-    # First attempt: with labels and milestone
+    # First attempt: with labels, milestone, and type
     local create_result
     printf '%s' "$payload" > "$_body_tmp"
     create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
@@ -381,6 +392,16 @@ ${marker}"
     if echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
       warn "  Issue #$src_number: retry without milestone..."
       payload="$(echo "$payload" | jq 'del(.milestone)')"
+      printf '%s' "$payload" > "$_body_tmp"
+      create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
+        --method POST \
+        --input "$_body_tmp" \
+        2>/dev/null)" || create_result="FAILED"
+    fi
+    # Retry without type (type name may not exist in target org yet)
+    if echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
+      warn "  Issue #$src_number: retry without type (type may not exist in target org)..."
+      payload="$(echo "$payload" | jq 'del(.type)')"
       printf '%s' "$payload" > "$_body_tmp"
       create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
         --method POST \
@@ -1066,6 +1087,21 @@ _import_all_issues() {
       warn "  [import] SOURCE_ORG unset and not in state meta — cf-mirror markers will be empty, idempotency will break"
   fi
   log "Importing issues from $(echo "$repo_names" | grep -c .) repo state file(s)"
+
+  # ---- Precompute total items across all repos for the progress/ETA engine ----
+  # Export already serialized every issue, so the total is known up front. We
+  # reassemble each repo (idempotent; _import_repo_issues would do it anyway) and
+  # count .items so % and ETA are accurate across the whole multi-repo run.
+  local _total_issues=0 _rn
+  while IFS= read -r _rn; do
+    [[ -z "$_rn" ]] && continue
+    state_unsplit "$STATE_DIR/$_rn.yaml"
+    local _c
+    _c="$(jq '.items | length' "$STATE_DIR/$_rn.yaml" 2>/dev/null || echo 0)"
+    _total_issues=$(( _total_issues + _c ))
+  done < <(echo "$repo_names")
+  progress_begin "$_total_issues" "issues"
+
   local repo_name
   while IFS= read -r repo_name; do
     [[ -z "$repo_name" ]] && continue
@@ -1073,6 +1109,9 @@ _import_all_issues() {
     _import_repo_issues "$repo_name"
     pause 2.0
   done < <(echo "$repo_names")
+
+  progress_end
+  apirate_report   # final rolling-60m API call summary by category
 }
 
 _import_repo_issues() {
@@ -1093,6 +1132,10 @@ _import_repo_issues() {
     tgt_existing="$(echo "$item" | jq -r '.target_number // empty')"
     comments_status="$(echo "$item" | jq -r '.comments_status // "none"')"
 
+    # Advance the cross-repo progress/ETA counter once per item (every item is a
+    # unit of work whether it gets created, skipped, or fails below).
+    progress_tick 1 "$repo_name"
+
     # Already imported — finish comment sync only; never recreate the issue.
     if [[ -n "$tgt_existing" && "$tgt_existing" != "null" ]]; then
       if [[ "$comments_status" != "done" ]]; then
@@ -1112,7 +1155,7 @@ _import_repo_issues() {
       imported=$((imported + 1)); continue
     fi
 
-    local issue src_state title body assignees labels milestone_title src_author src_created tgt_node_id
+    local issue src_state title body assignees labels milestone_title src_author src_created tgt_node_id issue_type_name
     issue="$(echo "$item" | jq -c '.source_data')"
     src_state="$(echo "$issue" | jq -r '.state')"
     title="$(echo "$issue" | jq -r '.title')"
@@ -1122,6 +1165,8 @@ _import_repo_issues() {
     milestone_title="$(echo "$issue" | jq -r '.milestone.title // ""')"
     src_author="$(echo "$issue" | jq -r '.user.login // "unknown"')"
     src_created="$(echo "$issue" | jq -r '.created_at // ""')"
+    # Issue type (Bug / Feature / Task etc.) — added to GitHub REST API in 2024.
+    issue_type_name="$(echo "$issue" | jq -r '.type.name // ""')"
 
     local full_body
     full_body="$(_build_issue_body "$repo_name" "$src_number" "$src_author" "$src_created" "$body")"
@@ -1142,6 +1187,11 @@ _import_repo_issues() {
     if [[ -n "$milestone_number" && "$milestone_number" != "null" ]]; then
       payload="$(echo "$payload" | jq --argjson ms "$milestone_number" '.milestone = $ms')"
     fi
+    # Include issue type (Bug/Feature/Task) — GitHub REST API supports this since 2024.
+    # Pass by name so it works even if the target org assigned different type IDs.
+    if [[ -n "$issue_type_name" ]]; then
+      payload="$(echo "$payload" | jq --arg t "$issue_type_name" '.type = $t')"
+    fi
 
     local create_result
     printf '%s' "$payload" > "$_body_tmp"
@@ -1158,6 +1208,13 @@ _import_repo_issues() {
     if echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
       warn "  Issue #$src_number: retry without milestone..."
       payload="$(echo "$payload" | jq 'del(.milestone)')"
+      printf '%s' "$payload" > "$_body_tmp"
+      create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
+        --method POST --input "$_body_tmp" 2>/dev/null)" || create_result="FAILED"
+    fi
+    if echo "$create_result" | jq -e '.message // "" | test("Validation Failed")' &>/dev/null; then
+      warn "  Issue #$src_number: retry without type (type may not exist in target org)..."
+      payload="$(echo "$payload" | jq 'del(.type)')"
       printf '%s' "$payload" > "$_body_tmp"
       create_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues" \
         --method POST --input "$_body_tmp" 2>/dev/null)" || create_result="FAILED"
@@ -1248,7 +1305,7 @@ _import_issue_comments() {
   # shellcheck disable=SC2064
   trap "rm -f -- '${_body_tmp}' '${_post_err_tmp}'; ${_prev_trap:-trap - RETURN}" RETURN
 
-  local idx=0 posted="$already"
+  local idx=0 posted="$already" failed=0
   while IFS= read -r c; do
     idx=$((idx + 1))
     (( idx <= already )) && continue   # resume: skip comments posted in a prior run
@@ -1263,8 +1320,12 @@ _import_issue_comments() {
     c_result="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number/comments" \
       --method POST --input "$_body_tmp" 2>"$_post_err_tmp")" || c_result="FAILED"
     if [[ "$c_result" == "FAILED" ]]; then
+      # M1 FIX: record the failure and stop advancing the resumable counter so the
+      # PR/issue is NOT marked "done" with comments missing (which would make a
+      # re-run skip it permanently). Re-run resumes from the successful prefix.
+      failed=$((failed + 1))
       warn "  Failed to import comment $c_id on issue #$src_number — $(head -1 "$_post_err_tmp" 2>/dev/null || true)"
-    else
+    elif (( failed == 0 )); then
       posted=$((posted + 1))
       if (( posted % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
         _update_comments_status "$state_file" "$src_number" "in_progress" "$posted"
@@ -1274,8 +1335,14 @@ _import_issue_comments() {
     pause 3.0
   done < <(echo "$comments" | jq -c '.[]')
 
-  _update_comments_status "$state_file" "$src_number" "done" "$posted"
-  ok "  [import] Posted comments for issue #$src_number ($posted/$total)"
+  # M1 FIX: only "done" when all comments posted; else leave "in_progress" to retry.
+  if (( failed == 0 )); then
+    _update_comments_status "$state_file" "$src_number" "done" "$posted"
+    ok "  [import] Posted comments for issue #$src_number ($posted/$total)"
+  else
+    _update_comments_status "$state_file" "$src_number" "in_progress" "$posted"
+    warn "  [import] Issue #$src_number comments INCOMPLETE: $posted/$total posted, $failed failed — left in_progress, re-run to retry"
+  fi
 }
 
 main "$@"

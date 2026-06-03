@@ -67,9 +67,14 @@ _create_target_repo_if_absent() {
   local name="$1" private="$2"
   # gh api writes 404 error JSON to stdout even on failure, so check exit code
   # out-of-band (RC-5) rather than piping through jq.
-  local target_exists
-  target_exists="$(gh api "repos/$TARGET_ORG/$name" 2>/dev/null)" || target_exists=""
-  if [[ -n "$target_exists" ]]; then
+  # H2 FIX: don't trust "non-empty output" as "repo exists" — a stray runner
+  # notice line, or a 200 response that isn't a repo object, would skip creation
+  # and then the push fails with "remote not found". Confirm a real repo object
+  # by extracting .id; only treat as existing when that is present.
+  local target_raw target_id
+  target_raw="$(gh api "repos/$TARGET_ORG/$name" 2>/dev/null)" || target_raw=""
+  target_id="$(printf '%s' "$target_raw" | jq -rs '.[0].id // empty' 2>/dev/null || true)"
+  if [[ -n "$target_id" ]]; then
     return 0
   fi
   log "Creating target repo $TARGET_ORG/$name (private=$private)..."
