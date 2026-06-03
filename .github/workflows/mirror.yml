@@ -82,12 +82,14 @@ jobs:
           if [[ -z "$INPUT" || "$INPUT" == "all" ]]; then
             # Stage 15 (export-projects) is export-only and NOT part of the default
             # full-mode pipeline; it must be requested explicitly via the stages input.
-            for stage in 1 2 3 4 5 6 7 8 9 10 11 12 13 14; do
+            for stage in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 16; do
               echo "run_${stage}=true" >> "$GITHUB_OUTPUT"
             done
+            # Stages 15/17 are opt-in (export-only / post-processing); 16 runs in import pipeline
             echo "run_15=false" >> "$GITHUB_OUTPUT"
+            echo "run_17=false" >> "$GITHUB_OUTPUT"
           else
-            for stage in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+            for stage in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17; do
               if echo "$INPUT" | grep -qE "(^|,)${stage}(,|$)"; then
                 echo "run_${stage}=true" >> "$GITHUB_OUTPUT"
               else
@@ -381,4 +383,45 @@ jobs:
             git push
           else
             echo "No state changes to commit after stage 15"
+          fi
+
+      # ================================================================== #
+      # Stage 16 — Set sub-issues (parent/child relationships after import)
+      # Runs in import pipeline by default after stage 08.
+      # ================================================================== #
+      - name: Stage 16 — set-sub-issues
+        if: steps.stages.outputs.run_16 == 'true'
+        run: mirror/stages/16-set-sub-issues.sh
+
+      - name: Commit state after stage 16
+        if: steps.stages.outputs.run_16 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 16 (set-sub-issues) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 16"
+          fi
+
+      # ================================================================== #
+      # Stage 17 — Mirror issue field values (Priority, Effort etc.)
+      # Export phase: run with MIRROR_MODE=export to capture field defs.
+      # Import phase: opt-in via stages input ("17") to create fields + apply values.
+      # ================================================================== #
+      - name: Stage 17 — mirror-issue-fields
+        if: steps.stages.outputs.run_17 == 'true'
+        run: mirror/stages/17-mirror-issue-fields.sh
+
+      - name: Commit state after stage 17
+        if: steps.stages.outputs.run_17 == 'true'
+        run: |
+          git add state/ validation-reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit --allow-empty \
+              -m "mirror: state after stage 17 (mirror-issue-fields) [skip ci]"
+            git push
+          else
+            echo "No state changes to commit after stage 17"
           fi

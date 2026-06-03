@@ -677,7 +677,7 @@ _reconcile_issue() {
   _body_tmp="$(mktemp)"
   trap 'rm -f "$_body_tmp"' RETURN
 
-  local src_state title body labels milestone_title src_author src_created src_id assignees
+  local src_state title body labels milestone_title src_author src_created src_id assignees issue_type_name
   src_state="$(echo "$issue_json"        | jq -r '.state')"
   title="$(echo "$issue_json"            | jq -r '.title')"
   body="$(echo "$issue_json"             | jq -r '.body // ""')"
@@ -687,6 +687,7 @@ _reconcile_issue() {
   src_created="$(echo "$issue_json"      | jq -r '.created_at // ""')"
   src_id="$(echo "$issue_json"           | jq -r '.id')"
   assignees="$(echo "$issue_json"        | jq -r '[.assignees[].login]')"
+  issue_type_name="$(echo "$issue_json"  | jq -r '.type.name // ""')"
   local src_url="https://github.com/$SOURCE_ORG/$repo_name/issues/$src_number"
   local marker="<!-- cf-mirror: $SOURCE_ORG/$repo_name#$src_number -->"
 
@@ -716,12 +717,13 @@ ${marker}"
   local tgt_json
   tgt_json="$(gh api "repos/$TARGET_ORG/$repo_name/issues/$tgt_number" \
     2>/dev/null | jq -rs '.[0] // {}')" || tgt_json='{}'
-  local tgt_title tgt_body tgt_state tgt_milestone_num tgt_node_id
+  local tgt_title tgt_body tgt_state tgt_milestone_num tgt_node_id tgt_type_name
   tgt_title="$(echo "$tgt_json"         | jq -r '.title // ""'          2>/dev/null || true)"
   tgt_body="$(echo "$tgt_json"          | jq -r '.body // ""'           2>/dev/null || true)"
   tgt_state="$(echo "$tgt_json"         | jq -r '.state // "open"'      2>/dev/null || true)"
   tgt_milestone_num="$(echo "$tgt_json" | jq -r '.milestone.number // "null"' 2>/dev/null || echo 'null')"
   tgt_node_id="$(echo "$tgt_json"       | jq -r '.node_id // ""'        2>/dev/null || true)"
+  tgt_type_name="$(echo "$tgt_json"     | jq -r '.type.name // ""'      2>/dev/null || true)"
   pause 1.0
 
   # ---- Resolve target milestone number from source title -------------------
@@ -769,6 +771,11 @@ ${marker}"
   # State (open/closed)
   if [[ "$src_state" != "$tgt_state" ]]; then
     patch_payload="$(echo "$patch_payload" | jq --arg v "$src_state" '.state = $v')"
+  fi
+
+  # Issue type (Bug/Feature/Task) — reconcile if source has a type and target differs.
+  if [[ -n "$issue_type_name" && "$issue_type_name" != "$tgt_type_name" ]]; then
+    patch_payload="$(echo "$patch_payload" | jq --arg v "$issue_type_name" '.type = $v')"
   fi
 
   # ---- Apply PATCH if anything changed -------------------------------------
@@ -1136,9 +1143,17 @@ _import_repo_issues() {
     # unit of work whether it gets created, skipped, or fails below).
     progress_tick 1 "$repo_name"
 
-    # Already imported — finish comment sync only; never recreate the issue.
+    # Already imported — reconcile (CONTINUOUS) or finish comment sync only.
     if [[ -n "$tgt_existing" && "$tgt_existing" != "null" ]]; then
-      if [[ "$comments_status" != "done" ]]; then
+      if [[ "${CONTINUOUS:-false}" == "true" ]]; then
+        # CONTINUOUS mode: reconcile title/body/labels/milestone/type from source_data.
+        # This is how already-migrated issues get their type (and other fields) patched.
+        local _src_data
+        _src_data="$(echo "$item" | jq -c '.source_data // {}')"
+        if [[ -n "$_src_data" && "$_src_data" != "{}" ]]; then
+          _reconcile_issue "$repo_name" "$_src_data" "$src_number" "$tgt_existing" "$state_file"
+        fi
+      elif [[ "$comments_status" != "done" ]]; then
         _import_issue_comments "$repo_name" "$item" "$tgt_existing" "$state_file"
       fi
       skipped=$((skipped + 1))
