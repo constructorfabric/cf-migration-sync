@@ -471,6 +471,7 @@ ${marker}"
   done < <(echo "$all_issues" | jq -c '.[]')
 
   state_update_stats "$state_file"
+  state_split_if_needed "$state_file"   # full-mode parity fix: split if > MAX_STATE_FILE_MB
   ok "  Done $repo_name: new=$new_count skipped=$skip_count failed=$failed_count"
 }
 
@@ -623,7 +624,7 @@ ${c_marker}"
       2>"$_post_err_tmp")" || c_result="FAILED"
 
     if [[ "$c_result" == "FAILED" ]]; then
-      warn "  Failed to mirror comment $c_id on issue #$src_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
+      warn "  Failed to mirror comment $c_id on issue #$src_number — $(_gh_err_line "$_post_err_tmp")"
     else
       mirrored=$((mirrored + 1))
       posted_since_commit=$((posted_since_commit + 1))
@@ -1095,10 +1096,10 @@ _import_all_issues() {
   fi
   log "Importing issues from $(echo "$repo_names" | grep -c .) repo state file(s)"
 
-  # ---- Precompute total items across all repos for the progress/ETA engine ----
-  # Export already serialized every issue, so the total is known up front. We
-  # reassemble each repo (idempotent; _import_repo_issues would do it anyway) and
-  # count .items so % and ETA are accurate across the whole multi-repo run.
+  # =====================================================================
+  # PASS 1 — Create all issues (no comments).
+  # =====================================================================
+  log "=== Pass 1/2: Creating issues (comments deferred) ==="
   local _total_issues=0 _rn
   while IFS= read -r _rn; do
     [[ -z "$_rn" ]] && continue
@@ -1107,25 +1108,75 @@ _import_all_issues() {
     _c="$(jq '.items | length' "$STATE_DIR/$_rn.yaml" 2>/dev/null || echo 0)"
     _total_issues=$(( _total_issues + _c ))
   done < <(echo "$repo_names")
-  progress_begin "$_total_issues" "issues"
+  progress_begin "$_total_issues" "issues (creating)"
 
   local repo_name
   while IFS= read -r repo_name; do
     [[ -z "$repo_name" ]] && continue
-    log "Importing issues for $repo_name..."
-    _import_repo_issues "$repo_name"
+    log "Importing issues for $repo_name (pass 1: create)..."
+    _import_repo_issues "$repo_name" "create"
     pause 2.0
   done < <(echo "$repo_names")
-
   progress_end
-  apirate_report   # final rolling-60m API call summary by category
+  apirate_report
+
+  # =====================================================================
+  # PASS 2 — Add comments to all created issues.
+  # =====================================================================
+  log "=== Pass 2/2: Adding comments to all issues ==="
+  local _total_with_comments=0
+  while IFS= read -r _rn; do
+    [[ -z "$_rn" ]] && continue
+    [[ -n "$only_repo" && "$_rn" != "$only_repo" ]] && continue   # B3 fix: honour --repo filter
+    local _f="$STATE_DIR/$_rn.yaml"
+    [[ -f "$_f" ]] && \
+      _total_with_comments=$(( _total_with_comments + $(jq \
+        '[.items[] | select((.target_number // null) != null) | select(.comments_status != "done")] | length' \
+        "$_f" 2>/dev/null || echo 0) ))
+  done < <(echo "$repo_names")
+  progress_begin "$_total_with_comments" "issues (comments)"
+
+  while IFS= read -r repo_name; do
+    [[ -z "$repo_name" ]] && continue
+    log "Adding comments for $repo_name (pass 2: comments)..."
+    _import_repo_issues "$repo_name" "comments"
+    pause 2.0
+  done < <(echo "$repo_names")
+  progress_end
+  apirate_report
 }
 
 _import_repo_issues() {
-  local repo_name="$1"
+  local repo_name="$1" phase="${2:-create}"
   local state_file="$STATE_DIR/$repo_name.yaml"
   state_unsplit "$state_file"   # reassemble parts (freshly pulled) into the whole file
   [[ -f "$state_file" ]] || { warn "  No state file for $repo_name"; return 0; }
+
+  # Always reconcile markers first — dedup guard in both passes.
+  _reconcile_markers_from_target "$repo_name" "$state_file" "issue"
+
+  # --- COMMENTS-ONLY PASS ---------------------------------------------------
+  if [[ "$phase" == "comments" ]]; then
+    local commented=0 skipped=0
+    while IFS= read -r item; do
+      local src_number tgt_existing comments_status
+      src_number="$(echo "$item" | jq -r '.source_number')"
+      tgt_existing="$(echo "$item" | jq -r '.target_number // empty')"
+      comments_status="$(echo "$item" | jq -r '.comments_status // "none"')"
+      progress_tick 1 "$repo_name"
+      if [[ -z "$tgt_existing" || "$tgt_existing" == "null" ]]; then
+        skipped=$(( skipped + 1 )); continue
+      fi
+      if [[ "$comments_status" == "done" ]]; then
+        skipped=$(( skipped + 1 )); continue
+      fi
+      _import_issue_comments "$repo_name" "$item" "$tgt_existing" "$state_file"
+      commented=$(( commented + 1 ))
+    done < <(state_items "$state_file")
+    ok "  [import comments] $repo_name: commented=$commented skipped=$skipped"
+    return 0
+  fi
+  # --------------------------------------------------------------------------
 
   local _body_tmp
   _body_tmp="$(mktemp)"
@@ -1153,9 +1204,8 @@ _import_repo_issues() {
         if [[ -n "$_src_data" && "$_src_data" != "{}" ]]; then
           _reconcile_issue "$repo_name" "$_src_data" "$src_number" "$tgt_existing" "$state_file"
         fi
-      elif [[ "$comments_status" != "done" ]]; then
-        _import_issue_comments "$repo_name" "$item" "$tgt_existing" "$state_file"
       fi
+      # Comments deferred to pass 2 — do not call _import_issue_comments here.
       skipped=$((skipped + 1))
       continue
     fi
@@ -1260,12 +1310,7 @@ _import_repo_issues() {
     local assignees_status="none"
     [[ "$(echo "$assignees" | jq 'length')" -gt 0 ]] && assignees_status="pending"
     _mark_issue_imported "$state_file" "$src_number" "$tgt_number" "$tgt_node_id" "$assignees_status"
-
-    # Re-read the freshly-updated item so the comments fn sees comments_mirrored.
-    local updated_item
-    updated_item="$(jq -c --argjson n "$src_number" \
-      '.items[] | select(.source_number == $n)' "$state_file" 2>/dev/null | head -1)"
-    _import_issue_comments "$repo_name" "$updated_item" "$tgt_number" "$state_file"
+    # Comments are posted in pass 2 — do NOT call _import_issue_comments here.
 
     imported=$((imported + 1)); wrote=$((wrote + 1))
     if (( wrote % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
@@ -1275,6 +1320,7 @@ _import_repo_issues() {
   done < <(state_items "$state_file")
 
   state_update_stats "$state_file"
+  state_split_if_needed "$state_file"   # split into parts if > MAX_STATE_FILE_MB (B2 fix)
   ok "  [import] $repo_name: imported=$imported skipped=$skipped failed=$failed"
 }
 
@@ -1339,7 +1385,7 @@ _import_issue_comments() {
       # PR/issue is NOT marked "done" with comments missing (which would make a
       # re-run skip it permanently). Re-run resumes from the successful prefix.
       failed=$((failed + 1))
-      warn "  Failed to import comment $c_id on issue #$src_number — $(head -1 "$_post_err_tmp" 2>/dev/null || true)"
+      warn "  Failed to import comment $c_id on issue #$src_number — $(_gh_err_line "$_post_err_tmp")"
     elif (( failed == 0 )); then
       posted=$((posted + 1))
       if (( posted % 25 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then

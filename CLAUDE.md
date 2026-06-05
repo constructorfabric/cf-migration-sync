@@ -1285,7 +1285,334 @@ Prevention:
 
 ---
 
+### RC-30 — CONTINUOUS reconcile implemented in one code path, not audited across all stages
+
+```
+Bug:          CONTINUOUS=true (re-sync already-mirrored items to pick up later source
+              edits) was implemented only in the FULL-mode loops of stages 05 and 06.
+              The IMPORT-mode loops of the same stages skipped mirrored items outright,
+              so an operator who migrated via export/import (the normal path) could not
+              fix already-migrated issues/PRs with CONTINUOUS at all. Stages 11 (release
+              name/body) and 14 (collaborator permission) had no CONTINUOUS path either.
+
+5 Whys:
+  Why 1:  CONTINUOUS was checked in _mirror_repo_issues / _mirror_repo_prs (full mode)
+          but not in _import_repo_issues / _import_repo_prs (import mode).
+  Why 2:  When CONTINUOUS was first written, only full mode existed; the export/import
+          split was added later and the import loops were written fresh without copying
+          the CONTINUOUS branch.
+  Why 3:  "Create-once" stages (skip when status==mirrored/synced) were never enumerated
+          as a class that REQUIRES a CONTINUOUS bypass; only the two obvious stages got it.
+  Why 4:  There was no documented contract distinguishing "always re-apply" stages
+          (idempotent PATCH/PUT every run — 03/04/10/12/13 etc.) from "create-once"
+          stages (05/06/11/14) that need an explicit reconcile path.
+  Why 5:  CONTINUOUS was treated as a stage-05/06 feature, not a cross-cutting capability
+          with a per-stage behaviour matrix.
+
+Root cause:   A cross-cutting capability (reconcile-on-rerun) was implemented per-occurrence
+              in the code in front of the author, not designed against an enumerated list
+              of every stage's re-run behaviour. Same class as RC-9/RC-11/RC-18: a feature
+              applied only where the author happened to be looking.
+
+Fix applied:  - Added CONTINUOUS reconcile to _import_repo_issues (stage 05) and
+                _import_repo_prs (stage 06): an already-mirrored item is reconciled from
+                its stored source_data (title/body/labels/milestone/type/state + comments).
+              - Stage 11: CONTINUOUS now PATCHes release name/body for mirrored releases.
+              - Stage 14: CONTINUOUS re-applies collaborator permission when it changed.
+              - Documented the full per-stage CONTINUOUS behaviour matrix in mirror/README.md.
+
+Prevention:
+1. Every stage falls into one of two classes; classify NEW stages explicitly:
+   (a) "always re-apply" — re-PATCH/PUT/upsert the target every run with no status skip.
+       These reconcile automatically; CONTINUOUS is a no-op for them.
+   (b) "create-once" — short-circuit when status==mirrored/synced/done. These MUST have
+       an explicit `if CONTINUOUS` branch that re-syncs from source, or they can never
+       pick up source edits.
+2. Any capability that branches on a global flag (CONTINUOUS, DRY_RUN, MIRROR_MODE) must
+   be applied to EVERY relevant code path in the same change — grep the flag across all
+   stages and confirm coverage, don't add it only where first noticed.
+3. CONTINUOUS must work identically in full AND import modes — the import loops are the
+   normal production path and must not lag behind full mode.
+```
+
+---
+
+### RC-31 — Secondary (abuse) limit enforced only reactively; AUTORATELIMIT saw only the primary limit
+
+```
+Bug:          Bursts of comment creation hit GitHub's secondary (content-creation/abuse)
+              limit and returned 403 even though AUTORATELIMIT was set — because
+              AUTORATELIMIT probed `gh api rate_limit`, which exposes ONLY the primary
+              (core/graphql) buckets. The secondary limit (~80 content-creations/min) is
+              not in any header or endpoint, so the adaptive throttle was structurally
+              blind to it. The ONLY defence against it was the REACTIVE 403 hard-stop +
+              degraded mode — i.e. we always had to actually trip the limit first.
+              Concrete: PR #268's 99 comments at ~0.5s inline pause tripped a 403.
+
+5 Whys:
+  Why 1:  AUTORATELIMIT backs off on used/limit from `rate_limit`, which has no
+          secondary-limit field — so it never throttled the content-creation rate.
+  Why 2:  The design assumed "the limit GitHub reports is the limit that matters". The
+          secondary limit is real but invisible to the API, so it was out of the model.
+  Why 3:  Nothing measured our OWN content-creation rate, even though every such request
+          is one WE make and already log (target-write in state/.api-rate.log).
+  Why 4:  The secondary limit was categorised as "reactive only — can't be predicted",
+          conflating "GitHub won't tell us its threshold" with "we can't measure our rate".
+          We can't see their counter, but we can count our own emissions against a known
+          documented ceiling (~80/min).
+  Why 5:  Rate-limit handling was built around the server's reported numbers, never around
+          a locally-maintained model of what we are emitting.
+
+Root cause:   The throttle modelled only server-reported (primary) limits. The secondary
+              limit — which is a function of OUR request rate against a known ceiling — had
+              no proactive guard because nothing measured the locally-controllable quantity
+              (content-creations/min). An invisible-to-the-API limit is not the same as an
+              unmeasurable one.
+
+Fix applied:  - AUTORATELIMIT_PROBE_EVERY default 25 → 1 (check after EVERY write, per the
+                operator's requirement).
+              - New config: CONTENT_CREATION_LIMIT_PER_MIN=80, CONTENT_GATE_STEP_SECONDS=2,
+                CONTENT_GATE_MAX_SLEEP=60.
+              - _apirate_content_rate_60s(): counts target-write events in the last 60s
+                from state/.api-rate.log (numeric-epoch guarded per RC-22).
+              - _arl_content_gate(): no-op when AUTORATELIMIT=0; else threshold =
+                AUTORATELIMIT × CONTENT_CREATION_LIMIT_PER_MIN (0.8×80=64). While the
+                rolling-60s rate ≥ threshold, sleep progressively (step×CONTENT_GATE_STEP_SECONDS,
+                capped at CONTENT_GATE_MAX_SLEEP), re-measuring until it drops below.
+              - Wired into _throttle_post_write AFTER the target-write is recorded, so the
+                just-made request is counted and the gate runs after EVERY write.
+              - Live rate surfaced in the API-rate line + persisted to .write-throttle.json
+                (content_rate_per_min, content_gate_step, content_rate_at); .progress shows it.
+              The reactive 403 hard-stop + degraded mode is RETAINED as the backstop.
+
+Prevention:
+1. A rate limit that is invisible to the server's reported headers is NOT necessarily
+   unmeasurable. If the limited quantity is something WE emit (requests we make), maintain
+   a LOCAL rolling-window counter against the documented ceiling and gate proactively —
+   do not rely solely on the reactive 403 handler.
+2. The same AUTORATELIMIT fraction governs both the primary (header-driven) and the
+   secondary (locally-counted) gate, so one knob expresses one risk tolerance.
+3. Any new class of content-creating write must be a `target-write` in state/.api-rate.log
+   (it already is if it goes through gh() — RC-20), so the content gate covers it for free.
+4. A proactive gate NEVER replaces the reactive 403 hard-stop; keep both.
+```
+
+---
+
+### RC-32 — Unguarded jq on a state file aborted the entire run when the whole file was momentarily absent
+
+```
+Bug:          A multi-hour PR import crashed with `jq: error: Could not open file
+              state/prs/cyberware-frontx.yaml: No such file or directory` immediately
+              after importing PR #264, losing all in-progress work. The repo's state
+              existed on disk ONLY as split parts (<repo>.yaml.part01/02 + .parts manifest)
+              — the whole <repo>.yaml was absent at that moment — yet state_update did a
+              bare `jq "$@" "$filter" "$file"` with no guard, so under `set -euo pipefail`
+              the missing file took down the whole process.
+
+5 Whys:
+  Why 1:  state_update ran `jq ... "$file"` on a path that did not exist → jq exit 2 →
+          set -e aborted the run.
+  Why 2:  The whole file was missing while its split PARTS were present — reassembly had
+          not (re)run for that repo at that point (interrupted/!=expected reassembly, or
+          the operator's concurrent manual re-split removed the whole file).
+  Why 3:  state_update assumed the canonical whole file is ALWAYS present when called. The
+          split/merge contract ("merge-before-read") was enforced only at loop entry
+          (one state_unsplit per repo), not at each individual write — so any later
+          disappearance of the whole file was unhandled.
+  Why 4:  Even granting the file could vanish, the helper had no defensive posture: a
+          single missing file should fail ONE item, not abort a run that has done hours
+          of idempotent work. There was no "self-heal or skip-non-fatally" behaviour.
+  Why 5:  State-mutating helpers were written for the happy path (file present, jq
+          succeeds) with no contract that a state write must be CRASH-SAFE: the worst case
+          for one bad/missing file is "warn + skip this item", never "abort everything".
+
+Root cause:   The lowest-level state-write primitive (state_update) had no crash-safety
+              contract. It trusted that the whole file is always present and that jq always
+              succeeds, so any transient absence (split parts present but whole gone) or jq
+              error escalated — via `set -e` — from a one-item problem into a total run
+              abort with lost progress.
+
+Fix applied:  - state_update now SELF-HEALS: if the whole file is absent it calls
+                state_unsplit first (reassembling from parts that are sitting right there),
+                then proceeds. If still absent (no parts), it WARNS and returns 0 (non-fatal)
+                so the run continues; the item's status is simply not advanced and a re-run
+                retries it (idempotent).
+              - state_update GUARDS the jq itself (`jq ... 2>/dev/null` + success check):
+                a transient failure warns and leaves the file unchanged instead of crashing.
+              - state_items gained the same self-heal (reassemble-from-parts) so the import
+                loop's primary reader is crash-safe too.
+              - Audited stages 05/06/07 for other unguarded `jq ... "$state_file"` reads;
+                the remaining direct reads already use `2>/dev/null` or route through
+                state_update/state_items.
+
+Prevention:
+1. EVERY state-write/read primitive (state_update, state_items, and any future
+   state_* helper) must be CRASH-SAFE: a missing or unreadable file is at most a
+   warn-and-skip for that item, NEVER a `set -e` abort of the run. Guard the jq
+   (`2>/dev/null` + explicit success branch) and return 0 on a non-fatal skip so a
+   bare call under `set -e` does not abort.
+2. The merge-before-read contract must be enforced AT THE POINT OF USE, not only at
+   loop entry. Any helper that reads/writes <repo>.yaml must reassemble from parts
+   (state_unsplit) if the whole file is absent — the parts are the source of truth and
+   may be all that exists at any moment (fresh checkout, interrupted run, operator re-split).
+3. Returning 0 on a non-fatal skip means the item's terminal status is NOT advanced, so
+   a re-run retries — consistent with the idempotency design (RC-7/RC-24). Never advance
+   a "done/mirrored" status on a path where the write was skipped.
+```
+
+---
+
+### RC-33 — Live dashboard files refreshed only at stage boundaries, stale during long single-item work (improvement)
+
+```
+Context:      Operator wanted state/.api-rate.summary, state/.rate-limit, and
+              state/.progress to update much more frequently — ideally after every
+              request, or on the same cadence as the AUTORATELIMIT probe.
+
+Problem:      .progress was rewritten only on progress_tick (once per PR/issue item),
+              and .api-rate.summary only inside apirate_report (called at stage end /
+              every APIRATE_REPORT_EVERY events + prune). During a long single-item
+              operation (e.g. posting 99 comments on one PR) progress ticks ONCE, so the
+              dashboard sat stale for minutes while dozens of writes happened.
+
+Fix applied:  - AUTORATELIMIT_PROBE_EVERY default is 1 (every write); .rate-limit is
+                refreshed by _arl_probe on that cadence whenever AUTORATELIMIT>0 (or
+                RATELIMIT_SHOW=1).
+              - New _apirate_refresh_summary(): a CHEAP read-only single-awk-pass recompute
+                of the 60m per-category counts + 60s content-creation rate → overwrites
+                .api-rate.summary. No prune, no log line (unlike apirate_report).
+              - progress_tick now caches its rendered line to state/.progress.line; new
+                _status_refresh() re-renders .progress from that cached line + the freshest
+                footers. (The throttle engine runs inside `$(gh ...)` subshells, so the
+                cache MUST be a file, not a shell var — RC-16-adjacent.)
+              - _throttle_post_write calls _apirate_refresh_summary + _status_refresh after
+                each write on the AUTORATELIMIT_PROBE_EVERY cadence (default every write),
+                so all three dashboard files stay current between progress ticks.
+
+Prevention:
+1. A STATUS file (latest snapshot) must be refreshed on the cadence of the ACTIVITY it
+   reports (per-write), not only on the cadence of the outer loop (per-item). When work
+   is bursty within one item, per-item refresh is stale by design.
+2. Per-write refreshers must be CHEAP: read-only, single-pass, no prune, no log. Keep the
+   heavy/pruning path (apirate_report) on its own coarser cadence + stage end.
+3. Anything the throttle engine writes/reads runs inside a command-substitution subshell;
+   cross-call state MUST be file-based (RC-16/RC-30 family), never a shell variable.
+```
+
+---
+
+### RC-34 — Swallowed fetch error made an EXPECTED scope limit indistinguishable from a bug
+
+```
+Bug:          Stage 09 export logged `[paginate] no/failed response from
+              orgs/cyberfabric/actions/secrets — treating as empty` (and the same for
+              dependabot/secrets). The operator could not tell whether this was a code
+              bug, a transient error, or an expected permission limit — the message
+              carried no HTTP status or reason.
+
+5 Whys:
+  Why 1:  gh_flatten_wrapper fetched with `... 2>/dev/null` and `|| raw=""`, discarding
+          gh's actual error text before the warning was composed.
+  Why 2:  The wrapper was written to be CRASH-SAFE (don't abort on a failed inventory) but
+          conflated "don't crash" with "don't report why" — it threw the diagnosis away.
+  Why 3:  The failure cause (almost always a 403: the source token lacks 'admin:org', which
+          is REQUIRED to read org-level Actions/Dependabot secrets) was never surfaced, so
+          an expected, non-blocking limitation looked identical to a real defect.
+  Why 4:  No fetch helper distinguished error CLASSES (403/scope = expected operator
+          condition; 404 = feature absent; 5xx/network = transient/retry). All collapsed
+          into one vague line.
+  Why 5:  Same family as RC-25: gh errors that an operator needs to ACT on (grant scope vs
+          retry vs ignore) were swallowed; "treat as empty" handled control flow but not
+          observability.
+
+Root cause:   Crash-safety was implemented by discarding the error instead of capturing and
+              classifying it. A swallowed error cannot distinguish an EXPECTED limitation
+              (token scope) from a transient failure from a real bug — forcing the operator
+              to guess and eroding trust in every "treating as empty" message.
+
+Fix applied:  gh_flatten_wrapper now captures stderr (and falls back to the stdout error
+              body, RC-5), checks the exit code out-of-band, and emits a CLASSIFIED warning:
+              403/forbidden → "token lacks scope (org secrets need admin:org); secret VALUES
+              are write-only and can't be migrated anyway → non-blocking"; 404 → "feature
+              absent"; else → "likely transient, re-run to retry". The actual error text is
+              included.
+
+Prevention:
+1. A helper that "treats failure as empty" for crash-safety MUST still CAPTURE and REPORT
+   the failure cause. Crash-safety (control flow) and observability (why) are separate
+   requirements; satisfy both.
+2. Classify fetch errors the operator must act on differently: 403/scope = expected
+   condition (state what scope is needed + whether it's blocking); 404 = feature absent;
+   5xx/network = transient (say "re-run to retry"). Never collapse them into one message.
+3. Reading ORG-level Actions/Dependabot secrets requires the SOURCE token to have
+   'admin:org'. This is commonly absent and is NON-BLOCKING: only secret NAMES are
+   inventoried (values are write-only and unmigratable). Do not treat it as an error.
+4. Confirm a suspected scope limit with:
+     gh api -i --header "Authorization: token $GH_TOKEN_SOURCE" /rate_limit | grep -i x-oauth-scopes
+   (classic PAT scopes) or read the HTTP status from the now-classified warning.
+```
+
+---
+
 ## Write-throttle / abuse-protection contract (non-negotiable)
+
+### RC-35 — Bare `403` in `_looks_like_rate_limit` triggered false-positive degraded mode
+
+```
+Bug:          Stage 06 importing PR #1884's comments entered degraded mode + 900s
+              hard-stop sleep mid-import, even though rate-limit status showed
+              core 16/5000 (0%) — clearly not rate-limited. The script spent
+              15 minutes sleeping then ran degraded (22s/write) for the rest of the
+              session. The WARN message showed a rate-limit probe line from 15 minutes
+              earlier instead of the actual error.
+
+5 Whys:
+  Why 1:  _throttle_on_rate_limit fired → 900s sleep → degraded mode.
+  Why 2:  _looks_like_rate_limit returned true → triggered the hard-stop.
+  Why 3:  _looks_like_rate_limit matched bare "403" in the gh error text.
+          The actual error was a non-rate-limit 403 (e.g. permission denied,
+          SAML enforcement, content-policy) — not a rate limit at all.
+  Why 4:  The regex included '403' as a standalone match condition. GitHub returns
+          403 for many non-rate-limit reasons; only rate-limit 403s include
+          specific language ("secondary rate limit", "rate limit exceeded", "abuse").
+  Why 5:  The pattern was written defensively ("if it's a 403 it might be a rate
+          limit") without considering that false positives cause a 900s penalty +
+          degraded mode for the entire rest of the run — much worse than failing
+          one item and continuing normally.
+
+Root cause:   _looks_like_rate_limit used HTTP status code alone (bare "403") as a
+              sufficient condition for the 900s hard-stop + degraded mode, even though
+              403 is routinely returned for non-rate-limit reasons. The cost of a false
+              positive (900s sleep + permanent degraded mode) is orders of magnitude
+              higher than a false negative (one item fails without entering degraded mode,
+              but retries normally on the next run).
+
+Fix applied:  Removed bare "403" from _looks_like_rate_limit. Real rate-limit 403s
+              always contain "secondary rate limit", "rate limit exceeded", or "abuse"
+              in gh's error message. HTTP 429 (Too Many Requests) is kept as it is
+              always rate-limiting. Also fixed _post_err_tmp error reporting: added
+              _gh_err_line() helper that skips throttle-engine diagnostic lines (which
+              start with "[timestamp]") and returns the actual "gh: ..." error instead
+              of head -1 which was returning the probe log line. Applied to all 6
+              _post_err_tmp warn sites in stages 05 and 06.
+
+Prevention:
+1. _looks_like_rate_limit must NEVER match on bare HTTP status codes alone (403, 404,
+   etc.). It must require SEMANTIC rate-limit language in the error body. GitHub's
+   rate-limit errors always include "rate limit", "secondary rate", or "abuse" — that
+   is sufficient and precise.
+2. The cost asymmetry is extreme: false negative (miss a rate limit) → one item retries.
+   False positive (wrong degraded mode) → 900s penalty + hours of slow running. Always
+   bias toward false negatives.
+3. Any code that reads _post_err_tmp (or any file capturing gh()'s stderr) must skip
+   throttle-engine diagnostic lines. Use _gh_err_line() not head -1.
+4. The "degraded mode" state can be manually cleared if incorrectly entered:
+     jq '.degraded = false | .writes_in_batch = 0' state/.write-throttle.json \
+       > /tmp/t.json && mv /tmp/t.json state/.write-throttle.json
+```
+
+---
 
 A central write-throttle engine in `mirror/lib/common.sh` enforces the GitHub
 abuse-protection policy. Defaults: 10s after every write, ≤350 writes/hour, a
@@ -1320,6 +1647,174 @@ Why a wrapper and not per-stage sleeps (RCA summary): scattering the policy acro
 violation is invisible until GitHub issues a 403. Centralizing in the single chokepoint
 (`gh()`) that every write already passes through makes coverage total and auditable
 (`grep -c 'command gh'` must only match `ghsrc` and the wrapper itself).
+
+---
+
+### RC-36 — Import trusted local state as the only existence check, causing duplicate creation after interrupted runs
+
+```
+Bug:          Import stages 05/06 created duplicate issues/PRs in the target (e.g.
+              constructorfabric/cyberware-rust #1520 and #3596 both mirroring the
+              same source PR). The script had no mechanism to detect that a target
+              item already existed before creating a new one.
+
+5 Whys:
+  Why 1:  _import_repo_prs / _import_repo_issues only skip creation when
+          target_issue_number / target_number is set in the local state file.
+  Why 2:  If a previous run created the target item but then crashed (or
+          state_update was the non-fatal skip path — RC-32) before writing the
+          target number to state, the state file still shows status=exported
+          with no target number.
+  Why 3:  On the next run, the item looks "not yet created" and gets created again,
+          producing an exact duplicate with the same cf-mirror body marker.
+  Why 4:  The design assumed "state file = ground truth for what exists in target."
+          That assumption breaks on interrupted runs. The cf-mirror body marker
+          embedded in every created item IS the ground truth, but it was never
+          consulted at import time — only during full-mode reconciliation.
+  Why 5:  There was no pre-run consistency check between state and the actual
+          target repository. Each stage trusted local state unconditionally.
+
+Root cause:   The import loop's dedup relies solely on local state (target_number
+              present?). When a run is interrupted after creation but before state
+              is written, the local state is out of sync with the target. No
+              mechanism exists to re-derive target numbers from the authoritative
+              source (the cf-mirror body markers on target items).
+
+Fix applied:  _reconcile_markers_from_target() in common.sh: called once at the
+              start of each _import_repo_issues / _import_repo_prs, before the
+              main loop. Fetches all target issues in one paginated call, parses
+              cf-mirror markers from bodies, and for any state item with
+              status=exported + no target number that ALREADY EXISTS in the target,
+              writes the target number back and marks it mirrored. The import loop
+              then skips those items normally. Zero per-item API calls — one list
+              fetch per repo.
+              New tool mirror/tools/find-duplicates.sh: scans target for items
+              sharing the same cf-mirror marker, reports them, and optionally
+              closes the duplicates (keeps lowest target number = first created).
+
+Prevention:
+1. Import loops must NEVER rely solely on local state to determine whether an item
+   already exists in the target. The cf-mirror body marker is the authoritative
+   idempotency key; it must be consulted at import time.
+2. Any function that creates a target item must be preceded by a marker-based
+   existence check, or a bulk marker reconcile at repo-loop entry.
+3. _reconcile_markers_from_target must run before EVERY import loop, not just on
+   CONTINUOUS mode. It is cheap (one API call per repo) and fully idempotent.
+4. When RC-32's non-fatal state_update is triggered (state write skipped), the item
+   remains at status=exported. The next run's _reconcile_markers_from_target will
+   recover it — so the RC-32 + RC-36 fixes compose correctly: crash-safe state
+   write + marker-based recovery on re-run.
+```
+
+---
+
+### RC-37 — Two-pass import introduced 5 bugs in one change (new code never audited against existing RCs)
+
+```
+Bugs found in the two-pass import refactor (stages 05/06):
+
+B1/B2 [CRITICAL] state_split_if_needed never called in creation pass.
+  Root cause: The creation pass was copied from the original loop but the
+  original loop called state_split_if_needed at its end. The new pass ends
+  at state_update_stats only. Large repos (>10 MB) would grow without bound
+  across creation runs, re-introducing the >100 MB git limit violation that
+  state splitting was designed to prevent. Silent — no error, just large files.
+  Fix: Added state_split_if_needed after state_update_stats in both stages 05/06.
+
+B3 [MEDIUM] only_repo filter missing in pass-2 progress count (stage 05).
+  Root cause: The pass-2 total-items loop was copy-pasted from pass 1 without
+  carrying over the `[[ -n "$only_repo" && "$_rn" != "$only_repo" ]] && continue`
+  guard. When --repo is passed, pass-2 progress shows N=all-repos but the loop
+  processes only 1 repo, making ETA wildly wrong.
+  Fix: Added the only_repo guard to the pass-2 count loop.
+
+B4 [MEDIUM] _count_prs_for_progress uses skip_open_prs via implicit dynamic scope (RC-16).
+  Root cause: Helper defined inside _import_all_prs accessed skip_open_prs from
+  the enclosing function's locals. Every function must declare all inputs
+  explicitly (RC-16 rule #1). Future refactor breaking the call chain would
+  silently pass 0 for skip_open_prs.
+  Fix: Added skip_open as explicit third parameter; all 2 call sites updated.
+
+B5 [LOW] CONTINUOUS in creation pass posted comments via _reconcile_pr → _reconcile_pr_comments,
+  bypassing the two-pass design.
+  Root cause: _reconcile_pr always called _reconcile_pr_comments unconditionally.
+  Adding it to creation pass without a suppression mechanism caused comment
+  posting to happen in both passes for CONTINUOUS mode.
+  Fix: Added optional 6th arg skip_comments to _reconcile_pr. Creation pass
+  passes 1; comments pass passes 0 (default). _reconcile_pr_comments only
+  called when skip_comments==0.
+
+B6 [LOW] find-duplicates.sh: three top-level shell bugs caused silent exit with no output.
+  Root cause: (a) local keyword outside a function body exits silently under
+  set -e; (b) mapfile (bash 4 readarray) not available on macOS bash 3.2;
+  (c) error message went to stderr only with no visible indicator. Operator
+  sees blank output and cannot diagnose.
+  Fix: Rewrote main body without local declarations; replaced mapfile with
+  while-read loop; improved error messages with usage examples.
+
+Prevention (applies to all future multi-pass refactors):
+1. When introducing a new "pass" or "phase" to an existing loop, enumerate every
+   side-effect the original loop had (state_split_if_needed, commit_state, progress
+   counts, etc.) and verify each is present in the new pass if needed.
+2. After any refactor touching import loops, grep for state_split_if_needed to
+   confirm it appears at least once per _import_repo_* function.
+3. Progress count loops must carry ALL the same filters as the work loop that
+   follows them (only_repo, skip_open_prs, etc.). Count ≠ processed = wrong ETA.
+4. Any helper that runs in a loop must declare ALL inputs as explicit parameters
+   (RC-16). Dynamic-scope access is invisible to the function signature.
+5. New tool scripts: test with bash -x to catch silent exits; use while-read not
+   mapfile for macOS compatibility; add usage example to every error message.
+```
+
+---
+
+### RC-38 — Full-mode (`MIRROR_MODE=full`) diverged from export+import on state-file splitting
+
+```
+Bug:          Full-mode runs of stages 05 and 06 never called state_split_if_needed
+              at the end of _mirror_repo_issues and _mirror_repo_prs. Large repos
+              (>10 MB state files) that ran in full mode instead of export+import
+              would accumulate unsplit state files, eventually exceeding GitHub's
+              100 MB hard limit and failing on git push — with no warning.
+
+5 Whys:
+  Why 1:  state_split_if_needed was not called after state_update_stats in any of
+          the three full-mode function-end / early-return paths.
+  Why 2:  state_split_if_needed was added when import mode was introduced (B1/B2
+          fixes in RC-37). Full mode was not audited at the same time.
+  Why 3:  There is no systematic check that export, import, and full mode all call
+          the same set of state-management primitives at their function ends.
+  Why 4:  The modes were written at different times; "same behaviour" was assumed
+          but never verified with a concrete parity checklist.
+  Why 5:  RC-9's rule ("apply fixes across the entire codebase") was followed for
+          import but not explicitly extended to full mode as a "same-class consumer."
+
+Root cause:   Full mode and export+import mode share the same state files but were
+              developed independently. Any state-management primitive added to one
+              mode is not automatically applied to the other. Without a parity test
+              or a shared end-of-function helper, they will silently diverge.
+
+Fix applied:  Added state_split_if_needed after state_update_stats in:
+              - _mirror_repo_issues (stage 05 full mode, function end)
+              - _mirror_repo_prs (stage 06 full mode, closed-PRs loop end)
+              - _mirror_repo_prs (stage 06 full mode, early-return when no closed PRs)
+              The early-return case matters because open PRs may have grown the state
+              file before the function reaches the closed-PRs section.
+
+Prevention:
+1. Full mode and export+import mode are DIFFERENT CODE PATHS for the SAME state files.
+   Whenever a state-management primitive (split, unsplit, update_stats, init) is added
+   to one path, grep for every other _mirror_repo_* / _import_repo_* / _export_repo_*
+   function and add it there too.
+2. Every _mirror_repo_* function that ends with state_update_stats MUST be followed
+   by state_split_if_needed (unless it is an early-return for zero items, where no
+   new data was written). This is now a mandatory pairing rule.
+3. After any mode-specific refactor, run the RC-38 parity check:
+     awk '/state_update_stats/{line=NR;found=0} /state_split_if_needed/ && NR<=line+3{found=1}
+          NR>line+3 && !found && line>0{print FILENAME":"line" MISSING split"; line=0}' \
+       mirror/stages/05-mirror-issues.sh mirror/stages/06-mirror-prs.sh
+   Output must be empty (or only zero-items early-returns).
+```
 
 ---
 

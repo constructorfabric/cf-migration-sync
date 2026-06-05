@@ -98,12 +98,22 @@ _progress_file_path() {
   echo "$PROGRESS_FILE"
 }
 
+# _progress_line_path — cache file holding the LAST progress line, so the status
+# file (.progress) can be re-rendered with a fresh API-rate footer between ticks
+# (e.g. after every write during a long comment-posting PR). The throttle engine
+# runs inside `$(gh ...)` subshells, so this must be a FILE, not a shell variable.
+_progress_line_path() {
+  echo "${REPO_ROOT:-.}/state/.progress.line"
+}
+
 # _status_write_file <progress_line> — (re)write the human status file with the
 # given progress line plus the most-recent cached API-rate summary line. Called
 # on every tick so the file is always current; cheap (no jq, no awk).
 _status_write_file() {
   local progress_line="$1"
   local sf; sf="$(_progress_file_path)"
+  # Cache the line so _status_refresh can re-render this file between ticks.
+  printf '%s' "$progress_line" > "$(_progress_line_path)" 2>/dev/null || true
   local rate_line=""
   local rs; rs="$(_apirate_summary_path)"
   [[ -f "$rs" ]] && rate_line="$(cat "$rs" 2>/dev/null || true)"
@@ -117,6 +127,17 @@ _status_write_file() {
     [[ -n "$rl_line"   ]] && echo "$rl_line"
     echo "updated: $(now)"
   } > "$sf" 2>/dev/null || true
+}
+
+# _status_refresh — re-render the human status file (.progress) from the cached
+# last progress line plus the freshest API-rate + rate-limit footers. Called by
+# the throttle engine after writes so the dashboard stays current even during a
+# long single-item operation (e.g. posting 99 comments) that ticks only once.
+_status_refresh() {
+  local lp; lp="$(_progress_line_path)"
+  [[ -f "$lp" ]] || return 0
+  local line; line="$(cat "$lp" 2>/dev/null || true)"
+  [[ -n "$line" ]] && _status_write_file "$line"
 }
 
 # _hms <seconds> — format an integer second count as compact "1h 02m 03s".
@@ -280,7 +301,26 @@ RATELIMIT_MIN_REMAINING="${RATELIMIT_MIN_REMAINING:-50}"
 # manifests as a 403 with Retry-After, which the existing _throttle_on_rate_limit
 # hard-stop already handles. AUTORATELIMIT therefore complements, not replaces, it.
 AUTORATELIMIT="${AUTORATELIMIT:-0}"
-AUTORATELIMIT_PROBE_EVERY="${AUTORATELIMIT_PROBE_EVERY:-25}"
+# Check the rate limits after EVERY request by default (was 25). 1 = every request.
+AUTORATELIMIT_PROBE_EVERY="${AUTORATELIMIT_PROBE_EVERY:-1}"
+
+# ---------------------------------------------------------------------------
+# SECONDARY (content-creation) rate limit — locally measured.
+# GitHub's secondary/abuse limit on CONTENT CREATION (issues, comments, PRs) is
+# NOT exposed by any header or `rate_limit` endpoint. BUT it is a rate WE control:
+# every content-creation request is one WE make, so we can count them ourselves.
+#
+# GitHub's documented content-creation ceiling is ~80 requests/minute. When
+# AUTORATELIMIT>0, the content gate applies the SAME fraction logic to this
+# locally-measured rate: e.g. AUTORATELIMIT=0.8 → back off once we reach
+# 0.8 * 80 = 64 content-creations/minute, progressively delaying each subsequent
+# request until the rolling-60s rate drops back under the threshold. Checked
+# after EVERY content-creation request (target-write).
+CONTENT_CREATION_LIMIT_PER_MIN="${CONTENT_CREATION_LIMIT_PER_MIN:-80}"
+# Each over-threshold step sleeps this many seconds, escalating per consecutive
+# over-threshold check, capped at the max. Sleeping naturally lowers the rate.
+CONTENT_GATE_STEP_SECONDS="${CONTENT_GATE_STEP_SECONDS:-2}"
+CONTENT_GATE_MAX_SLEEP="${CONTENT_GATE_MAX_SLEEP:-60}"
 # RATELIMIT_SHOW=1 → run the (quota-free) rate_limit probe purely for VISIBILITY
 # (console line + state/.rate-limit + .progress) even when AUTORATELIMIT=0. It
 # does NOT change throttle behaviour — it only displays how close we are to the
@@ -306,8 +346,11 @@ _throttle_init() {
     jq -n --argjson now "$(date +%s)" \
       '{writes_total:0, writes_in_batch:0, hour_window_start:$now,
         writes_in_hour:0, degraded:false,
-        arl_probe_at:0, arl_fallback_step:0}' > "$THROTTLE_STATE" 2>/dev/null || \
-      printf '{"writes_total":0,"writes_in_batch":0,"hour_window_start":%s,"writes_in_hour":0,"degraded":false,"arl_probe_at":0,"arl_fallback_step":0}' \
+        arl_probe_at:0, arl_fallback_step:0,
+        content_rate_per_min:0, content_rate_at:0, content_gate_step:0,
+        max_content_rate_per_min:0, max_writes_in_hour:0,
+        degraded_reason:"", degraded_at:"", degraded_error:""}' > "$THROTTLE_STATE" 2>/dev/null || \
+      printf '{"writes_total":0,"writes_in_batch":0,"hour_window_start":%s,"writes_in_hour":0,"degraded":false,"arl_probe_at":0,"arl_fallback_step":0,"content_rate_per_min":0,"content_rate_at":0,"content_gate_step":0,"max_content_rate_per_min":0,"max_writes_in_hour":0,"degraded_reason":"","degraded_at":"","degraded_error":""}' \
         "$(date +%s)" > "$THROTTLE_STATE"
   fi
 }
@@ -440,6 +483,59 @@ _arl_gate() {
   fi
 }
 
+# _arl_content_gate — SECONDARY (content-creation) rate-limit enforcement.
+# Called AFTER every content-creation write (target-write) has been recorded.
+# No-op when AUTORATELIMIT=0. Otherwise: measure the rolling 60s content-creation
+# rate (writes/min) and, while it is at/above AUTORATELIMIT * CONTENT_CREATION_LIMIT_PER_MIN,
+# sleep progressively (escalating per consecutive over-threshold check) until the
+# measured rate drops back under the threshold. This is the PROACTIVE guard for
+# GitHub's secondary/abuse limit, which no header reports — we measure our own rate.
+_arl_content_gate() {
+  # Disabled unless AUTORATELIMIT>0.
+  awk -v n="${AUTORATELIMIT:-0}" 'BEGIN{exit !(n+0>0)}' || return 0
+  _throttle_init
+
+  local limit thresh
+  limit="${CONTENT_CREATION_LIMIT_PER_MIN:-80}"
+  # threshold (writes/min) = fraction * ceiling, rounded down. e.g. 0.8*80 = 64.
+  thresh="$(awk -v l="$limit" -v n="$AUTORATELIMIT" 'BEGIN{printf "%d", (l*n)}')"
+  (( thresh <= 0 )) && return 0
+
+  # Loop: keep sleeping while the rolling-60s rate is at/over threshold. Each sleep
+  # both waits AND lets old events age out of the 60s window, lowering the rate.
+  local step=0 rate
+  rate="$(_apirate_content_rate_60s)"
+  [[ "$rate" =~ ^[0-9]+$ ]] || rate=0
+  # Always record the latest measured rate for visibility tooling + update max.
+  _throttle_set '.content_rate_per_min = $r | .content_rate_at = $t
+    | .max_content_rate_per_min = (if $r > (.max_content_rate_per_min // 0)
+        then $r else (.max_content_rate_per_min // 0) end)' \
+    --argjson r "$rate" --argjson t "$(date +%s)" 2>/dev/null || true
+  # Fast path: under threshold — make sure the gate-step marker is cleared.
+  if (( rate < thresh )); then
+    _throttle_set '.content_gate_step = 0' 2>/dev/null || true
+    return 0
+  fi
+  while (( rate >= thresh )); do
+    step=$(( step + 1 ))
+    local wait=$(( CONTENT_GATE_STEP_SECONDS * step ))   # progressive: 2,4,6,...
+    (( wait > CONTENT_GATE_MAX_SLEEP )) && wait="$CONTENT_GATE_MAX_SLEEP"
+    _throttle_set '.content_gate_step = $s | .content_rate_per_min = $r
+      | .max_content_rate_per_min = (if $r > (.max_content_rate_per_min // 0)
+          then $r else (.max_content_rate_per_min // 0) end)' \
+      --argjson s "$step" --argjson r "$rate" 2>/dev/null || true
+    warn "[autoratelimit] content-creation rate ${rate}/min ≥ threshold ${thresh}/min (${AUTORATELIMIT} of ${limit}) — sleeping ${wait}s to cool down (step $step)"
+    sleep "$wait"
+    rate="$(_apirate_content_rate_60s)"
+    [[ "$rate" =~ ^[0-9]+$ ]] || rate=0
+    # Safety: never loop forever — after a full minute of cooldown the window has
+    # rolled completely, so the rate must have dropped. Cap the loop accordingly.
+    (( step >= 60 )) && break
+  done
+  _throttle_set '.content_gate_step = 0 | .content_rate_per_min = $r' \
+    --argjson r "$rate" 2>/dev/null || true
+}
+
 # _throttle_get <key> — read one numeric/bool field from the state file.
 _throttle_get() {
   jq -r ".$1" "$THROTTLE_STATE" 2>/dev/null || echo 0
@@ -457,11 +553,16 @@ _throttle_set() {
   fi
 }
 
-# _throttle_enter_degraded — flip to degraded mode (slower, smaller batches).
+# _throttle_enter_degraded <reason> [error_text] — flip to degraded mode.
+# Persists the reason + triggering error text to .write-throttle.json so the
+# operator can see WHY degraded mode was entered without grepping the full log.
 _throttle_enter_degraded() {
+  local reason="${1:-unknown}" error_text="${2:-}"
   _throttle_init
-  _throttle_set '.degraded = true'
-  warn "[throttle] DEGRADED MODE engaged — write delay ${DEGRADED_WRITE_DELAY_SECONDS}s, batch pause every ${DEGRADED_BATCH_SIZE_WRITES} writes"
+  local now_str; now_str="$(now)"
+  _throttle_set '.degraded = true | .degraded_reason = $r | .degraded_at = $at | .degraded_error = $e' \
+    --arg r "$reason" --arg at "$now_str" --arg e "$error_text"
+  warn "[throttle] DEGRADED MODE engaged — write delay ${DEGRADED_WRITE_DELAY_SECONDS}s, batch pause every ${DEGRADED_BATCH_SIZE_WRITES} writes | reason: $reason${error_text:+ | error: $error_text}"
 }
 
 # _is_write_args — return 0 if the gh argv represents a mutating request.
@@ -545,7 +646,9 @@ _throttle_post_write() {
     batch_pause="$BATCH_PAUSE_SECONDS"
   fi
 
-  _throttle_set '.writes_total += 1 | .writes_in_batch += 1 | .writes_in_hour += 1'
+  _throttle_set '.writes_total += 1 | .writes_in_batch += 1 | .writes_in_hour += 1
+    | .max_writes_in_hour = (if .writes_in_hour > (.max_writes_in_hour // 0)
+        then .writes_in_hour else (.max_writes_in_hour // 0) end)'
 
   in_batch="$(_throttle_get writes_in_batch)"
 
@@ -569,28 +672,73 @@ _throttle_post_write() {
     sleep "$batch_pause"
     _throttle_set '.writes_in_batch = 0'
   fi
+
+  # ---- SECONDARY (content-creation) gate: proactively prevent the abuse limit.
+  # Runs AFTER this write was recorded as target-write, so the rolling-60s rate
+  # already includes it. No-op when AUTORATELIMIT=0. When the measured rate hits
+  # the threshold (AUTORATELIMIT * CONTENT_CREATION_LIMIT_PER_MIN) it sleeps
+  # progressively until the rate drops back below. Checked after EVERY write.
+  _arl_content_gate
+
+  # ---- Refresh the live dashboard files after writes, on the SAME cadence as the
+  # AUTORATELIMIT probe (AUTORATELIMIT_PROBE_EVERY, default 1 = every write). Keeps
+  # state/.api-rate.summary and state/.progress current even during a long
+  # single-item operation (e.g. posting 99 comments) that ticks progress only once.
+  local _wt2
+  _wt2="$(_throttle_get writes_total)"; [[ "$_wt2" =~ ^[0-9]+$ ]] || _wt2=0
+  if (( AUTORATELIMIT_PROBE_EVERY > 0 )) && (( _wt2 % AUTORATELIMIT_PROBE_EVERY == 0 )); then
+    _apirate_refresh_summary
+    _status_refresh
+  fi
 }
 
-# _throttle_on_rate_limit <retry_after_secs> — HARD STOP handler for 403/429.
+# _throttle_on_rate_limit <retry_after_secs> [error_text] — HARD STOP handler.
 # Sleeps the fallback duration, then engages degraded mode for the rest of the run.
 _throttle_on_rate_limit() {
-  local retry_after="${1:-}"
-  local wait
+  local retry_after="${1:-}" error_text="${2:-}"
+  local wait reason
   if [[ -n "$retry_after" && "$retry_after" =~ ^[0-9]+$ ]]; then
     wait=$(( retry_after + 60 ))
+    reason="403/429 rate limit (Retry-After=${retry_after}s; hard stop ${wait}s)"
     err "[throttle] 403/429 rate limit — Retry-After=${retry_after}s; HARD STOP, sleeping $((wait))s before degraded resume"
   else
     wait="$RATE_LIMIT_FALLBACK_PAUSE_SECONDS"
+    reason="403/429 rate limit (no Retry-After; hard stop ${wait}s)"
     err "[throttle] 403/429 rate limit — no Retry-After; HARD STOP, sleeping ${wait}s before degraded resume"
   fi
   sleep "$wait"
-  _throttle_enter_degraded
+  _throttle_enter_degraded "$reason" "$error_text"
   _throttle_set '.writes_in_batch = 0'
 }
 
+# _gh_err_line <file> — extract the most-useful error line from a _post_err_tmp
+# file. The file may contain throttle-engine diagnostic lines (rate-limit probe
+# output, content-gate WARN, etc.) written to fd 2 BEFORE command gh runs. Those
+# lines start with a timestamp "[YYYY-...]". Actual gh errors start with "gh:"
+# or contain "HTTP NNN". Always prefer the actual gh error; fall back to the last
+# non-timestamp line, then to head -1.
+_gh_err_line() {
+  local f="$1"
+  [[ -f "$f" ]] || return 0
+  # Prefer lines that look like actual gh errors (start with "gh:" or contain HTTP code).
+  local line
+  line="$(grep -m1 -E '^gh:|HTTP [0-9]{3}' "$f" 2>/dev/null || true)"
+  [[ -n "$line" ]] && { echo "$line"; return 0; }
+  # Fall back: last non-timestamp line (skip throttle/probe "[timestamp] ..." lines).
+  line="$(grep -v '^\[20[0-9][0-9]-' "$f" 2>/dev/null | tail -1 || true)"
+  [[ -n "$line" ]] && { echo "$line"; return 0; }
+  head -1 "$f" 2>/dev/null || true
+}
+
 # _looks_like_rate_limit <text> — heuristic match on a gh error body/stderr.
+# IMPORTANT: match only SEMANTIC rate-limit language, never bare "403".
+# GitHub returns 403 for many non-rate-limit reasons: SAML enforcement, permission
+# denied, content-policy, repository access — none of those should trigger the
+# 900s hard-stop + degraded mode. Real rate-limit 403s always include specific
+# language ("secondary rate limit", "rate limit exceeded", "abuse"). HTTP 429 is
+# always "Too Many Requests" so it is safe to match numerically.
 _looks_like_rate_limit() {
-  echo "$1" | grep -qiE 'rate.?limit|secondary rate|abuse|too many requests|403|429' 2>/dev/null
+  echo "$1" | grep -qiE 'rate.?limit|secondary rate|abuse|too many requests|429' 2>/dev/null
 }
 
 # Remove a rewrite-crossrefs.yaml entry so stage 07 re-processes the body
@@ -691,8 +839,8 @@ _apirate_summary_path() {
   echo "${REPO_ROOT:-.}/state/.api-rate.summary"
 }
 
-# _apirate_record <category> — append one event and, every APIRATE_REPORT_EVERY
-# events, emit the rolling-60m summary. Best-effort: never fails the caller.
+# _apirate_record <category> — append one "<epoch> <category>" event and, every
+# APIRATE_REPORT_EVERY events, emit the rolling-60m summary. Best-effort.
 _apirate_record() {
   local cat="$1"
   local lf; lf="$(_apirate_log_path)"
@@ -708,6 +856,66 @@ _apirate_record() {
   [[ -z "$n" ]] && return 0
   if (( n % APIRATE_REPORT_EVERY == 0 )); then
     apirate_report
+  fi
+}
+
+# _apirate_content_rate_60s — count target-write events in the last 60 SECONDS
+# (the secondary content-creation limit is a per-MINUTE rate). Prints the count.
+# This is the locally-measured proxy for GitHub's content-creation abuse limit.
+_apirate_content_rate_60s() {
+  local lf; lf="$(_apirate_log_path)"
+  [[ -f "$lf" ]] || { echo 0; return 0; }
+  local now cutoff
+  now="$(date +%s)"
+  cutoff=$(( now - 60 ))
+  # Count BOTH successful and failed writes — GitHub sees all of them.
+  awk -v cutoff="$cutoff" '
+    ($1 ~ /^[0-9]+$/) && ($1 + 0 >= cutoff) && \
+    ($2 == "target-write" || $2 == "target-write-failed") { c++ }
+    END { print (c+0) }
+  ' "$lf" 2>/dev/null || echo 0
+}
+
+# _apirate_refresh_summary — CHEAP read-only refresh of the .api-rate.summary
+# cache (no prune, no log line). Computes the 60m per-category counts and the 60s
+# content-creation rate in ONE awk pass and overwrites the summary file, so the
+# .progress dashboard can show an up-to-date API-rate footer after EVERY write
+# without the cost/noise of full apirate_report (which prunes + logs).
+_apirate_refresh_summary() {
+  local lf; lf="$(_apirate_log_path)"
+  [[ -f "$lf" ]] || return 0
+  local now cut60m cut60s
+  now="$(date +%s)"
+  cut60m=$(( now - 3600 ))
+  cut60s=$(( now - 60 ))
+  local counts
+  counts="$(awk -v c60m="$cut60m" -v c60s="$cut60s" '
+    ($1 ~ /^[0-9]+$/) {
+      e = $1 + 0
+      if (e >= c60m) { c[$2]++; total++ }
+      # content rate = successful + failed writes (GitHub counts both)
+      if (e >= c60s && ($2 == "target-write" || $2 == "target-write-failed")) { cpm++ }
+    }
+    END { printf "%d %d %d %d %d %d", (c["source-read"]+0), (c["target-read"]+0), \
+          (c["target-write"]+0), (c["target-write-failed"]+0), (total+0), (cpm+0) }
+  ' "$lf" 2>/dev/null || true)"
+  [[ -z "$counts" ]] && return 0
+  local sr tr tw twf tot cpm
+  read -r sr tr tw twf tot cpm <<<"$counts"
+  : "${sr:=0}" "${tr:=0}" "${tw:=0}" "${twf:=0}" "${tot:=0}" "${cpm:=0}"
+  local cap="${MAX_WRITES_PER_HOUR:-350}"
+  local cpm_limit="${CONTENT_CREATION_LIMIT_PER_MIN:-80}"
+  local cpm_thresh
+  cpm_thresh="$(awk -v l="$cpm_limit" -v n="${AUTORATELIMIT:-0}" 'BEGIN{printf "%d", (l*n)}')"
+  local failed_note=""
+  [[ "${twf:-0}" -gt 0 ]] && failed_note=" (${twf} failed)"
+  local rate_line="API rate (last 60m): ${tot} calls — source-read ${sr}, target-read ${tr}, target-write ${tw}${failed_note}/${cap}/hr cap | content-creation ${cpm}/${cpm_limit} per-min$([[ "${cpm_thresh:-0}" -gt 0 ]] && echo " (limit ${cpm_thresh})") (reads count invocations; --paginate may be >1 HTTP each)"
+  printf '%s\n' "$rate_line" > "$(_apirate_summary_path)" 2>/dev/null || true
+  # Update max_content_rate_per_min in throttle state (cheap; no jq parse cost on fast path).
+  if [[ "$cpm" -gt 0 ]]; then
+    _throttle_set '.max_content_rate_per_min = (if $r > (.max_content_rate_per_min // 0)
+        then $r else (.max_content_rate_per_min // 0) end)' \
+      --argjson r "$cpm" 2>/dev/null || true
   fi
 }
 
@@ -732,23 +940,167 @@ apirate_report() {
       c[$2]++; total++
     }
     END {
-      printf "%d %d %d %d\n", \
-        (c["source-read"]+0), (c["target-read"]+0), (c["target-write"]+0), (total+0)
+      printf "%d %d %d %d %d\n", \
+        (c["source-read"]+0), (c["target-read"]+0), (c["target-write"]+0), \
+        (c["target-write-failed"]+0), (total+0)
     }
   ' "$lf" > "$tmp.counts" 2>/dev/null || { rm -f "$tmp" "$tmp.counts"; return 0; }
   mv "$tmp" "$lf" 2>/dev/null || rm -f "$tmp"
 
-  local sr tr tw tot
-  read -r sr tr tw tot < "$tmp.counts" 2>/dev/null || { rm -f "$tmp.counts"; return 0; }
+  local sr tr tw twf tot
+  read -r sr tr tw twf tot < "$tmp.counts" 2>/dev/null || { rm -f "$tmp.counts"; return 0; }
   rm -f "$tmp.counts"
-  : "${sr:=0}" "${tr:=0}" "${tw:=0}" "${tot:=0}"
+  : "${sr:=0}" "${tr:=0}" "${tw:=0}" "${twf:=0}" "${tot:=0}"
 
   # Also surface the write cap so the number has context (the abuse-sensitive one).
   local cap="${MAX_WRITES_PER_HOUR:-350}"
-  local rate_line="API rate (last 60m): ${tot} calls — source-read ${sr}, target-read ${tr}, target-write ${tw}/${cap} cap (reads count invocations; --paginate may be >1 HTTP each)"
+  # Locally-measured content-creation rate (the SECONDARY-limit proxy): writes/min.
+  local cpm cpm_limit cpm_thresh
+  cpm="$(_apirate_content_rate_60s)"
+  cpm_limit="${CONTENT_CREATION_LIMIT_PER_MIN:-80}"
+  # Threshold = AUTORATELIMIT fraction of the per-min ceiling (only meaningful when ON).
+  cpm_thresh="$(awk -v l="$cpm_limit" -v n="${AUTORATELIMIT:-0}" 'BEGIN{printf "%d", (l*n)}')"
+  local failed_note=""
+  [[ "${twf:-0}" -gt 0 ]] && failed_note=" (${twf} failed)"
+  local rate_line="API rate (last 60m): ${tot} calls — source-read ${sr}, target-read ${tr}, target-write ${tw}${failed_note}/${cap}/hr cap | content-creation ${cpm}/${cpm_limit} per-min$([[ "${cpm_thresh:-0}" -gt 0 ]] && echo " (limit ${cpm_thresh})") (reads count invocations; --paginate may be >1 HTTP each)"
   log "$rate_line"
   # Cache the summary so the human status file (.progress) can show it inline.
   printf '%s\n' "$rate_line" > "$(_apirate_summary_path)" 2>/dev/null || true
+  # Persist the live content rate into throttle state; update max.
+  _throttle_init
+  _throttle_set '.content_rate_per_min = $r | .content_rate_at = $t
+    | .max_content_rate_per_min = (if $r > (.max_content_rate_per_min // 0)
+        then $r else (.max_content_rate_per_min // 0) end)' \
+    --argjson r "${cpm:-0}" --argjson t "$now" 2>/dev/null || true
+}
+
+# ---------------------------------------------------------------------------
+# Target-marker reconciliation — prevent duplicate creation
+# ---------------------------------------------------------------------------
+# _reconcile_markers_from_target <repo_name> <state_file> <item_type>
+#
+# Before the import loop runs, fetch ALL existing target issues/PRs whose
+# body contains a cf-mirror marker, parse the source number from each, and
+# update any state-file items that are marked "exported" (no target_number)
+# but ALREADY EXIST in the target (created by a previous interrupted run
+# where state_update failed after creation — see RC-32).
+#
+# This is a SINGLE paginated LIST call per repo (no per-item searches), so
+# it adds one API round-trip regardless of how many items need reconciling.
+#
+# item_type = "pr"    → look for <!-- cf-mirror-pr: ORG/REPO#N --> markers
+#                       state field: source_pr_number / target_issue_number
+# item_type = "issue" → look for <!-- cf-mirror: ORG/REPO#N --> markers
+#                       state field: source_number / target_number
+_reconcile_markers_from_target() {
+  local repo_name="$1" state_file="$2" item_type="${3:-pr}"
+
+  local tgt_src_field tgt_num_field marker_test
+  if [[ "$item_type" == "pr" ]]; then
+    tgt_src_field="source_pr_number"
+    tgt_num_field="target_issue_number"
+    marker_test="cf-mirror-pr:"    # discriminator: PRs use cf-mirror-pr:
+  else
+    tgt_src_field="source_number"
+    tgt_num_field="target_number"
+    marker_test="cf-mirror:"       # issues use cf-mirror: (no "-pr")
+  fi
+
+  log "  [dedup] Scanning $TARGET_ORG/$repo_name for existing cf-mirror markers (${item_type}s)..."
+
+  # Fetch all target issues in one paginated call (body field included in list response).
+  # RC-5: capture exit code out-of-band; rc != 0 → warn and skip dedup for this repo.
+  local raw rc
+  raw="$(gh api "repos/$TARGET_ORG/$repo_name/issues?state=all&per_page=100" \
+    --paginate 2>/dev/null)"; rc=$?
+  if [[ "$rc" -ne 0 || -z "$raw" ]]; then
+    warn "  [dedup] Could not fetch target issues for $repo_name — dedup skipped (re-run to retry)"
+    return 0
+  fi
+
+  # Extract canonical (src → min_tgt) pairs from bodies with a cf-mirror marker.
+  # RC-8 two-level select; jq capture uses ?<name> NOT (?P<name>).
+  # Group by source number and take the MINIMUM target number (lowest = first
+  # created = canonical kept item). This handles duplicates: if source #268 maps
+  # to both target #1520 and #3596, canonical = 1520.
+  local pairs
+  pairs="$(printf '%s' "$raw" | jq -rs --arg mt "$marker_test" '
+    [.[] | select(type=="array") | .[] | select(type=="object")
+     | select((.body // "") | test($mt; ""))
+     | {
+         tgt: .number,
+         src: (
+           .body
+           | try (capture("cf-mirror[^:]*: [^/]+/[^#]+#(?<n>[0-9]+)") | .n | tonumber)
+           catch null
+         )
+       }
+     | select(.src != null and .tgt != null)
+    ]
+    | group_by(.src)
+    | map({src: .[0].src, tgt: (map(.tgt) | min)})
+  ' 2>/dev/null || echo '[]')"
+
+  local count
+  count="$(printf '%s' "$pairs" | jq 'length' 2>/dev/null || echo 0)"
+  if [[ "$count" -eq 0 ]]; then
+    log "  [dedup] No existing cf-mirror markers found in $TARGET_ORG/$repo_name"
+    return 0
+  fi
+  log "  [dedup] Found $count unique source ${item_type}(s) in target — reconciling state"
+
+  # For each canonical (src, min_tgt) pair: update state when:
+  #   (a) state has no target number yet (interrupted run — RC-32 scenario), OR
+  #   (b) state has a DIFFERENT target number (pointing to a duplicate, not the
+  #       canonical lowest-numbered item).
+  # This makes reconcile idempotent for both the "crash after create" AND the
+  # "state points to the duplicate" recovery scenarios.
+  local reconciled=0
+  while IFS= read -r pair; do
+    local tgt_num src_num
+    tgt_num="$(echo "$pair" | jq -r '.tgt')"
+    src_num="$(echo "$pair" | jq -r '.src')"
+    [[ -z "$tgt_num" || "$tgt_num" == "null" || -z "$src_num" || "$src_num" == "null" ]] && continue
+
+    local current_tgt current_status
+    current_tgt="$(jq -r \
+      --argjson sn "$src_num" --arg sf "$tgt_src_field" --arg nf "$tgt_num_field" \
+      '.items[] | select(.[$sf] == $sn) | .[$nf] // empty' \
+      "$state_file" 2>/dev/null | head -1 || true)"
+    current_status="$(jq -r \
+      --argjson sn "$src_num" --arg sf "$tgt_src_field" \
+      '.items[] | select(.[$sf] == $sn) | .status // empty' \
+      "$state_file" 2>/dev/null | head -1 || true)"
+
+    # Skip if state already points to the correct canonical target.
+    [[ "$current_tgt" == "$tgt_num" ]] && continue
+    # Skip if source item is not in state at all.
+    [[ -z "$current_status" ]] && continue
+
+    local action="recovered"
+    [[ -n "$current_tgt" && "$current_tgt" != "null" ]] && \
+      action="repointed (was #${current_tgt} → canonical #${tgt_num})"
+
+    local now_str; now_str="$(now)"
+    if [[ "$item_type" == "pr" ]]; then
+      state_update "$state_file" \
+        '.items = [.items[] | if .source_pr_number == $sn
+           then .target_issue_number = $tn | .status = "mirrored" | .mirrored_at = $at
+           else . end]' \
+        --argjson sn "$src_num" --argjson tn "$tgt_num" --arg at "$now_str"
+    else
+      state_update "$state_file" \
+        '.items = [.items[] | if .source_number == $sn
+           then .target_number = $tn | .status = "mirrored" | .mirrored_at = $at
+           else . end]' \
+        --argjson sn "$src_num" --argjson tn "$tgt_num" --arg at "$now_str"
+    fi
+    ok "  [dedup] ${action^}: source ${item_type} #${src_num} → canonical target #${tgt_num}"
+    reconciled=$(( reconciled + 1 ))
+  done < <(printf '%s' "$pairs" | jq -c '.[]' 2>/dev/null || true)
+
+  [[ "$reconciled" -gt 0 ]] && \
+    log "  [dedup] Reconciled $reconciled ${item_type}(s) from target markers"
 }
 
 # ---------------------------------------------------------------------------
@@ -810,11 +1162,30 @@ gh() {
   local _err_text
   _err_text="$(cat "$_gh_err" 2>/dev/null || true)"
   rm -f "$_gh_err"
+
+  # Record the FAILED write attempt so it is visible in content_rate_per_min.
+  # GitHub sees and counts ALL API requests — successful or not — toward its
+  # secondary rate limit. Without recording failures our measurement is blind
+  # to rapid-fire failed writes (permission 403, 422 validation, etc.) that
+  # can push GitHub's count above the limit while ours shows artificially low.
+  _apirate_record "target-write-failed"
+
   if _looks_like_rate_limit "$_err_text"; then
     # Extract Retry-After if gh surfaced it; otherwise fallback pause.
     local _ra
     _ra="$(echo "$_err_text" | grep -ioE 'retry-after[: ]+[0-9]+' | grep -oE '[0-9]+' | head -1 || true)"
-    _throttle_on_rate_limit "$_ra"
+    # Pass the first non-empty error line as the recorded error for diagnosis.
+    local _err_summary
+    _err_summary="$(echo "$_err_text" | grep -m1 -E '^gh:|HTTP [0-9]{3}' 2>/dev/null || \
+                    echo "$_err_text" | head -1)"
+    _throttle_on_rate_limit "$_ra" "$_err_summary"
+  else
+    # Non-rate-limit failure: apply a minimal delay so rapid consecutive
+    # failures (e.g. permission 403, 422 validation) don't burst to GitHub.
+    # Half the normal write delay — enough to pace, not enough to stall.
+    local _fail_delay=$(( ${WRITE_DELAY_SECONDS:-10} / 2 ))
+    (( _fail_delay < 1 )) && _fail_delay=1
+    sleep "$_fail_delay"
   fi
   # Return the ORIGINAL non-zero exit so callers' FAILED handling is unchanged.
   return "$_rc"
@@ -952,12 +1323,29 @@ state_update() {
   local filter="$2"
   shift 2
 
+  # SELF-HEAL (RC-32): the whole file may be absent mid-run — the operator (or a
+  # prior interrupted reassembly) can leave only the split parts on disk. If parts
+  # exist, reassemble before writing instead of letting an unguarded jq abort the
+  # entire multi-hour run under `set -e`.
+  if [[ ! -f "$file" ]]; then
+    state_unsplit "$file" 2>/dev/null || true
+  fi
+  if [[ ! -f "$file" ]]; then
+    warn "state_update: $file is missing and has no parts to reassemble — update skipped (item status NOT advanced; re-run to retry)"
+    return 0   # non-fatal: never abort the run for one missing file
+  fi
+
   local tmp
   tmp="$(mktemp)"
-
-  # Pass remaining args as extra jq args
-  jq "$@" "$filter" "$file" > "$tmp"
-  mv "$tmp" "$file"
+  # Guard the jq itself: a transient read failure must warn + leave the file
+  # untouched, never crash the run. (RC-32)
+  if jq "$@" "$filter" "$file" > "$tmp" 2>/dev/null; then
+    mv "$tmp" "$file"
+  else
+    rm -f "$tmp"
+    warn "state_update: jq update failed for $file — file left unchanged (re-run to retry)"
+    return 0
+  fi
 }
 
 # state_items — emit each item in a state file as one compact JSON line.
@@ -965,6 +1353,8 @@ state_update() {
 #   while IFS= read -r item; do ... ; done < <(state_items "$state_file")
 state_items() {
   local file="$1"
+  # SELF-HEAL (RC-32): reassemble from parts if the whole file is absent.
+  [[ -f "$file" ]] || state_unsplit "$file" 2>/dev/null || true
   [[ -f "$file" ]] || return 0
   jq -c '.items[]?' "$file" 2>/dev/null || true
 }
@@ -1203,21 +1593,57 @@ state_update_stats() {
 # ---------------------------------------------------------------------------
 # Git commit helper
 # ---------------------------------------------------------------------------
-# commit_state — stage state/ and validation-reports/, commit, push
+# commit_state — stage state/ and validation-reports/, commit, push.
+#
+# LOCAL RUNS (GITHUB_ACTIONS != "true"): SILENT NO-OP. State files live on disk;
+# the operator commits and pushes manually. No git operations, no warnings.
+#
+# CI RUNS (GITHUB_ACTIONS == "true"): time-gated to avoid committing on every
+# mid-loop checkpoint call. At most one actual commit every
+# COMMIT_STATE_MIN_INTERVAL seconds (default 600 = 10 min). Set to 0 to disable
+# the gate and commit on every call (e.g. for debugging).
+#
 # Usage: commit_state "commit message"
+COMMIT_STATE_MIN_INTERVAL="${COMMIT_STATE_MIN_INTERVAL:-600}"
 commit_state() {
   local msg="${1:-"mirror: update state [skip ci]"}"
 
-  # Ensure we're in the repo root
-  local repo_root
-  repo_root="$(git -C "$(dirname "${BASH_SOURCE[0]}")" rev-parse --show-toplevel 2>/dev/null || true)"
+  # ---- Local run guard: silent no-op. -----------------------------------
+  if [[ "${GITHUB_ACTIONS:-}" != "true" ]]; then
+    return 0
+  fi
+
+  # ---- CI rate-limit: skip if we attempted git ops too recently. --------
+  local interval="${COMMIT_STATE_MIN_INTERVAL:-600}"
+  local last_file="${REPO_ROOT:-.}/state/.last-commit-at"
+  local now; now="$(date +%s)"
+  if [[ "$interval" -gt 0 ]]; then
+    local last_at
+    last_at="$(cat "$last_file" 2>/dev/null || echo 0)"
+    last_at="${last_at//[^0-9]/}"; : "${last_at:=0}"
+    if (( now - last_at < interval )); then
+      return 0   # too soon — silently skip; state is safe on disk
+    fi
+  fi
+
+  # ---- Locate and verify git root. REPO_ROOT is always set by stage scripts;
+  # the BASH_SOURCE fallback covers edge cases (testing, unusual invocation).
+  local repo_root="${REPO_ROOT:-}"
   if [[ -z "$repo_root" ]]; then
+    local _src="${BASH_SOURCE[0]:-}"
+    [[ -n "$_src" ]] && \
+      repo_root="$(git -C "$(dirname "$_src")" rev-parse --show-toplevel 2>/dev/null || true)"
+  fi
+  # Record attempt time regardless of what follows — prevents rapid re-calls
+  # from repeatedly hitting git ops (or the warn) on every checkpoint call.
+  printf '%s\n' "$now" > "$last_file" 2>/dev/null || true
+
+  if [[ -z "$repo_root" ]] || ! git -C "$repo_root" rev-parse --git-dir >/dev/null 2>&1; then
     warn "commit_state: could not find git root, skipping commit"
     return 0
   fi
 
   cd "$repo_root"
-
   git add mirror/state/ state/ validation-reports/ 2>/dev/null || true
 
   if git diff --cached --quiet; then
@@ -1312,17 +1738,34 @@ dry_run_skip() {
 # becomes a visible, actionable event. Output items are unchanged on the happy path.
 gh_flatten_wrapper() {
   local cmd="$1" endpoint="$2" key="$3"
-  local raw
+  # Capture stderr so a failure can be DIAGNOSED (403/scope vs 404 vs transient)
+  # instead of producing a vague "no/failed response". gh writes the human error
+  # ("gh: ... (HTTP 403)") to stderr; the error BODY may also land on stdout (RC-5),
+  # so we check the exit code out-of-band and inspect both streams.
+  local raw rc errf
+  errf="$(mktemp)"
   if [[ "$cmd" == "ghsrc" ]]; then
-    raw="$(ghsrc api "${endpoint}?per_page=100" --paginate 2>/dev/null)" || raw=""
+    raw="$(ghsrc api "${endpoint}?per_page=100" --paginate 2>"$errf")"; rc=$?
   else
-    raw="$(gh api "${endpoint}?per_page=100" --paginate 2>/dev/null)" || raw=""
+    raw="$(gh api "${endpoint}?per_page=100" --paginate 2>"$errf")"; rc=$?
   fi
-  if [[ -z "$raw" ]]; then
-    warn "  [paginate] no/failed response from ${endpoint} — treating as empty (inventory may be incomplete)"
+  if [[ "$rc" -ne 0 || -z "$raw" ]]; then
+    local emsg
+    emsg="$(head -1 "$errf" 2>/dev/null || true)"
+    # Fall back to the stdout error body if stderr was empty.
+    [[ -z "$emsg" ]] && emsg="$(printf '%s' "$raw" | jq -rs '.[0].message // empty' 2>/dev/null || true)"
+    rm -f "$errf"
+    if echo "$emsg" | grep -qiE '403|forbidden|must have admin|resource not accessible|insufficient'; then
+      warn "  [paginate] ${endpoint}: 403/forbidden — the token lacks scope to read these secrets (org secrets need 'admin:org'; repo secrets need repo admin). This is EXPECTED if the source token isn't an org admin. Secret VALUES are write-only and can't be migrated regardless — only NAMES are inventoried, so this gap is non-blocking. (${emsg})"
+    elif echo "$emsg" | grep -qiE '404|not found'; then
+      warn "  [paginate] ${endpoint}: 404 — feature not enabled / endpoint absent for this org/repo; treating as empty (non-blocking)."
+    else
+      warn "  [paginate] no/failed response from ${endpoint} — treating as empty (inventory may be incomplete; likely transient — re-run to retry).${emsg:+ error: $emsg}"
+    fi
     echo '[]'
     return 0
   fi
+  rm -f "$errf"
   # Count pages that are objects but DON'T carry the expected key (error/garbage).
   local bad
   bad="$(printf '%s' "$raw" | jq -rs --arg k "$key" \

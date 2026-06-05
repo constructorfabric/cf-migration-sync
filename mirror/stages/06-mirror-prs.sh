@@ -506,6 +506,7 @@ ${marker}"
 
   if [[ "$total_prs" -eq 0 ]]; then
     state_update_stats "$state_file"
+    state_split_if_needed "$state_file"   # open PRs may have grown state file
     return 0
   fi
 
@@ -782,6 +783,7 @@ ${marker}"
   done < <(echo "$prs" | jq -c '.[]' 2>/dev/null || true)
 
   state_update_stats "$state_file"
+  state_split_if_needed "$state_file"   # full-mode parity fix: split if > MAX_STATE_FILE_MB
   ok "  Done $repo_name: new=$new_count skipped=$skip_count failed=$failed_count"
 }
 
@@ -895,7 +897,7 @@ ${c_marker}"
       --method POST --input "$_body_tmp" \
       2>"$_post_err_tmp")" || c_result="FAILED"
     if [[ "$c_result" == "FAILED" ]]; then
-      warn "  Failed to mirror discussion comment $c_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
+      warn "  Failed to mirror discussion comment $c_id on PR #$src_pr_number — $(_gh_err_line "$_post_err_tmp")"
     else
       mirrored=$((mirrored + 1))
       posted_since_commit=$((posted_since_commit + 1))
@@ -936,7 +938,7 @@ ${rv_marker}"
       --method POST --input "$_body_tmp" \
       2>"$_post_err_tmp")" || rv_result="FAILED"
     if [[ "$rv_result" == "FAILED" ]]; then
-      warn "  Failed to mirror review body $rv_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
+      warn "  Failed to mirror review body $rv_id on PR #$src_pr_number — $(_gh_err_line "$_post_err_tmp")"
     else
       mirrored=$((mirrored + 1))
       posted_since_commit=$((posted_since_commit + 1))
@@ -978,7 +980,7 @@ ${rc_marker}"
       --method POST --input "$_body_tmp" \
       2>"$_post_err_tmp")" || rc_result="FAILED"
     if [[ "$rc_result" == "FAILED" ]]; then
-      warn "  Failed to mirror inline review comment $rc_id on PR #$src_pr_number — $(cat "$_post_err_tmp" 2>/dev/null | head -1 || true)"
+      warn "  Failed to mirror inline review comment $rc_id on PR #$src_pr_number — $(_gh_err_line "$_post_err_tmp")"
     else
       mirrored=$((mirrored + 1))
       posted_since_commit=$((posted_since_commit + 1))
@@ -1076,6 +1078,9 @@ _reconcile_pr() {
   local pr_number="$3"
   local tgt_issue_number="$4"
   local state_file="$5"
+  # B5 fix: optional 6th arg suppresses comment reconcile (creation pass defers
+  # comments to pass 2; CONTINUOUS in pass 2 gets them via _reconcile_pr_comments).
+  local skip_comments="${6:-0}"
 
   local _body_tmp
   _body_tmp="$(mktemp)"
@@ -1164,8 +1169,10 @@ ${marker}"
     [[ "$body_changed" -eq 1 ]] && _clear_crossref_record "$repo_name" "$tgt_issue_number"
   fi
 
-  # ---- Reconcile all comment types -----------------------------------------
-  _reconcile_pr_comments "$repo_name" "$pr_number" "$tgt_issue_number" "$state_file"
+  # ---- Reconcile all comment types (skipped in creation pass — deferred to pass 2) ---
+  if [[ "${skip_comments:-0}" -eq 0 ]]; then
+    _reconcile_pr_comments "$repo_name" "$pr_number" "$tgt_issue_number" "$state_file"
+  fi
 
   # ---- Update state file ---------------------------------------------------
   _upsert_pr "$state_file" "$pr_number" "$pr_url" \
@@ -1551,44 +1558,116 @@ _import_all_prs() {
   fi
   log "Importing PRs from $(echo "$repo_names" | grep -c .) repo state file(s)"
 
-  # ---- Precompute total items for the progress/ETA engine ----
-  # Respect the same filters the work loop uses: --repo (only_repo) and
-  # --skip-open-prs (exclude source_state == "open"), so % and ETA match reality.
+  # Helper: count PRs in a repo state file that match the work-loop filters.
+  # B4 fix (RC-16): all parameters passed explicitly — no implicit dynamic-scope access.
+  _count_prs_for_progress() {
+    local rn="$1" phase="$2" skip_open="$3"
+    local f="$STATE_DIR/$rn.yaml"
+    [[ -f "$f" ]] || return
+    if [[ "$phase" == "create" ]]; then
+      if [[ "$skip_open" -eq 1 ]]; then
+        jq '[.items[] | select((.source_state // "closed") != "open")] | length' "$f" 2>/dev/null || echo 0
+      else
+        jq '.items | length' "$f" 2>/dev/null || echo 0
+      fi
+    else
+      if [[ "$skip_open" -eq 1 ]]; then
+        jq '[.items[] | select((.source_state // "closed") != "open")
+              | select((.target_issue_number // null) != null)
+              | select(.comments_status != "done")] | length' "$f" 2>/dev/null || echo 0
+      else
+        jq '[.items[] | select((.target_issue_number // null) != null)
+              | select(.comments_status != "done")] | length' "$f" 2>/dev/null || echo 0
+      fi
+    fi
+  }
+
+  # =====================================================================
+  # PASS 1 — Create all PRs/issues (no comments).
+  # All items across all repos are created before any comments are posted.
+  # This minimises the window for duplicates and lets you verify all items
+  # exist before the slower comment-posting pass begins.
+  # =====================================================================
+  log "=== Pass 1/2: Creating PRs/issues (comments deferred) ==="
   local _total_prs=0 _rn
   while IFS= read -r _rn; do
     [[ -z "$_rn" ]] && continue
     [[ -n "$only_repo" && "$_rn" != "$only_repo" ]] && continue
-    state_unsplit "$STATE_DIR/$_rn.yaml"
-    local _c
-    if [[ "$skip_open_prs" -eq 1 ]]; then
-      _c="$(jq '[.items[] | select((.source_state // "closed") != "open")] | length' "$STATE_DIR/$_rn.yaml" 2>/dev/null || echo 0)"
-    else
-      _c="$(jq '.items | length' "$STATE_DIR/$_rn.yaml" 2>/dev/null || echo 0)"
-    fi
-    _total_prs=$(( _total_prs + _c ))
+    _total_prs=$(( _total_prs + $(_count_prs_for_progress "$_rn" "create" "$skip_open_prs") ))
   done < <(echo "$repo_names")
-  progress_begin "$_total_prs" "PRs"
+  progress_begin "$_total_prs" "PRs (creating)"
 
   local repo_name
   while IFS= read -r repo_name; do
     [[ -z "$repo_name" ]] && continue
-    if [[ -n "$only_repo" && "$repo_name" != "$only_repo" ]]; then
-      continue
-    fi
-    log "Importing PRs for $repo_name..."
-    _import_repo_prs "$repo_name" "$skip_open_prs"
+    [[ -n "$only_repo" && "$repo_name" != "$only_repo" ]] && continue
+    log "Importing PRs for $repo_name (pass 1: create)..."
+    _import_repo_prs "$repo_name" "$skip_open_prs" "create"
     pause 2.0
   done < <(echo "$repo_names")
-
   progress_end
-  apirate_report   # final rolling-60m API call summary by category
+  apirate_report
+
+  # =====================================================================
+  # PASS 2 — Add comments to all created PRs/issues.
+  # =====================================================================
+  log "=== Pass 2/2: Adding comments to all PRs/issues ==="
+  local _total_with_comments=0
+  while IFS= read -r _rn; do
+    [[ -z "$_rn" ]] && continue
+    [[ -n "$only_repo" && "$_rn" != "$only_repo" ]] && continue
+    _total_with_comments=$(( _total_with_comments + $(_count_prs_for_progress "$_rn" "comments" "$skip_open_prs") ))
+  done < <(echo "$repo_names")
+  progress_begin "$_total_with_comments" "PRs (comments)"
+
+  while IFS= read -r repo_name; do
+    [[ -z "$repo_name" ]] && continue
+    [[ -n "$only_repo" && "$repo_name" != "$only_repo" ]] && continue
+    log "Adding comments for $repo_name (pass 2: comments)..."
+    _import_repo_prs "$repo_name" "$skip_open_prs" "comments"
+    pause 2.0
+  done < <(echo "$repo_names")
+  progress_end
+  apirate_report
 }
 
 _import_repo_prs() {
-  local repo_name="$1" skip_open_prs="${2:-0}"
+  local repo_name="$1" skip_open_prs="${2:-0}" phase="${3:-create}"
   local state_file="$STATE_DIR/$repo_name.yaml"
   state_unsplit "$state_file"   # reassemble parts (freshly pulled) into the whole file
   [[ -f "$state_file" ]] || { warn "  No state file for $repo_name"; return 0; }
+
+  # Always reconcile markers first — both in create AND comments pass.
+  _reconcile_markers_from_target "$repo_name" "$state_file" "pr"
+
+  # --- COMMENTS-ONLY PASS ---------------------------------------------------
+  # phase="comments": skip all creation; only post comments for already-created
+  # items. Idempotent — items with comments_status=done are skipped; unfinished
+  # ones resume from their comments_mirrored cursor.
+  if [[ "$phase" == "comments" ]]; then
+    local commented=0 skipped=0
+    while IFS= read -r item; do
+      local pr_number tgt_existing comments_status source_state
+      pr_number="$(echo "$item" | jq -r '.source_pr_number')"
+      tgt_existing="$(echo "$item" | jq -r '.target_issue_number // empty')"
+      comments_status="$(echo "$item" | jq -r '.comments_status // "none"')"
+      source_state="$(echo "$item" | jq -r '.source_state // "closed"')"
+      [[ "$skip_open_prs" -eq 1 && "$source_state" == "open" ]] && continue
+      progress_tick 1 "$repo_name"
+      if [[ -z "$tgt_existing" || "$tgt_existing" == "null" ]]; then
+        # Not yet created — pass 1 missed it (likely still "exported" in state).
+        skipped=$(( skipped + 1 )); continue
+      fi
+      if [[ "$comments_status" == "done" ]]; then
+        skipped=$(( skipped + 1 )); continue
+      fi
+      _import_pr_comments "$repo_name" "$item" "$tgt_existing" "$state_file"
+      commented=$(( commented + 1 ))
+    done < <(state_items "$state_file")
+    ok "  [import comments] $repo_name: commented=$commented skipped=$skipped"
+    return 0
+  fi
+  # --------------------------------------------------------------------------
 
   local _body_tmp
   _body_tmp="$(mktemp)"
@@ -1619,18 +1698,15 @@ _import_repo_prs() {
     # Advance the cross-repo progress/ETA counter once per processed item.
     progress_tick 1 "$repo_name"
 
-    # Already imported — reconcile (CONTINUOUS) or finish comment sync only.
+    # Already imported — in creation pass only reconcile body/state (CONTINUOUS);
+    # comments are deferred entirely to pass 2.
     if [[ -n "$tgt_existing" && "$tgt_existing" != "null" ]]; then
       if [[ "${CONTINUOUS:-false}" == "true" ]]; then
-        # CONTINUOUS mode: reconcile title/body/labels/state from the stored
-        # source_data so already-migrated PRs pick up source edits + new comments.
         local _pr_src
         _pr_src="$(echo "$item" | jq -c '.source_data // {}')"
         if [[ -n "$_pr_src" && "$_pr_src" != "{}" ]]; then
-          _reconcile_pr "$repo_name" "$_pr_src" "$pr_number" "$tgt_existing" "$state_file"
+          _reconcile_pr "$repo_name" "$_pr_src" "$pr_number" "$tgt_existing" "$state_file" 1
         fi
-      elif [[ "$comments_status" != "done" ]]; then
-        _import_pr_comments "$repo_name" "$item" "$tgt_existing" "$state_file"
       fi
       skipped=$((skipped + 1)); continue
     fi
@@ -1787,11 +1863,7 @@ _import_repo_prs() {
     fi
 
     _mark_pr_imported "$state_file" "$pr_number" "$tgt_number"
-
-    local updated_item
-    updated_item="$(jq -c --argjson n "$pr_number" \
-      '.items[] | select(.source_pr_number == $n)' "$state_file" 2>/dev/null | head -1)"
-    _import_pr_comments "$repo_name" "$updated_item" "$tgt_number" "$state_file"
+    # Comments are posted in pass 2 — do NOT call _import_pr_comments here.
 
     imported=$((imported + 1)); wrote=$((wrote + 1))
     if (( wrote % 10 == 0 )) && [[ "$DRY_RUN" -eq 0 ]]; then
@@ -1801,6 +1873,7 @@ _import_repo_prs() {
   done < <(state_items "$state_file")
 
   state_update_stats "$state_file"
+  state_split_if_needed "$state_file"   # split into parts if > MAX_STATE_FILE_MB (B1 fix)
   ok "  [import] $repo_name: imported=$imported skipped=$skipped failed=$failed"
 }
 
@@ -1860,7 +1933,7 @@ _import_pr_comments() {
       # advance `posted` past it AND must NOT mark this PR's comments "done", so a
       # re-run retries from the first failure instead of silently skipping it.
       failed=$((failed + 1))
-      warn "  Failed to import $what on PR #$pr_number — $(head -1 "$_post_err_tmp" 2>/dev/null || true)"
+      warn "  Failed to import $what on PR #$pr_number — $(_gh_err_line "$_post_err_tmp")"
     elif (( failed == 0 )); then
       # Only advance the resumable counter while the prefix is still unbroken.
       posted=$((posted + 1))

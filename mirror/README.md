@@ -164,17 +164,39 @@ AUTORATELIMIT=0.8 ./mirror/stages/06-mirror-prs.sh   # back off at 80% of limit
 
 - `AUTORATELIMIT=0` (default) — OFF; only the fixed delays + hourly cap + 403
   hard-stop apply.
-- `AUTORATELIMIT=<0..1>` — every `AUTORATELIMIT_PROBE_EVERY` writes (default 25) a
-  cheap `gh api rate_limit` probe refreshes the **core (REST)** and **graphql**
-  bucket usage. When any bucket's `used/limit` reaches the fraction, the engine
-  **sleeps until that bucket's reset epoch** (+`AUTORATELIMIT_RESET_BUFFER`, default
-  15s) — precise, never overshoots, never blows the limit. If a reset epoch isn't
-  available it falls back to a bounded exponential sleep
-  (`AUTORATELIMIT_FALLBACK_BASE`^n, capped at `AUTORATELIMIT_FALLBACK_MAX`).
+- `AUTORATELIMIT=<0..1>` — every `AUTORATELIMIT_PROBE_EVERY` writes (default **1**,
+  i.e. after every write) a cheap `gh api rate_limit` probe refreshes the **core
+  (REST)** and **graphql** bucket usage. When any bucket's `used/limit` reaches the
+  fraction, the engine **sleeps until that bucket's reset epoch**
+  (+`AUTORATELIMIT_RESET_BUFFER`, default 15s) — precise, never overshoots, never
+  blows the limit. If a reset epoch isn't available it falls back to a bounded
+  exponential sleep (`AUTORATELIMIT_FALLBACK_BASE`^n, capped at
+  `AUTORATELIMIT_FALLBACK_MAX`).
 
-This complements (does not replace) the 403/429 hard-stop: GitHub's **secondary
-(abuse) limit is not exposed by any header or `rate_limit`** — it only appears as a
-403 + Retry-After, which the existing hard-stop + degraded-mode handler covers.
+#### Secondary (content-creation / abuse) limit — locally counted
+
+GitHub's **secondary (abuse) limit is not exposed by any header or `rate_limit`** —
+it only surfaces as a 403 + Retry-After. The dominant trigger is **content-creation
+rate** (issues, comments, PRs created per minute); GitHub's documented ceiling is
+~80 content-creating requests/minute. Because we make those requests, we can count
+them ourselves. The write-throttle records every target-write in `state/.api-rate.log`
+and the same `AUTORATELIMIT` fraction governs a **content-creation gate**:
+
+- threshold = `AUTORATELIMIT` × `CONTENT_CREATION_LIMIT_PER_MIN` (default 80) — e.g.
+  `0.8 × 80 = 64`/min.
+- **After every write**, the rolling 60-second content-creation rate is measured.
+  While it is at/above the threshold the gate sleeps **progressively**
+  (`CONTENT_GATE_STEP_SECONDS` × step, capped at `CONTENT_GATE_MAX_SLEEP`), re-checking
+  each time, until the rate drops back below — letting old events age out of the
+  60s window. This makes the burst self-limit to the configured ceiling without ever
+  hitting the 403.
+- Knobs: `CONTENT_CREATION_LIMIT_PER_MIN` (80), `CONTENT_GATE_STEP_SECONDS` (2),
+  `CONTENT_GATE_MAX_SLEEP` (60). Off entirely when `AUTORATELIMIT=0`.
+
+The live rate is shown in the API-rate line (`content-creation 64/80 per-min (limit 64)`)
+and persisted to `state/.write-throttle.json` (`content_rate_per_min`,
+`content_gate_step`, `content_rate_at`). This is the **proactive** counterpart to the
+403/429 hard-stop + degraded-mode handler, which remains the reactive backstop.
 
 Tip: AUTORATELIMIT and the fixed `WRITE_DELAY_SECONDS` compose — keep a modest
 `WRITE_DELAY_SECONDS` (e.g. 4–6) for smooth pacing and let AUTORATELIMIT be the
@@ -220,7 +242,11 @@ count) and `--repo` (single-repo runs count only that repo). Tuning knobs:
 **Easiest way to watch progress:** the stage rewrites a plain-text status file
 `state/.progress` on EVERY item (not throttled), so it is always current even when
 the console is busy. It carries the progress/ETA line plus the latest API-rate
-summary:
+summary. In addition, the write-throttle engine refreshes `state/.progress`,
+`state/.api-rate.summary`, and `state/.rate-limit` **after every write** (on the
+`AUTORATELIMIT_PROBE_EVERY` cadence, default 1), so even during a long single-item
+operation (e.g. posting 99 comments on one PR — which ticks progress only once) the
+dashboard stays live and the content-creation rate keeps updating:
 
 ```bash
 cat state/.progress
@@ -235,8 +261,9 @@ API rate (last 60m): 412 calls — source-read 31, target-read 47, target-write 
 updated: 2026-06-02T09:12:10Z
 ```
 
-Runtime state files (`state/.progress`, `state/.progress.json`,
-`state/.api-rate.log`, `state/.api-rate.summary`) are gitignored.
+Runtime state files (`state/.progress`, `state/.progress.json`, `state/.progress.line`,
+`state/.api-rate.log`, `state/.api-rate.summary`, `state/.rate-limit`,
+`state/.write-throttle.json`) are gitignored (the whole `state/` tree is).
 
 ## Write-throttle / abuse-protection policy
 
@@ -327,7 +354,42 @@ Notes:
   normally in import mode.
 - `mirror-clones/` is gitignored — for a two-machine export/import you must
   copy it across yourself (it holds bare git clones and release-asset blobs).
-- `CONTINUOUS=true` reconciliation applies to `full` mode.
+## CONTINUOUS=true — reconcile already-mirrored items
+
+`CONTINUOUS=true` makes a re-run pick up changes made in the source AFTER the
+initial mirror, instead of skipping anything already created. It works in both
+`full` and `import` modes. Behaviour by stage:
+
+| Stage | Without CONTINUOUS (re-run) | With CONTINUOUS=true |
+|-------|-----------------------------|----------------------|
+| 01 invite-people | re-checks membership (always fresh) | same |
+| 02 mirror-repos  | `git push --prune` (always fresh) | same |
+| 03 org-metadata  | re-PATCHes settings (always fresh) | same |
+| 04 repo-metadata | re-PATCHes (always fresh) | same |
+| 05 mirror-issues | skips mirrored issues | **reconciles title/body/labels/milestone/type + comments** |
+| 06 mirror-prs    | skips mirrored PRs | **reconciles title/body/labels/state + comments** |
+| 07 crossrefs     | skips `rewritten` items | re-rewrites items whose body was cleared by 05/06 reconcile |
+| 08 assign-issues | re-applies `pending` assignees (always fresh) | same |
+| 09 other-objects | re-checks webhooks (always fresh) | same |
+| 10 teams         | re-PATCHes (always fresh) | same |
+| 11 releases      | re-attempts assets only | **+ re-syncs release name/body** |
+| 12 branch-protections | re-PUTs (always fresh) | same |
+| 13 actions-variables  | upserts (always fresh) | same |
+| 14 outside-collab | skips `synced` | **re-applies when permission changed** |
+| 16 sub-issues    | idempotent attach (always fresh) | same |
+| 17 issue-fields  | re-applies values (always fresh) | same |
+
+So the "always fresh" stages (01-04, 08-10, 12, 13, 16, 17) reconcile on every
+re-run regardless of the flag; the "create-once" stages (05, 06, 11, 14) need
+CONTINUOUS to re-sync. Stage 07 picks up body changes because the 05/06 reconcile
+clears the crossref record for any changed body — so **run 05/06 with CONTINUOUS
+before 07**.
+
+To fix already-migrated content (e.g. add a field added later):
+```bash
+CONTINUOUS=true MIRROR_MODE=import TARGET_ORG=... GH_TOKEN=... \
+  ./mirror/stages/05-mirror-issues.sh
+```
 
 ---
 
